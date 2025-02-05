@@ -1,0 +1,1069 @@
+---
+title: "Figure A shared senescence signature driven by NF-KB signaling"
+author: "Joanna Yeung"
+date: '2025-01-27'
+output: html_document
+---
+```{r}
+library(readr)
+library(GenomicFeatures)
+library(DESeq2)
+library(apeglm)
+library(gridExtra)
+library(ggplot2)
+library(pheatmap)
+library(msigdbr)
+library(stringr)
+library(org.Hs.eg.db)
+library(ggrepel)
+library(rtracklayer)
+library(cowplot)
+library(readxl)
+library(EnsDb.Hsapiens.v79)
+library(viridis)
+library(GenomicRanges)
+library(rtracklayer)
+library(RColorBrewer)
+library(cowplot)
+library(preprocessCore)
+library(scales)
+library(ChIPseeker)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(org.Hs.eg.db)
+library(BSgenome.Hsapiens.UCSC.hg38)
+library(MotifDb)
+library(motifmatchr)
+library(Biostrings)
+library(clusterProfiler)
+library(pheatmap)
+```
+
+# annotation colors for pheatmap
+```{r}
+hm_cols_RNA <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
+                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD"), 
+                Biorep=c("1"="orange", "2"="light blue", "3"="pink"), 
+                log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "DoxovsPalbo"="#CCEBC5"), 
+                clusters_cutree8=brewer.pal(8, "Set2"), 
+                Clusters=c("5"="#66C2A5","2"="#A6D854","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#E78AC3","3"="#FFD92F","8"="#E5C494"), 
+                SASP = c("Yes"="dark green", "No"="white"),
+                Cell_Cycle = c("Yes"="dark blue", "No"="white"), 
+                p53_All=c("Yes"="#00B0F0", "No"="white"),
+                NFKB_All=c("Yes"="red", "No"="white"))
+names(hm_cols_RNA$clusters_cutree8) <- as.factor(1:8)
+
+
+hm_cols_ATAC <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
+                Treatment=c("None"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD", "PvsD"="#CCEBC5"),
+                Biorep=c("1"="orange", "2"="light blue", "3"="pink", "4"="light green"), 
+                log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "PvsD"="#CCEBC5"),
+                Peak_anno=c("Distal"="#B15A28", "Gene Body"="#7F54A2", "Promoter"="#A7CEE2"), 
+                Doxo=c("Yes"="#B3C543", "No"="white"),
+                Palbo=c("Yes"="#E0ADCD", "No"="white")
+                )
+```
+
+# load in workspace with DESeq results and rlog counts matrix of genes. 
+```{r}
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence/workspace.RData")
+```
+
+#### universe (background gene set) for GO enrichment analysis is all genes expressed
+```{r}
+universe <- genes_anno_type[match(gsub('\\.[0-9]*$', '', row.names(acrossGroups)), genes_anno_type$ensembl_id), ]
+```
+
+# GO enrichment analysis on k-means clusters from sigMat (significantly changing genes across all conditions, based on Likelihood ratio test)
+
+## *function to get GO enriched terms*:
+## arguments:
+### gene= vector of genes to test for GO enrichment (gene ensembl format)
+### universe=background gene set 
+### Database=database containing groups of genes to GO annotation term e.g. msigdb GO:BP
+```{r}
+getGOenrichment <-function(gene,universe,Database){
+  #gene_entrezID <-  AnnotationDbi::select(EnsDb.Hsapiens.v79, gene[!is.na(gene)], "ENTREZID", "SYMBOL") #convert gene IDs from SYMBOL format to ENTREZ ID format (was using v79, new code is using v107)
+  gene_entrezID <- genes_anno_type[match(gene, genes_anno_type$gene_id), ]
+  gene_go <- enricher(gene_entrezID$entrezid, TERM2GENE=Database, universe=universe) #enrichment analysis with hypergeometric test
+  gene_go <- setReadable(gene_go, OrgDb = org.Hs.eg.db, keyType="ENTREZID") #convert enrichment results from ENTREZ ID format to SYMBOL for easier interpretation
+return(gene_go)
+} 
+```
+
+# assign significant genes to relevant k-means clusters & drug + cell cycle arrest categories. 
+```{r}
+genes_in_clusters <- lapply(levels(clusterDF$Clusters), function(x){row.names(clusterDF[clusterDF$Clusters %in% x, ])})
+genes_in_clusters[[1]] <- unlist(genes_in_clusters[1:2])
+genes_in_clusters[[6]] <- unlist(genes_in_clusters[5:6])
+genes_in_clusters <- genes_in_clusters[c(1,3,4,6,7,8)]
+cluster_names <- c("CellCycle", "Palbo1", "Palbo2", "Doxo1", "Doxo2", "Shared") 
+names(genes_in_clusters) <- cluster_names
+```
+
+# RNA-seq: GO enrichment on significant genes
+```{r}
+# GO enrichment analysis with msigdb GO:BP database:
+GOBP_enrichment_clusters <- list()
+# GO enrichment analysis with msigdb REACT database:
+GO_enrichment_clusters_REACT <- list()
+# GO enrichment analysis with msigdb Hallmark database:
+GO_enrichment_clusters_HallMark <- list()
+# GO enrichment analysis with msigdb REACT database:
+GO_enrichment_clusters_REACT <- list()
+
+# GO enrichment analysis with msigdb GO:MF database:
+GO_enrichment_clusters_MF <- list()
+
+for(i in 1:length(genes_in_clusters)){
+  
+GOBP_enrichment_clusters[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_GO_BP) # do GO enrichment analysis with background gene set set as all gene expressed, database used is msigdb GO:BP
+
+GO_enrichment_clusters_REACT[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_REACT)
+
+GO_enrichment_clusters_HallMark[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_H)
+
+GO_enrichment_clusters_REACT[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_REACT)
+
+ GO_enrichment_clusters_MF[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_GO_MF)
+}
+```
+
+### RNA-seq: format GO enrichment terms from each cluster into matrix of -log10(padj values)
+```{r}
+# convert each clusters' GO enrichment terms into dataframes
+GO_enrichment_clusters_REACT_df <- list()
+ GO_enrichment_clusters_REACT_df <- list()
+ GO_enrichment_clusters_HallMark_df <- list()
+ GOBP_enrichment_clusters_df <- list()
+for(i in 1:length(GO_enrichment_clusters_REACT)){
+  GO_enrichment_clusters_REACT_df[[i]] <- as.data.frame(GO_enrichment_clusters_REACT[[i]])
+   GO_enrichment_clusters_REACT_df[[i]] <- as.data.frame(GO_enrichment_clusters_REACT[[i]])
+ GO_enrichment_clusters_HallMark_df[[i]] <- as.data.frame(GO_enrichment_clusters_HallMark[[i]])
+ GOBP_enrichment_clusters_df[[i]] <- as.data.frame(GOBP_enrichment_clusters[[i]])
+}
+
+ # indicate names of each list as the cluster number
+ names(GO_enrichment_clusters_REACT_df) <- cluster_names 
+ names(GO_enrichment_clusters_REACT_df) <- cluster_names 
+ names(GO_enrichment_clusters_HallMark_df) <- cluster_names 
+ names(GOBP_enrichment_clusters_df) <- cluster_names 
+ 
+ # remove any cluster of genes that have 0 GO enrichment terms
+ GO_enrichment_clusters_REACT_df <-  GO_enrichment_clusters_REACT_df[sapply( GO_enrichment_clusters_REACT_df, nrow)>0]
+ GO_enrichment_clusters_REACT_df <-  GO_enrichment_clusters_REACT_df[sapply( GO_enrichment_clusters_REACT_df, nrow)>0]
+ GO_enrichment_clusters_HallMark_df <-  GO_enrichment_clusters_HallMark_df[sapply( GO_enrichment_clusters_HallMark_df, nrow)>0]
+ GOBP_enrichment_clusters_df <-  GOBP_enrichment_clusters_df[sapply( GOBP_enrichment_clusters_df, nrow)>0]
+ 
+ # indicate which cluster and database each dataframe comes from 
+ for(i in 1:length(GO_enrichment_clusters_REACT_df)){
+  GO_enrichment_clusters_REACT_df[[i]]$Cluster <- names(GO_enrichment_clusters_REACT_df)[i]
+  GO_enrichment_clusters_REACT_df[[i]]$Database <- "REACT"
+ }
+  for(i in 1:length(GO_enrichment_clusters_REACT_df)){
+   GO_enrichment_clusters_REACT_df[[i]]$Cluster <-  names(GO_enrichment_clusters_REACT_df)[i]
+   GO_enrichment_clusters_REACT_df[[i]]$Database <- "REACTOME"
+  }
+  for(i in 1:length(GO_enrichment_clusters_HallMark_df)){
+ GO_enrichment_clusters_HallMark_df[[i]]$Cluster <- names(GO_enrichment_clusters_HallMark_df)[i]
+ GO_enrichment_clusters_HallMark_df[[i]]$Database <- "Hallmark"
+  }
+ 
+  for(i in 1:length(GOBP_enrichment_clusters_df)){
+ GOBP_enrichment_clusters_df[[i]]$Cluster <- names(GOBP_enrichment_clusters_df)[i]
+  GOBP_enrichment_clusters_df[[i]]$Database <- "GO:BP"
+  }
+
+# combine GO enrichment results from different databases into 1 dataframe for each cluster of genes. 
+GO_results_list <- vector()
+GO_results_list$CellCycle <- rbind(GO_enrichment_clusters_REACT_df$CellCycle, GO_enrichment_clusters_HallMark_df$CellCycle, GO_enrichment_clusters_REACT_df$CellCycle, GOBP_enrichment_clusters_df$CellCycle)
+
+GO_results_list$Palbo1 <- rbind(GO_enrichment_clusters_REACT_df$Palbo1, GO_enrichment_clusters_HallMark_df$Palbo1 , GO_enrichment_clusters_REACT_df$Palbo1, GOBP_enrichment_clusters_df$Palbo1)
+
+GO_results_list$Palbo2 <- rbind(GO_enrichment_clusters_REACT_df$Palbo2, GO_enrichment_clusters_HallMark_df$Palbo2, GO_enrichment_clusters_REACT_df$Palbo2, GOBP_enrichment_clusters_df$Palbo2)
+
+GO_results_list$Doxo1 <- rbind(GO_enrichment_clusters_REACT_df$Doxo1, GO_enrichment_clusters_HallMark_df$Doxo1, GO_enrichment_clusters_REACT_df$Doxo1, GOBP_enrichment_clusters_df$Doxo1)
+
+GO_results_list$Doxo2 <- rbind(GO_enrichment_clusters_REACT_df$Doxo2, GO_enrichment_clusters_HallMark_df$Doxo2, GO_enrichment_clusters_REACT_df$Doxo2, GOBP_enrichment_clusters_df$Doxo2)
+
+GO_results_list$Shared <- rbind(GO_enrichment_clusters_REACT_df$Shared, GO_enrichment_clusters_HallMark_df$Shared, GO_enrichment_clusters_REACT_df$Shared, GOBP_enrichment_clusters_df$Shared)
+
+# order GO enrichment results from different databases by padj values
+for(i in 1:length(GO_results_list)){
+  GO_results_list[[i]] <- GO_results_list[[i]][order(GO_results_list[[i]]$p.adjust), ]
+}
+
+# combine dataframes of each cluster of gene's GO enrichment results into 1 master dataframe
+GO_results_df <- do.call(rbind, GO_results_list)
+
+# create matrix of -log10pvalues of the top 15 enriched pathways for each cluster
+
+GO_results_list_mat <- matrix(nrow=length(unique(unlist(lapply(GO_results_list, function(GO_results_list){GO_results_list$ID[1:50]})))), ncol=length(GO_results_list)) # make empty matrix, number of columns are the clusters of genes and number of total top GO terms of all clusters
+
+row.names(GO_results_list_mat) <- unique(unlist(lapply(GO_results_list, function(GO_results_list){GO_results_list$ID[1:50]}))) # row names are top 12 GO enrichment terms for each cluster combined
+colnames(GO_results_list_mat) <- cluster_names  # column names are clusters
+
+# pathways that are not enriched in the cluster are listed as NA so just change the value to 0 so that it can be plotted in heatmap
+for(i in 1:ncol(GO_results_list_mat)){
+GO_results_list_mat[ ,i] <- -log10(GO_results_list[[i]][match(row.names(GO_results_list_mat), GO_results_list[[i]]$ID), ]$p.adjust)
+GO_results_list_mat[ ,i] <- ifelse(GO_results_list_mat[ ,i] %in% NA, 0, GO_results_list_mat[ ,i])
+}
+GO_results_list_mat <- GO_results_list_mat[!is.na(row.names(GO_results_list_mat)), ] # remove padj values that are NA 
+
+GO_anno_colors <-  list(database=c("GO:BP"="#3B4992FF", "Hallmark"="#EE0000FF", "REACT"="#008B45FF", "REACTOME" ="#631879FF"), Cluster=c("CellCycle"="#66C2A5", "Palbo1"="#FC8D62", "Palbo2"="#8DA0CB","Doxo1"="#E78AC3","Doxo2"="#FFD92F", "Shared"="#E5C494"))
+names(GO_anno_colors$Cluster) <- cluster_names 
+# annotation dataframe for rows of heatmap to indicate which database GO term came from 
+GO_anno <- data.frame(row.names=row.names(GO_results_list_mat), database=GO_results_df[match(row.names(GO_results_list_mat), GO_results_df$ID), ]$Database)
+# annotation dataframe for columns of heatmap to color by Cluster colors. 
+Cluster_anno <- data.frame(Cluster=cluster_names , row.names = colnames(GO_results_list_mat))
+
+# plot heatmap of -log10 pvalues of GO enrichment results 
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure p53 activity is different depending on the presence of DNA damage/GO_results_list_mat.pdf", height=20, width=15)
+pheatmap(GO_results_list_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100),breaks = seq(0, 10,length.out = 100), annotation_row = GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, clustering_distance_rows = "correlation", border_color = "black")
+dev.off()
+```
+
+# RNA-seq: GSEA Analysis
+```{r}
+ranked_res_forGSEA <- list()
+for(i in 1:length(LFCResultsall_RNA)){
+# Filter for significant genes (optional)
+  
+rank <- LFCResultsall_RNA[[i]][!is.na(LFCResultsall_RNA[[i]]$padj), ]
+
+# Create a ranked list based on a metric (e.g., log2 fold change or -log10(p-value))
+# Here, we rank by the sign of log2FoldChange * -log10(p-value)
+rank$rank_metric <- sign(rank$log2FoldChange) * -log10(rank$pvalue)
+
+rank <- rank[order(rank$rank_metric, decreasing = TRUE), ]
+
+# Sort the LFCResultsall_RNA results by the ranking metric
+ranked_res_forGSEA[[i]] <- rank$rank_metric
+names(ranked_res_forGSEA[[i]]) <- row.names(rank)
+
+names(ranked_res_forGSEA[[i]]) <- ifelse(genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid %in% NA, names(ranked_res_forGSEA[[i]]), genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid)
+} # convert to entrez id for input into GSEA function. 
+names(ranked_res_forGSEA) <- names(LFCResultsall_RNA)
+
+# run GSEA analysis using: 
+GSEA_Results_H <- list() # msigdb Hallmark database
+GSEA_Results_REACT <- list() # msigdb KEGG database
+GSEA_Results_REACT <- list() # msigdb Reactome database
+GSEA_plots_H <- list()
+GSEA_plots_REACT <- list()
+GSEA_plots_REACT <- list()
+for(i in 1:length(ranked_res_forGSEA)){
+ GSEA_Results_H[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_H) 
+ GSEA_Results_REACT[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_REACT) 
+ GSEA_Results_REACT[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_REACT) 
+}
+
+names(GSEA_Results_H) <- names(LFCResultsall_RNA)
+names(GSEA_Results_REACT) <- names(LFCResultsall_RNA)
+names(GSEA_Results_REACT) <- names(LFCResultsall_RNA)
+
+# generate running score plots for GSEA results
+# GSEA Hallmark
+for(i in 1:length(GSEA_Results_H)){
+  maxplots <- length(GSEA_Results_H[[i]]$ID)
+GSEA_plots_H[[i]] <- list()
+GSEA_plots_KEGG[[i]] <- list()
+GSEA_plots_REACT[[i]] <- list()
+  for(j in 1:maxplots){
+  GSEA_plots_H[[i]][[j]] <- gseaplot(GSEA_Results_H[[i]], geneSetID = j, by = "runningScore", title = paste0(names(GSEA_Results_H)[i], ": " , GSEA_Results_H[[i]]$ID[j]) )
+  }
+  names(GSEA_plots_H[[i]]) <- GSEA_Results_H[[i]]$ID[1:maxplots]
+}
+
+# GSEA KEGG
+for (i in 1:length(GSEA_Results_KEGG)) {
+  # Check if the current object is not empty
+  if (!is.null(GSEA_Results_KEGG[[i]]) && length(GSEA_Results_KEGG[[i]]$ID) > 0) {
+    maxplots <- length(GSEA_Results_KEGG[[i]]$ID)
+    GSEA_plots_KEGG[[i]] <- list()  # Initialize a list to store plots for this object
+    
+    for (j in 1:maxplots) {
+      GSEA_plots_KEGG[[i]][[j]] <- gseaplot(
+        GSEA_Results_KEGG[[i]], 
+        geneSetID = j, 
+        by = "runningScore", 
+        title = GSEA_Results_KEGG[[i]]$ID[j]
+      )
+    }
+    # Assign names to the plots
+    names(GSEA_plots_KEGG[[i]]) <- GSEA_Results_KEGG[[i]]$ID[1:maxplots]
+  } else {
+    # If empty, set the current slot in GSEA_plots_KEGG to NULL
+    GSEA_plots_KEGG[[i]] <- NULL
+  }
+}
+
+# GSEA Reactome
+for (i in 1:length(GSEA_Results_REACT)) {
+  # Check if the current object is not empty
+  if (!is.null(GSEA_Results_REACT[[i]]) && length(GSEA_Results_REACT[[i]]$ID) > 0) {
+    maxplots <- length(GSEA_Results_REACT[[i]]$ID)
+    GSEA_plots_REACT[[i]] <- list()  # Initialize a list to store plots for this object
+    
+    for (j in 1:maxplots) {
+      GSEA_plots_REACT[[i]][[j]] <- gseaplot(
+        GSEA_Results_REACT[[i]], 
+        geneSetID = j, 
+        by = "runningScore", 
+        title = GSEA_Results_REACT[[i]]$ID[j]
+      )
+    }
+    # Assign names to the plots
+    names(GSEA_plots_REACT[[i]]) <- GSEA_Results_REACT[[i]]$ID[1:maxplots]
+  } else {
+    # If empty, set the current slot in GSEA_plots_REACT to NULL
+    GSEA_plots_REACT[[i]] <- NULL
+  }
+}
+
+# assign names to plots based on which DESeq comparison GSEA was done on. 
+names(GSEA_plots_H) <- names(LFCResultsall_RNA)
+names(GSEA_plots_KEGG) <- names(which(unlist(lapply(GSEA_Results_KEGG, function(x){length(x$ID)})) >0))
+names(GSEA_plots_REACT) <- names(which(unlist(lapply(GSEA_Results_REACT, function(x){length(x$ID)})) >0))
+```
+
+# RNA-seq: import IPA upstream regulators & pathways
+```{r}
+setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure p53 activity is different depending on the presence of DNA damage/IPA_files/output/")
+IPA_upstream_regs <- list()
+IPA_pathways <- list()
+# read in information for enriched IPA pathways per hierarchical cluster (clustering based on scaled rlog normalized counts)
+for(i in 1:length(cluster_names)){
+IPA_pathways[[i]]<- read_tsv(paste0(cluster_names[i], "_IPA_Pathways.txt"), skip=2)
+# read in information for enriched upstream regulators 
+IPA_upstream_regs[[i]] <- read.table(paste0(cluster_names[i], "_IPA_UpstreamRegs.txt"), sep="\t", skip=2, header=T)
+IPA_upstream_regs[[i]] <- IPA_upstream_regs[[i]][!grepl("mir|miR|Mir", IPA_upstream_regs[[i]]$Upstream.Regulator), ] # remove upstream regulators that are miRNAs (uncertain if they will be informative & there is a lot of them)
+}
+
+# filter out upstream regulators that are not expressed in this cell line. 
+
+#extract ids of all expressed genes
+expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
+
+# keep only upstream regulators that are part of expressed genes or have lower case letters (these are upstream regulators that could be miRNAs or protein complexes)
+IPA_upstream_regs <- lapply(IPA_upstream_regs, function(IPA_upstream_regs){IPA_upstream_regs[c(grep('[:lower:]', IPA_upstream_regs$Upstream.Regulator), which(IPA_upstream_regs$Upstream.Regulator %in% expressedGenes)), ]})
+
+names(IPA_upstream_regs) <- cluster_names
+
+names(IPA_pathways) <- cluster_names
+```
+
+## plotting padj values of top IPA predicted upstream regulators of all clusters
+```{r}
+create_ipa_regs_matrix <- function(IPA_upstream_regs, cluster_names, filter_keyword = "complex", top_n = 25) {
+  # Extract unique upstream regulators based on the filter keyword
+  unique_upstream_regs <- unique(unlist(lapply(IPA_upstream_regs, function(x) {
+    x$Upstream.Regulator[grepl(filter_keyword, x$Molecule.Type)][1:top_n]
+  })))
+
+  # Create a matrix to store -log10 p-values
+  IPA_complex_regs_mat <- matrix(
+    nrow = length(unique_upstream_regs),
+    ncol = length(IPA_upstream_regs)
+  )
+  row.names(IPA_complex_regs_mat) <- unique_upstream_regs # Set row names to upstream regulators
+  colnames(IPA_complex_regs_mat) <- cluster_names        # Set column names to cluster names
+
+  # Fill in the matrix with -log10 p-values
+  for (i in seq_len(ncol(IPA_complex_regs_mat))) {
+    # Match and extract p-values for each cluster
+    IPA_complex_regs_mat[, i] <- -log10(IPA_upstream_regs[[i]][
+      match(row.names(IPA_complex_regs_mat), IPA_upstream_regs[[i]]$Upstream.Regulator),
+      "p.value.of.overlap"
+    ])
+
+    # Replace NA values with 0 for heatmap compatibility
+    IPA_complex_regs_mat[, i][is.na(IPA_complex_regs_mat[, i])] <- 0
+  }
+
+  return(IPA_complex_regs_mat)
+}
+
+IPA_complex_regs_mat <- create_ipa_regs_matrix(
+  IPA_upstream_regs = IPA_upstream_regs,
+  cluster_names = cluster_names,
+  filter_keyword = "complex",
+  top_n = 25
+)
+
+IPA_TF_regs_mat <- create_ipa_regs_matrix(
+  IPA_upstream_regs = IPA_upstream_regs,
+  cluster_names = cluster_names,
+  filter_keyword = "transcription",
+  top_n = 25
+)
+
+# plot heatmap of -log10 pvalue of overlap of enriched complex regulators
+pheatmap(IPA_complex_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100))
+
+pheatmap(IPA_TF_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100))
+```
+
+# RNA-seq: make matrix with log2FC values of significant genes
+```{r}
+# get log2FC values of significantly changing genes over time
+sig_LFCMat <- matrix(ncol=length(LFCResultsall_RNA), nrow=nrow(clusterDF))
+colnames(sig_LFCMat) <- names(LFCResultsall_RNA)
+row.names(sig_LFCMat) <-row.names(LFCResultsall_RNA[[10]][row.names(LFCResultsall_RNA[[10]]) %in% sigGenes, ])
+for(i in 1:ncol(sig_LFCMat)){
+sig_LFCMat[ ,i] <- LFCResultsall_RNA[[i]][row.names(LFCResultsall_RNA[[i]]) %in% sigGenes, ]$log2FoldChange
+}
+
+row.names(sig_LFCMat) <-  ifelse(genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(sig_LFCMat), genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id)
+
+row.names(ordered_sigMat)[grep("^H1.[0-9]", row.names(ordered_sigMat))]  <- gsub("*H1.", "H1-",row.names(ordered_sigMat[grepl("^H1.[0-9]", row.names(ordered_sigMat)), ]) )
+
+sig_LFCMat <- sig_LFCMat[match(row.names(ordered_sigMat), row.names(sig_LFCMat)), ] # order based on k-means & hierarchical ordering of rlog counts. 
+
+# get log2FC values of all expressed genes over time 
+LFCMat <- matrix(ncol=length(LFCResultsall_RNA), nrow=nrow(LFCResultsall_RNA[[1]]))
+colnames(LFCMat) <- names(LFCResultsall_RNA)
+row.names(LFCMat) <-row.names(LFCResultsall_RNA[[1]])
+for(i in 1:ncol(LFCMat)){
+LFCMat[ ,i] <- LFCResultsall_RNA[[i]]$log2FoldChange
+}
+
+row.names(LFCMat) <-  ifelse(genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(LFCMat), genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id)
+```
+
+# RNA-seq: P53 & NF-kB signatures
+```{r}
+# import p53 census target gene database from https://tp53.isb-cgc.org/target_genes
+Fischer_Oncogene_2017_p53_census_target_genes <- read_excel("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/external_databases/Fischer_Oncogene_2017_p53_census_target_genes.xlsx")
+
+# import Gilmore Lab's list of NF-kB target genes
+Gilmore_NFKB_Targets <- as.data.frame(read_excel("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/external_databases/GilmoreLab_NFKB_Target_Genes_BostonUniversity.xlsx"))$`Human Gene Name`
+Gilmore_NFKB_Targets <- unique(Gilmore_NFKB_Targets[!is.na(Gilmore_NFKB_Targets)])
+
+# extract genes under Hallmark terms P53 PATHWAY & TNFA SIGNALING VIA NFKB
+p53_Hallmark <- msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_P53_PATHWAY", ]$gene_symbol
+NFKB_Hallmark <- msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_TNFA_SIGNALING_VIA_NFKB", ]$gene_symbol
+
+# filter for p53 & NFKB target genes from IPA
+IPA_targets <- list(p53=unlist(lapply(IPA_upstream_regs, function(x){str_split(x[grep("TP53$", x$Upstream.Regulator), ]$Target.Molecules.in.Dataset, ",")})),
+                    NFKB=unlist(lapply(IPA_upstream_regs, function(x){unique(unlist(str_split(x[grep("NFKB", x$Upstream.Regulator), ]$Target.Molecules.in.Dataset, ",")))}))
+                    )
+
+# make log2FC matrix of p53 target genes going up with drug treatment
+NFKB_sig_LFCMat <- sig_LFCMat[row.names(sig_LFCMat) %in% c(Gilmore_NFKB_Targets, NFKB_Hallmark, IPA_targets$NFKB) & ! row.names(sig_LFCMat) %in% row.names(clusterDF[clusterDF$Clusters %in% c("5", "2"), ]), ]
+
+anno_sigLFC <- data.frame(
+  row.names = colnames(sig_LFCMat),
+  log2FC = c(rep("vs Cyc", 4), rep("vs day3", 3), rep("vs Cyc", 5), rep("vs day3", 4), rep("DoxovsPalbo",4)),
+  Treatment = c(rep("Doxo", 7), rep("Palbo", 9), rep("DoxovsPalbo",4)),
+  Timepoint = c("3", "10", "14", "21", "10", "14", "21", "3", "10", "14", "21", "28", "10", "14", "21", "28","3", "10", "14", "21")
+)
+
+# add annotation to significant genes based on if they are NF-kB or p53 targets. 
+clusterDF$NFKB_All <- ifelse(row.names(clusterDF) %in% c(Gilmore_NFKB_Targets, NFKB_Hallmark, IPA_targets$NFKB), "Yes", "No") # annotate sig genes as NF-kB targets if they are part of Gilmore_NFKB_Targets or TNFA SIGNALING VIA NFKB Hallmark term 
+clusterDF$p53_All <- ifelse(row.names(clusterDF) %in% c(Fischer_Oncogene_2017_p53_census_target_genes$`Gene Symbol`, p53_Hallmark), "Yes", "No")
+
+row.names(clusterDF)[grep("^H1.[0-9]", row.names(clusterDF))]  <- gsub("*H1.", "H1-",row.names(clusterDF[grepl("^H1.[0-9]", row.names(clusterDF)), ]) ) # correction: to match with row.names in sig_LFCMat, replace - with . for linker histone genes. 
+```
+
+# ATAC-seq: plot Tn5 insertion sites around RELA motifs to show shared increased accessibility at putative NF-kB binding sites (all up peaks)
+```{r}
+# filter for GRanges of up peaks in each drug and cell cycle arrest category 
+Up_DrugandArrestCat <- list(
+  PalboUpvsCyc=allUpvsCycling$Palbo[!allUpvsCycling$Palbo %over% allUpvsCycling$Doxo, ], 
+  sharedUpvsCyc=allUpvsCycling$Palbo[allUpvsCycling$Palbo %over% allUpvsCycling$Doxo, ],
+  DoxoUpvsCyc=allUpvsCycling$Doxo[!allUpvsCycling$Doxo %over% allUpvsCycling$Palbo, ], 
+  PalboUpvsday3=allUpvsday3$Palbo[!allUpvsday3$Palbo %over% allUpvsday3$Doxo, ], 
+  sharedUpvsday3=allUpvsday3$Palbo[allUpvsday3$Palbo %over% allUpvsday3$Doxo, ], 
+  DoxoUpvsday3=allUpvsday3$Doxo[!allUpvsday3$Doxo %over% allUpvsday3$Palbo, ])
+
+# filter for GRanges of up peaks in each drug and cell cycle arrest category but without specifying shared up peaks. 
+Up_DrugandArrest_PvsD <- list(
+  PalboUpvsCyc=allUpvsCycling$Palbo, 
+  DoxoUpvsCyc=allUpvsCycling$Doxo, 
+  PalboUpvsday3=allUpvsday3$Palbo,
+  DoxoUpvsday3=allUpvsday3$Doxo)
+
+# load in HOCOMOCO motif sequence database
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/motifs/HOCOMOCO_v11_matrix.RData")
+# scan for RELA motifs
+TF65_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$TF65_HUMAN.H11MO.0.A, BSgenome.Hsapiens.UCSC.hg38, with.score=T)
+# scan for NFKB1 motifs
+NFKB1_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$NFKB1_HUMAN.H11MO.1.B, BSgenome.Hsapiens.UCSC.hg38, with.score=T)
+
+# filter for RELA motifs that overlap with up peaks
+TF65_ATAC_Up_DrugandArrestCat <- lapply(Up_DrugandArrestCat, function(x){TF65_HMv11[TF65_HMv11 %over% x]})
+TF65_ATAC_Up_DrugandArrest_PvsD <- lapply(Up_DrugandArrest_PvsD, function(x){TF65_HMv11[TF65_HMv11 %over% x]})
+
+# Export each GRanges object as a BED file
+for(i in 1:length(TF65_ATAC_Up_DrugandArrestCat)){
+export.bed(TF65_ATAC_Up_DrugandArrestCat[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds/", names(TF65_ATAC_Up_DrugandArrestCat)[i], "_TF65_HMv11.bed"))
+}
+
+for(i in 1:length(TF65_ATAC_Up_DrugandArrest_PvsD)){
+export.bed(TF65_ATAC_Up_DrugandArrest_PvsD[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds/", names(TF65_ATAC_Up_DrugandArrest_PvsD)[i], "_PvsD_TF65_HMv11.bed"))
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+writeLines(dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds", full.names=T, pattern=".bed"), con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds/regions.txt")
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir("//lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds", pattern=".bed"))
+writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds/filename.txt")
+```
+
+# ATAC-seq: submit bash job to plot around TF65 motifs in all up peaks
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/Cycling_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day3_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day10_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day14_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day21_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day3_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day10_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day14_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day21_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day28_Palbo_scaleFactornorm_cutsCoverage.bw"
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/output_plots
+sbatch -p risc,hpc --array=1-10 \
+--export=bigwigs="$mergedcuts",\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds/regions.txt,\
+samplenames="$samplenames",\
+profile_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/output_plots/plotProfile,\
+heatmap_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/output_plots/plotHeatmap,\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds/filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+
+# ATAC-seq: plot Tn5 insertion sites around RELA motifs to show shared increased accessibility at putative NF-kB binding sites (up peaks within 50kb of sig changing gene clusters )
+```{r}
+# merge RNA clusters of the same drug category.
+merge_geneclusters <- list("CellCycle"=genes_in_clusters[[1]], 
+                           "Palbo"=unlist(genes_in_clusters[2:3]), 
+                           "Doxo"=unlist(genes_in_clusters[4:5]), 
+                           "Shared"=genes_in_clusters[[6]]
+)
+
+# import gtf file for genes
+genes_anno <- import("/lustre/fs4/risc_lab/store/jyeung/references/gencode.v41.GRCh38.p13.annotation.gtf")
+genes_anno <- genes_anno[genes_anno$type %in% "gene", ] # filter for regions that are only genes 
+genes_anno$gene_id <- gsub('\\.[0-9]*$', '', genes_anno$gene_id) # remove numbers after . in gene id column 
+genes_anno <- genes_anno[ ,c("source", "type", "gene_id", "gene_type", "gene_name", "level")] # keep only these columns
+
+
+# get the genomic coordinates of significantly changing genes from merged clusters (RNA-seq data)
+merge_geneclusters_anno <- lapply(merge_geneclusters, function(merge_geneclusters){genes_anno[genes_anno$gene_name %in% merge_geneclusters]})
+
+# make GRanges where the coordinates are 50kb upstream of gene TSS and 50kb downstream of end of gene. 
+merge_geneclusters_anno_findpeaks <- merge_geneclusters_anno
+for(i in 1:length(merge_geneclusters_anno)){
+  start(merge_geneclusters_anno_findpeaks[[i]]) <- start(merge_geneclusters_anno[[i]])-50000
+  end(merge_geneclusters_anno_findpeaks[[i]]) <- end(merge_geneclusters_anno[[i]])+50000
+}
+
+# find peaks that overlap within 50kb of significantly changing genes in clusters
+peaks_in_geneclusters <- lapply(merge_geneclusters_anno_findpeaks, function(merge_geneclusters_anno_findpeaks){annomasterpeaks_pval0.2[annomasterpeaks_pval0.2 %over% merge_geneclusters_anno_findpeaks, ]})
+
+# filter for sig changing peaks within 50kb of sig changing genes in clusters. 
+Up_PvsD_gene_clusters <- list()
+for(i in 1:length(Up_DrugandArrest_PvsD)){
+Up_PvsD_gene_clusters[[i]] <-lapply(peaks_in_geneclusters, function(peaks_in_geneclusters){Up_DrugandArrest_PvsD[[i]][Up_DrugandArrest_PvsD[[i]] %over% peaks_in_geneclusters, ]}) 
+}
+names(Up_PvsD_gene_clusters) <- names(Up_DrugandArrest_PvsD)
+
+# filter for RELA motifs that overlap with up peaks nearby sig changing genes 
+NFKB1_Up_PvsD_gene_clusters <- list()
+for(i in 1:length(Up_PvsD_gene_clusters)){
+NFKB1_Up_PvsD_gene_clusters[[i]] <- lapply(Up_PvsD_gene_clusters[[i]], function(x){NFKB1_HMv11[NFKB1_HMv11 %over% x]})
+}
+names(NFKB1_Up_PvsD_gene_clusters) <- names(Up_PvsD_gene_clusters)
+
+directory <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds"
+  
+# Export each GRanges object as a BED file
+for(i in 1:length(NFKB1_Up_PvsD_gene_clusters)){
+  for(j in 1:length(NFKB1_Up_PvsD_gene_clusters[[i]])){
+export.bed(NFKB1_Up_PvsD_gene_clusters[[i]][[j]], con = paste0(directory, "/", names(NFKB1_Up_PvsD_gene_clusters)[i], "_", names(NFKB1_Up_PvsD_gene_clusters[[i]])[j], "_genes", "_PvsD_NFKB1_HMv11.bed"))
+  }
+}
+
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+writeLines(dir(directory, full.names=T, pattern="NFKB1.*\\.bed$"), con=paste0(directory, "/NFKB1_regions.txt"))
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir(directory, pattern="NFKB1.*\\.bed$"))
+writeLines(filenames, con=paste0(directory, "/NFKB1_filename.txt"))
+```
+
+# ATAC-seq: submit bash job to plot around NFKB1 motifs in up peaks within 50kb of sig changing genes. 
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/Cycling_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day3_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day10_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day14_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day21_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day3_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day10_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day14_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day21_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day28_Palbo_scaleFactornorm_cutsCoverage.bw"
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/output_plots
+sbatch -p risc,hpc --array=1-16 \
+--export=bigwigs="$mergedcuts",\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds/NFKB1_regions.txt,\
+samplenames="$samplenames",\
+profile_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/output_plots/plotProfile,\
+heatmap_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/output_plots/plotHeatmap,\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/input_beds/NFKB1_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+
+# ATAC-seq: import MEME-AME results into dataframe
+```{r}
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/expressedGenes.RData")
+
+# function to import motif enrichment results
+process_motif_data <- function(base_dir, expressed_genes = NULL) {
+  library(dplyr)
+  library(readr)
+  
+  # Initialize an empty list to store the data frames
+  Peaks_AME <- list()
+  processed_dirs <- vector()
+  setwd(base_dir)
+  file_paths=dir()
+
+  # Loop through each directory and process the files
+  for (i in seq_along(file_paths)) {
+    # Construct the path to the ame.tsv file
+    ame_file_path <- paste0(file_paths[i], "/ame.tsv")
+    
+    # Check the file size
+    file_info <- file.info(ame_file_path)
+    if (file_info$size == 1.1 || is.na(file_info$size)) {
+      # If the file size is 0 or file does not exist, skip to the next iteration
+      next
+    }
+    
+    # Read the ame.tsv file
+    Peaks_AME[[length(Peaks_AME) + 1]] <- as.data.frame(read_tsv(file = ame_file_path, comment = "#"))
+    
+    # Add the current directory to the processed_dirs vector
+    processed_dirs <- c(processed_dirs, file_paths[i])
+  }
+  
+  # Set names for the list elements
+  names(Peaks_AME) <- processed_dirs
+  
+  # Post-processing each dataframe
+  for (i in seq_along(Peaks_AME)) {
+    
+    # Calculate TPvsFP and add as a new column
+    Peaks_AME[[i]]$TPvsFP <- Peaks_AME[[i]]$`%TP` - Peaks_AME[[i]]$`%FP`
+    
+    # Remove everything after "_" in the motif_ID column
+    Peaks_AME[[i]]$motif_ID <- gsub("\\_.*", "", Peaks_AME[[i]]$motif_ID)
+  }
+  
+  # Convert the list of MEME-AME results into a single dataframe
+  Peaks_AME <- Peaks_AME[!sapply(Peaks_AME, is.null)]
+  Peaks_AME_df <- do.call(rbind, Peaks_AME)
+  
+  # Filter for motifs that are expressed, if provided
+  if (!is.null(expressed_genes)) {
+    Peaks_AME_df <- Peaks_AME_df %>%
+      filter(motif_ID %in% expressed_genes)
+  }
+colnames(Peaks_AME_df)[c(7,15,17)] <- c("adj_pvalue", "percentTP", "percentFP") # change column names without special symbols 
+Peaks_AME_df$neglog10padj <- -log10(Peaks_AME_df$adj_pvalue) # add in column for -log10(adj pvalue)
+  return(Peaks_AME_df)
+}
+
+# import motif enrichment results from sig changing peaks within 50kb of RNA sig changing gene clusters (categorized by Palbo, Doxo, shared and vsCyc and vsday3)
+PvsSharedvsD_AME_mergeClusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/Palbo_shared_Doxo_sigPeaks_RNAmergeClusters", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+PvsSharedvsD_AME_mergeClusters$Cluster <- gsub("^[^_]*_|\\.[0-9]*$", "",row.names(PvsSharedvsD_AME_mergeClusters))
+PvsSharedvsD_AME_mergeClusters$Comparison <- gsub("_.*", "",  row.names(PvsSharedvsD_AME_mergeClusters)) 
+PvsSharedvsD_AME_mergeClusters$Comparison <- as.factor(PvsSharedvsD_AME_mergeClusters$Comparison)
+PvsSharedvsD_AME_mergeClusters$Direction <- ifelse(grepl("Up", PvsSharedvsD_AME_mergeClusters$Comparison), "Up", "Down")
+PvsSharedvsD_AME_mergeClusters$Group <- gsub("(Doxo|Palbo|shared).*", "\\1", PvsSharedvsD_AME_mergeClusters$Comparison)
+
+
+# ATAC-seq:  motif enrichment results from sig changing peaks within 50kb of RNA sig changing gene clusters (categorized by Palbo, Doxo only )
+AME_mergeClusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_sigPeaks_RNAmergeClusters", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+AME_mergeClusters$Cluster <- gsub('\\.[0-9]*$', '', row.names(AME_mergeClusters)) 
+AME_mergeClusters$Cluster <- gsub("^[^_]+_[^_]+_", "", AME_mergeClusters$Cluster) # remove everything before the 2nd "_"
+
+AME_mergeClusters$Comparison <- gsub(".*?(all(Up|Down)_(Palbo|Doxo)).*", "\\1", row.names(AME_mergeClusters))
+AME_mergeClusters$Comparison <- as.factor(AME_mergeClusters$Comparison)
+AME_mergeClusters$Direction <- ifelse(grepl("Up", AME_mergeClusters$Comparison), "Up", "Down")
+AME_mergeClusters$Group <- gsub("^[^_]*_", "", AME_mergeClusters$Comparison)
+```
+
+# ATAC-seq: import MEME-AME results into dataframe from DrugandArrest_PvsD peak list (peaks within 50kb of sig changing genes, categorized by DoxovsCyc, Doxovsday3, PalbovsCyc, Palbovsday3)
+```{r}
+PvsD_AME_mergeClusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/Palbo_shared_Doxo_sigPeaks_RNAmergeClusters", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+PvsD_AME_mergeClusters$Cluster <- gsub("^[^_]*_|\\.[0-9]*$", "",row.names(PvsD_AME_mergeClusters))
+PvsD_AME_mergeClusters$Comparison <- gsub("_.*", "",  row.names(PvsD_AME_mergeClusters)) 
+PvsD_AME_mergeClusters$Comparison <- as.factor(PvsD_AME_mergeClusters$Comparison)
+PvsD_AME_mergeClusters$Direction <- ifelse(grepl("Up", PvsD_AME_mergeClusters$Comparison), "Up", "Down")
+PvsD_AME_mergeClusters$Group <- gsub("(Doxo|Palbo).*", "\\1", PvsD_AME_mergeClusters$Comparison)
+```
+
+
+# *FIGURES*
+# RNA-seq: save GSEA running score for day 14 Doxo vs Cycling's Hallmark TNFA SIGNALING VIA NFKB Pathway
+```{r}
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/GSEA_Hallmark_TNFA SIGNALING VIA NFKB_pathway.pdf", width=3, height=2.5)
+GSEA_plots_H$`Doxo10 vs Doxo3`$`TNFA SIGNALING VIA NFKB`+theme_classic()+ylim(-0.05,0.7)
+GSEA_plots_H$`Doxo14 vs Doxo3`$`TNFA SIGNALING VIA NFKB`+theme_classic()+ylim(-0.05,0.7)
+GSEA_plots_H$`Doxo21 vs Doxo3`$`TNFA SIGNALING VIA NFKB`+theme_classic()+ylim(-0.05,0.7)
+
+GSEA_plots_H$`Palbo10 vs Palbo3`$`TNFA SIGNALING VIA NFKB`+theme_classic()+ylim(-0.05,0.7)
+GSEA_plots_H$`Palbo14 vs Palbo3`$`TNFA SIGNALING VIA NFKB`+theme_classic()+ylim(-0.05,0.7)
+GSEA_plots_H$`Palbo21 vs Palbo3`$`TNFA SIGNALING VIA NFKB`+theme_classic()+ylim(-0.05,0.7)
+GSEA_plots_H$`Palbo28 vs Palbo3`$`TNFA SIGNALING VIA NFKB`+theme_classic()+ylim(-0.05,0.7)
+dev.off()
+```
+
+# RNA-seq: plot padj values for top 10 GO terms for shared senescence up genes. 
+```{r}
+# Still showing the pvalues of the other clusters
+GO_results_mat_clusters <- list()
+for(i in 1:length(GO_results_list)){
+
+GO_results_mat_clusters[[i]] <- GO_results_list_mat[row.names(GO_results_list_mat) %in% GO_results_list[[i]]$ID[1:25], ]
+GO_results_mat_clusters[[i]] <- GO_results_mat_clusters[[i]][order(GO_results_mat_clusters[[i]][ ,i], decreasing=T), ]
+
+}
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/RNA_GO_results_SharedUp_genes.pdf", width=6, height=2.5)
+pheatmap(GO_results_mat_clusters[[6]][1:10, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0,8,length.out = 100), cluster_rows = F, main="GO enrichment: shared up genes", annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
+dev.off()
+```
+
+# RNA-seq: plot padj values for top 5 IPA upstream regs for each cluster individually. 
+```{r}
+# Still showing the pvalues of the other clusters as columns but only the top IPA upstream regs from the cluster of interest. 
+IPA_TF_regs_clusters <- list()
+IPA_complex_regs_clusters <- list()
+for(i in 1:length(IPA_upstream_regs)){
+  #transcription regulators
+IPA_TF_regs_clusters[[i]] <-IPA_TF_regs_mat[row.names(IPA_TF_regs_mat) %in% IPA_upstream_regs[[i]]$Upstream.Regulator[grepl("transcription", IPA_upstream_regs[[i]]$Molecule.Type)][1:5], ]
+IPA_TF_regs_clusters[[i]] <- IPA_TF_regs_clusters[[i]][order(IPA_TF_regs_clusters[[i]][ ,i], decreasing=T), ]
+  # complex regulators
+IPA_complex_regs_clusters[[i]] <-IPA_complex_regs_mat[row.names(IPA_complex_regs_mat) %in% IPA_upstream_regs[[i]]$Upstream.Regulator[grepl("complex", IPA_upstream_regs[[i]]$Molecule.Type)][1:5], ]
+IPA_complex_regs_clusters[[i]] <- IPA_complex_regs_clusters[[i]][order(IPA_complex_regs_clusters[[i]][ ,i], decreasing=T), ] # sort by decreasing padj value
+}
+
+# make heatmap of top 5 IPA predicted upstream regulators for shared up genes. 
+pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/RNA_IPA_TF_regs_SharedUp_genes.pdf", width=3, height=2)
+pheatmap(IPA_TF_regs_clusters[[6]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main="Shared up genes: predicted TF regulators", border_color = "black",  annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
+dev.off()
+
+pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/RNA_IPA_complex_regs_SharedUp_genes.pdf", width=4, height=2)
+pheatmap(IPA_complex_regs_clusters[[6]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main="Shared up genes: predicted complex regulators", border_color = "black", annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
+dev.off()
+```
+
+# RNA-seq: plot venn diagram showing overlap of shared up genes that are p53 targets, NF-kB targets and SASP. 
+```{r}
+# write function to create venn diagrams that are proportional to size of each category. 
+create_proportional_venn <- function(sets, set_labels, colors = c("#E0ADCD", "#B3C543", "#A0ADCD")) {
+  library(eulerr)
+  # Check if sets and labels are provided correctly
+  if (length(sets) != length(set_labels)) {
+    stop("The number of sets and set_labels must be the same.")
+  }
+  
+  # Prepare the data for eulerr
+  venn_data <- sets
+  names(venn_data) <- set_labels
+  
+  # Use eulerr to calculate the Venn diagram
+  venn_fit <- euler(venn_data)
+  
+  # Plot the Venn diagram
+  plot(venn_fit, 
+       fills = colors, 
+       labels = list(cex = 1, fontfamily = "Helvetica"),
+       quantities = list(cex = 1),
+       edges = list(lwd = 2))
+}
+venn_data_shared <- list(row.names(clusterDF[clusterDF$Clusters %in% "8" & clusterDF$p53_All %in% "Yes", ]), 
+                  row.names(clusterDF[clusterDF$Clusters %in% "8" & clusterDF$NFKB_All %in% "Yes", ]), 
+                  row.names(clusterDF[clusterDF$Clusters %in% "8" & clusterDF$SASP%in% "Yes", ]), 
+                  row.names(clusterDF[clusterDF$Clusters %in% "8", ]))
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/RNA_p53vsNFKB_sharedgenes_vennDiagram.pdf", width=4, height=4)
+
+create_proportional_venn(sets=venn_data_shared, 
+                         set_labels = c("p53 targets", "NF-kB targets", "SASP", "Shared up genes"), 
+                         colors = c("#00B0F0","red", "dark green", "#E5C494")
+)
+dev.off()
+```
+
+# plot heatmap of NF-kB target genes, clustered based on log2FC from day 3 treatment controls & Cycling controls
+```{r}
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/RNA_log2FC_NFKB_targets_mat.pdf", width=5, height=3)
+pheatmap(NFKB_sig_LFCMat, show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("Clusters", "SASP", "Cell_Cycle", "p53_All")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="all up NF-kB target genes")
+
+# plot showing only NFKB target genes belonging to shared up cluster of genes
+pheatmap(NFKB_sig_LFCMat[row.names(NFKB_sig_LFCMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "8", ]), ], show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=T, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("p53_All", "SASP")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="NF-kB Targets: Shared up genes")
+
+# plot showing only NFKB target genes belonging to shared up cluster of genes & are SASP genes. 
+pheatmap(NFKB_sig_LFCMat[row.names(NFKB_sig_LFCMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "8" & clusterDF$SASP %in% "Yes", ]), ], show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=T, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("p53_All", "SASP")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="NF-kB SASP: Shared up genes")
+dev.off()
+```
+
+# plot log2FC of NF-kB target genes at all timepoints relative to Cycling or day 3
+```{r}
+p53_NFKB_SASP_genes <- clusterDF[clusterDF$p53_All %in% "Yes"|clusterDF$SASP %in% "Yes"|clusterDF$NFKB_All %in% "Yes", ]
+p53_NFKB_SASP_genes <- row.names(p53_NFKB_SASP_genes[!p53_NFKB_SASP_genes$Clusters %in% c("5", "2"), ])
+
+log2FC_p53_NFKB_SASP <- rbind(
+          data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo3 vs Cycling0"], 
+           Condition="day 3 Palbo", 
+           Comparison="vs Cycling"),
+  
+          data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo14 vs Cycling0"], 
+           Condition="day 14 Palbo", 
+           Comparison="vs Cycling" ), 
+           
+           data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo21 vs Cycling0"], 
+           Condition="day 21 Palbo", 
+           Comparison="vs Cycling" ), 
+           
+           data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo28 vs Cycling0"], 
+           Condition="day 28 Palbo", 
+           Comparison="vs Cycling" ),
+           
+           data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo3 vs Cycling0"], 
+           Condition="day 3 Doxo", 
+           Comparison="vs Cycling"),
+      
+      data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo14 vs Cycling0"], 
+           Condition="day 14 Doxo", 
+           Comparison="vs Cycling"), 
+      
+          data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo21 vs Cycling0"], 
+           Condition="day 21 Doxo", 
+           Comparison="vs Cycling"), 
+      
+      data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo14 vs Palbo3"], 
+           Condition="day 14 Palbo",
+           Comparison="vs day 3"), 
+      
+       data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo21 vs Palbo3"], 
+           Condition="day 21 Palbo",
+           Comparison="vs day 3" ), 
+           
+           data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo28 vs Palbo3"], 
+           Condition="day 28 Palbo",
+           Comparison="vs day 3" ),
+      
+      data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo14 vs Doxo3"], 
+           Condition="day 14 Doxo",
+           Comparison="vs day 3"),
+      
+      data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo21 vs Doxo3"], 
+           Condition="day 21 Doxo",
+           Comparison="vs day 3")
+)
+
+log2FC_p53_NFKB_SASP[ ,5:7] <- clusterDF[match(log2FC_p53_NFKB_SASP$genes, row.names(clusterDF)), c("SASP", "NFKB_All", "p53_All")]
+
+# function to create violin plot of log2FC values of genes
+create_violin_plot <- function(data=log2FC_p53_NFKB_SASP, plot_title="RNA: log2FC of p53 target genes") {
+  library(ggplot2)
+  library(ggbeeswarm)
+  
+  ggplot(
+    data,
+    aes(x = Condition, y = log2FC, fill = Condition)
+  ) +
+    geom_violin() +
+    geom_quasirandom(
+      color = "black", alpha = 0.2,
+      method = "pseudorandom", # Aligns jitter points to violin shape
+      groupOnX = TRUE,
+      size = 0.5
+    ) +
+    stat_summary(
+      fun = "median",
+      geom = "crossbar",
+      color = "white",
+      width = 0.5
+    ) +
+    theme_classic() +
+    theme(
+      axis.text.x = element_text(angle = 90, size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title.y = element_text(size = 10)
+    ) +
+    facet_wrap(~Comparison, scales = "free_x") +
+    scale_fill_manual(
+      values = c(
+        "day 3 Doxo" = "#B3C543",
+        "day 14 Doxo" = "#B3C543",
+        "day 21 Doxo" = "#B3C543",
+        "day 3 Palbo" = "#E0ADCD",
+        "day 14 Palbo" = "#E0ADCD",
+        "day 21 Palbo" = "#E0ADCD",
+        "day 28 Palbo" = "#E0ADCD"
+      )
+    ) +
+    ylab("log2FC") +
+    xlab("") +
+    ggtitle(plot_title)
+}
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/RNA_log2FC_NFKB_targets.pdf", width=7, height=3)
+library(ggbeeswarm)
+create_violin_plot(
+  data = log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ],
+  plot_title = "RNA: log2FC of NFKB target genes"
+)
+dev.off()
+
+# plot only for day 14
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/RNA_day14_log2FC_NFKB_targets.pdf", width=4, height=3)
+library(ggbeeswarm)
+create_violin_plot(
+  data = log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes" & log2FC_p53_NFKB_SASP$Condition %in% c("day 14 Doxo", "day 14 Palbo"), ],
+  plot_title = "RNA: log2FC of NF-kB target genes"
+)
+dev.off()
+```
+
+# ATAC-seq, merged RNA clusters: plot motif enrichment results of all clusters as heatmap of p-adj values for each type (Doxo, Palbo, Shared) of sig changing peaks
+```{r}
+# create function that stores the -log10(padj) value of each motif ID for each cluster
+create_AME_peaks_matrix_byCluster <- function(sig_peaks_df) {
+  # Create an empty matrix for significant peaks
+  unique_motifs <- unique(sig_peaks_df$motif_ID)
+  cluster <- unique(sig_peaks_df$Cluster)
+  sig_peaks_mat <- matrix(nrow = length(unique_motifs), ncol = length(cluster))
+  
+  rownames(sig_peaks_mat) <- unique_motifs # Row names are motif IDs
+  colnames(sig_peaks_mat) <- cluster   # Column names are DESeq comparisons
+  
+  # Populate the matrix with neglog10padj values
+  for (i in 1:ncol(sig_peaks_mat)) {
+    temp_comparison <- sig_peaks_df[sig_peaks_df$Cluster == cluster[i], ]
+    sig_peaks_mat[, i] <- temp_comparison[match(rownames(sig_peaks_mat), temp_comparison$motif_ID), ]$neglog10padj
+    sig_peaks_mat[, i] <- ifelse(is.na(sig_peaks_mat[, i]), 0, sig_peaks_mat[, i])
+  }
+  
+  return(sig_peaks_mat)
+}
+
+# make matrix of -log10(padj) values from motif enrichment results 
+AME_padj_mat <- list()
+comparisons <- c("PalboDownvsCyc", "PalboDownvsday3",  "sharedDownvsCyc", "sharedDownvsday3", "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "sharedUpvsCyc", "sharedUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3")
+
+for(i in 1:length(comparisons)){
+AME_padj_mat[[i]] <- create_AME_peaks_matrix_byCluster(PvsSharedvsD_AME_mergeClusters[PvsSharedvsD_AME_mergeClusters$Comparison %in% comparisons[i], ])
+
+AME_padj_mat[[i]] <- AME_padj_mat[[i]][order(rowSums(AME_padj_mat[[i]]), decreasing=T), ] # sort motif IDs by overall significance across clusters. 
+}
+
+names(AME_padj_mat) <- c("PalboDownvsCyc", "PalboDownvsday3",  "sharedDownvsCyc", "sharedDownvsday3", "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "sharedUpvsCyc", "sharedUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3")
+
+# plot motif enrichment results as dotplot indicating difference between %TP & %FP as dot size & fill color as padj values for (Doxo, Palbo, Shared) of sig changing peaks
+
+NFkB_AME_padj_dots <- list()
+for(i in 1:length(comparisons)){
+NFkB_AME_padj_dots[[i]] <- PvsSharedvsD_AME_mergeClusters[PvsSharedvsD_AME_mergeClusters$Comparison %in% comparisons[i], ]
+NFkB_AME_padj_dots[[i]] <- NFkB_AME_padj_dots[[i]][NFkB_AME_padj_dots[[i]]$motif_ID %in% c("NFKB1", "NFKB2", "REL", "RELB"), ] # show only top 15 most significant padj values motif IDs
+NFkB_AME_padj_dots[[i]]$motif_ID <- factor(NFkB_AME_padj_dots[[i]]$motif_ID, levels=rev(unique(NFkB_AME_padj_dots[[i]]$motif_ID)))
+}
+names(NFkB_AME_padj_dots) <- comparisons
+NFkB_AME_padj_dots <- NFkB_AME_padj_dots[-which(sapply(NFkB_AME_padj_dots, nrow) ==0)]
+
+# function to create dotplots of enrichment results. 
+create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50, size_limit=4.5 ){
+  ggplot(AME_df, aes(x=Cluster, y=motif_ID, size=TPvsFP)) +
+    geom_point(aes(fill=neglog10padj), colour="black", pch=21, alpha=0.8) +
+    scale_fill_gradient(name="-log10(padj)", 
+                        low="light yellow", high="dark orange",
+                        limits=c(0, fill_limit), 
+                        oob=scales::squish) + # Adjust fill scale
+    scale_size_continuous(name="%TP - %FP", 
+                          limits=c(0, size_limit), 
+                          range=c(1, 10)) +  # Adjust dot sizes
+    theme_minimal() +
+    ggtitle(Title) +
+    theme(
+      text = element_text(size=8), 
+      axis.text.x = element_text(size=8), 
+      strip.text.x = element_text(size=8, face="bold"),
+      strip.text.y = element_text(size=8, face="bold")
+    ) +
+  theme_classic()+
+    facet_wrap(~Cluster, scales="free", nrow=1)+
+    labs(x="RNA cluster", y="motif ID")
+}
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/PvsSharedvsD.near.mergedRNAclusters.NFkB.motifs.dotplots.pdf", width=5, height=2)
+create_AME_dotplots(NFkB_AME_padj_dots$sharedUpvsCyc, Title="Shared Up vs Cycling", fill_limit=16, size_limit=10)
+dev.off()
+```
+
+```{r}
+AME_padj_mat <- list()
+comparisons <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+for(i in 1:length(comparisons)){
+AME_padj_mat[[i]] <- create_AME_peaks_matrix_byCluster(AME_mergeClusters[AME_mergeClusters$Comparison %in% comparisons[i], ])
+}
+names(AME_padj_mat) <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+
+NFkB_AME_padj_dots <- list()
+for(i in 1:length(comparisons)){
+NFkB_AME_padj_dots[[i]] <- AME_mergeClusters[AME_mergeClusters$Comparison %in% comparisons[i], ]
+NFkB_AME_padj_dots[[i]] <- NFkB_AME_padj_dots[[i]][NFkB_AME_padj_dots[[i]]$motif_ID %in% c("NFKB1", "NFKB2", "REL", "RELB"), ] # show only top 15 most significant padj values motif IDs
+NFkB_AME_padj_dots[[i]]$motif_ID <- factor(NFkB_AME_padj_dots[[i]]$motif_ID, levels=rev(unique(NFkB_AME_padj_dots[[i]]$motif_ID)))
+}
+names(NFkB_AME_padj_dots) <- comparisons
+NFkB_AME_padj_dots <- NFkB_AME_padj_dots[-which(sapply(NFkB_AME_padj_dots, nrow) ==0)]
+
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/Up.Down.peaks.near.mergedRNAclusters.NFkB.motifs.dotplots.pdf", width=8, height=5)
+plot_grid( create_AME_dotplots(NFkB_AME_padj_dots$allUp_Doxo[!NFkB_AME_padj_dots$allUp_Doxo$Cluster %in% "CellCycle_genes", ], Title="Up Doxo", fill_limit=16, size_limit=8),
+           create_AME_dotplots(NFkB_AME_padj_dots$allUp_Palbo[!NFkB_AME_padj_dots$allUp_Palbo$Cluster %in% "CellCycle_genes", ], Title="Up Palbo", fill_limit=16, size_limit=8),
+           nrow =1)
+dev.off()
+```
+
+# ATAC-seq, merged RNA clusters: plot motif enrichment results as dotplot indicating difference between %TP & %FP as dot size & fill color as padj values for ("PalboDownvsCyc", "PalboDownvsday3",  "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3") of sig changing peaks
+```{r}
+AME_padj_mat <- list()
+comparisons <- c("PalboDownvsCyc", "PalboDownvsday3",  "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3")
+for(i in 1:length(comparisons)){
+AME_padj_mat[[i]] <- create_AME_peaks_matrix_byCluster(PvsD_AME_mergeClusters[PvsD_AME_mergeClusters$Comparison %in% comparisons[i], ])
+}
+names(AME_padj_mat) <- comparisons
+
+NFkB_AME_padj_dots <- list()
+for(i in 1:length(comparisons)){
+NFkB_AME_padj_dots[[i]] <-PvsD_AME_mergeClusters[PvsD_AME_mergeClusters$Comparison %in% comparisons[i], ]
+NFkB_AME_padj_dots[[i]] <- NFkB_AME_padj_dots[[i]][NFkB_AME_padj_dots[[i]]$motif_ID %in% c("NFKB1", "NFKB2", "REL", "RELB"), ] # show only top 15 most significant padj values motif IDs
+NFkB_AME_padj_dots[[i]]$motif_ID <- factor(NFkB_AME_padj_dots[[i]]$motif_ID, levels=rev(unique(NFkB_AME_padj_dots[[i]]$motif_ID)))
+}
+names(NFkB_AME_padj_dots) <- comparisons
+NFkB_AME_padj_dots <- NFkB_AME_padj_dots[-which(sapply(NFkB_AME_padj_dots, nrow) ==0)]
+
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/PvsD.vsCyc.vsday3.peaks.near.mergedRNAclusters.NFkB.motifs.dotplots.pdf", width=14, height=2)
+plot_grid( create_AME_dotplots(NFkB_AME_padj_dots$DoxoUpvsCyc[!NFkB_AME_padj_dots$DoxoUpvsCyc$Cluster %in% "CellCycle_genes", ], Title="Up Doxo vs Cycling", fill_limit=16, size_limit=13),
+           create_AME_dotplots(NFkB_AME_padj_dots$PalboUpvsCyc[!NFkB_AME_padj_dots$DoxoUpvsCyc$Cluster %in% "CellCycle_genes", ], Title="Up Palbo vs Cycling", fill_limit=16, size_limit=13),
+             create_AME_dotplots(NFkB_AME_padj_dots$DoxoUpvsday3[!NFkB_AME_padj_dots$DoxoUpvsday3$Cluster %in% "CellCycle_genes", ], Title="Up Doxo vs day3", fill_limit=16, size_limit=13),
+           nrow =1)
+dev.off()
+```

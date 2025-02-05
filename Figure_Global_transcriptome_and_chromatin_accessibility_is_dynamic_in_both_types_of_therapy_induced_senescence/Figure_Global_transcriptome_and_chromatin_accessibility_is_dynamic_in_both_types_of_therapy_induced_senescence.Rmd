@@ -1,0 +1,618 @@
+---
+title: Figure Global transcriptome and chromatin accessibility is dynamic in both
+  types of therapy induced senescence
+author: "Joanna Yeung"
+date: '2025-01-22'
+output: html_document
+---
+
+#load packages
+```{r}
+library(readr)
+library(tximport)
+library(GenomicFeatures)
+library(DESeq2)
+library(apeglm)
+library(gridExtra)
+library(ggplot2)
+library(pheatmap)
+library(msigdbr)
+library(stringr)
+library(pheatmap)
+library(org.Hs.eg.db)
+library(ggrepel)
+library(rtracklayer)
+library(cowplot)
+library(readxl)
+library(EnsDb.Hsapiens.v79)
+library(sva)
+library(ashr)
+library(viridis)
+library(GenomicRanges)
+library(rtracklayer)
+library(chromVAR)
+library(RColorBrewer)
+library(cowplot)
+library(preprocessCore)
+library(viridis)
+library(scales)
+library(ChIPseeker)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(org.Hs.eg.db)
+library(BSgenome.Hsapiens.UCSC.hg38)
+library(MotifDb)
+library(motifmatchr)
+library(Biostrings)
+library(clusterProfiler)
+library(pheatmap)
+```
+
+```{r}
+# load in gene annotation database & RNA-seq workspace
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_1/RNAseq/post_kallisto_analysis/workspaces/genes_anno_type.RData")
+#load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/LS_PDvsDoxo_2_RNAseq_analysis_Kallisto_QC_DESeq2.RData")
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_1/RNAseq/post_kallisto_analysis/workspaces/msigdbr_df_andt2g_workspace.RData")
+
+# load in ATAC-seq workspace
+#load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/workspaces/workingspace4.RData")
+```
+
+# load SASP gene list
+```{r}
+# SASP genes database downloaded from Wang et al, EMBO 2022. 
+Wang_etal_SASP <- as.data.frame(read_excel("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_1/RNAseq/post_kallisto_analysis/Other_Resources/embj2021108946-sup-0003-tableev2.xlsx"))
+Wang_etal_SASP <- genes_anno_type[match(Wang_etal_SASP$p53, genes_anno_type$gene_id), ] %>% dplyr::distinct(gene_id, ensembl_id, entrezid)
+Wang_etal_SASP$Type <- ifelse(Wang_etal_SASP$gene_id %in% unlist(strsplit("BMP2\nLIPG\nIL1A\nAPOE\nC3\nB2M\nCCL2\nCCL5\nCXCL14\nCXCL16\nCXCL2\nCXCL8\nEBI3\nF8\nFas\nIL18\nIL1B\nIL6\nNRG1\nPENK\nSAA1\nTNC\nTNFSF15\nVEGFC\nMMP3\nBDNF\nMMP1\nKISS1\nFN1\nEDN1\nPLAU\nIL11\nCXCL1", "\n")), "NF-KB", "")
+
+Wang_etal_SASP$Type <- ifelse(Wang_etal_SASP$gene_id %in% unlist(strsplit("VGF\nAPOD\nCEACAM1\nCPE\nNTN1\nGDF15\nAGT\nLAMA3\nCLCA2\nPLA2G15\nISG15\nLIF\nMR1\nPLTP\nTSKU\nPLAT\nLYNX1\nTGFB2\nTGFA\nAGRN\nTGFBI\nVWCE\nIGFBP3\nGAS6\nPCSK5\nPLXNB1\nHBEGF\nABHD15\nLAMC1\nMFGE8\nPGF\nWNT9A\nVCAN\nTIMP3", "\n")), "p53", ifelse(Wang_etal_SASP$gene_id %in% unlist(strsplit("BMP2\nLIPG\nIL1A\nAPOE\nC3\nB2M\nCCL2\nCCL5\nCXCL14\nCXCL16\nCXCL2\nCXCL8\nEBI3\nF8\nFas\nIL18\nIL1B\nIL6\nNRG1\nPENK\nSAA1\nTNC\nTNFSF15\nVEGFC\nMMP3\nBDNF\nMMP1\nKISS1\nFN1\nEDN1\nPLAU\nIL11\nCXCL1", "\n")), "NF-KB", ""))
+
+# SASP genes from Gleason et al, Clincal Cancer Research
+Gleason_etal_SASP <- as.data.frame(read_excel("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/external_databases/Gleason_etal_ClinicalCancerRes2024_SASPList_supplementary_table_s6.xlsx",col_names = FALSE))
+
+# SASP genes from SASP Atlas
+SASP_Atlas_sigMat <- read.table("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/SASPatlas_Results/SASP_Atlas_sigMat.csv", sep=",", header=T)
+
+# merge all sources of SASP genes into a single vector
+SASP_all <- c(as.character(SASP_Atlas_sigMat$Genes), Gleason_etal_SASP$...1, Wang_etal_SASP$gene_id)
+```
+
+### import kallisto output files, matching transcript id to gene id. this part, you need to switch to conda env, jr_rna
+```{r, echo=F}
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/txi.kallisto.RData")
+# load genes_anno_type database matching ensembl, entrez & symbol ids of genes (VERSION 107 OF ENSEMBL ID & VERSION P14 OF ENTREZ ID (LATEST VERSION))
+```
+
+# annotation colors for pheatmap
+```{r}
+hm_cols_RNA <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
+                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD"), 
+                Biorep=c("1"="orange", "2"="light blue", "3"="pink"), 
+                log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "DoxovsPalbo"="#CCEBC5"), 
+                clusters_cutree8=brewer.pal(8, "Set2"), 
+                Clusters=c("5"="#66C2A5","2"="#A6D854","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#E78AC3","3"="#FFD92F","8"="#E5C494"), 
+                SASP = c("Yes"="dark green", "No"="white"),
+                Cell_Cycle = c("Yes"="dark blue", "No"="white"), 
+                p53_All=c("Yes"="#00B0F0", "No"="white"),
+                NFKB_All=c("Yes"="red", "No"="white"))
+names(hm_cols_RNA$clusters_cutree8) <- as.factor(1:8)
+
+
+hm_cols_ATAC <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
+                Treatment=c("None"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD", "PvsD"="#CCEBC5"),
+                Biorep=c("1"="orange", "2"="light blue", "3"="pink", "4"="light green"), 
+                log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "PvsD"="#CCEBC5"),
+                Peak_anno=c("Distal"="#B15A28", "Gene Body"="#F9A573", "Promoter"="#A7CEE2"), 
+                Doxo=c("Yes"="#B3C543", "No"="white"),
+                Palbo=c("Yes"="#E0ADCD", "No"="white")
+                )
+
+colors_manual_RNA <- c("Cycling0"="#F8766D", "Doxo3"="#EBD599", "Doxo10"="#D1DC8E",  "Doxo14"="#B3C543", "Doxo21"="#6F7835","Palbo3"="#9D8E8A","Palbo10"="#ECCEE1", "Palbo14"="#E0ADCD","Palbo21"="#B23282","Palbo28"="#732154")
+
+colors_manual_ATAC <- c("Cycling"="#F8766D", "day3-Doxo"="#EBD599", "day10-Doxo"="#D1DC8E",  "day14-Doxo"="#B3C543", "day21-Doxo"="#6F7835","day3-Palbo"="#9D8E8A","day10-Palbo"="#ECCEE1", "day14-Palbo"="#E0ADCD","day21-Palbo"="#B23282","day28-Palbo"="#732154")
+```
+
+
+# DESeq analysis for RNA-seq
+```{r}
+
+# load in kallisto counts from both biological replicates
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/txi.kallisto.all.RData")
+
+# generate design dataframe
+metaDataall <- data.frame(Biorep=c(rep("1", 8), rep("2", 6), rep("3", 5)), 
+         Treatment=c("Cycling",rep("Doxo", 3), rep("Palbo", 4), "Cycling", rep("Doxo", 2),rep("Palbo", 3), "Cycling", rep("Doxo", 2), rep("Palbo", 2)), 
+         Timepoint=c(0, 3, 14, 21, 3, 14, 21, 28, 0, 3, 21,3, 21, 28, 0, 10, 14, 10, 14)
+         )
+         
+#import kallisto counts into a DESeq object with experimental design specificed
+RNAddsall <- DESeqDataSetFromTximport(txi.kallisto.all, metaDataall, ~Biorep+Treatment+Timepoint)
+keep <- rowSums(counts(RNAddsall)) >= 50 # filter out rows with rowsum less than 50 to remove genes that aren't being expressed across samples. 
+RNAddsall <- RNAddsall[keep,]
+# perform DESeq
+RNAddsall <- DESeq(RNAddsall)
+
+# combine experimental design levels to make it easier to extract results for pairwise comparisons of samples
+RNAddsall$group <- factor(paste0(RNAddsall$Treatment, RNAddsall$Timepoint))
+design(RNAddsall) <- ~ group
+# perform DESeq again
+RNAddsall <- DESeq(RNAddsall)
+resultsNames(RNAddsall)
+# rlog normalization of RNAddsall
+RNAddsall_rlog <- rlog(RNAddsall)
+```
+
+# RNA-seq sample distance matrix
+```{r}
+sampleDists <- dist(t(assay(RNAddsall_rlog))) # get vst normalized count matrix & convert to distance measure for calculating correlations. 
+RNAsampleDistMatrix <- as.matrix(sampleDists)[c(1,9,15,2,10,16,3,17,4,11,5,12,18,6,19,7,13,8,14) ,c(1,9,15,2,10,16,3,17,4,11,5,12,18,6,19,7,13,8,14)]
+```
+
+
+# RNA-seq: filter for significantly changing genes based on LRT & absolute log2FC value >=2
+```{r}
+# generate design dataframe
+metaDataall <- data.frame(Biorep=c(rep("1", 8), rep("2", 6), rep("3", 5)), 
+         Treatment=c("Cycling",rep("Doxo", 3), rep("Palbo", 4), "Cycling", rep("Doxo", 2),rep("Palbo", 3), "Cycling", rep("Doxo", 2), rep("Palbo", 2)), 
+         Timepoint=c(0, 3, 14, 21, 3, 14, 21, 28, 0, 3, 21,3, 21, 28, 0, 10, 14, 10, 14)
+         )
+         
+RNAddsallLRT <- DESeqDataSetFromTximport(txi.kallisto.all, metaDataall, ~Biorep+Treatment+Timepoint)
+keep <- rowSums(counts(RNAddsallLRT)) >= 50 # filter out rows with rowsum less than 30 to remove genes that aren't being expressed across samples. 
+RNAddsallLRT <- RNAddsallLRT[keep,]
+
+RNAddsallLRT <- DESeq(RNAddsallLRT, test="LRT", reduced=~Biorep) #perform DESeq
+#extract results from DESeq objects 
+results(RNAddsallLRT)
+
+# get DESeq results from LRT
+acrossGroups <- results(RNAddsallLRT)
+acrossGroups$SYMBOL <-  gsub('\\.[0-9]*$', '', row.names(acrossGroups))
+acrossGroups$SYMBOL <-  ifelse(genes_anno_type[match(acrossGroups$SYMBOL, genes_anno_type$ensembl_id), ]$gene_id %in% NA, acrossGroups$SYMBOL, genes_anno_type[match(acrossGroups$SYMBOL, genes_anno_type$ensembl_id), ]$gene_id)
+
+# filter for significant results (padj < 0.05)
+sigGroups <- acrossGroups[acrossGroups$padj < 0.05 & !is.na(acrossGroups$padj), ]
+
+sigGroups$SYMBOL <-  ifelse(genes_anno_type[match(sigGroups$SYMBOL, genes_anno_type$ensembl_id), ]$gene_id %in% NA, sigGroups$SYMBOL, genes_anno_type[match(sigGroups$SYMBOL, genes_anno_type$ensembl_id), ]$gene_id)
+
+sigGroups <- sigGroups[order(sigGroups$padj), ]
+
+
+LFCResultsall_RNA <- list()
+# comparison with Cycling as control
+for(i in 1:9){
+LFCResultsall_RNA[[i]] <- results(RNAddsall, contrast=c("group", as.character(levels(RNAddsall$group)[i+1]), as.character(levels(RNAddsall$group)[1])))
+row.names(LFCResultsall_RNA[[i]]) <- gsub('\\.[0-9]*$', '', row.names(LFCResultsall_RNA[[i]]))
+LFCResultsall_RNA[[i]]$SYMBOL <-  ifelse(genes_anno_type[match(row.names(LFCResultsall_RNA[[i]]), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(LFCResultsall_RNA[[i]]), genes_anno_type[match(row.names(LFCResultsall_RNA[[i]]), genes_anno_type$ensembl_id), ]$gene_id)
+
+names(LFCResultsall_RNA)[[i]] <- paste(as.character(levels(RNAddsall$group)[i+1]), "vs", as.character(levels(RNAddsall$group)[1]))
+}
+# comparison with day3 as control
+
+Doxovsday3 <- c("Doxo10", "Doxo14", "Doxo21")
+for(i in 1:3){
+LFCResultsall_RNA[[i+9]] <- results(RNAddsall, contrast=c("group", Doxovsday3[i] , "Doxo3"))
+
+row.names(LFCResultsall_RNA[[i+9]]) <- gsub('\\.[0-9]*$', '', row.names(LFCResultsall_RNA[[i+9]]))
+LFCResultsall_RNA[[i+9]]$SYMBOL <-  ifelse(genes_anno_type[match(row.names(LFCResultsall_RNA[[i+9]]), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(LFCResultsall_RNA[[i+9]]), genes_anno_type[match(row.names(LFCResultsall_RNA[[i+9]]), genes_anno_type$ensembl_id), ]$gene_id)
+
+names(LFCResultsall_RNA)[[i+9]] <- paste(Doxovsday3[i],"vs", "Doxo3")
+}
+# comparison with day3 Palbo as control
+Palbovsday3 <- c("Palbo10", "Palbo14", "Palbo21", "Palbo28")
+for(i in 1:4){
+LFCResultsall_RNA[[i+12]] <- results(RNAddsall, contrast=c("group", Palbovsday3[i], "Palbo3"))
+
+row.names(LFCResultsall_RNA[[i+12]]) <- gsub('\\.[0-9]*$', '', row.names(LFCResultsall_RNA[[i+12]]))
+LFCResultsall_RNA[[i+12]]$SYMBOL <-  ifelse(genes_anno_type[match(row.names(LFCResultsall_RNA[[i+12]]), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(LFCResultsall_RNA[[i+12]]), genes_anno_type[match(row.names(LFCResultsall_RNA[[i+12]]), genes_anno_type$ensembl_id), ]$gene_id)
+
+names(LFCResultsall_RNA)[[i+12]] <- paste(Palbovsday3[i],"vs", "Palbo3")
+
+}
+
+DoxovsPalbo <- list(c("group", "Doxo3", "Palbo3"), c("group", "Doxo10", "Palbo10"), c("group", "Doxo14", "Palbo14"), c("group", "Doxo21", "Palbo21"))
+for(i in 1:4){
+LFCResultsall_RNA[[i+16]] <- results(RNAddsall, contrast=DoxovsPalbo[[i]])
+
+row.names(LFCResultsall_RNA[[i+16]]) <- gsub('\\.[0-9]*$', '', row.names(LFCResultsall_RNA[[i+16]]))
+LFCResultsall_RNA[[i+16]]$SYMBOL <-  ifelse(genes_anno_type[match(row.names(LFCResultsall_RNA[[i+16]]), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(LFCResultsall_RNA[[i+16]]), genes_anno_type[match(row.names(LFCResultsall_RNA[[i+16]]), genes_anno_type$ensembl_id), ]$gene_id)
+names(LFCResultsall_RNA)[[i+16]] <- paste(DoxovsPalbo[[i]][2], "vs", DoxovsPalbo[[i]][3])
+}
+
+LFCResultsall_RNA <- LFCResultsall_RNA[c(4,1:3,10:12,9,5:8,13:20)]
+
+# filter for significant results with absolute log2FC > 2 across all pairwise comparisons between groups. 
+sigLFCResultsall_RNA <- list()
+for(i in 1:length(LFCResultsall_RNA)){
+  sigLFCResultsall_RNA[[i]] <- LFCResultsall_RNA[[i]][LFCResultsall_RNA[[i]]$SYMBOL %in% sigGroups$SYMBOL& abs(LFCResultsall_RNA[[i]]$log2FoldChange) >= 2, ]
+  sigLFCResultsall_RNA[[i]]$LRT_padj <- acrossGroups[match(row.names(sigLFCResultsall_RNA[[i]]), row.names(acrossGroups)), ]$padj
+}
+names(sigLFCResultsall_RNA) <- names(LFCResultsall_RNA)
+
+# get list of genes with absolute log2FC > 2 increase relative to controls by extracting unique genes from sigLFCResultsall
+sigGenes <- list()
+for(i in 1:length(sigLFCResultsall_RNA)){
+sigGenes[[i]] <- row.names(sigLFCResultsall_RNA[[i]])
+}
+sigGenes <- unique(unlist(sigGenes))
+
+# load in old clustering information 
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/genes_in_clusters.RData")
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/anno_genes.RData")
+
+anno_genes$SASP <- ifelse(anno_genes$SASP_Atlas %in% "Yes"|anno_genes$SASPWangetal %in% "Yes", "Yes", ifelse(anno_genes$Gleason_etal_SASP %in% "Yes", "Yes", "No"))
+
+gsub('\\.[0-9]*$', '', row.names(assay(RNAddsall_rlog)))
+
+sigMat <- assay(RNAddsall_rlog)[gsub('\\.[0-9]*$', '', row.names(assay(RNAddsall_rlog))) %in% sigGenes, ]
+
+row.names(sigMat) <-  gsub('\\.[0-9]*$', '', row.names(sigMat))
+
+# reorder columns into sensible order based on time. 
+sigMat <- sigMat[ ,c(1,9,15,2,10,16,3,17,4,11,5,12,18,6,19,7,13,8,14)]
+
+# convert row names into gene symbol format, if there is no gene symbol for the gene, keep the ensembl id. 
+row.names(sigMat) <- ifelse(genes_anno_type[match(row.names(sigMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(sigMat), genes_anno_type[match(row.names(sigMat), genes_anno_type$ensembl_id), ]$gene_id)
+row.names(sigMat)  <- make.names(row.names(sigMat), unique=T)
+
+samplenames <- c("Cycling_1", "d3-Doxo_1", "d14-Doxo_1", "d21-Doxo_VIAL1", "d3-Palbo_1", "d14-Palbo_1", "d21-Palbo_VIAL1", "d28-Palbo_VIAL1", "Cycling_2", "d3-Doxo_2", "d21-Doxo_VIAL2", "d3-Palbo_2", "d21-Palbo_VIAL2", "d28-Palbo_VIAL2", "day14_Cyc", "day10_Doxo",  "day14_Doxo", "day10_Palbo", "day14_Palbo")
+metaDataall <- data.frame(Biorep=c(rep("1", 8), rep("2", 6), rep("3", 5)), 
+         Treatment=c("Cycling",rep("Doxo", 3), rep("Palbo", 4), "Cycling", rep("Doxo", 2),rep("Palbo", 3), "Cycling", rep("Doxo", 2), rep("Palbo", 2)), 
+         Timepoint=as.factor(c(0, 3, 14, 21, 3, 14, 21, 28, 0, 3, 21,3, 21, 28, 0, 10, 14, 10, 14))
+         )
+
+row.names(metaDataall) <- samplenames
+
+# perform k-means clustering
+set.seed(2025)
+k <- pheatmap(sigMat, scale = "row", kmeans_k = 8)
+clusterDF <- as.data.frame(factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3,8)))
+colnames(clusterDF) <- "Clusters"
+
+order <- order(clusterDF$Clusters)
+clusterDF <- data.frame(row.names=row.names(clusterDF)[order], Clusters=clusterDF[order, ])
+
+# annotate which genes are part of the SASP 
+clusterDF$SASP <- ifelse(row.names(clusterDF) %in% SASP_all, "Yes", "No")
+
+# annotate which genes belong to the cell cycle based on whether or not they are found in the following MSigDb datasets. 
+clusterDF$Cell_Cycle <- ifelse(row.names(clusterDF) %in% c(msigdbr_df_H[msigdbr_df_H$gs_name %in% c("HALLMARK_E2F_TARGETS", "HALLMARK_G2M_CHECKPOINT"), ]$gene_symbol, msigdbr_df_REACT[msigdbr_df_REACT$gs_name %in% c("REACTOME_CELL_CYCLE", "REACTOME_CELL_CYCLE_CHECKPOINTS", "REACTOME_CELL_CYCLE_MITOTIC"), ]$gene_symbol, msigdbr_df_KEGG[msigdbr_df_KEGG$gs_name %in% "KEGG_CELL_CYCLE", ]$gene_symbol), "Yes", "No")
+
+# annotate genes based on previous clustering
+clusterDF$clusters_cutree8 <- anno_genes[match(row.names(clusterDF), row.names(anno_genes)), ]$clusters_cutree8
+clusterDF <- clusterDF[order(clusterDF$Cluster), ]
+
+# note new cluster categories: 
+# 4,7: shared down genes (cell cycle arrest)
+# 3: CDk4/6i enriched upregulated relative to day 3
+# 2: CDK4/6i enriched upregulated relative to Cycling
+# 5: Doxo enriched upregulated relative to Cycling
+# 6,8: Doxo enriched upregulated relative to day 3
+# 5,9: shared senescence upregulated
+
+# order rows by k-means cluster & assigned drug category
+
+drug_cat_list <- list(sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% c("5", "2"), ]), ], 
+                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "7", ]), ], 
+                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "1", ]), ], 
+                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% c("6", "4"), ]), ], 
+                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "3", ]), ], 
+                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "8", ]), ]
+)
+
+
+  ordered_sigMat <- list()
+   for(i in 1:length(drug_cat_list)){
+  ordered_sigMat[[i]] <- sigMat[row.names(sigMat) %in% row.names(drug_cat_list[[i]]), ]
+  # Calculate the distance matrix
+  distance_matrix <- dist(ordered_sigMat[[i]])
+  
+  # Perform hierarchical clustering within each drug category
+  set.seed(123)  # For reproducibility
+  
+  # Perform hierarchical clustering
+  hc <- hclust(distance_matrix, method="complete")
+  
+  # Order the rows based on hierarchical clustering
+  order <- hc$order
+  
+  # Reorder the original data matrix
+  ordered_sigMat[[i]] <- ordered_sigMat[[i]][order, ]
+   }
+  
+  # merge back into master counts matrix, ordered by drug category/ k-means cluster. 
+  ordered_sigMat <- do.call(rbind, ordered_sigMat)
+```
+
+# DESeq analysis for ATAC-seq
+```{r}
+# load in fragment counts under peaks
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/workspaces/fragCounts_all.RData")
+
+# make metaData dataframe containing information on sample names, Condition and biological replicate. 
+metaData_ATAC <- data.frame(sample=colnames(fragCounts_all), 
+  Condition=c(rep("Cycling", 5), rep("day14-Doxo", 2), rep("day14-Palbo", 3), rep("day21-Doxo", 5), rep("day21-Palbo", 6), rep("day28-Palbo", 6), rep("day3-Doxo", 5), rep("day3-Palbo", 5), rep("Cycling", 5), rep("day10-Doxo",3), rep("day10-Palbo",3), rep("day14-Doxo",3), rep("day14-Palbo",3)), 
+  Biorep= as.factor(c(rep(1, 2), rep(2, 3), rep(1, 5), rep(1, 3), 2,2, rep(1, 3), rep(2, 3), rep(1, 3), rep(2, 3), rep(1, 2), rep(2, 3), rep(1, 2), rep(2, 3), 3,4,3,4,4, rep(3,6), rep(4,6))),
+  Treatment=as.factor(c(
+  rep("None", 5), rep("Doxo", 2), rep("Palbo", 3), rep("Doxo", 5), rep("Palbo", 12), rep("Doxo", 5), rep("Palbo", 5), rep("None", 5), rep("Doxo", 3), rep("Palbo", 3), rep("Doxo", 3), rep("Palbo", 3))), 
+  Timepoint=c(rep(0, 5), rep(14, 5), rep(21, 11), rep(28, 6), rep(3, 10), rep(0,5), rep(10,6), rep(14,6)))
+
+# make DESeq object from fragCounts matrix
+dds <- DESeq2::DESeqDataSetFromMatrix(countData=fragCounts_all, design=~Condition+Biorep, colData=metaData_ATAC)
+dds <- estimateSizeFactors(dds)
+
+summary(apply(counts(dds, normalized=T), 2, quantile, 0.25))
+# keep only peaks that have at least 5 samples with normalized counts >=12. 
+keep <- apply(counts(dds, normalized=T), 1, function(row) sum(row >= 12) >= 5)
+
+# combine variables Condition & time into 1 design called "group"
+# dds$group <- factor(paste0(dds$Condition, combatCountsall$time))
+# design(dds) <- ~ group
+
+dds_filt <- dds[keep,]
+
+dds_filt <-DESeq(dds_filt)
+
+# rlog normalize for QC metrics visualization
+vstdds_filt <- vst(dds_filt)
+
+dds_filt$group <- factor(paste0(dds_filt$Condition, dds_filt$Biorep))
+dds_filt_collapsed <- collapseReplicates(dds_filt, dds_filt$group)
+dds_filt_collapsed <- estimateSizeFactors(dds_filt_collapsed) 
+vstdds_filt_collapsed <- vst(dds_filt_collapsed)
+vstdds_filt_collapsed <- vstdds_filt_collapsed # reorder samples by time & drug
+```
+
+# ATAC-seq sample distance matrix
+```{r}
+row.names(metaData_ATAC) <- metaData_ATAC$sample
+sampleDists <- dist(t(assay(vstdds_filt))) # get vst normalized count matrix & convert to distance measure for calculating correlations. 
+ATACsampleDistMatrix <- as.matrix(sampleDists)[c(1:5, 38, 40, 39, 41, 42, 28:32, 43:45, 6:7, 49:51, 11:15, 33:37, 46:48, 8:10, 52:54, 16:27), c(1:5, 38, 40, 39, 41, 42, 28:32, 43:45, 6:7, 49:51, 11:15, 33:37, 46:48, 8:10, 52:54, 16:27)]
+
+# merge tech reps together
+sampleDists <- dist(t(assay(vstdds_filt_collapsed))) 
+ATACsampleDistMatrix_collapsed <- as.matrix(sampleDists)[c(1:4,17,18,5,7,8,11,12,19,20,6,9,10,13:16) ,c(1:4,17,18,5,7,8,11,12,19,20,6,9,10,13:16)]
+```
+
+# ATAC-seq: filter for differential peaks based on absolute log2FC > 1 & padj < 0.01/nrow(LFCResults_ATAC[[1]]))
+```{r}
+LFCResults_ATAC <- list()
+# Comparison to Cycling as a control 
+for(i in 1:9){
+LFCResults_ATAC[[i]] <- results(dds_filt, contrast=c("Condition", as.character(levels(dds_filt$Condition)[i+1]), as.character(levels(dds_filt$Condition)[1])))
+names(LFCResults_ATAC)[[i]] <- paste(as.character(levels(dds_filt$Condition)[i+1]), "vs", as.character(levels(dds_filt$Condition)[1]))
+}
+# Comparison to day 3 Doxo as control 
+LFCResults_ATAC$`day10-Doxo vs day3-Doxo` <- results(dds_filt, contrast=c("Condition", "day10-Doxo", "day3-Doxo"))
+LFCResults_ATAC$`day14-Doxo vs day3-Doxo` <- results(dds_filt, contrast=c("Condition", "day14-Doxo", "day3-Doxo"))
+LFCResults_ATAC$`day21-Doxo vs day3-Doxo` <- results(dds_filt, contrast=c("Condition", "day21-Doxo", "day3-Doxo"))
+
+# Comparison to day 3 Palbo as control 
+LFCResults_ATAC$`day10-Palbo vs day3-Palbo` <- results(dds_filt, contrast=c("Condition", "day10-Palbo", "day3-Palbo"))
+LFCResults_ATAC$`day14-Palbo vs day3-Palbo` <- results(dds_filt, contrast=c("Condition", "day14-Palbo", "day3-Palbo"))
+LFCResults_ATAC$`day21-Palbo vs day3-Palbo` <- results(dds_filt, contrast=c("Condition", "day21-Palbo", "day3-Palbo"))
+LFCResults_ATAC$`day28-Palbo vs day3-Palbo` <- results(dds_filt, contrast=c("Condition", "day28-Palbo", "day3-Palbo"))
+
+LFCResults_ATAC <- LFCResults_ATAC[c(8,1,3,5,9,2,4,6,7,10:16)]
+
+names(LFCResults_ATAC) <- gsub(" |-", "", names(LFCResults_ATAC))
+
+sigLFCResults_ATAC <- list()
+for(i in 1:length(LFCResults_ATAC)){
+ sigLFCResults_ATAC[[i]] <- LFCResults_ATAC[[i]][na.omit(LFCResults_ATAC[[i]]$padj < 0.01/nrow(LFCResults_ATAC[[1]])), ] 
+}
+names(sigLFCResults_ATAC) <- names(LFCResults_ATAC)
+
+# number of differential windows per Comparison. 
+lapply(sigLFCResults_ATAC, nrow)
+
+# extract DESeq results of peaks increasing in accessibility with drug treatment 
+sigLFCResults_ATACUp <- lapply(sigLFCResults_ATAC, function(sigLFCResults_ATAC){sigLFCResults_ATAC[sigLFCResults_ATAC$log2FoldChange >1, ]})
+
+# extract DESeq results of peaks decreasing in accessibility with drug treatment
+sigLFCResults_ATACDown <- lapply(sigLFCResults_ATAC, function(sigLFCResults_ATAC){sigLFCResults_ATAC[sigLFCResults_ATAC$log2FoldChange < -1, ]})
+
+annomasterpeaks_pval0.2 <- import("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/workspaces/annomasterpeaks_pval0.2.gtf")
+
+# get GRanges of  going up in accessibility with drug treatment
+sigUp <- lapply(sigLFCResults_ATACUp, function(sigLFCResults_ATACUp){annomasterpeaks_pval0.2 [annomasterpeaks_pval0.2 $name %in% row.names(sigLFCResults_ATACUp), ]})
+
+# get GRanges of peaks going down in accessibility with drug treatment
+sigDown <- lapply(sigLFCResults_ATACDown, function(sigLFCResults_ATACDown){annomasterpeaks_pval0.2 [annomasterpeaks_pval0.2 $name %in% row.names(sigLFCResults_ATACDown), ]})
+```
+
+# PEAK ANNOTATION 
+```{r}
+# annotate peaks going up in accessibility with drug treatment 
+annoUp <- lapply(sigUp, annotatePeak, TxDb=TxDb.Hsapiens.UCSC.hg38.knownGene)
+annoUp <-lapply(annoUp, as.GRanges)
+# annotate peaks going down in accessibility with drug treatment
+annoDown <- lapply(sigDown, annotatePeak, TxDb=TxDb.Hsapiens.UCSC.hg38.knownGene)
+annoDown <- lapply(annoDown, as.GRanges)
+```
+
+# merge differential peaks into a single GRanges- categorized by relative to Cycling or day 3
+```{r}
+allUpvsCycling <- list(Palbo=unique(unlist(GRangesList(annoUp[grepl("PalbovsCycling", names(annoUp))]))), Doxo=unique(unlist(GRangesList(annoUp[grepl("DoxovsCycling", names(annoUp))]))) )
+allDownvsCycling <- list(Palbo=unique(unlist(GRangesList(annoDown[grepl("PalbovsCycling", names(annoDown))]))), Doxo=unique(unlist(GRangesList(annoDown[grepl("DoxovsCycling", names(annoDown))]))) )
+
+allUpvsday3 <- list(Palbo=unique(unlist(GRangesList(annoUp[grepl("Palbovsday3Palbo", names(annoUp))]))), Doxo= unique(unlist(GRangesList(annoUp[grepl("Doxovsday3Doxo", names(annoUp))]))) )
+allDownvsday3 <- list(Palbo=unique(unlist(GRangesList(annoDown[grepl("Palbovsday3Palbo", names(annoDown))]))), Doxo=unique(unlist(GRangesList(annoDown[grepl("Doxovsday3Doxo", names(annoDown))]))) )
+
+allUpvsCycling[["Palbo"]]@ranges@NAMES <- NULL
+allUpvsCycling[["Doxo"]]@ranges@NAMES <- NULL
+allUpvsday3[["Palbo"]]@ranges@NAMES <- NULL
+allUpvsday3[["Doxo"]]@ranges@NAMES <- NULL
+
+allDownvsCycling[["Palbo"]]@ranges@NAMES <- NULL
+allDownvsCycling[["Doxo"]]@ranges@NAMES <- NULL
+allDownvsday3[["Palbo"]]@ranges@NAMES <- NULL
+allDownvsday3[["Doxo"]]@ranges@NAMES <- NULL
+```
+
+# get matrix of counts under differential peaks 
+```{r}
+# merge Peaks by direction & drug treatment
+mergedDiffGR <- list(allUp_Doxo=unique(unlist(GRangesList(annoUp[grep("DoxovsCyc|Doxovsday3Doxo", names(annoUp))]))), 
+
+allUp_Palbo=unique(unlist(GRangesList(annoUp[grep("PalbovsCyc|Palbovsday3Palbo", names(annoUp))]))),
+
+allDown_Doxo=unique(unlist(GRangesList(annoDown[grep("DoxovsCyc|Doxovsday3Doxo", names(annoDown))]))),
+
+allDown_Palbo=unique(unlist(GRangesList(annoDown[grep("PalbovsCyc|Palbovsday3Palbo", names(annoDown))])))
+)
+
+# Subset and reorder the vstdds matrix columns
+vstdds_matrix <- assays(vstdds_filt)[[1]]
+vstdds_matrix <- vstdds_matrix[, c(1:5, 38, 40, 39, 41, 42, 28:32, 43:45, 6:7, 49:51, 11:15, 33:37, 46:48, 8:10, 52:54, 16:27)]
+
+# make heatmaps from merged differential peaks
+mergedDiff_hm <- list(
+UpPalbo.UpDoxo=vstdds_matrix[row.names(vstdds_matrix) %in% unique(c(mergedDiffGR$allUp_Doxo$name, mergedDiffGR$allUp_Palbo$name)), ], 
+DownPalbo.DownDoxo=vstdds_matrix[row.names(vstdds_matrix) %in% unique(c(mergedDiffGR$allDown_Doxo$name, mergedDiffGR$allDown_Palbo$name)), ]
+)
+# all tech reps set scale to -3 to 3, with outlier "day3_Palbo_3_2" removed 
+mergedDiff_hm_rmOutlier <- lapply(mergedDiff_hm, function(mergedDiff_hm){mergedDiff_hm[ ,-33]})
+
+# make peak annotation more simple (so that we only have 3 terms to deal with)
+simpleannomasterpeaks_pval0.2 <- annomasterpeaks_pval0.2
+simpleannomasterpeaks_pval0.2$annotation <- gsub("^\\s*(\\S+)\\s(?!UTR).*", "\\1", annomasterpeaks_pval0.2$annotation, perl = TRUE)
+simpleannomasterpeaks_pval0.2$annotation[simpleannomasterpeaks_pval0.2$annotation %in% c("Exon", "Intron", "3' UTR", "5' UTR")] <- "Gene Body"
+simpleannomasterpeaks_pval0.2[grepl("Downstream", simpleannomasterpeaks_pval0.2$annotation), ]$annotation <- "Distal"
+
+# annotation for columns on heatmap 
+annoCol<- data.frame(
+  row.names = colnames(mergedDiff_hm_rmOutlier[[1]]),
+  Treatment = as.factor(metaData_ATAC[match(colnames(mergedDiff_hm_rmOutlier[[1]]), gsub("_final.bam", "", metaData_ATAC$sample)), ]$Treatment),
+  Timepoint = as.factor(metaData_ATAC[match(colnames(mergedDiff_hm_rmOutlier[[1]]), gsub("_final.bam", "", metaData_ATAC$sample)), ]$Timepoint),
+  Biorep = as.factor(metaData_ATAC[match(colnames(mergedDiff_hm_rmOutlier[[1]]), gsub("_final.bam", "", metaData_ATAC$sample)), ]$Biorep)
+)
+
+vsCyc <- unique(unlist(c(GRangesList(allUpvsCycling), GRangesList(allDownvsCycling))))
+unique(c(unlist(GRangesList(allUpvsCycling)), unlist(GRangesList(allDownvsCycling))))
+vsday3 <- unique(c(unlist(GRangesList(allUpvsday3)), unlist(GRangesList(allDownvsday3))))
+```
+
+# function to generate ATAC-seq heatmaps of counts under differential peaks, clustered by drug treatment and relative to cycling or day 3. 
+```{r}
+generatemergedDiff_hm <- function(matrix,output_file, breaks = NA, hm_colors, plot_Title, annoCol=annoCol, DoxoGR=mergedDiffGR$allUp_Doxo, PalboGR=mergedDiffGR$allUp_Palbo) {
+
+# make dataframe to specify which drug treatment peak belongs to: Palbo, Doxo or both. 
+drug_cat <- data.frame(row.names=row.names(matrix), Palbo=ifelse(row.names(matrix) %in% PalboGR$name, "Yes", "No"), 
+                       Doxo=ifelse(row.names(matrix) %in% DoxoGR$name, "Yes", "No"), 
+                       Both=ifelse(row.names(matrix) %in% DoxoGR$name & row.names(matrix) %in% PalboGR$name, "Yes", "No"),
+                       vsCyc=ifelse(row.names(matrix) %in% vsCyc$name, "Yes", "No"), 
+                       vsday3=ifelse(row.names(matrix) %in% vsday3$name, "Yes", "No") )
+
+# order rows by Palbo, Doxo then both peaks
+drug_cat_list <- list(drug_cat[drug_cat$Palbo %in% "Yes" & drug_cat$Doxo %in% "No" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "No", ],
+                      drug_cat[drug_cat$Palbo %in% "Yes" & drug_cat$Doxo %in% "No" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "Yes", ],
+                      drug_cat[drug_cat$Palbo %in% "Yes" & drug_cat$Doxo %in% "No" & drug_cat$vsCyc %in% "No" & drug_cat$vsday3 %in% "Yes", ],
+                      drug_cat[drug_cat$Both %in% "Yes" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "No", ],
+                      drug_cat[drug_cat$Both %in% "Yes" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "Yes", ],
+                      drug_cat[drug_cat$Both %in% "Yes" & drug_cat$vsCyc %in% "No" & drug_cat$vsday3 %in% "Yes", ],
+                      drug_cat[drug_cat$Palbo %in% "No" & drug_cat$Doxo %in% "Yes" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "No", ], 
+                      drug_cat[drug_cat$Palbo %in% "No" & drug_cat$Doxo %in% "Yes" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "Yes", ],
+                      drug_cat[drug_cat$Palbo %in% "No" & drug_cat$Doxo %in% "Yes" & drug_cat$vsCyc %in% "No" & drug_cat$vsday3 %in% "Yes", ]
+)
+   ordered_matrix <- list()
+   for(i in 1:length(drug_cat_list)){
+  ordered_matrix[[i]] <- matrix[row.names(matrix) %in% row.names(drug_cat_list[[i]]), ]
+  # Calculate the distance matrix
+  distance_matrix <- dist(ordered_matrix[[i]])
+  
+  # Perform hierarchical clustering within each drug category
+  set.seed(123)  # For reproducibility
+  
+  # Perform hierarchical clustering
+  hc <- hclust(distance_matrix, method="complete")
+  
+  # Order the rows based on hierarchical clustering
+  order <- hc$order
+  
+  # Reorder the original data matrix
+  ordered_matrix[[i]] <- ordered_matrix[[i]][order, ]
+   }
+  
+  # merge back into master counts matrix
+  ordered_matrix <- do.call(rbind, ordered_matrix)
+  
+  # save to PDF
+  pdf(output_file, width = 3.6, height = 5.6)
+  pheatmap(
+    ordered_matrix, 
+    scale = "row", 
+    breaks = breaks,
+    show_rownames = FALSE, 
+    show_colnames = FALSE,
+    cluster_cols = FALSE, 
+    cluster_rows= FALSE,
+    annotation_col = annoCol, 
+    annotation_colors = hm_colors, 
+    annotation_row = annoRow, 
+    main = paste0(plot_Title, ": ", nrow(matrix), "peaks")
+  )
+  dev.off()
+}
+```
+# *FIGURES*
+
+# plots for RNA-seq & ATAC-seq sample distance matrix
+```{r}
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figures Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence/sampleDistMatrix.pdf", width=4.25, height=4)
+pheatmap(RNAsampleDistMatrix, colorRampPalette(rev(c("white","white", "#FFFFB2","#FED976", "#FEB24C", "#FD8D3C", "#FC4E2A", "#E31A1C", "#B10026")))(100), border_color=NA, breaks = seq(0, 100, length.out = 100), annotation_row = metaDataall, annotation_colors = hm_cols_RNA, show_colnames = F, show_rownames = F, cluster_rows = F, cluster_cols=F, main="RNA-seq") 
+          
+pheatmap(ATACsampleDistMatrix, colorRampPalette(rev(c("white","white", "#FFFFB2","#FED976", "#FEB24C", "#FD8D3C", "#FC4E2A", "#E31A1C", "#B10026")))(100), breaks = seq(0, 450,length.out = 100), annotation_row = as.data.frame(colData(vstdds_filt))[ ,3:5], annotation_col = as.data.frame(colData(vstdds_filt))[ ,3:5],border_color=NA,annotation_colors = hm_cols_ATAC, show_colnames = F, show_rownames = F, cluster_rows = F, cluster_cols=F, main="ATAC-seq")
+
+pheatmap(ATACsampleDistMatrix_collapsed, colorRampPalette(rev(c("white","white", "#FFFFB2","#FED976", "#FEB24C", "#FD8D3C", "#FC4E2A", "#E31A1C", "#B10026")))(100), breaks = seq(0, 450,length.out = 100), annotation_row = as.data.frame(colData(vstdds_filt_collapsed))[ ,3:5], annotation_col = as.data.frame(colData(vstdds_filt_collapsed))[ ,3:5],border_color=NA,annotation_colors = hm_cols_ATAC, show_colnames = F, show_rownames = F, cluster_rows = F, cluster_cols=F, main="ATAC-seq: merged tech reps")
+dev.off()
+```
+# plots for RNA-seq & ATAC-seq PCA
+```{r}
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figures Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence/PCA.pdf", width=4, height=2)
+DESeq2::plotPCA(RNAddsall_rlog, intgroup=c("group"))+geom_point(size=0.5)+theme_classic()+theme(text = element_text(size = 10, colour="black"), axis.title = element_text(size=10), axis.text =element_text(colour="black"))+scale_colour_manual(values=colors_manual_RNA)+ggtitle("Principal component: RNA-seq")+xlim(-30,45)+ylim(-30,30)
+
+DESeq2::plotPCA(vstdds_filt, intgroup=c("Condition"))+theme_classic()+scale_color_manual(values=colors_manual_ATAC)+theme(text = element_text(size = 10, colour="black"), axis.title = element_text(size=10), axis.text =element_text(colour="black"))+xlim(-30,45)+ylim(-30,30)+ggtitle("Principal component: ATAC-seq")
+dev.off()
+```
+
+# RNA-seq: plot heatmap of differential genes 
+```{r}
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence/RNA_diff_genes_Mat.pdf", width = 4.2, height = 6)
+pheatmap(ordered_sigMat, scale = "row", annotation_row = clusterDF, show_rownames = FALSE, show_colnames = F,
+    cluster_rows = FALSE, breaks=seq(-2.5, 2.5, length.out = 100),  annotation_col = metaDataall, annotation_colors = hm_cols_RNA, cluster_cols=F, main=paste0(nrow(ordered_sigMat), " differential genes"))
+
+mergedCluster_colors <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
+                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD"), 
+                Biorep=c("1"="orange", "2"="light blue", "3"="pink"), 
+               Clusters=c("5"="#66C2A5","2"="#66C2A5","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#E78AC3","3"="#FFD92F","8"="#E5C494") , 
+                SASP = c("Yes"="dark green", "No"="white"),
+                Cell_Cycle = c("Yes"="dark blue", "No"="white")
+                )
+
+pheatmap(ordered_sigMat, scale = "row", annotation_row = clusterDF[ , 1:3], show_rownames = FALSE, show_colnames = F,
+    cluster_rows = FALSE, annotation_col = metaDataall, annotation_colors = mergedCluster_colors, cluster_cols=F, breaks=seq(-2.5, 2.5, length.out = 100), main=paste0(nrow(ordered_sigMat), " differential genes"))
+
+dev.off()
+```
+# ATAC-seq: plot heatmap of differential peaks
+```{r}
+  # Prepare row annotation (set to if the peak is found in the mergedDiffGR peak set)
+matrix <- mergedDiff_hm_rmOutlier$UpPalbo.UpDoxo
+  annoRow <- data.frame(Doxo=ifelse(row.names(matrix) %in% mergedDiffGR$allUp_Doxo$name, "Yes", "No"), 
+                        Palbo=ifelse(row.names(matrix) %in% mergedDiffGR$allUp_Palbo$name, "Yes", "No"), 
+                        Peak_anno=simpleannomasterpeaks_pval0.2[match(row.names(matrix), simpleannomasterpeaks_pval0.2$name)]$annotation,
+                        row.names = row.names(matrix))
+
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence"
+generatemergedDiff_hm(matrix=mergedDiff_hm_rmOutlier$UpPalbo.UpDoxo, breaks = seq(-3, 3,length.out = 100), output_file=paste0(pdf_dir, "/ATAC_all_Up_Peaks_Mat.pdf"), hm_colors=hm_cols_ATAC, plot_Title = paste0("all Up Peaks: ", nrow(mergedDiff_hm_rmOutlier$UpPalbo.UpDoxo)), annoCol=annoCol, DoxoGR=mergedDiffGR$allUp_Doxo, PalboGR=mergedDiffGR$allUp_Palbo)
+
+matrix <- mergedDiff_hm_rmOutlier$DownPalbo.DownDoxo
+  # Prepare row annotation (set to if the peak is found in the mergedDiffGR peak set)
+  annoRow <- data.frame(Doxo=ifelse(row.names(matrix) %in% mergedDiffGR$allDown_Doxo$name, "Yes", "No"), 
+                        Palbo=ifelse(row.names(matrix) %in% mergedDiffGR$allDown_Palbo$name, "Yes", "No"), 
+                        Peak_anno=simpleannomasterpeaks_pval0.2[match(row.names(matrix), simpleannomasterpeaks_pval0.2$name)]$annotation,
+                        row.names = row.names(matrix))
+  
+generatemergedDiff_hm(matrix=mergedDiff_hm_rmOutlier$DownPalbo.DownDoxo, breaks = seq(-3, 3,length.out = 100), output_file=paste0(pdf_dir,"/ATAC_all_Down_Peaks_Peaks_Mat.pdf"), hm_colors=hm_cols_ATAC, plot_Title = paste0("all Down Peaks:", nrow(mergedDiff_hm_rmOutlier$DownPalbo.DownDoxo)), annoCol=annoCol, DoxoGR=mergedDiffGR$allDown_Doxo, PalboGR=mergedDiffGR$allDown_Palbo)
+```
+

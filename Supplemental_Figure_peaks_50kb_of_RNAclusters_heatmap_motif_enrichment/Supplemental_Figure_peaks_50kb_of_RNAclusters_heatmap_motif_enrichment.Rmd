@@ -1,0 +1,723 @@
+---
+title: "Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment"
+author: "Joanna Yeung"
+date: '2025-02-01'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence/workspace.RData")
+```
+
+# RNA-seq: assign significant genes to relevant k-means clusters & drug + cell cycle arrest categories. 
+```{r}
+genes_in_clusters <- lapply(levels(clusterDF$Clusters), function(x){row.names(clusterDF[clusterDF$Clusters %in% x, ])})
+genes_in_clusters[[1]] <- unlist(genes_in_clusters[1:2])
+genes_in_clusters[[6]] <- unlist(genes_in_clusters[5:6])
+genes_in_clusters <- genes_in_clusters[c(1,3,4,6,7,8)]
+cluster_names <- c("CellCycle", "Palbo1", "Palbo2", "Doxo1", "Doxo2", "Shared") 
+names(genes_in_clusters) <- cluster_names
+```
+
+# ATAC-seq: annotation of all peaks near significantly changing genes for each cluster
+```{r}
+# import gtf file for genes
+genes_anno <- import("/lustre/fs4/risc_lab/store/jyeung/references/gencode.v41.GRCh38.p13.annotation.gtf")
+genes_anno <- genes_anno[genes_anno$type %in% "gene", ] # filter for regions that are only genes 
+genes_anno$gene_id <- gsub('\\.[0-9]*$', '', genes_anno$gene_id) # remove numbers after . in gene id column 
+genes_anno <- genes_anno[ ,c("source", "type", "gene_id", "gene_type", "gene_name", "level")] # keep only these columns
+
+# get the genomic coordinates of significantly changing genes from each cluster (RNA-seq data)
+genes_in_clusters_anno <- lapply(genes_in_clusters, function(genes_in_clusters){genes_anno[genes_anno$gene_name %in% genes_in_clusters]})
+
+# make GRanges where the coordinates are 50kb upstream of gene TSS and 50kb downstream of end of gene. 
+genes_in_clusters_anno_findpeaks <- genes_in_clusters_anno
+for(i in 1:length(genes_in_clusters_anno)){
+  start(genes_in_clusters_anno_findpeaks[[i]]) <- start(genes_in_clusters_anno[[i]])-50000
+  end(genes_in_clusters_anno_findpeaks[[i]]) <- end(genes_in_clusters_anno[[i]])+50000
+}
+
+# find peaks that overlap within 50kb of significantly changing genes in clusters
+peaks_in_geneclusters <- lapply(genes_in_clusters_anno_findpeaks, function(genes_in_clusters_anno_findpeaks){annomasterpeaks_pval0.2[annomasterpeaks_pval0.2 %over% genes_in_clusters_anno_findpeaks, ]})
+
+# filter for just sig changing peaks within 50kb of sig changing genes in clusters. 
+sigPeaks_in_geneclusters <- list()
+for(i in 1:length(mergedDiffGR)){
+sigPeaks_in_geneclusters[[i]] <-lapply(peaks_in_geneclusters, function(peaks_in_geneclusters){mergedDiffGR[[i]][mergedDiffGR[[i]] %over% peaks_in_geneclusters, ]}) 
+}
+names(sigPeaks_in_geneclusters) <- names(mergedDiffGR)
+
+# create static peak set to use as background for MEME-AME analysis for peaks near gene clusters. 
+# initialize empty nested list
+staticPeaks_in_geneclusters <- vector(mode="list", length=2)
+names(staticPeaks_in_geneclusters) <- c("Doxo", "Palbo")
+for(i in 1:length(staticPeaks_in_geneclusters)){
+  staticPeaks_in_geneclusters[[i]] <- vector(mode="list", length=length(peaks_in_geneclusters))
+}
+# find static peaks for each drug condition for each gene cluster. 
+for(i in 1:length(peaks_in_geneclusters)){
+staticPeaks_in_geneclusters$Doxo[[i]] <- peaks_in_geneclusters[[i]][!peaks_in_geneclusters[[i]] %over% c(sigPeaks_in_geneclusters$allUp_Doxo[[i]], sigPeaks_in_geneclusters$allDown_Doxo[[i]])]
+staticPeaks_in_geneclusters$Palbo[[i]] <- peaks_in_geneclusters[[i]][!peaks_in_geneclusters[[i]] %over% c(sigPeaks_in_geneclusters$allUp_Palbo[[i]], sigPeaks_in_geneclusters$allDown_Palbo[[i]])]
+}
+```
+
+# function to get sequence under peaks for input into MEME-AME for motif enrichment analysis
+```{r}
+getSeqforMEME <- function(peakset, dir, filename){seq <- getSeq(BSgenome.Hsapiens.UCSC.hg38, peakset) #get sequence info under peaks
+names(seq) <- 1:length(seq)
+writeXStringSet(seq, file = paste0(dir, filename, ".fa")) #write to FASTA format for input into MEME
+}
+```
+
+
+# ATAC-seq: create input fasta files for MEME-AME analysis
+```{r}
+directory <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks"
+# get sequences under significant peaks belonging to each hierarchical cluster
+for(i in 1:length(sigPeaks_in_geneclusters)){
+  for(j in 1:length(sigPeaks_in_geneclusters[[i]])){
+
+filename <- paste0("/", names(sigPeaks_in_geneclusters)[i], "_sigPeaks_within_50kb_of_", names(sigPeaks_in_geneclusters[[i]])[j], "_genes") 
+  
+getSeqforMEME(sigPeaks_in_geneclusters[[i]][[j]],
+dir=directory, filename=filename)
+  }
+}  
+# get sequences under static peaks belonging to each hierarchical cluster
+for(i in 1:length(staticPeaks_in_geneclusters)){
+  for(j in 1:length(staticPeaks_in_geneclusters[[i]])){
+    filename <- paste0("/",names(staticPeaks_in_geneclusters[i]), "_staticPeaks_within_50kb_of_", names(sigPeaks_in_geneclusters[[i]])[j], "_genes") 
+    getSeqforMEME(staticPeaks_in_geneclusters[[i]][[j]], dir=directory, filename=filename)
+  }
+}
+# specify file paths for input to MEME-AME analysis
+
+# folder names 
+folderlist <- gsub("_sigPeaks_within_50kb_of|.fa", "", dir(directory, pattern="sigPeaks"))
+
+# sig peaks nearby sig genes 
+writeLines(dir(directory, full.names=T, pattern="sigPeaks"), con=paste0(directory, "/inputfiles_sigPeaks_in_geneclusters.txt"))
+
+# static peaks nearby sig genes 
+writeLines(rep(dir(directory, full.names=T, pattern="staticPeaks"), 2), con=paste0(directory, "/inputfiles_staticPeaks_in_geneclusters.txt"))
+
+# folder names
+writeLines(folderlist, con=paste0(directory, "/folderlist_sigPeaks_in_geneclusters.txt"))
+```
+
+# ATAC-seq: MEME-AME analysis on sig changing peaks within 50kb near sig changing genes clusters. 
+```{bash}
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input
+
+sbatch -p risc --array=1-24 --export=backgroundpeakslist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks/inputfiles_staticPeaks_in_geneclusters.txt,inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks/inputfiles_sigPeaks_in_geneclusters.txt,outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_sigPeaks,folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks/folderlist_sigPeaks_in_geneclusters.txt /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
+```
+
+```{r}
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/expressedGenes.RData")
+```
+
+```{r}
+process_motif_data <- function(base_dir, expressed_genes = NULL) {
+  library(dplyr)
+  library(readr)
+  
+  # Initialize an empty list to store the data frames
+  Peaks_AME <- list()
+  processed_dirs <- vector()
+  setwd(base_dir)
+  file_paths=dir()
+
+  # Loop through each directory and process the files
+  for (i in seq_along(file_paths)) {
+    # Construct the path to the ame.tsv file
+    ame_file_path <- paste0(file_paths[i], "/ame.tsv")
+    
+    # Check the file size
+    file_info <- file.info(ame_file_path)
+    if (file_info$size == 1.1 || is.na(file_info$size)) {
+      # If the file size is 0 or file does not exist, skip to the next iteration
+      next
+    }
+    
+    # Read the ame.tsv file
+    Peaks_AME[[length(Peaks_AME) + 1]] <- as.data.frame(read_tsv(file = ame_file_path, comment = "#"))
+    
+    # Add the current directory to the processed_dirs vector
+    processed_dirs <- c(processed_dirs, file_paths[i])
+  }
+  
+  # Set names for the list elements
+  names(Peaks_AME) <- processed_dirs
+  
+  # Post-processing each dataframe
+  for (i in seq_along(Peaks_AME)) {
+    
+    # Calculate TPvsFP and add as a new column
+    Peaks_AME[[i]]$TPvsFP <- Peaks_AME[[i]]$`%TP` - Peaks_AME[[i]]$`%FP`
+    
+    # Remove everything after "_" in the motif_ID column
+    Peaks_AME[[i]]$motif_ID <- gsub("\\_.*", "", Peaks_AME[[i]]$motif_ID)
+  }
+  
+  # Convert the list of MEME-AME results into a single dataframe
+  Peaks_AME <- Peaks_AME[!sapply(Peaks_AME, is.null)]
+  Peaks_AME_df <- do.call(rbind, Peaks_AME)
+  
+  # Filter for motifs that are expressed, if provided
+  if (!is.null(expressed_genes)) {
+    Peaks_AME_df <- Peaks_AME_df %>%
+      filter(motif_ID %in% expressed_genes)
+  }
+colnames(Peaks_AME_df)[c(7,15,17)] <- c("adj_pvalue", "percentTP", "percentFP") # change column names without special symbols 
+Peaks_AME_df$neglog10padj <- -log10(Peaks_AME_df$adj_pvalue) # add in column for -log10(adj pvalue)
+  return(Peaks_AME_df)
+}
+
+Peaks_AME_Clusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_sigPeaks", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+Peaks_AME_Clusters$Cluster <- gsub('\\.[0-9]*$', '', row.names(Peaks_AME_Clusters)) 
+Peaks_AME_Clusters$Cluster <- gsub("^[^_]+_[^_]+_", "", Peaks_AME_Clusters$Cluster) # remove everything before the 2nd "_"
+
+Peaks_AME_Clusters$Comparison <- gsub(".*?(all(Up|Down)_(Palbo|Doxo)).*", "\\1", row.names(Peaks_AME_Clusters))
+Peaks_AME_Clusters$Comparison <- as.factor(Peaks_AME_Clusters$Comparison)
+Peaks_AME_Clusters$Direction <- ifelse(grepl("Up", Peaks_AME_Clusters$Comparison), "Up", "Down")
+Peaks_AME_Clusters$Group <- gsub("^[^_]*_", "", Peaks_AME_Clusters$Comparison)
+```
+
+# ----------------------------------------------------------------------------------------------------------
+# ATAC-seq: redo MEME-AME on nearby sig peaks, this time merging RNA clusters of the same drug category.
+```{r}
+# merge RNA clusters of the same drug category.
+merge_geneclusters <- list("CellCycle"=genes_in_clusters[[1]], 
+                           "Palbo"=unlist(genes_in_clusters[2:3]), 
+                           "Doxo"=unlist(genes_in_clusters[4:5]), 
+                           "Shared"=genes_in_clusters[[6]]
+)
+```
+
+## ATAC-seq: annotation of all peaks near significantly changing genes for each merged RNA cluster
+```{r}
+# get the genomic coordinates of significantly changing genes from each cluster (RNA-seq data)
+merge_geneclusters_anno <- lapply(merge_geneclusters, function(merge_geneclusters){genes_anno[genes_anno$gene_name %in% merge_geneclusters]})
+
+# make GRanges where the coordinates are 50kb upstream of gene TSS and 50kb downstream of end of gene. 
+merge_geneclusters_anno_findpeaks <- merge_geneclusters_anno
+for(i in 1:length(merge_geneclusters_anno)){
+  start(merge_geneclusters_anno_findpeaks[[i]]) <- start(merge_geneclusters_anno[[i]])-50000
+  end(merge_geneclusters_anno_findpeaks[[i]]) <- end(merge_geneclusters_anno[[i]])+50000
+}
+
+# find peaks that overlap within 50kb of significantly changing genes in clusters
+peaks_in_geneclusters <- lapply(merge_geneclusters_anno_findpeaks, function(merge_geneclusters_anno_findpeaks){annomasterpeaks_pval0.2[annomasterpeaks_pval0.2 %over% merge_geneclusters_anno_findpeaks, ]})
+
+# filter for just sig changing peaks within 50kb of sig changing genes in clusters. 
+sigPeaks_in_geneclusters <- list()
+for(i in 1:length(mergedDiffGR)){
+sigPeaks_in_geneclusters[[i]] <-lapply(peaks_in_geneclusters, function(peaks_in_geneclusters){mergedDiffGR[[i]][mergedDiffGR[[i]] %over% peaks_in_geneclusters, ]}) 
+}
+names(sigPeaks_in_geneclusters) <- names(mergedDiffGR)
+
+# create static peak set to use as background for MEME-AME analysis for peaks near gene clusters. 
+# initialize empty nested list
+staticPeaks_in_geneclusters <- vector(mode="list", length=2)
+names(staticPeaks_in_geneclusters) <- c("Doxo", "Palbo")
+for(i in 1:length(staticPeaks_in_geneclusters)){
+  staticPeaks_in_geneclusters[[i]] <- vector(mode="list", length=length(peaks_in_geneclusters))
+}
+# find static peaks for each drug condition for each gene cluster. 
+for(i in 1:length(peaks_in_geneclusters)){
+staticPeaks_in_geneclusters$Doxo[[i]] <- peaks_in_geneclusters[[i]][!peaks_in_geneclusters[[i]] %over% c(sigPeaks_in_geneclusters$allUp_Doxo[[i]], sigPeaks_in_geneclusters$allDown_Doxo[[i]])]
+staticPeaks_in_geneclusters$Palbo[[i]] <- peaks_in_geneclusters[[i]][!peaks_in_geneclusters[[i]] %over% c(sigPeaks_in_geneclusters$allUp_Palbo[[i]], sigPeaks_in_geneclusters$allDown_Palbo[[i]])]
+}
+```
+
+# ATAC-seq: create input fasta files for MEME-AME analysis
+```{r}
+directory <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks_RNAmergeClusters"
+# get sequences under significant peaks belonging to each hierarchical cluster
+for(i in 1:length(sigPeaks_in_geneclusters)){
+  for(j in 1:length(sigPeaks_in_geneclusters[[i]])){
+
+filename <- paste0("/", names(sigPeaks_in_geneclusters)[i], "_sigPeaks_within_50kb_of_", names(sigPeaks_in_geneclusters[[i]])[j], "_genes") 
+  
+getSeqforMEME(sigPeaks_in_geneclusters[[i]][[j]],
+dir=directory, filename=filename)
+  }
+}  
+# get sequences under static peaks belonging to each hierarchical cluster
+for(i in 1:length(staticPeaks_in_geneclusters)){
+  for(j in 1:length(staticPeaks_in_geneclusters[[i]])){
+    filename <- paste0("/", names(staticPeaks_in_geneclusters[i]), "_staticPeaks_within_50kb_of_", names(sigPeaks_in_geneclusters[[i]])[j], "_genes") 
+    getSeqforMEME(staticPeaks_in_geneclusters[[i]][[j]], dir=directory, filename=filename)
+  }
+}
+
+# folder names 
+folderlist <- gsub("_sigPeaks_within_50kb_of|.fa", "", dir(directory, pattern="sigPeaks"))
+# specify file paths for input to MEME-AME analysis
+# sig peaks nearby sig genes 
+writeLines(dir(directory, full.names=T, pattern="sigPeaks"), con=paste0(directory, "/inputfiles_sigPeaks_in_geneclusters.txt"))
+
+# static peaks nearby sig genes 
+writeLines(rep(dir(directory, full.names=T, pattern="staticPeaks"), 2), con=paste0(directory, "/inputfiles_staticPeaks_in_geneclusters.txt"))
+
+# folder names
+writeLines(folderlist, con=paste0(directory,"/folderlist_sigPeaks_in_geneclusters.txt"))
+```
+
+# ATAC-seq: MEME-AME analysis on sig changing peaks within 50kb near sig changing merged RNA clusters. 
+```{bash}
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input
+
+sbatch -p risc --array=1-16 --export=backgroundpeakslist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks_RNAmergeClusters/inputfiles_staticPeaks_in_geneclusters.txt,inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks_RNAmergeClusters/inputfiles_sigPeaks_in_geneclusters.txt,outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_sigPeaks_RNAmergeClusters,folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks_RNAmergeClusters/folderlist_sigPeaks_in_geneclusters.txt /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
+```
+
+# ATAC-seq: import MEME-AME results into dataframe
+```{r}
+AME_mergeClusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_sigPeaks_RNAmergeClusters", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+AME_mergeClusters$Cluster <- gsub('\\.[0-9]*$', '', row.names(AME_mergeClusters)) 
+AME_mergeClusters$Cluster <- gsub("^[^_]+_[^_]+_", "", AME_mergeClusters$Cluster) # remove everything before the 2nd "_"
+
+AME_mergeClusters$Comparison <- gsub(".*?(all(Up|Down)_(Palbo|Doxo)).*", "\\1", row.names(AME_mergeClusters))
+AME_mergeClusters$Comparison <- as.factor(AME_mergeClusters$Comparison)
+AME_mergeClusters$Direction <- ifelse(grepl("Up", AME_mergeClusters$Comparison), "Up", "Down")
+AME_mergeClusters$Group <- gsub("^[^_]*_", "", AME_mergeClusters$Comparison)
+```
+
+# ATAC-seq: annotation of significantly up peaks near significantly changing genes for each cluster- classified by Doxo enriched, Palbo enriched and shared peaks. 
+```{r}
+# filter for GRanges of up peaks in each drug and cell cycle arrest category 
+DrugandArrestCat <- list(
+  PalboUpvsCyc=allUpvsCycling$Palbo[!allUpvsCycling$Palbo %over% allUpvsCycling$Doxo, ], 
+  sharedUpvsCyc=allUpvsCycling$Palbo[allUpvsCycling$Palbo %over% allUpvsCycling$Doxo, ],
+  DoxoUpvsCyc=allUpvsCycling$Doxo[!allUpvsCycling$Doxo %over% allUpvsCycling$Palbo, ], 
+  PalboUpvsday3=allUpvsday3$Palbo[!allUpvsday3$Palbo %over% allUpvsday3$Doxo, ], 
+  sharedUpvsday3=allUpvsday3$Palbo[allUpvsday3$Palbo %over% allUpvsday3$Doxo, ], 
+  DoxoUpvsday3=allUpvsday3$Doxo[!allUpvsday3$Doxo %over% allUpvsday3$Palbo, ], 
+  
+  PalboDownvsCyc=allDownvsCycling$Palbo[!allDownvsCycling$Palbo %over% allDownvsCycling$Doxo, ], 
+  sharedDownvsCyc=allDownvsCycling$Palbo[allDownvsCycling$Palbo %over% allDownvsCycling$Doxo, ],
+  DoxoDownvsCyc=allDownvsCycling$Doxo[!allDownvsCycling$Doxo %over% allDownvsCycling$Palbo, ], 
+  PalboDownvsday3=allDownvsday3$Palbo[!allDownvsday3$Palbo %over% allDownvsday3$Doxo, ], 
+  sharedDownvsday3=allDownvsday3$Palbo[allDownvsday3$Palbo %over% allDownvsday3$Doxo, ], 
+  DoxoDownvsday3=allDownvsday3$Doxo[!allDownvsday3$Doxo %over% allDownvsday3$Palbo, ])
+
+# filter for sig changing peaks within 50kb of sig changing genes in clusters. 
+sigPeaks_PvsSharedvsD <- list()
+for(i in 1:length(DrugandArrestCat)){
+sigPeaks_PvsSharedvsD[[i]] <-lapply(peaks_in_geneclusters, function(peaks_in_geneclusters){DrugandArrestCat[[i]][DrugandArrestCat[[i]] %over% peaks_in_geneclusters, ]}) 
+}
+names(sigPeaks_PvsSharedvsD) <- names(DrugandArrestCat)
+
+# create static peak set to use as background for MEME-AME analysis for peaks near gene clusters. 
+# initialize empty nested list
+staticPeaks_PvsSharedvsD <- vector(mode="list", length=3)
+names(staticPeaks_PvsSharedvsD) <- c("Palbo","shared", "Doxo")
+for(i in 1:length(staticPeaks_PvsSharedvsD)){
+  staticPeaks_PvsSharedvsD[[i]] <- vector(mode="list", length=length(peaks_in_geneclusters))
+  names(staticPeaks_PvsSharedvsD[[i]]) <- names(peaks_in_geneclusters)
+}
+# find static peaks for each drug condition for each gene cluster. 
+for(i in 1:length(peaks_in_geneclusters)){
+staticPeaks_PvsSharedvsD$Doxo[[i]] <-  peaks_in_geneclusters[[i]][!peaks_in_geneclusters[[i]] %over% c(sigPeaks_PvsSharedvsD$DoxoUpvsCyc[[i]], sigPeaks_PvsSharedvsD$DoxoUpvsday3[[i]], 
+  sigPeaks_PvsSharedvsD$DoxoDownvsCyc[[i]], sigPeaks_PvsSharedvsD$DoxoDownvsday3[[i]])]
+
+staticPeaks_PvsSharedvsD$Palbo[[i]] <- peaks_in_geneclusters[[i]][!peaks_in_geneclusters[[i]] %over% c(sigPeaks_PvsSharedvsD$PalboUpvsCyc[[i]], sigPeaks_PvsSharedvsD$PalboUpvsday3[[i]], 
+  sigPeaks_PvsSharedvsD$PalboDownvsCyc[[i]], sigPeaks_PvsSharedvsD$PalboDownvsday3[[i]] )]
+
+staticPeaks_PvsSharedvsD$shared[[i]] <- peaks_in_geneclusters[[i]][!peaks_in_geneclusters[[i]] %over% c(sigPeaks_PvsSharedvsD$sharedUpvsCyc[[i]], sigPeaks_PvsSharedvsD$sharedUpvsday3[[i]], sigPeaks_PvsSharedvsD$sharedDownvsCyc[[i]], sigPeaks_PvsSharedvsD$sharedDownvsday3[[i]])]
+}
+```
+
+# ATAC-seq: create input fasta files for MEME-AME analysis
+```{r}
+directory <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/Palbo_shared_Doxo_sigPeaks_RNAmergeClusters"
+# get sequences under significant peaks belonging to each hierarchical cluster
+for(i in 1:length(sigPeaks_PvsSharedvsD)){
+  for(j in 1:length(sigPeaks_PvsSharedvsD[[i]])){
+
+filename <- paste0("/", names(sigPeaks_PvsSharedvsD)[i], "_sigPeaks_within_50kb_of_", names(sigPeaks_PvsSharedvsD[[i]])[j], "_genes") 
+  
+getSeqforMEME(sigPeaks_PvsSharedvsD[[i]][[j]],
+dir=directory, filename=filename)
+  }
+}  
+# get sequences under static peaks belonging to each hierarchical cluster
+for(i in 1:length(staticPeaks_PvsSharedvsD)){
+  for(j in 1:length(staticPeaks_PvsSharedvsD[[i]])){
+    filename <- paste0("/", names(staticPeaks_PvsSharedvsD[i]), "_staticPeaks_within_50kb_of_", names(sigPeaks_PvsSharedvsD[[i]])[j], "_genes") 
+    getSeqforMEME(staticPeaks_PvsSharedvsD[[i]][[j]], dir=directory, filename=filename)
+  }
+}
+
+# folder names 
+folderlist <- gsub("_sigPeaks_within_50kb_of|.fa", "", dir(directory, pattern="sigPeaks"))
+# specify file paths for input to MEME-AME analysis
+# sig peaks nearby sig genes 
+writeLines(dir(directory, full.names=T, pattern="sigPeaks"), con=paste0(directory, "/inputfiles_sigPeaks_PvsSharedvsD.txt"))
+
+# static peaks nearby sig genes 
+writeLines(c(rep(dir(directory,full.names=T, pattern="staticPeaks")[1:4], times=4), rep(dir(directory, full.names=T, pattern="staticPeaks")[5:8], times=4), rep(dir(directory, full.names=T, pattern="staticPeaks")[9:12], times=4)), con=paste0(directory, "/inputfiles_staticPeaks_PvsSharedvsD.txt"))
+
+# folder names
+writeLines(folderlist, con=paste0(directory,"/folderlist_sigPeaks_PvsSharedvsD.txt"))
+```
+
+# ATAC-seq: MEME-AME analysis on sig changing peaks within 50kb near sig changing merged RNA clusters. 
+```{bash}
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input
+
+sbatch -p risc --array=1-48%12 --export=backgroundpeakslist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/Palbo_shared_Doxo_sigPeaks_RNAmergeClusters/inputfiles_staticPeaks_PvsSharedvsD.txt,inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/Palbo_shared_Doxo_sigPeaks_RNAmergeClusters/inputfiles_sigPeaks_PvsSharedvsD.txt,outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/Palbo_shared_Doxo_sigPeaks_RNAmergeClusters,folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/Palbo_shared_Doxo_sigPeaks_RNAmergeClusters/folderlist_sigPeaks_PvsSharedvsD.txt /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
+```
+
+# ATAC-seq: import MEME-PvsSharedvsD_AME results into dataframe
+```{r}
+PvsSharedvsD_AME_mergeClusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/Palbo_shared_Doxo_sigPeaks_RNAmergeClusters", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+PvsSharedvsD_AME_mergeClusters$Cluster <- gsub("^[^_]*_|\\.[0-9]*$", "",row.names(PvsSharedvsD_AME_mergeClusters))
+PvsSharedvsD_AME_mergeClusters$Comparison <- gsub("_.*", "",  row.names(PvsSharedvsD_AME_mergeClusters)) 
+PvsSharedvsD_AME_mergeClusters$Comparison <- as.factor(PvsSharedvsD_AME_mergeClusters$Comparison)
+PvsSharedvsD_AME_mergeClusters$Direction <- ifelse(grepl("Up", PvsSharedvsD_AME_mergeClusters$Comparison), "Up", "Down")
+PvsSharedvsD_AME_mergeClusters$Group <- gsub("(Doxo|Palbo|shared).*", "\\1", PvsSharedvsD_AME_mergeClusters$Comparison)
+```
+--------------------------------------------------------------------------------------------------------------------------------------------
+# ATAC-seq: annotation of significantly up peaks near significantly changing genes for each cluster- classified by DoxovsCyc, DoxovsDay3, PalbovsCyc, PalbovsDay3. 
+```{r}
+DrugandArrest_PvsD <- list(
+  PalboUpvsCyc=allUpvsCycling$Palbo, 
+  DoxoUpvsCyc=allUpvsCycling$Doxo, 
+  PalboUpvsday3=allUpvsday3$Palbo,
+  DoxoUpvsday3=allUpvsday3$Doxo, 
+  PalboDownvsCyc=allDownvsCycling$Palbo, 
+  DoxoDownvsCyc=allDownvsCycling$Doxo, 
+  PalboDownvsday3=allDownvsday3$Palbo,
+  DoxoDownvsday3=allDownvsday3$Doxo)
+
+# filter for sig changing peaks within 50kb of sig changing genes in clusters. 
+sigPeaks_PvsD <- list()
+for(i in 1:length(DrugandArrest_PvsD)){
+sigPeaks_PvsD[[i]] <-lapply(peaks_in_geneclusters, function(peaks_in_geneclusters){DrugandArrest_PvsD[[i]][DrugandArrest_PvsD[[i]] %over% peaks_in_geneclusters, ]}) 
+}
+names(sigPeaks_PvsD) <- names(DrugandArrest_PvsD)
+
+# create static peak set to use as background for MEME-AME analysis for peaks near gene clusters. 
+# initialize empty nested list
+staticPeaks_PvsD <- vector(mode="list", length=2)
+names(staticPeaks_PvsD) <- c("Palbo", "Doxo")
+for(i in 1:length(staticPeaks_PvsD)){
+  staticPeaks_PvsD[[i]] <- vector(mode="list", length=length(peaks_in_geneclusters))
+  names(staticPeaks_PvsD[[i]]) <- names(peaks_in_geneclusters)
+}
+# find static peaks for each drug condition for each gene cluster. 
+for(i in 1:length(peaks_in_geneclusters)){
+staticPeaks_PvsD$Doxo[[i]] <-  peaks_in_geneclusters[[i]][!peaks_in_geneclusters[[i]] %over% c(sigPeaks_PvsD$DoxoUpvsCyc[[i]], sigPeaks_PvsD$DoxoUpvsday3[[i]], sigPeaks_PvsD$DoxoDownvsCyc[[i]], sigPeaks_PvsD$DoxoDownvsday3[[i]])]
+
+staticPeaks_PvsD$Palbo[[i]] <- peaks_in_geneclusters[[i]][!peaks_in_geneclusters[[i]] %over% c(sigPeaks_PvsD$PalboUpvsCyc[[i]], sigPeaks_PvsD$PalboUpvsday3[[i]], sigPeaks_PvsD$PalboDownvsCyc[[i]], sigPeaks_PvsD$PalboDownvsday3[[i]] )]
+}
+```
+
+# ATAC-seq: create input fasta files for MEME-AME analysis
+```{r}
+directory <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_vsCyc_vsday3_sigPeaks_RNAmergeClusters"
+# get sequences under significant peaks belonging to each hierarchical cluster
+for(i in 1:length(sigPeaks_PvsD)){
+  for(j in 1:length(sigPeaks_PvsD[[i]])){
+
+filename <- paste0("/", names(sigPeaks_PvsD)[i], "_sigPeaks_within_50kb_of_", names(sigPeaks_PvsD[[i]])[j], "_genes") 
+  
+getSeqforMEME(sigPeaks_PvsD[[i]][[j]],
+dir=directory, filename=filename)
+  }
+}  
+# get sequences under static peaks belonging to each hierarchical cluster
+for(i in 1:length(staticPeaks_PvsD)){
+  for(j in 1:length(staticPeaks_PvsD[[i]])){
+    filename <- paste0("/", names(staticPeaks_PvsD[i]), "_staticPeaks_within_50kb_of_", names(sigPeaks_PvsD[[i]])[j], "_genes") 
+    getSeqforMEME(staticPeaks_PvsD[[i]][[j]], dir=directory, filename=filename)
+  }
+}
+
+# folder names 
+folderlist <- gsub("_sigPeaks_within_50kb_of|.fa", "", dir(directory, pattern="sigPeaks"))
+# specify file paths for input to MEME-AME analysis
+# sig peaks nearby sig genes 
+writeLines(dir(directory, full.names=T, pattern="sigPeaks"), con=paste0(directory, "/inputfiles_sigPeaks_PvsD.txt"))
+
+# static peaks nearby sig genes 
+writeLines(c(rep(dir(directory,full.names=T, pattern="staticPeaks")[1:4], times=4), rep(dir(directory, full.names=T, pattern="staticPeaks")[5:8], times=4)), con=paste0(directory, "/inputfiles_staticPeaks_PvsD.txt"))
+
+# folder names
+writeLines(folderlist, con=paste0(directory,"/folderlist_sigPeaks_PvsD.txt"))
+```
+
+# ATAC-seq: MEME-AME analysis on sig changing peaks within 50kb near sig changing merged RNA clusters. 
+```{bash}
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input
+
+sbatch -p risc --array=1-32%8 --export=backgroundpeakslist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_vsCyc_vsday3_sigPeaks_RNAmergeClusters/inputfiles_staticPeaks_PvsD.txt,inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_vsCyc_vsday3_sigPeaks_RNAmergeClusters/inputfiles_sigPeaks_PvsD.txt,outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_vsCyc_vsday3_sigPeaks_RNAmergeClusters,folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_vsCyc_vsday3_sigPeaks_RNAmergeClusters/folderlist_sigPeaks_PvsD.txt /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
+```
+
+
+# ATAC-seq: import MEME-AME results into dataframe from DrugandArrest_PvsD peak list (peaks within 50kb of sig changing genes, categorized by DoxovsCyc, Doxovsday3, PalbovsCyc, Palbovsday3)
+```{r}
+PvsD_AME_mergeClusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_vsCyc_vsday3_sigPeaks_RNAmergeClusters", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+PvsD_AME_mergeClusters$Cluster <- gsub("^[^_]*_|\\.[0-9]*$", "",row.names(PvsD_AME_mergeClusters))
+PvsD_AME_mergeClusters$Comparison <- gsub("_.*", "",  row.names(PvsD_AME_mergeClusters)) 
+PvsD_AME_mergeClusters$Comparison <- as.factor(PvsD_AME_mergeClusters$Comparison)
+PvsD_AME_mergeClusters$Direction <- ifelse(grepl("Up", PvsD_AME_mergeClusters$Comparison), "Up", "Down")
+PvsD_AME_mergeClusters$Group <- gsub("(Doxo|Palbo).*", "\\1", PvsD_AME_mergeClusters$Comparison)
+```
+
+----------------------------------------------------------------------------------------------------------------------------
+#*FIGURES*
+
+# ATAC-seq, separate RNA clusters: plot motif enrichment results of all clusters as heatmap of p-adj values for each type (up, down, Doxo, Palbo) of sig changing peak 
+```{r}
+# create function that stores the -log10(padj) value of each motif ID for each cluster
+create_AME_peaks_matrix_byCluster <- function(sig_peaks_df) {
+  # Create an empty matrix for significant peaks
+  unique_motifs <- unique(sig_peaks_df$motif_ID)
+  cluster <- unique(sig_peaks_df$Cluster)
+  sig_peaks_mat <- matrix(nrow = length(unique_motifs), ncol = length(cluster))
+  
+  rownames(sig_peaks_mat) <- unique_motifs # Row names are motif IDs
+  colnames(sig_peaks_mat) <- cluster   # Column names are DESeq comparisons
+  
+  # Populate the matrix with neglog10padj values
+  for (i in 1:ncol(sig_peaks_mat)) {
+    temp_comparison <- sig_peaks_df[sig_peaks_df$Cluster == cluster[i], ]
+    sig_peaks_mat[, i] <- temp_comparison[match(rownames(sig_peaks_mat), temp_comparison$motif_ID), ]$neglog10padj
+    sig_peaks_mat[, i] <- ifelse(is.na(sig_peaks_mat[, i]), 0, sig_peaks_mat[, i])
+  }
+  
+  return(sig_peaks_mat)
+}
+
+AME_padj_mat <- list()
+comparisons <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+for(i in 1:length(comparisons)){
+AME_padj_mat[[i]] <- create_AME_peaks_matrix_byCluster(Peaks_AME_Clusters[Peaks_AME_Clusters$Comparison %in% comparisons[i], ])
+}
+names(AME_padj_mat) <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Up.Down.peaks.near.RNAclusters.enriched.motifs.pdf", width=3, height=9)
+
+  pheatmap(AME_padj_mat[[1]][order(rowSums(AME_padj_mat[[1]]), decreasing=T), ], cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 150,length.out = 100), main="all Down Doxo: enriched motifs")
+
+  pheatmap(AME_padj_mat[[2]][order(rowSums(AME_padj_mat[[2]]), decreasing=T), ], cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 30,length.out = 100), main="all Down Palbo: enriched motifs")
+
+  pheatmap(AME_padj_mat[[3]][order(rowSums(AME_padj_mat[[3]]), decreasing=T), ], cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 40,length.out = 100), main="all Up Doxo: enriched motifs") 
+  pheatmap(AME_padj_mat[[4]][order(rowSums(AME_padj_mat[[4]]), decreasing=T), ], cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 20,length.out = 100), main="all Up Palbo: enriched motifs")
+
+dev.off()
+```
+
+# ATAC-seq, separate RNA clusters: plot motif enrichment results as dotplot indicating difference between %TP & %FP as dot size & fill color as padj values.  
+```{r}
+AME_padj_dots <- list()
+comparisons <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+for(i in 1:length(comparisons)){
+AME_padj_dots[[i]] <- Peaks_AME_Clusters[Peaks_AME_Clusters$Comparison %in% comparisons[i], ]
+AME_padj_dots[[i]] <- AME_padj_dots[[i]][AME_padj_dots[[i]]$motif_ID %in% row.names(AME_padj_mat[[i]][1:15, ]), ] # show only top 15 most significant padj values motif IDs
+AME_padj_dots[[i]]$motif_ID <- factor(AME_padj_dots[[i]]$motif_ID, levels=rev(unique(AME_padj_dots[[i]]$motif_ID)))
+}
+names(AME_padj_dots) <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+
+
+# create function that makes dotplots of motif enrichment results
+create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title){
+  ggplot(AME_df, aes(x=Cluster, y=motif_ID, size=TPvsFP)) +
+    geom_point(aes(fill=neglog10padj), colour="black", pch=21, alpha=0.8) +
+    scale_fill_gradient(name="-log10(padj)", low="light yellow", high="dark orange") +
+    scale_size_continuous(name="%TP - % FP") +
+    theme_minimal() +
+    ggtitle(Title) +
+    theme(
+      text = element_text(size=8), 
+      axis.text.x = element_text(size=8), 
+      strip.text.x = element_text(size=8, face="bold"),
+      strip.text.y = element_text(size=8, face="bold")
+    ) +
+  theme_classic()+
+    facet_wrap(~Cluster, scales="free", nrow=1)+
+    labs(x="RNA cluster", y="motif ID")
+}
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Up.Down.peaks.near.RNAclusters.enriched.motifs.dotplots.pdf", width=8, height=5)
+for(i in 1:length(AME_padj_dots)){
+p <- create_AME_dotplots(AME_padj_dots[[i]], Title=names(AME_padj_dots)[i]) 
+print(p)
+}
+dev.off()
+```
+
+
+# ATAC-seq, merged RNA clusters: plot motif enrichment results of all clusters as heatmap of p-adj values for each type (up, down, Doxo, Palbo) of sig changing peak 
+```{r}
+AME_padj_mat <- list()
+comparisons <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+for(i in 1:length(comparisons)){
+AME_padj_mat[[i]] <- create_AME_peaks_matrix_byCluster(AME_mergeClusters[AME_mergeClusters$Comparison %in% comparisons[i], ])
+}
+names(AME_padj_mat) <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Up.Down.peaks.near.mergedRNAclusters.enriched.motifs.pdf", width=3, height=9)
+
+  pheatmap(AME_padj_mat[[1]][order(rowSums(AME_padj_mat[[1]]), decreasing=T), ], cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 150,length.out = 100), main="all Down Doxo: enriched motifs")
+
+  pheatmap(AME_padj_mat[[2]][order(rowSums(AME_padj_mat[[2]]), decreasing=T), ], cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 30,length.out = 100), main="all Down Palbo: enriched motifs")
+
+  pheatmap(AME_padj_mat[[3]][order(rowSums(AME_padj_mat[[3]]), decreasing=T), ], cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 40,length.out = 100), main="all Up Doxo: enriched motifs") 
+  pheatmap(AME_padj_mat[[4]][order(rowSums(AME_padj_mat[[4]]), decreasing=T), ], cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 20,length.out = 100), main="all Up Palbo: enriched motifs")
+
+dev.off()
+```
+
+# ATAC-seq, merged RNA clusters: plot motif enrichment results as dotplot indicating difference between %TP & %FP as dot size & fill color as padj values.  
+```{r}
+AME_padj_dots <- list()
+comparisons <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+for(i in 1:length(comparisons)){
+AME_padj_dots[[i]] <- AME_mergeClusters[AME_mergeClusters$Comparison %in% comparisons[i], ]
+AME_padj_dots[[i]] <- AME_padj_dots[[i]][AME_padj_dots[[i]]$motif_ID %in% row.names(AME_padj_mat[[i]][1:15, ]), ] # show only top 15 most significant padj values motif IDs
+AME_padj_dots[[i]]$motif_ID <- factor(AME_padj_dots[[i]]$motif_ID, levels=rev(unique(AME_padj_dots[[i]]$motif_ID)))
+}
+names(AME_padj_dots) <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Up.Down.peaks.near.mergedRNAclusters.enriched.motifs.dotplots.pdf", width=6, height=5)
+for(i in 1:length(AME_padj_dots)){
+p <- create_AME_dotplots(AME_padj_dots[[i]], Title=names(AME_padj_dots)[i]) 
+print(p)
+}
+dev.off()
+```
+
+# ATAC-seq, merged RNA clusters: plot motif enrichment results of all clusters as heatmap of p-adj values for each type ("PalboDownvsCyc", "PalboDownvsday3",  "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3") of sig changing peaks
+```{r}
+AME_padj_mat <- list()
+comparisons <- c("PalboDownvsCyc", "PalboDownvsday3",  "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3")
+
+for(i in 1:length(comparisons)){
+AME_padj_mat[[i]] <- create_AME_peaks_matrix_byCluster(PvsD_AME_mergeClusters[PvsD_AME_mergeClusters$Comparison %in% comparisons[i], ])
+
+AME_padj_mat[[i]] <- AME_padj_mat[[i]][order(rowSums(AME_padj_mat[[i]]), decreasing=T), ] # sort motif IDs by overall significance across clusters. 
+}
+
+names(AME_padj_mat) <- comparisons
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/PvsD.near.mergedRNAclusters.enriched.motifs.pdf", width=3, height=9)
+
+for(i in 1:length(comparisons)){
+
+p <- pheatmap(AME_padj_mat[[i]][order(rowSums(AME_padj_mat[[i]]), decreasing=T), ], cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), main=names(AME_padj_mat)[i])
+
+print(p)
+}
+
+dev.off()
+```
+
+# ATAC-seq, merged RNA clusters: plot motif enrichment results as dotplot indicating difference between %TP & %FP as dot size & fill color as padj values for ("PalboDownvsCyc", "PalboDownvsday3",  "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3") of sig changing peaks
+```{r}
+AME_padj_dots <- list()
+for(i in 1:length(comparisons)){
+AME_padj_dots[[i]] <- PvsD_AME_mergeClusters[PvsD_AME_mergeClusters$Comparison %in% comparisons[i], ]
+
+max_number <- ifelse(nrow(AME_padj_mat[[i]]) >=15, 15, nrow(AME_padj_mat[[i]]))
+AME_padj_dots[[i]] <- AME_padj_dots[[i]][AME_padj_dots[[i]]$motif_ID %in% row.names(AME_padj_mat[[i]][1:max_number, ]), ] # show only top 15 most significant padj values motif IDs
+AME_padj_dots[[i]]$motif_ID <- factor(AME_padj_dots[[i]]$motif_ID, levels=rev(unique(AME_padj_dots[[i]]$motif_ID)))
+}
+names(AME_padj_dots) <- comparisons
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/PvsD.near.mergedRNAclusters.enriched.motifs.dotplots.pdf", width=6, height=5)
+for(i in 1:length(AME_padj_dots)){
+p <- create_AME_dotplots(AME_padj_dots[[i]], Title=names(AME_padj_dots)[i]) 
+print(p)
+}
+dev.off()
+```
+
+
+##### TBD 
+
+##########################################################################################################################
+### PEAKS WITHIN 50KB OF SIG CHANGING GENES CLUSTERS
+# filter for motifs that overlap with up and down peaks nearby significantly changing genes clusters. (within 50kb)
+```{r}
+motifs_near_genes_UpPeaks <- list()
+motifs_near_genes_DownPeaks <- list()
+for(k in 1:length(peaks_in_geneclusters)){
+  motifs_near_genes_UpPeaks[[k]] <- list()
+  motifs_near_genes_DownPeaks[[k]] <- list()
+for(i in 1:length(Up_DrugandArrestCat_motifsintersect)){
+  motifs_near_genes_UpPeaks[[k]][[i]] <- list()
+  motifs_near_genes_DownPeaks[[k]][[i]] <- list()
+  for(j in 1:length(Up_DrugandArrestCat_motifsintersect[[i]])){
+    motifs_near_genes_UpPeaks[[k]][[i]][[j]] <- Up_DrugandArrestCat_motifsintersect[[i]][[j]][Up_DrugandArrestCat_motifsintersect[[i]][[j]] %over% peaks_in_geneclusters[[k]]]
+    motifs_near_genes_DownPeaks[[k]][[i]][[j]] <- Down_DrugandArrestCat_motifsintersect[[i]][[j]][Down_DrugandArrestCat_motifsintersect[[i]][[j]] %over% peaks_in_geneclusters[[k]]]
+  }
+  names(motifs_near_genes_UpPeaks[[k]][[i]]) <-names(Up_DrugandArrestCat_motifsintersect[[i]])
+  names(motifs_near_genes_DownPeaks[[k]][[i]]) <-names(Down_DrugandArrestCat_motifsintersect[[i]])
+} 
+  names(motifs_near_genes_UpPeaks[[k]]) <- names(Up_DrugandArrestCat_motifsintersect)
+   names(motifs_near_genes_DownPeaks[[k]]) <-names(Down_DrugandArrestCat_motifsintersect)
+}
+
+names(motifs_near_genes_UpPeaks) <- paste0("Cluster", 1:8)
+names(motifs_near_genes_DownPeaks) <- paste0("Cluster", 1:8)
+
+# export up & down peaks nearby changing genes & overlapping with motifs as bed files. 
+for(k in 1:length(peaks_in_geneclusters)){
+  for(i in 1:length(Up_DrugandArrestCat_motifsintersect)){
+    for(j in 1:length(Up_DrugandArrestCat_motifsintersect[[i]])){
+   export.bed(motifs_near_genes_UpPeaks[[k]][[i]][[j]], con=paste0("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/deepTools/Coverage_over_hclust_by_drug.cat_Up_Peaks/input_beds/peaks_in_geneclusters/Cluster", k, "/", names(Up_DrugandArrestCat_motifsintersect)[i], "_", names(Up_DrugandArrestCat_motifsintersect[[i]])[j], ".bed"))
+      
+export.bed(motifs_near_genes_DownPeaks[[k]][[i]][[j]], con=paste0("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/deepTools/Coverage_over_hclust_by_drug.cat_Down_Peaks/input_beds/peaks_in_geneclusters/Cluster", k, "/", names(Down_DrugandArrestCat_motifsintersect)[i], "_", names(Down_DrugandArrestCat_motifsintersect[[i]])[j], ".bed"))
+    }
+  } 
+}
+```
+
+-------------------------------------------------------------------------------------------------------------------
+# *FUNCTIONS*
+# save functions for use in other RMarkdown files. 
+```{r}
+functions_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Functions"
+save(process_motif_data, file=paste0(functions_dir, "/process_motif_data.RData"))
+
+save(create_AME_peaks_matrix_byCluster, file=paste0(functions_dir, "/create_AME_peaks_matrix_byCluster.RData"))
+
+# create_AME_dotplots with extra arguments to set fill limits and size limits for "%TP - %FP" & -log10(padj) values. 
+create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50, size_limit=4.5 ){
+  ggplot(AME_df, aes(x=Cluster, y=motif_ID, size=TPvsFP)) +
+    geom_point(aes(fill=neglog10padj), colour="black", pch=21, alpha=0.8) +
+    scale_fill_gradient(name="-log10(padj)", 
+                        low="light yellow", high="dark orange",
+                        limits=c(0, fill_limit), 
+                        oob=scales::squish) + # Adjust fill scale
+    scale_size_continuous(name="%TP - %FP", 
+                          limits=c(0, size_limit), 
+                          range=c(1, 10)) +  # Adjust dot sizes
+    theme_minimal() +
+    ggtitle(Title) +
+    theme(
+      text = element_text(size=8), 
+      axis.text.x = element_text(size=8), 
+      strip.text.x = element_text(size=8, face="bold"),
+      strip.text.y = element_text(size=8, face="bold")
+    ) +
+  theme_classic()+
+    facet_wrap(~Cluster, scales="free", nrow=1)+
+    labs(x="RNA cluster", y="motif ID")
+}
+
+save(create_AME_dotplots, file=paste0(functions_dir, "/create_AME_dotplots.RData"))
+```
+
+  
