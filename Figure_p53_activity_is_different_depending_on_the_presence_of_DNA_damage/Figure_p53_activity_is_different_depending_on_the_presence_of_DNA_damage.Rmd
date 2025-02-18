@@ -40,7 +40,7 @@ library(pheatmap)
 
 # load in workspace with DESeq results and rlog counts matrix of genes. 
 ```{r}
-load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence/workspace.RData")
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Global_transcriptome_and_chromatin_accessibility_is_dynamic_in_both_types_of_therapy_induced_senescence/workspace.RData")
 ```
 
 #### universe (background gene set) for GO enrichment analysis is all genes expressed
@@ -469,7 +469,16 @@ writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figure
 
 # submit bash job to plot around p53 motifs in up  peaks
 ```{bash}
-mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/Cycling_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day3_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day10_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day14_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day21_Doxo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day3_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day10_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day14_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day21_Palbo_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_RPGC_bigwigs/workspaces/day28_Palbo_scaleFactornorm_cutsCoverage.bw"
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
 samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
 
 cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_is_different_depending_on_the_presence_of_DNA_damage/deepTools_files/output_plots
@@ -499,7 +508,12 @@ pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_
 pheatmap(p53_sig_LFCMat, show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("Clusters", "SASP", "Cell_Cycle", "NFKB_All")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="all up p53 target genes")
 
 # plot showing only p53 target genes under p53 Hallmark term from GO enrichment. 
-pheatmap( p53_sig_LFCMat[row.names(p53_sig_LFCMat) %in% unlist(str_split(GO_enrichment_clusters_HallMark_df$Doxo1[GO_enrichment_clusters_HallMark_df$Doxo1$ID %in% "P53 PATHWAY", ]$geneID, "/")), ], show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=T, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("NFKB_All", "SASP")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="Hallmark p53 pathway: Doxo enriched up genes")
+
+p53_genes <- sort(row.names(p53_sig_LFCMat[row.names(p53_sig_LFCMat) %in% unlist(str_split(GO_enrichment_clusters_HallMark_df$Doxo1[GO_enrichment_clusters_HallMark_df$Doxo1$ID %in% "P53 PATHWAY", ]$geneID, "/")), ])) # filter for p53 pathway Hallmark genes that are significantly changing
+
+pheatmap(p53_sig_LFCMat[match(p53_genes, row.names(p53_sig_LFCMat)) , ], show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=T, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("NFKB_All", "SASP")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="Hallmark p53 pathway: Doxo enriched up genes") # with log2FC legend limits set to -6, 6. 
+
+pheatmap(p53_sig_LFCMat[match(p53_genes, row.names(p53_sig_LFCMat)), ], show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-4, 4,length.out = 100), annotation_row = clusterDF[ ,c("NFKB_All", "SASP")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="Hallmark p53 pathway: Doxo enriched up genes") # with log2FC legend limits set to -4, 4 & gene ids ordered in alphabetical order
 dev.off()
 ```
 # plot: venn diagram showing overlap of Doxo or Palbo enriched up genes that are p53 targets, NF-kB targets and SASP. 
@@ -688,6 +702,35 @@ create_violin_plot(
   plot_title = "RNA: log2FC of p53 target genes"
 )
 dev.off()
+
+# get significance of log2FC values between day 14 Palbo & day 14 Doxo vs Cycling based on paired student t-test
+
+# Check normality of differences 
+d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$p53_All %in% "Yes" & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling", ]$log2FC # log2FC values of p53 targets in day 14 Palbo vs Cycling
+
+d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$p53_All %in% "Yes" & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling", ]$log2FC # log2FC values of p53 targets in day 14 Doxo vs Cycling
+
+differences <- d14_Palbo_log2FC - d14_Doxo_log2FC
+
+# Shapiro-Wilk test for normality
+shapiro_test <- shapiro.test(differences)
+print(shapiro_test)
+
+# Visualize distribution of differences
+ggplot(data.frame(differences), aes(x = differences)) +
+  geom_histogram(binwidth = 0.2, fill = "skyblue", color = "black", alpha = 0.7) +
+  labs(title = "Distribution of Log2FC Differences", x = "Difference (Drug1 - Drug2)", y = "Count")
+
+# Perform Paired t-test if normality assumption holds
+if (shapiro_test$p.value > 0.05) {
+  t_test_result <- t.test(d14_Palbo_log2FC, d14_Doxo_log2FC, paired = TRUE)
+  print(t_test_result)
+} else {
+  # Use Wilcoxon signed-rank test if normality is violated
+  wilcox_test_result <- wilcox.test(d14_Palbo_log2FC, d14_Doxo_log2FC, paired = TRUE)
+  print(wilcox_test_result)
+}
+
 ```
 
 # RNA-seq Plot normalized counts of well-known p53 targets, MDM2 & CDKN1A over time. 
