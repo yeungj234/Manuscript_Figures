@@ -467,7 +467,7 @@ filenames <- gsub(".bed", "", dir("//lustre/fs4/risc_lab/scratch/jyeung/Manuscri
 writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_is_different_depending_on_the_presence_of_DNA_damage/deepTools_files/input_beds/filename.txt")
 ```
 
-# submit bash job to plot around p53 motifs in up  peaks
+# submit bash job to plot around Tn5 cut sites around p53 motifs in up peaks
 ```{bash}
 mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
 /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw

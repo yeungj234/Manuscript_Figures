@@ -66,7 +66,7 @@ hm_cols_ATAC <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A
 
 # load in workspace with DESeq results and rlog counts matrix of genes. 
 ```{r}
-load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence/workspace.RData")
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Global_transcriptome_and_chromatin_accessibility_is_dynamic_in_both_types_of_therapy_induced_senescence/workspace.RData")
 ```
 
 #### universe (background gene set) for GO enrichment analysis is all genes expressed
@@ -216,11 +216,6 @@ names(GO_anno_colors$Cluster) <- cluster_names
 GO_anno <- data.frame(row.names=row.names(GO_results_list_mat), database=GO_results_df[match(row.names(GO_results_list_mat), GO_results_df$ID), ]$Database)
 # annotation dataframe for columns of heatmap to color by Cluster colors. 
 Cluster_anno <- data.frame(Cluster=cluster_names , row.names = colnames(GO_results_list_mat))
-
-# plot heatmap of -log10 pvalues of GO enrichment results 
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure p53 activity is different depending on the presence of DNA damage/GO_results_list_mat.pdf", height=20, width=15)
-pheatmap(GO_results_list_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100),breaks = seq(0, 10,length.out = 100), annotation_row = GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, clustering_distance_rows = "correlation", border_color = "black")
-dev.off()
 ```
 
 # RNA-seq: GSEA Analysis
@@ -329,7 +324,7 @@ names(GSEA_plots_REACT) <- names(which(unlist(lapply(GSEA_Results_REACT, functio
 
 # RNA-seq: import IPA upstream regulators & pathways
 ```{r}
-setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure p53 activity is different depending on the presence of DNA damage/IPA_files/output/")
+setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_is_different_depending_on_the_presence_of_DNA_damage/IPA_files/output/")
 IPA_upstream_regs <- list()
 IPA_pathways <- list()
 # read in information for enriched IPA pathways per hierarchical cluster (clustering based on scaled rlog normalized counts)
@@ -435,12 +430,12 @@ row.names(LFCMat) <-  ifelse(genes_anno_type[match(row.names(LFCMat), genes_anno
 p53_Hallmark <- msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_P53_PATHWAY", ]$gene_symbol
 NFKB_Hallmark <- msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_TNFA_SIGNALING_VIA_NFKB", ]$gene_symbol
 
-# filter for p53 & NFKB target genes from IPA
+# filter for E2F target genes from IPA & Hallmark E2F Targets pathway term. 
 E2F_Targets=unique(c(unlist(lapply(IPA_upstream_regs, function(x){str_split(x[grep("E2F", x$Upstream.Regulator), ]$Target.Molecules.in.Dataset, ",")})), 
               msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_E2F_TARGETS", ]$gene_symbol
 ))
 
-# make log2FC matrix of p53 target genes going up with drug treatment
+# make log2FC matrix of cell cycle genes (based on KEGG Cell Cycle pathway term) going down with drug treatment
 CellCycle_sig_LFCMat <- sig_LFCMat[row.names(sig_LFCMat) %in% msigdbr_df_KEGG[msigdbr_df_KEGG$gs_name %in% "KEGG_CELL_CYCLE", ]$gene_symbol & row.names(sig_LFCMat) %in% row.names(clusterDF[clusterDF$Clusters %in% c("5", "2"), ]), ]
 
 anno_sigLFC <- data.frame(
@@ -450,13 +445,173 @@ anno_sigLFC <- data.frame(
   Timepoint = c("3", "10", "14", "21", "10", "14", "21", "3", "10", "14", "21", "28", "10", "14", "21", "28","3", "10", "14", "21")
 )
 
-# add annotation to significant genes based on if they are NF-kB or p53 targets. 
+# add annotation to significant genes based on if they are E2F targets. 
 clusterDF$E2F <- ifelse(row.names(clusterDF) %in% E2F_Targets, "Yes", "No") # annotate sig genes that are E2F targets
 
 row.names(clusterDF)[grep("^H1.[0-9]", row.names(clusterDF))]  <- gsub("*H1.", "H1-",row.names(clusterDF[grepl("^H1.[0-9]", row.names(clusterDF)), ]) ) # correction: to match with row.names in sig_LFCMat, replace - with . for linker histone genes. 
 ```
 
+# ATAC-seq: plot Tn5 insertion sites around E2F1 motifs overlapping down peaks to show cell cycle signature is also reflected at the chromatin accessibility level in both drugs. 
+```{r}
+# filter for GRanges of up peaks in each drug and cell cycle arrest category 
+Down_DrugandArrestCat <- list(
+  PalboDownvsCyc=allDownvsCycling$Palbo[!allDownvsCycling$Palbo %over% allDownvsCycling$Doxo, ], 
+  sharedDownvsCyc=allDownvsCycling$Palbo[allDownvsCycling$Palbo %over% allDownvsCycling$Doxo, ],
+  DoxoDownvsCyc=allDownvsCycling$Doxo[!allDownvsCycling$Doxo %over% allDownvsCycling$Palbo, ], 
+  PalboDownvsday3=allDownvsday3$Palbo[!allDownvsday3$Palbo %over% allDownvsday3$Doxo, ], 
+  sharedDownvsday3=allDownvsday3$Palbo[allDownvsday3$Palbo %over% allDownvsday3$Doxo, ], 
+  DoxoDownvsday3=allDownvsday3$Doxo[!allDownvsday3$Doxo %over% allDownvsday3$Palbo, ])
 
+# filter for GRanges of Down peaks in each drug and cell cycle arrest category but without specifying shared Down peaks. 
+Down_DrugandArrest_PvsD <- list(
+  PalboDownvsCyc=allDownvsCycling$Palbo, 
+  DoxoDownvsCyc=allDownvsCycling$Doxo, 
+  PalboDownvsday3=allDownvsday3$Palbo,
+  DoxoDownvsday3=allDownvsday3$Doxo)
+
+# load in HOCOMOCO motif sequence database
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/motifs/HOCOMOCO_v11_matrix.RData")
+# scan for E2F1 motifs
+E2F1_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$E2F1_HUMAN.H11MO.0.A, BSgenome.Hsapiens.UCSC.hg38, with.score=T)
+
+# filter for E2F1 motifs that overlap with Down peaks
+E2F1_ATAC_Down_DrugandArrestCat <- lapply(Down_DrugandArrestCat, function(x){E2F1_HMv11[E2F1_HMv11 %over% x]})
+E2F1_ATAC_Down_DrugandArrest_PvsD <- lapply(Down_DrugandArrest_PvsD, function(x){E2F1_HMv11[E2F1_HMv11 %over% x]})
+
+directory <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/deepTools_files/input_beds"
+# Export each GRanges object as a BED file
+for(i in 1:length(E2F1_ATAC_Down_DrugandArrestCat)){
+export.bed(E2F1_ATAC_Down_DrugandArrestCat[[i]], con = paste0(directory, "/", names(E2F1_ATAC_Down_DrugandArrestCat)[i], "_E2F1_HMv11.bed"))
+}
+
+for(i in 1:length(E2F1_ATAC_Down_DrugandArrest_PvsD)){
+export.bed(E2F1_ATAC_Down_DrugandArrest_PvsD[[i]], con = paste0(directory, "/", names(E2F1_ATAC_Down_DrugandArrest_PvsD)[i], "_PvsD_E2F1_HMv11.bed"))
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+writeLines(dir(directory, full.names=T, pattern=".bed"), con=paste0(directory, "/regions.txt"))
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir(directory, pattern=".bed"))
+writeLines(filenames, con=paste0(directory, "/filename.txt"))
+```
+
+# submit bash job to plot Tn5 cut sites around E2F1 motifs in down peaks
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/deepTools_files/output_plots
+sbatch -p risc,hpc --array=1-10 \
+--export=bigwigs="$mergedcuts",\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/deepTools_files/input_beds/regions.txt,\
+samplenames="$samplenames",\
+profile_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/deepTools_files/output_plots/plotProfile,\
+heatmap_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/deepTools_files/output_plots/plotHeatmap,\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/deepTools_files/input_beds/filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+
+# ATAC-seq: import motif enrichment results under down peaks across all timepoint comparisons & drug treatment. 
+```{r}
+# load in process_motif_data function. 
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Functions/process_motif_data.RData")
+```
+
+```{r}
+annoDownPeaks_AME_df <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_output/DESeq/annoDown", expressed_genes = expressedGenes)
+
+annoDownPeaks_AME_df$Comparison <- gsub("\\..*", "", row.names(annoDownPeaks_AME_df))
+annoDownPeaks_AME_df$Comparison <- factor(annoDownPeaks_AME_df$Comparison, levels=unique(annoDownPeaks_AME_df$Comparison)[c(15,1,5,9,2,6,10,16,3,7,11,13,4,8,12,14)]) # column to identify DESeq comparison
+
+annoDownPeaks_AME_df$Group <- ifelse(grepl("DoxovsCycling", annoDownPeaks_AME_df$Comparison), "DoxovsCycling", ifelse(grepl("PalbovsCycling", annoDownPeaks_AME_df$Comparison), "PalbovsCycling", ifelse(grepl("Doxovsday3Doxo", annoDownPeaks_AME_df$Comparison), "Doxovsday3Doxo", "Palbovsday3Palbo"))) # column to identify relative to cycling or day 3 comparison and drug treatment. 
+
+annoDownPeaks_AME_df$Timepoint <-  gsub("(day[0-9]{1,2}).*", "\\1", annoDownPeaks_AME_df$Comparison) # column to identify which timepoint is compared to Cycling or day 3 controls, by removing everything after day[0-9] where [0-9] is 1 or 2 digits in the Comparison column. 
+annoDownPeaks_AME_df$Timepoint <- factor(annoDownPeaks_AME_df$Timepoint, levels=c("day3", "day10", "day14", "day21", "day28"))
+```
+
+# ATAC-seq: get peak ids for peaks that are true positive peaks for E2F motif from motif enrichment analysis (MEME-AME)
+```{r}
+input_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_output/DESeq/annoDown"
+
+out_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/E2F_tp_peaks"
+
+# generate input file containing directory paths to sequences.tsv file from MEME-AME output. 
+writeLines(paste0(dir(input_dir, full.names = T), "/sequences.tsv"), con=paste0(out_dir, "/DESeq_annoDown_sequencefiles.txt"))
+```
+
+```{bash}
+# extract peak ids of true positive peaks from sequences.tsv file from MEME-AME output
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/E2F_tp_peaks
+
+# for all E2F motifs
+sbatch -p risc --array=1-16 \
+--export=outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/E2F_tp_peaks/all_E2F_motifs,\
+inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/E2F_tp_peaks/DESeq_annoDown_sequencefiles.txt,\
+names=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoDown/folderlist_annoDown_DESeq_peaks.txt,\
+motif=E2F \
+get_tp_peaks_motifs.slurm
+
+rm $(ls|egrep '.err|.out')
+
+# for E2F1 motif
+sbatch -p risc --array=1-16 \
+--export=outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/E2F_tp_peaks/E2F1_motif,\
+inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/E2F_tp_peaks/DESeq_annoDown_sequencefiles.txt,\
+names=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoDown/folderlist_annoDown_DESeq_peaks.txt,\
+motif=E2F1 \
+get_tp_peaks_motifs.slurm
+
+rm $(ls|egrep '.err|.out')
+```
+
+```{r}
+# import peak ids of true positive down peaks containing any E2F motif
+setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/E2F_tp_peaks/all_E2F_motifs")
+
+file_ids <- dir()
+all_E2F_tp_peaks <- list()
+
+for (i in seq_along(file_ids)) {
+  file_path <- file_ids[i]  # Get full file name
+
+  # Check if file is empty
+  if (file.info(file_path)$size > 0) {
+    all_E2F_tp_peaks[[file_path]] <- read_tsv(file_path, col_names = FALSE) %>% pull(X1)
+  }
+}
+
+names(all_E2F_tp_peaks) <- gsub("_E2F_all_tp_Downpeaks_ids.tsv", "", names(all_E2F_tp_peaks))
+```
+
+```{r}
+# import peak ids of true positive down peaks containing E2F1 motif
+setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/E2F_tp_peaks/E2F1_motif")
+
+file_ids <- dir()
+E2F1_tp_peaks <- list()
+
+for (i in seq_along(file_ids)) {
+  file_path <- file_ids[i]  # Get full file name
+
+  # Check if file is empty
+  if (file.info(file_path)$size > 0) {
+    E2F1_tp_peaks[[file_path]] <- read_tsv(file_path, col_names = FALSE) %>% pull(X1)
+  }
+}
+
+names(E2F1_tp_peaks) <- gsub("_E2F_all_tp_Downpeaks_ids.tsv", "", names(E2F1_tp_peaks))
+```
 # *FIGURES*
 
 # RNA-seq: save GSEA running score for E2F targets for all timepoints relative to Cycling
@@ -646,6 +801,105 @@ create_violin_plot(
   plot_title = "RNA: log2FC of E2F Target genes"
 )
 dev.off()
+
+
+# get significance of log2FC values between day 14 Palbo & day 14 Doxo vs Cycling based on paired student t-test
+
+# Check normality of differences 
+d14_Palbo_log2FC <- log2FC_E2F[log2FC_E2F$Condition %in% "day 14 Palbo" & log2FC_E2F$Comparison %in% "vs Cycling", ]$log2FC # log2FC values of p53 targets in day 14 Palbo vs Cycling
+
+d14_Doxo_log2FC <- log2FC_E2F[log2FC_E2F$Condition %in% "day 14 Doxo" & log2FC_E2F$Comparison %in% "vs Cycling", ]$log2FC # log2FC values of p53 targets in day 14 Doxo vs Cycling
+
+differences <- d14_Palbo_log2FC - d14_Doxo_log2FC
+
+# Shapiro-Wilk test for normality
+shapiro_test <- shapiro.test(differences)
+print(shapiro_test)
+
+# Visualize distribution of differences
+ggplot(data.frame(differences), aes(x = differences)) +
+  geom_histogram(binwidth = 0.2, fill = "skyblue", color = "black", alpha = 0.7) +
+  labs(title = "Distribution of Log2FC Differences", x = "Difference (Drug1 - Drug2)", y = "Count")
+
+# Perform Paired t-test if normality assumption holds
+if (shapiro_test$p.value > 0.05) {
+  t_test_result <- t.test(d14_Palbo_log2FC, d14_Doxo_log2FC, paired = TRUE)
+  print(t_test_result)
+} else {
+  # Use Wilcoxon signed-rank test if normality is violated
+  wilcox_test_result <- wilcox.test(d14_Palbo_log2FC, d14_Doxo_log2FC, paired = TRUE)
+  print(wilcox_test_result)
+}
 ```
 
 
+# ATAC-seq: plot motif enrichment results in the E2F family for down peaks across all timepoints and drug treatments (DESeq comparisons)
+```{r}
+# load in function to generate matrix of -log10(padj) values of motif enrichment results
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Functions/create_AME_peaks_matrix.RData")
+
+# load in function to create dotplots for motif enrichment results for each DESeq comparison. 
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Functions/create_AME_dotplots.RData")
+
+E2F_DownPeaks_AME_mat <- create_AME_peaks_matrix(annoDownPeaks_AME_df[grepl("E2F", annoDownPeaks_AME_df$motif_ID), ])
+                                                      
+E2F_DownPeaks_AME_mat <- E2F_DownPeaks_AME_mat[order(rowSums(E2F_DownPeaks_AME_mat), decreasing=T), ] # order by overall most to least enriched E2F motifs 
+
+outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs"
+
+# plot motif enrichment values of E2F motifs in all down peaks for all timepoints vs Cycling. 
+pdf(paste0(outdir, "/ATAC_E2F_DownPeaks_AME_dotplots.pdf"), width=6, height=4)
+create_AME_dotplots(annoDownPeaks_AME_df[grepl("E2F", annoDownPeaks_AME_df$motif_ID) & grepl("vsCycling", annoDownPeaks_AME_df$Comparison), ], Title="E2F Motifs enriched in Down peaks", fill_limit=200, size_limit=51)
+dev.off()
+
+# note: initially, I considered only showing E2F motif enrichment nearby shared down genes (enriched in cell cycle related genes) but E2F appears to also be enriched nearby genes going up with drug treatment. Therefore, I think it makes sense to just show the motif enrichment in all down peaks since the enrichment is not dependent/exclusive on how close it is to shared down genes
+```
+
+
+```{r}
+# write function to create venn diagrams that are proportional to size of each category. 
+create_proportional_venn <- function(sets, set_labels, colors = c("#E0ADCD", "#B3C543", "#A0ADCD")) {
+  library(eulerr)
+  # Check if sets and labels are provided correctly
+  if (length(sets) != length(set_labels)) {
+    stop("The number of sets and set_labels must be the same.")
+  }
+  
+  # Prepare the data for eulerr
+  venn_data <- sets
+  names(venn_data) <- set_labels
+  
+  # Use eulerr to calculate the Venn diagram
+  venn_fit <- euler(venn_data)
+  
+  # Plot the Venn diagram
+  plot(venn_fit, 
+       fills = colors, 
+       labels = list(cex = 1, fontfamily = "Helvetica"),
+       quantities = list(cex = 1),
+       edges = list(lwd = 2))
+}
+
+# unique peak ids for Doxo vs Cycling down tp peaks with any E2F motif
+tp_downpeaks_Doxo <- unique(unlist(E2F1_tp_peaks[grepl("Doxo", names(E2F1_tp_peaks))]))
+
+# unique peak ids for Palbo vs Cycling down tp peaks with any E2F motif
+tp_downpeaks_Palbo <- unique(unlist(E2F1_tp_peaks[grepl("Palbo", names(E2F1_tp_peaks))]))
+
+# peak ids for all down peaks 
+all_downpeaks_ids <- unique(c(mergedDiffGR$allDown_Doxo$name, mergedDiffGR$allDown_Palbo$name))
+
+pdf(paste0(outdir, "/ATAC_E2F1_tp_downpeaks_PalbovsDoxo_overlap_venn.pdf"), width=6, height=4)
+create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "blue"))
+dev.off()
+
+# unique peak ids for Doxo vs Cycling down tp peaks with any E2F motif
+tp_downpeaks_Doxo <- unique(unlist(all_E2F_tp_peaks[grepl("Doxo", names(all_E2F_tp_peaks))]))
+
+# unique peak ids for Palbo vs Cycling down tp peaks with any E2F motif
+tp_downpeaks_Palbo <- unique(unlist(all_E2F_tp_peaks[grepl("Palbo", names(all_E2F_tp_peaks))]))
+
+pdf(paste0(outdir, "/ATAC_all_E2F_tp_downpeaks_PalbovsDoxo_overlap_venn.pdf"), width=6, height=4)
+create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "blue"))
+dev.off()
+```
