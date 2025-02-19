@@ -195,23 +195,29 @@ Cluster_anno <- data.frame(Cluster=cluster_names , row.names = colnames(GO_resul
 ```{r}
 ranked_res_forGSEA <- list()
 for(i in 1:length(LFCResultsall_RNA)){
-# Filter for significant genes (optional)
   
-rank <- LFCResultsall_RNA[[i]][!is.na(LFCResultsall_RNA[[i]]$padj), ]
+  rank <- LFCResultsall_RNA[[i]]
+  
+  # Assign a default p-value for genes with NA padj (maximum p-value)
+  rank$pvalue[is.na(rank$padj)] <- 1 
+  
+  # Create a ranked list based on log2FoldChange and -log10(p-value)
+  rank$rank_metric <- sign(rank$log2FoldChange) * -log10(rank$pvalue)
+  
+  # Sort by the ranking metric
+  rank <- rank[order(rank$rank_metric, decreasing = TRUE), ]
+  
+  # Store the ranked values
+  ranked_res_forGSEA[[i]] <- rank$rank_metric
+  names(ranked_res_forGSEA[[i]]) <- row.names(rank)
 
-# Create a ranked list based on a metric (e.g., log2 fold change or -log10(p-value))
-# Here, we rank by the sign of log2FoldChange * -log10(p-value)
-rank$rank_metric <- sign(rank$log2FoldChange) * -log10(rank$pvalue)
+  # Convert gene IDs to Entrez IDs if available
+  entrez_ids <- genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid
+  names(ranked_res_forGSEA[[i]]) <- ifelse(is.na(entrez_ids), names(ranked_res_forGSEA[[i]]), entrez_ids)
+}
 
-rank <- rank[order(rank$rank_metric, decreasing = TRUE), ]
-
-# Sort the LFCResultsall_RNA results by the ranking metric
-ranked_res_forGSEA[[i]] <- rank$rank_metric
-names(ranked_res_forGSEA[[i]]) <- row.names(rank)
-
-names(ranked_res_forGSEA[[i]]) <- ifelse(genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid %in% NA, names(ranked_res_forGSEA[[i]]), genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid)
-} # convert to entrez id for input into GSEA function. 
 names(ranked_res_forGSEA) <- names(LFCResultsall_RNA)
+
 
 # run GSEA analysis using: 
 GSEA_Results_H <- list() # msigdb Hallmark database
@@ -505,7 +511,6 @@ dev.off()
 p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "P53 PATHWAY", by="runningScore", title = "day 14 Doxo vs Cycling: P53 PATHWAY", color.line="#B3C543", color="#B3C543")+theme_classic()+ylim(-0.4, 0.7)
 
 p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "P53 PATHWAY", by="runningScore", title = "day 14 Palbo vs Cycling: P53 PATHWAY", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.4, 0.7)
-
 
 pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_is_different_depending_on_the_presence_of_DNA_damage/GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark_p53_pathway.pdf", width=3, height=5)
 plot_grid(p1, p2, ncol=1)

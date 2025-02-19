@@ -223,22 +223,27 @@ Cluster_anno <- data.frame(Cluster=cluster_names , row.names = colnames(GO_resul
 ```{r}
 ranked_res_forGSEA <- list()
 for(i in 1:length(LFCResultsall_RNA)){
-# Filter for significant genes (optional)
   
-rank <- LFCResultsall_RNA[[i]][!is.na(LFCResultsall_RNA[[i]]$padj), ]
+  rank <- LFCResultsall_RNA[[i]]
+  
+  # Assign a default p-value for genes with NA padj (maximum p-value)
+  rank$pvalue[is.na(rank$padj)] <- 1 
+  
+  # Create a ranked list based on log2FoldChange and -log10(p-value)
+  rank$rank_metric <- sign(rank$log2FoldChange) * -log10(rank$pvalue)
+  
+  # Sort by the ranking metric
+  rank <- rank[order(rank$rank_metric, decreasing = TRUE), ]
+  
+  # Store the ranked values
+  ranked_res_forGSEA[[i]] <- rank$rank_metric
+  names(ranked_res_forGSEA[[i]]) <- row.names(rank)
 
-# Create a ranked list based on a metric (e.g., log2 fold change or -log10(p-value))
-# Here, we rank by the sign of log2FoldChange * -log10(p-value)
-rank$rank_metric <- sign(rank$log2FoldChange) * -log10(rank$pvalue)
+  # Convert gene IDs to Entrez IDs if available
+  entrez_ids <- genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid
+  names(ranked_res_forGSEA[[i]]) <- ifelse(is.na(entrez_ids), names(ranked_res_forGSEA[[i]]), entrez_ids)
+}
 
-rank <- rank[order(rank$rank_metric, decreasing = TRUE), ]
-
-# Sort the LFCResultsall_RNA results by the ranking metric
-ranked_res_forGSEA[[i]] <- rank$rank_metric
-names(ranked_res_forGSEA[[i]]) <- row.names(rank)
-
-names(ranked_res_forGSEA[[i]]) <- ifelse(genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid %in% NA, names(ranked_res_forGSEA[[i]]), genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid)
-} # convert to entrez id for input into GSEA function. 
 names(ranked_res_forGSEA) <- names(LFCResultsall_RNA)
 
 # run GSEA analysis using: 
