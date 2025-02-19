@@ -36,6 +36,7 @@ library(motifmatchr)
 library(Biostrings)
 library(clusterProfiler)
 library(pheatmap)
+library(dplyr)
 ```
 
 # annotation colors for pheatmap
@@ -627,6 +628,15 @@ GSEA_plots_H$`Palbo14 vs Cycling0`$`E2F TARGETS`+theme_classic()+ylim(-0.9,0.05)
 GSEA_plots_H$`Palbo21 vs Cycling0`$`E2F TARGETS`+theme_classic()+ylim(-0.9,0.05)
 GSEA_plots_H$`Palbo28 vs Cycling0`$`E2F TARGETS`+theme_classic()+ylim(-0.9,0.05)
 dev.off()
+
+p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "E2F TARGETS", by="runningScore", title = "day 14 Doxo vs Cycling: E2F TARGETS", color.line="#B3C543", color="#B3C543")+theme_classic()+ylim(-0.9, 0.05)
+
+p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "E2F TARGETS", by="runningScore", title = "day 14 Palbo vs Cycling: E2F TARGETS", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.9, 0.05)
+
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs//GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark_E2F_Targets.pdf", width=3, height=5)
+plot_grid(p1, p2, ncol=1)
+dev.off()
 ```
 
 # RNA-seq: plot padj values for top 10 GO terms for shared down genes. 
@@ -880,17 +890,18 @@ create_proportional_venn <- function(sets, set_labels, colors = c("#E0ADCD", "#B
        edges = list(lwd = 2))
 }
 
-# unique peak ids for Doxo vs Cycling down tp peaks with any E2F motif
+# unique peak ids for Doxo vs Cycling down tp peaks with E2F1 motif
 tp_downpeaks_Doxo <- unique(unlist(E2F1_tp_peaks[grepl("Doxo", names(E2F1_tp_peaks))]))
 
-# unique peak ids for Palbo vs Cycling down tp peaks with any E2F motif
+# unique peak ids for Palbo vs Cycling down tp peaks with E2F1 motif
 tp_downpeaks_Palbo <- unique(unlist(E2F1_tp_peaks[grepl("Palbo", names(E2F1_tp_peaks))]))
 
 # peak ids for all down peaks 
 all_downpeaks_ids <- unique(c(mergedDiffGR$allDown_Doxo$name, mergedDiffGR$allDown_Palbo$name))
 
+# plot venn diagram showing overlap of E2F1 containing down peaks between Doxo & Palbo against number of all down peaks
 pdf(paste0(outdir, "/ATAC_E2F1_tp_downpeaks_PalbovsDoxo_overlap_venn.pdf"), width=6, height=4)
-create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "blue"))
+create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "#F6F2EA"))
 dev.off()
 
 # unique peak ids for Doxo vs Cycling down tp peaks with any E2F motif
@@ -899,7 +910,8 @@ tp_downpeaks_Doxo <- unique(unlist(all_E2F_tp_peaks[grepl("Doxo", names(all_E2F_
 # unique peak ids for Palbo vs Cycling down tp peaks with any E2F motif
 tp_downpeaks_Palbo <- unique(unlist(all_E2F_tp_peaks[grepl("Palbo", names(all_E2F_tp_peaks))]))
 
+# plot venn diagram showing overlap of all E2F containing down peaks between Doxo & Palbo against number of all down peaks
 pdf(paste0(outdir, "/ATAC_all_E2F_tp_downpeaks_PalbovsDoxo_overlap_venn.pdf"), width=6, height=4)
-create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "blue"))
+create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "#F6F2EA"))
 dev.off()
 ```
