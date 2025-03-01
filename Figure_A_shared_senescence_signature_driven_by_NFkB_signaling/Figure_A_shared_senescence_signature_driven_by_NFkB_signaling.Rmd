@@ -708,6 +708,23 @@ PvsD_AME_mergeClusters$Direction <- ifelse(grepl("Up", PvsD_AME_mergeClusters$Co
 PvsD_AME_mergeClusters$Group <- gsub("(Doxo|Palbo).*", "\\1", PvsD_AME_mergeClusters$Comparison)
 ```
 
+# ATAC-seq: import motif enrichment results under ALL up peaks across all timepoint comparisons & drug treatment. 
+```{r}
+# load in process_motif_data function. 
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Functions/process_motif_data.RData")
+```
+
+```{r}
+annoUpPeaks_AME_df <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_output/DESeq/annoUp", expressed_genes = expressedGenes)
+
+annoUpPeaks_AME_df$Comparison <- gsub("\\..*", "", row.names(annoUpPeaks_AME_df))
+annoUpPeaks_AME_df$Comparison <- factor(annoUpPeaks_AME_df$Comparison, levels=unique(annoUpPeaks_AME_df$Comparison)[c(15,1,5,9,2,6,10,16,3,7,11,13,4,8,12,14)]) # column to identify DESeq comparison
+
+annoUpPeaks_AME_df$Group <- ifelse(grepl("DoxovsCycling", annoUpPeaks_AME_df$Comparison), "DoxovsCycling", ifelse(grepl("PalbovsCycling", annoUpPeaks_AME_df$Comparison), "PalbovsCycling", ifelse(grepl("Doxovsday3Doxo", annoUpPeaks_AME_df$Comparison), "Doxovsday3Doxo", "Palbovsday3Palbo"))) # column to identify relative to cycling or day 3 comparison and drug treatment. 
+
+annoUpPeaks_AME_df$Timepoint <-  gsub("(day[0-9]{1,2}).*", "\\1", annoUpPeaks_AME_df$Comparison) # column to identify which timepoint is compared to Cycling or day 3 controls, by removing everything after day[0-9] where [0-9] is 1 or 2 digits in the Comparison column. 
+annoUpPeaks_AME_df$Timepoint <- factor(annoUpPeaks_AME_df$Timepoint, levels=c("day3", "day10", "day14", "day21", "day28"))
+```
 
 # *FIGURES*
 # RNA-seq: save GSEA running score for day 14 Doxo vs Cycling's Hallmark TNFA SIGNALING VIA NFKB Pathway
@@ -724,18 +741,34 @@ GSEA_plots_H$`Palbo21 vs Palbo3`$`TNFA SIGNALING VIA NFKB`+theme_classic()+ylim(
 GSEA_plots_H$`Palbo28 vs Palbo3`$`TNFA SIGNALING VIA NFKB`+theme_classic()+ylim(-0.05,0.8)
 dev.off()
 
-p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "TNFA SIGNALING VIA NFKB", by="runningScore", title = "day 14 Doxo vs Cycling: TNFA SIGNALING VIA NFKB", color.line="#B3C543", color="#B3C543")+theme_classic()+ylim(-0.05, 0.8)
+# Get padj value of GSEA result for TNFA SIGNALING VIA NFKB pathway to add onto GSEA plots
+GSEA_padj <- list(DoxovsCyc=GSEA_Results_H$`Doxo14 vs Cycling0`@result[GSEA_Results_H$`Doxo14 vs Cycling0`@result$ID %in% "TNFA SIGNALING VIA NFKB", ]$p.adjust, 
+                  PalbovsCyc=GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% "TNFA SIGNALING VIA NFKB", ]$p.adjust, 
+                  Doxovsday3=GSEA_Results_H$`Doxo14 vs Doxo3`@result[GSEA_Results_H$`Doxo14 vs Doxo3`@result$ID %in% "TNFA SIGNALING VIA NFKB", ]$p.adjust, 
+                  Palbovsday3=GSEA_Results_H$`Palbo14 vs Palbo3`@result[GSEA_Results_H$`Palbo14 vs Palbo3`@result$ID %in% "TNFA SIGNALING VIA NFKB", ]$p.adjust)
+                  
+GSEA_padj <- lapply(GSEA_padj, function(x){format(round(x, 4), nsmall = 4)}) # round to 4 decimal places 
 
-p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "TNFA SIGNALING VIA NFKB", by="runningScore", title = "day 14 Palbo vs Cycling: TNFA SIGNALING VIA NFKB", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.05, 0.8)
+p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "TNFA SIGNALING VIA NFKB", by="runningScore", title = "day 14 Doxo vs Cycling: TNFA SIGNALING VIA NFKB", color.line="#B3C543", color="#B3C543", color.vline="#B3C543")+theme_classic()+ylim(-0.05, 0.8)
 
-p3 <- gseaplot(GSEA_Results_H$`Doxo14 vs Doxo3`, geneSetID = "TNFA SIGNALING VIA NFKB", by="runningScore", title = "day 14 Doxo vs day 3 Doxo: TNFA SIGNALING VIA NFKB", color.line="#B3C543", color="#B3C543")+theme_classic()+ylim(-0.05, 0.8)
+p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "TNFA SIGNALING VIA NFKB", by="runningScore", title = "day 14 Palbo vs Cycling: TNFA SIGNALING VIA NFKB", color="#E0ADCD", color.line="#E0ADCD", color.vline="#E0ADCD")+theme_classic()+ylim(-0.05, 0.8)
 
-p4 <- gseaplot(GSEA_Results_H$`Palbo14 vs Palbo3`, geneSetID = "TNFA SIGNALING VIA NFKB", by="runningScore", title = "day 14 Palbo vs day 3 Palbo: TNFA SIGNALING VIA NFKB", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.05, 0.8)
+p3 <- gseaplot(GSEA_Results_H$`Doxo14 vs Doxo3`, geneSetID = "TNFA SIGNALING VIA NFKB", by="runningScore", title = "day 14 Doxo vs day 3 Doxo: TNFA SIGNALING VIA NFKB", color.line="#B3C543", color="#B3C543", color.vline="#B3C543")+theme_classic()+ylim(-0.05, 0.8)
+
+p4 <- gseaplot(GSEA_Results_H$`Palbo14 vs Palbo3`, geneSetID = "TNFA SIGNALING VIA NFKB", by="runningScore", title = "day 14 Palbo vs day 3 Palbo: TNFA SIGNALING VIA NFKB", color="#E0ADCD", color.line="#E0ADCD", color.vline="#E0ADCD")+theme_classic()+ylim(-0.05, 0.8)
 
 pdf(paste0(outdir, "/GSEA_day14Doxo_day14Palbo_Hallmark_TNFA_SIGNALING_VIA_NFKB_pathway.pdf"), width=3, height=5)
 plot_grid(p1, p2, ncol=1)
 plot_grid(p3, p4, ncol=1)
 dev.off()
+
+pdf(paste0(outdir, "/GSEA_day14Doxo_day14Palbo_Hallmark_TNFA_SIGNALING_VIA_NFKB_pathway_padj_labeled.pdf"), width=3, height=5)
+plot_grid(p1+geom_text(label=paste0("padj=" ,GSEA_padj$DoxovsCyc), y=0.6, x=10000), p2+geom_text(label=paste0("padj=" ,GSEA_padj$PalbovsCyc), y=0.6, x=10000), ncol=1)
+plot_grid(p3+geom_text(label=paste0("padj=" ,GSEA_padj$Doxovsday3), y=0.6, x=10000), p4+geom_text(label=paste0("padj=" ,GSEA_padj$Palbovsday3), y=0.6, x=10000), ncol=1)
+dev.off()
+
+
+gseaplot(GSEA_Results_H$`Doxo14 vs Doxo3`, geneSetID = "TNFA SIGNALING VIA NFKB", by="runningScore", title = "day 14 Doxo vs day 3 Doxo: TNFA SIGNALING VIA NFKB", color.line="#B3C543", color="#B3C543", color.vline="#B3C543")+theme_classic()+ylim(-0.1, 0.8)
 ```
 
 # RNA-seq: plot padj values for top 10 GO terms for shared senescence up genes. 
@@ -940,7 +973,8 @@ create_violin_plot <- function(data=log2FC_p53_NFKB_SASP, plot_title="RNA: log2F
     ) +
     ylab("log2FC") +
     xlab("") +
-    ggtitle(plot_title)
+    ggtitle(plot_title)+
+    geom_hline(yintercept = 0, color="darkgrey", linetype="dashed")
 }
 
 pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/RNA_log2FC_NFKB_targets.pdf", width=7, height=3)
@@ -958,6 +992,10 @@ create_violin_plot(
   data = log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes" & log2FC_p53_NFKB_SASP$Condition %in% c("day 14 Doxo", "day 14 Palbo"), ],
   plot_title = "RNA: log2FC of NF-kB target genes"
 )
+create_violin_plot(
+  data = log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes" & log2FC_p53_NFKB_SASP$Condition %in% c("day 3 Doxo", "day 14 Doxo",  "day 3 Palbo", "day 14 Palbo") & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling", ],
+  plot_title = "RNA: log2FC of NF-kB target genes"
+) # after talking with Justin, we both agreed it looks better to include day 3 controls and plot relative to Cycling to show the increase over time in both drugs. 
 dev.off()
 ```
 
@@ -1084,5 +1122,78 @@ plot_grid( create_AME_dotplots(NFkB_AME_padj_dots$DoxoUpvsCyc[!NFkB_AME_padj_dot
            create_AME_dotplots(NFkB_AME_padj_dots$PalboUpvsCyc[!NFkB_AME_padj_dots$DoxoUpvsCyc$Cluster %in% "CellCycle_genes", ], Title="Up Palbo vs Cycling", fill_limit=16, size_limit=13),
              create_AME_dotplots(NFkB_AME_padj_dots$DoxoUpvsday3[!NFkB_AME_padj_dots$DoxoUpvsday3$Cluster %in% "CellCycle_genes", ], Title="Up Doxo vs day3", fill_limit=16, size_limit=13),
            nrow =1)
+dev.off()
+```
+
+# ATAC-seq: plot motif enrichment results in the NFKB family for ALL up peaks across all timepoints and drug treatments (DESeq comparisons)
+```{r}
+# load in function to generate matrix of -log10(padj) values of motif enrichment results
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Functions/create_AME_peaks_matrix.RData")
+
+# load in function to create dotplots for motif enrichment results for each DESeq comparison. 
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Functions/create_AME_dotplots.RData")
+
+NFkB_UpPeaks_AME_mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[grepl("NFKB|REL", annoUpPeaks_AME_df$motif_ID), ])
+                                                      
+NFkB_UpPeaks_AME_mat <- NFkB_UpPeaks_AME_mat[order(rowSums(NFkB_UpPeaks_AME_mat), decreasing=T), ] # order by overall most to least enriched NFkB motifs 
+
+outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling"
+
+# plot motif enrichment values of NFkB motifs in all Up peaks for all timepoints vs Cycling. 
+pdf(paste0(outdir, "/ATAC_NFkB_UpPeaks_AME_dotplots.pdf"), width=8, height=4)
+create_AME_dotplots(annoUpPeaks_AME_df[grepl("NFKB|REL", annoUpPeaks_AME_df$motif_ID), ], Title="NFkB Motifs enriched in Up peaks", fill_limit=90, size_limit=15)
+dev.off()
+
+# note: initially, I considered only showing NFKB related motif enrichment nearby shared up genes but NFkB is also enriched nearby Palbo enriched and Doxo enriched upregulated genes, not just shared. Therefore, I think it makes sense to just show the motif enrichment in all up peaks since the enrichment is not dependent/exclusive on how close it is to shared up genes
+```
+
+# note: still need to adjust code to be NF-kB, not E2F. 
+```{r}
+# write function to create venn diagrams that are proportional to size of each category. 
+create_proportional_venn <- function(sets, set_labels, colors = c("#E0ADCD", "#B3C543", "#A0ADCD")) {
+  library(eulerr)
+  # Check if sets and labels are provided correctly
+  if (length(sets) != length(set_labels)) {
+    stop("The number of sets and set_labels must be the same.")
+  }
+  
+  # Prepare the data for eulerr
+  venn_data <- sets
+  names(venn_data) <- set_labels
+  
+  # Use eulerr to calculate the Venn diagram
+  venn_fit <- euler(venn_data)
+  
+  # Plot the Venn diagram
+  plot(venn_fit, 
+       fills = colors, 
+       labels = list(cex = 1, fontfamily = "Helvetica"),
+       quantities = list(cex = 1),
+       edges = list(lwd = 2))
+}
+
+# unique peak ids for Doxo vs Cycling down tp peaks with E2F1 motif
+tp_downpeaks_Doxo <- unique(unlist(E2F1_tp_peaks[grepl("Doxo", names(E2F1_tp_peaks))]))
+
+# unique peak ids for Palbo vs Cycling down tp peaks with E2F1 motif
+tp_downpeaks_Palbo <- unique(unlist(E2F1_tp_peaks[grepl("Palbo", names(E2F1_tp_peaks))]))
+
+# peak ids for all down peaks 
+all_downpeaks_ids <- unique(c(mergedDiffGR$allDown_Doxo$name, mergedDiffGR$allDown_Palbo$name))
+
+# plot venn diagram showing overlap of E2F1 containing down peaks between Doxo & Palbo against number of all down peaks
+pdf(paste0(outdir, "/ATAC_E2F1_tp_downpeaks_PalbovsDoxo_overlap_venn.pdf"), width=6, height=4)
+create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "#F6F2EA"))
+dev.off()
+
+# unique peak ids for Doxo vs Cycling down tp peaks with any E2F motif
+tp_downpeaks_Doxo <- unique(unlist(all_E2F_tp_peaks[grepl("Doxo", names(all_E2F_tp_peaks))]))
+
+# unique peak ids for Palbo vs Cycling down tp peaks with any E2F motif
+tp_downpeaks_Palbo <- unique(unlist(all_E2F_tp_peaks[grepl("Palbo", names(all_E2F_tp_peaks))]))
+
+# plot venn diagram showing overlap of all E2F containing down peaks between Doxo & Palbo against number of all down peaks
+pdf(paste0(outdir, "/ATAC_all_E2F_tp_downpeaks_PalbovsDoxo_overlap_venn.pdf"), width=6, height=4)
+create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "#F6F2EA"))
 dev.off()
 ```

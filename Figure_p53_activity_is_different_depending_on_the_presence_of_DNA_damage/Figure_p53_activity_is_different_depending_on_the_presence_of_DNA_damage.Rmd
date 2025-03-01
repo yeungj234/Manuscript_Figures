@@ -455,6 +455,9 @@ p53_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$P53_HUMAN.H11MO.0.A, BSgenome.Hsapiens
 p53_ATAC_Up_DrugandArrestCat <- lapply(Up_DrugandArrestCat, function(x){p53_HMv11[p53_HMv11 %over% x]})
 p53_ATAC_Up_DrugandArrest_PvsD <- lapply(Up_DrugandArrest_PvsD, function(x){p53_HMv11[p53_HMv11 %over% x]})
 
+# print number of up peaks that overlap with p53 motifs. 
+lapply(lapply(Up_DrugandArrestCat, function(x){x[x %over% p53_HMv11]}), length)
+
 # Export each GRanges object as a BED file
 for(i in 1:length(p53_ATAC_Up_DrugandArrestCat)){
 export.bed(p53_ATAC_Up_DrugandArrestCat[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_is_different_depending_on_the_presence_of_DNA_damage/deepTools_files/input_beds/", names(p53_ATAC_Up_DrugandArrestCat)[i], "_p53_HMv11.bed"))
@@ -508,7 +511,12 @@ pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_
 GSEA_plots_H$`Doxo14 vs Cycling0`$`P53 PATHWAY` +theme_classic()
 dev.off()
 
-p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "P53 PATHWAY", by="runningScore", title = "day 14 Doxo vs Cycling: P53 PATHWAY", color.line="#B3C543", color="#B3C543")+theme_classic()+ylim(-0.4, 0.7)
+# Get padj value of GSEA result for p53 pathway to add onto GSEA plots
+GSEA_padj <- GSEA_Results_H$`Doxo14 vs Cycling0`@result[GSEA_Results_H$`Doxo14 vs Cycling0`@result$ID %in% "P53 PATHWAY", ]$p.adjust
+GSEA_padj <- format(round(GSEA_padj, 4), nsmall = 4) # round to 4 decimal places 
+
+# plot GSEA RES
+p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "P53 PATHWAY", by="runningScore", title = "day 14 Doxo vs Cycling: P53 PATHWAY", color.line="#B3C543", color="#B3C543", color.vline ="#B3C543")+theme_classic()+ylim(-0.4, 0.7)+geom_text(label=paste0("padj=" ,GSEA_padj), y=0.6, x=10000)
 
 p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "P53 PATHWAY", by="runningScore", title = "day 14 Palbo vs Cycling: P53 PATHWAY", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.4, 0.7)
 
@@ -519,9 +527,15 @@ dev.off()
 
 # plot heatmap, clustered based on log2FC from day 3 treatment controls & Cycling controls
 ```{r}
+# when plotting all p53 targets that are sig changing, annotate based on which database they were found in: Fischer or Hallmark, P53 PATHWAY term. 
+p53_genes_anno <- clusterDF[clusterDF$p53_All %in% "Yes", ]
+p53_genes_anno$Fischer_p53 <- ifelse(row.names(p53_genes_anno) %in% Fischer_Oncogene_2017_p53_census_target_genes$`Gene Symbol`, "Yes", "No")
+p53_genes_anno$Hallmark_p53 <- ifelse(row.names(p53_genes_anno) %in% p53_Hallmark, "Yes", "No")
+hm_cols_RNA$Fischer_p53 <- c("Yes"="#1E7DA5", No="white")
+hm_cols_RNA$Hallmark_p53 <- c("Yes"="#1E7DA5", No="white")
 
 pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_is_different_depending_on_the_presence_of_DNA_damage/RNA_log2FC_p53_Hallmark_mat.pdf", width=5, height=3.5)
-pheatmap(p53_sig_LFCMat, show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("Clusters", "SASP", "Cell_Cycle", "NFKB_All")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="all up p53 target genes")
+pheatmap(p53_sig_LFCMat, show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = p53_genes_anno[ ,c("Clusters", "Fischer_p53", "Hallmark_p53", "SASP", "NFKB_All")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="all up p53 target genes")
 
 # plot showing only p53 target genes under p53 Hallmark term from GO enrichment. 
 
@@ -772,4 +786,19 @@ ggplot(NormCounts_df[NormCounts_df$Transcript %in% "MDM2", ], aes(x=Timepoint, y
 
 dev.off()
 ```
+
+```{r}
+clusterDF[clusterDF$p53_All %in% "Yes", ]
+```
+
+# ATAC-seq: make sequence Logo from HOCOMOCO p53 motif. 
+```{r}
+outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_is_different_depending_on_the_presence_of_DNA_damage"
+library(seqLogo)
+pdf(paste0(outdir, "/P53_HUMAN.H11MO.0.A_HOCOMOCO_seqLogo.pdf"), width=6, height=4)
+seqLogo(HOCOMOCO_v11_matrix$P53_HUMAN.H11MO.0.A)
+dev.off()
+```
+
+
 

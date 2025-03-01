@@ -634,9 +634,16 @@ GSEA_plots_H$`Palbo21 vs Cycling0`$`E2F TARGETS`+theme_classic()+ylim(-0.9,0.05)
 GSEA_plots_H$`Palbo28 vs Cycling0`$`E2F TARGETS`+theme_classic()+ylim(-0.9,0.05)
 dev.off()
 
-p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "E2F TARGETS", by="runningScore", title = "day 14 Doxo vs Cycling: E2F TARGETS", color.line="#B3C543", color="#B3C543")+theme_classic()+ylim(-0.9, 0.05)
 
-p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "E2F TARGETS", by="runningScore", title = "day 14 Palbo vs Cycling: E2F TARGETS", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.9, 0.05)
+# Get padj value of GSEA result for E2F TARGETS pathway to add onto GSEA plots
+GSEA_padj <- list(DoxovsCyc=GSEA_Results_H$`Doxo14 vs Cycling0`@result[GSEA_Results_H$`Doxo14 vs Cycling0`@result$ID %in% "E2F TARGETS", ]$p.adjust, 
+                  PalbovsCyc=GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% "E2F TARGETS", ]$p.adjust) # note that the padj values are really the same as the padj values as TNFA SIGNALING VIA NFKB. pvalues are different though. 
+                  
+GSEA_padj <- lapply(GSEA_padj, function(x){format(round(x, 4), nsmall = 4)}) # round to 4 decimal places 
+
+p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "E2F TARGETS", by="runningScore", title = "day 14 Doxo vs Cycling: E2F TARGETS", color.line="#B3C543", color="#B3C543", color.vline="#B3C543")+theme_classic()+ylim(-0.9, 0.05)+geom_text(label=paste0("padj=" ,GSEA_padj$DoxovsCyc), y=-0.6, x=5000)
+
+p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "E2F TARGETS", by="runningScore", title = "day 14 Palbo vs Cycling: E2F TARGETS", color="#E0ADCD", color.line="#E0ADCD", color.vline="#E0ADCD")+theme_classic()+ylim(-0.9, 0.05)+geom_text(label=paste0("padj=" ,GSEA_padj$PalbovsCyc), y=-0.6, x=5000)
 
 
 pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs//GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark_E2F_Targets.pdf", width=3, height=5)
