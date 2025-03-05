@@ -81,7 +81,7 @@ universe <- genes_anno_type[match(gsub('\\.[0-9]*$', '', row.names(acrossGroups)
 ### gene= vector of genes to test for GO enrichment (gene ensembl format)
 ### universe=background gene set 
 ### Database=database containing groups of genes to GO annotation term e.g. msigdb GO:BP
-```{r}
+```{r getGOenrichment function}
 getGOenrichment <-function(gene,universe,Database){
   #gene_entrezID <-  AnnotationDbi::select(EnsDb.Hsapiens.v79, gene[!is.na(gene)], "ENTREZID", "SYMBOL") #convert gene IDs from SYMBOL format to ENTREZ ID format (was using v79, new code is using v107)
   gene_entrezID <- genes_anno_type[match(gene, genes_anno_type$gene_id), ]
@@ -92,23 +92,22 @@ return(gene_go)
 ```
 
 # assign significant genes to relevant k-means clusters & drug + cell cycle arrest categories. 
-```{r}
+```{r genes_in_clusters}
 genes_in_clusters <- lapply(levels(clusterDF$Clusters), function(x){row.names(clusterDF[clusterDF$Clusters %in% x, ])})
 cluster_names <- c("CellCycle1", "CellCycle2", "Palbo1", "Palbo2", "Doxo1", "Doxo2", "Shared") 
 names(genes_in_clusters) <- cluster_names
 ```
 
 # RNA-seq: GO enrichment on significant genes
-```{r}
+```{r RNA-seq GO enrichment analysis}
 # GO enrichment analysis with msigdb GO:BP database:
 GOBP_enrichment_clusters <- list()
 # GO enrichment analysis with msigdb REACT database:
-GO_enrichment_clusters_REACT <- list()
+GO_enrichment_clusters_KEGG <- list()
 # GO enrichment analysis with msigdb Hallmark database:
 GO_enrichment_clusters_HallMark <- list()
 # GO enrichment analysis with msigdb REACT database:
 GO_enrichment_clusters_REACT <- list()
-
 # GO enrichment analysis with msigdb GO:MF database:
 GO_enrichment_clusters_MF <- list()
 
@@ -116,28 +115,30 @@ for(i in 1:length(genes_in_clusters)){
   
 GOBP_enrichment_clusters[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_GO_BP) # do GO enrichment analysis with background gene set set as all gene expressed, database used is msigdb GO:BP
 
-GO_enrichment_clusters_REACT[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_REACT)
+GO_enrichment_clusters_KEGG[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_KEGG)
 
 GO_enrichment_clusters_HallMark[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_H)
 
 GO_enrichment_clusters_REACT[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_REACT)
 
- GO_enrichment_clusters_MF[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_GO_MF)
+GO_enrichment_clusters_MF[[i]] <- getGOenrichment(genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_GO_MF)
 }
 ```
 
 ### RNA-seq: format GO enrichment terms from each cluster into matrix of -log10(padj values)
-```{r}
+```{r RNAseq GO enrichment results}
 # convert each clusters' GO enrichment terms into dataframes
 GO_enrichment_clusters_KEGG_df <- list()
  GO_enrichment_clusters_REACT_df <- list()
  GO_enrichment_clusters_HallMark_df <- list()
  GOBP_enrichment_clusters_df <- list()
+GO_enrichment_clusters_MF_df <- list()
 for(i in 1:length(GO_enrichment_clusters_REACT)){
-  GO_enrichment_clusters_KEGG_df[[i]] <- as.data.frame(GO_enrichment_clusters_REACT[[i]])
+  GO_enrichment_clusters_KEGG_df[[i]] <- as.data.frame(GO_enrichment_clusters_KEGG[[i]])
    GO_enrichment_clusters_REACT_df[[i]] <- as.data.frame(GO_enrichment_clusters_REACT[[i]])
  GO_enrichment_clusters_HallMark_df[[i]] <- as.data.frame(GO_enrichment_clusters_HallMark[[i]])
  GOBP_enrichment_clusters_df[[i]] <- as.data.frame(GOBP_enrichment_clusters[[i]])
+  GO_enrichment_clusters_MF_df[[i]] <- as.data.frame(GO_enrichment_clusters_MF[[i]])
 }
 
  # indicate names of each list as the cluster number
@@ -145,12 +146,14 @@ for(i in 1:length(GO_enrichment_clusters_REACT)){
  names(GO_enrichment_clusters_REACT_df) <- cluster_names 
  names(GO_enrichment_clusters_HallMark_df) <- cluster_names 
  names(GOBP_enrichment_clusters_df) <- cluster_names 
+names(GO_enrichment_clusters_MF_df) <- cluster_names 
  
  # remove any cluster of genes that have 0 GO enrichment terms
- GO_enrichment_clusters_KEGG_df <-  GO_enrichment_clusters_KEGG_df[sapply( GO_enrichment_clusters_KEGG_df, nrow)>0]
- GO_enrichment_clusters_REACT_df <-  GO_enrichment_clusters_REACT_df[sapply( GO_enrichment_clusters_REACT_df, nrow)>0]
- GO_enrichment_clusters_HallMark_df <-  GO_enrichment_clusters_HallMark_df[sapply( GO_enrichment_clusters_HallMark_df, nrow)>0]
- GOBP_enrichment_clusters_df <-  GOBP_enrichment_clusters_df[sapply( GOBP_enrichment_clusters_df, nrow)>0]
+GO_enrichment_clusters_KEGG_df <-  GO_enrichment_clusters_KEGG_df[sapply( GO_enrichment_clusters_KEGG_df, nrow)>0]
+GO_enrichment_clusters_REACT_df <-  GO_enrichment_clusters_REACT_df[sapply( GO_enrichment_clusters_REACT_df, nrow)>0]
+GO_enrichment_clusters_HallMark_df <-  GO_enrichment_clusters_HallMark_df[sapply( GO_enrichment_clusters_HallMark_df, nrow)>0]
+GOBP_enrichment_clusters_df <-  GOBP_enrichment_clusters_df[sapply( GOBP_enrichment_clusters_df, nrow)>0]
+GO_enrichment_clusters_MF_df <-  GO_enrichment_clusters_MF_df[sapply( GO_enrichment_clusters_MF_df, nrow)>0]
  
  # indicate which cluster and database each dataframe comes from 
  for(i in 1:length(GO_enrichment_clusters_KEGG_df)){
@@ -171,36 +174,54 @@ for(i in 1:length(GO_enrichment_clusters_REACT)){
   GOBP_enrichment_clusters_df[[i]]$Database <- "GO:BP"
   }
 
+  for(i in 1:length(GO_enrichment_clusters_MF_df)){
+ GO_enrichment_clusters_MF_df[[i]]$Cluster <- names(GO_enrichment_clusters_MF_df)[i]
+ GO_enrichment_clusters_MF_df[[i]]$Database <- "GO:MF"
+  }
+
 # combine GO enrichment results from different databases into 1 dataframe for each cluster of genes. 
 GO_results_list <- vector()
-GO_results_list$CellCycle1 <- rbind(GO_enrichment_clusters_KEGG_df$CellCycle1, GO_enrichment_clusters_HallMark_df$CellCycle1, GO_enrichment_clusters_REACT_df$CellCycle1, GOBP_enrichment_clusters_df$CellCycle1)
+GO_results_list$CellCycle1 <- rbind(GO_enrichment_clusters_KEGG_df$CellCycle1,
+                                    GO_enrichment_clusters_HallMark_df$CellCycle1,
+                                    GO_enrichment_clusters_REACT_df$CellCycle1,
+                                    GOBP_enrichment_clusters_df$CellCycle1,
+                                    GO_enrichment_clusters_MF_df$CellCycle1)
 
-GO_results_list$CellCycle2 <- rbind(GO_enrichment_clusters_KEGG_df$CellCycle2, GO_enrichment_clusters_HallMark_df$CellCycle2, GO_enrichment_clusters_REACT_df$CellCycle2, GOBP_enrichment_clusters_df$CellCycle2)
+GO_results_list$CellCycle2 <- rbind(GO_enrichment_clusters_KEGG_df$CellCycle2,
+                                    GO_enrichment_clusters_HallMark_df$CellCycle2,
+                                    GO_enrichment_clusters_REACT_df$CellCycle2,
+                                    GOBP_enrichment_clusters_df$CellCycle2,
+                                    GO_enrichment_clusters_MF_df$CellCycle2)
 
 GO_results_list$Palbo1 <- rbind(GO_enrichment_clusters_KEGG_df$Palbo1,     
                                 GO_enrichment_clusters_HallMark_df$Palbo1 , 
                                 GO_enrichment_clusters_REACT_df$Palbo1, 
-                                GOBP_enrichment_clusters_df$Palbo1)
+                                GOBP_enrichment_clusters_df$Palbo1, 
+                                GO_enrichment_clusters_MF_df$Palbo1)
 
 GO_results_list$Palbo2 <- rbind(GO_enrichment_clusters_KEGG_df$Palbo2,
                                 GO_enrichment_clusters_HallMark_df$Palbo2,
                                 GO_enrichment_clusters_REACT_df$Palbo2,
-                                GOBP_enrichment_clusters_df$Palbo2)
+                                GOBP_enrichment_clusters_df$Palbo2, 
+                                GO_enrichment_clusters_MF_df$Palbo2)
 
 GO_results_list$Doxo1 <- rbind(GO_enrichment_clusters_KEGG_df$Doxo1,
                                GO_enrichment_clusters_HallMark_df$Doxo1,
                                GO_enrichment_clusters_REACT_df$Doxo1,
-                               GOBP_enrichment_clusters_df$Doxo1)
+                               GOBP_enrichment_clusters_df$Doxo1, 
+                               GO_enrichment_clusters_MF_df$Doxo1)
 
 GO_results_list$Doxo2 <- rbind(GO_enrichment_clusters_KEGG_df$Doxo2,
                                GO_enrichment_clusters_HallMark_df$Doxo2,
                                GO_enrichment_clusters_REACT_df$Doxo2,
-                               GOBP_enrichment_clusters_df$Doxo2)
+                               GOBP_enrichment_clusters_df$Doxo2, 
+                               GO_enrichment_clusters_MF_df$Doxo2)
 
 GO_results_list$Shared <- rbind(GO_enrichment_clusters_KEGG_df$Shared,
                                 GO_enrichment_clusters_HallMark_df$Shared,
                                 GO_enrichment_clusters_REACT_df$Shared,
-                                GOBP_enrichment_clusters_df$Shared)
+                                GOBP_enrichment_clusters_df$Shared, 
+                                GO_enrichment_clusters_MF_df$Shared)
 
 # order GO enrichment results from different databases by padj values
 for(i in 1:length(GO_results_list)){
@@ -224,21 +245,19 @@ GO_results_list_mat[ ,i] <- ifelse(GO_results_list_mat[ ,i] %in% NA, 0, GO_resul
 }
 GO_results_list_mat <- GO_results_list_mat[!is.na(row.names(GO_results_list_mat)), ] # remove padj values that are NA 
 
-GO_anno_colors <-  list(database=c("GO:BP"="#3B4992FF", "Hallmark"="#EE0000FF", "KEGG"="#008B45FF", "REACTOME" ="#631879FF"), Cluster=c("CellCycle1"="#66C2A5", "CellCycle2"="#A6D854", "Palbo1"="#FC8D62", "Palbo2"="#8DA0CB","Doxo1"="#E78AC3","Doxo2"="#FFD92F", "Shared"="#E5C494"))
+# specify GO results matrix annotation colors: based on ggsci:pal_aaas palette. 
+GO_anno_colors <-  list(database=c("GO:BP"="#3B4992FF", "Hallmark"="#EE0000FF", "KEGG"="#008B45FF", "REACTOME" ="#631879FF", "GO:MF"="#808180FF"), 
+                        Cluster=c("CellCycle1"="#66C2A5", "CellCycle2"="#A6D854", "Palbo1"="#FC8D62", "Palbo2"="#8DA0CB","Doxo1"="#E78AC3","Doxo2"="#FFD92F", "Shared"="#E5C494"))
 names(GO_anno_colors$Cluster) <- cluster_names 
+
 # annotation dataframe for rows of heatmap to indicate which database GO term came from 
 GO_anno <- data.frame(row.names=row.names(GO_results_list_mat), database=GO_results_df[match(row.names(GO_results_list_mat), GO_results_df$ID), ]$Database)
 # annotation dataframe for columns of heatmap to color by Cluster colors. 
 Cluster_anno <- data.frame(Cluster=cluster_names , row.names = colnames(GO_results_list_mat))
-
-# plot heatmap of -log10 pvalues of GO enrichment results 
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP/GO_results_list_mat.pdf", height=20, width=15)
-pheatmap(GO_results_list_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100),breaks = seq(0, 10,length.out = 100), annotation_row = GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, clustering_distance_rows = "correlation", border_color = "black")
-dev.off()
 ```
 
 # RNA-seq: GO enrichment on significant SASP genes
-```{r}
+```{r GO enrichment analysis SASP}
 # GO enrichment analysis with msigdb GO:BP database:
 GOBP_SASP_clusters <- list()
 # GO SASP analysis with msigdb REACT database:
@@ -274,24 +293,29 @@ GO_SASP_clusters_KEGG_df <- list()
  GO_SASP_clusters_REACT_df <- list()
  GO_SASP_clusters_HallMark_df <- list()
  GOBP_SASP_clusters_df <- list()
+  GO_SASP_clusters_MF_df <- list()
+  
 for(i in 1:length(GO_SASP_clusters_REACT)){
   GO_SASP_clusters_KEGG_df[[i]] <- as.data.frame(GO_SASP_clusters_KEGG[[i]])
    GO_SASP_clusters_REACT_df[[i]] <- as.data.frame(GO_SASP_clusters_REACT[[i]])
  GO_SASP_clusters_HallMark_df[[i]] <- as.data.frame(GO_SASP_clusters_HallMark[[i]])
  GOBP_SASP_clusters_df[[i]] <- as.data.frame(GOBP_SASP_clusters[[i]])
+ GO_SASP_clusters_MF_df[[i]] <- as.data.frame(GO_SASP_clusters_MF[[i]])
 }
 
  # indicate names of each list as the cluster number
  names(GO_SASP_clusters_KEGG_df) <- cluster_names 
  names(GO_SASP_clusters_REACT_df) <- cluster_names 
  names(GO_SASP_clusters_HallMark_df) <- cluster_names 
- names(GOBP_SASP_clusters_df) <- cluster_names 
+ names(GOBP_SASP_clusters_df) <- cluster_names
+  names(GO_SASP_clusters_MF_df) <- cluster_names 
  
  # remove any cluster of genes that have 0 GO enrichment terms
  GO_SASP_clusters_KEGG_df <-  GO_SASP_clusters_KEGG_df[sapply( GO_SASP_clusters_KEGG_df, nrow)>0]
  GO_SASP_clusters_REACT_df <-  GO_SASP_clusters_REACT_df[sapply( GO_SASP_clusters_REACT_df, nrow)>0]
  GO_SASP_clusters_HallMark_df <-  GO_SASP_clusters_HallMark_df[sapply( GO_SASP_clusters_HallMark_df, nrow)>0]
  GOBP_SASP_clusters_df <-  GOBP_SASP_clusters_df[sapply( GOBP_SASP_clusters_df, nrow)>0]
+GO_SASP_clusters_MF_df <-  GO_SASP_clusters_HallMark_df[sapply( GO_SASP_clusters_MF_df, nrow)>0]
  
  # indicate which cluster and database each dataframe comes from 
  for(i in 1:length(GO_SASP_clusters_KEGG_df)){
@@ -312,19 +336,26 @@ for(i in 1:length(GO_SASP_clusters_REACT)){
   GOBP_SASP_clusters_df[[i]]$Database <- "GO:BP"
   }
 
+ for(i in 1:length(GO_SASP_clusters_MF_df)){
+ GO_SASP_clusters_MF_df[[i]]$Cluster <- names(GO_SASP_clusters_MF_df)[i]
+ GO_SASP_clusters_MF_df[[i]]$Database <- "GO:MF"
+  }
+
 # combine GO enrichment results from different databases into 1 dataframe for each cluster of genes. 
 GO_SASP_list <- vector()
-GO_SASP_list$CellCycle <- rbind(GO_SASP_clusters_KEGG_df$CellCycle, GOBP_SASP_clusters_df$CellCycle)
+GO_SASP_list$CellCycle1 <- rbind(GO_SASP_clusters_HallMark_df$CellCycle1, GO_SASP_clusters_REACT_df$CellCycle1, GOBP_SASP_clusters_df$CellCycle1, GO_SASP_clusters_MF_df$CellCycle1)
 
-GO_SASP_list$Palbo1 <- rbind(GO_SASP_clusters_KEGG_df$Palbo1, GO_SASP_clusters_HallMark_df$Palbo1 , GO_SASP_clusters_REACT_df$Palbo1, GOBP_SASP_clusters_df$Palbo1)
+GO_SASP_list$CellCycle2 <- rbind(GO_SASP_clusters_KEGG_df$CellCycle2, GO_SASP_clusters_HallMark_df$CellCycle2, GO_SASP_clusters_REACT_df$CellCycle2, GOBP_SASP_clusters_df$CellCycle2, GO_SASP_clusters_MF_df$CellCycle2)
 
-GO_SASP_list$Palbo2 <- rbind(GO_SASP_clusters_KEGG_df$Palbo2, GO_SASP_clusters_HallMark_df$Palbo2, GO_SASP_clusters_REACT_df$Palbo2, GOBP_SASP_clusters_df$Palbo2)
+GO_SASP_list$Palbo1 <- rbind(GO_SASP_clusters_KEGG_df$Palbo1, GO_SASP_clusters_HallMark_df$Palbo1 , GO_SASP_clusters_REACT_df$Palbo1, GOBP_SASP_clusters_df$Palbo1,GO_SASP_clusters_MF_df$Palbo1)
 
-GO_SASP_list$Doxo1 <- rbind(GO_SASP_clusters_KEGG_df$Doxo1, GO_SASP_clusters_HallMark_df$Doxo1, GO_SASP_clusters_REACT_df$Doxo1, GOBP_SASP_clusters_df$Doxo1)
+GO_SASP_list$Palbo2 <- rbind(GO_SASP_clusters_KEGG_df$Palbo2, GO_SASP_clusters_HallMark_df$Palbo2, GO_SASP_clusters_REACT_df$Palbo2, GOBP_SASP_clusters_df$Palbo2, GO_SASP_clusters_MF_df$Palbo2)
 
-GO_SASP_list$Doxo2 <- rbind(GO_SASP_clusters_KEGG_df$Doxo2, GO_SASP_clusters_HallMark_df$Doxo2, GO_SASP_clusters_REACT_df$Doxo2, GOBP_SASP_clusters_df$Doxo2)
+GO_SASP_list$Doxo1 <- rbind(GO_SASP_clusters_KEGG_df$Doxo1, GO_SASP_clusters_HallMark_df$Doxo1, GO_SASP_clusters_REACT_df$Doxo1, GOBP_SASP_clusters_df$Doxo1, GO_SASP_clusters_MF_df$Doxo1)
 
-GO_SASP_list$Shared <- rbind(GO_SASP_clusters_KEGG_df$Shared, GO_SASP_clusters_HallMark_df$Shared, GO_SASP_clusters_REACT_df$Shared, GOBP_SASP_clusters_df$Shared)
+GO_SASP_list$Doxo2 <- rbind(GO_SASP_clusters_KEGG_df$Doxo2, GO_SASP_clusters_REACT_df$Doxo2, GOBP_SASP_clusters_df$Doxo2, GO_SASP_clusters_MF_df$Doxo2)
+
+GO_SASP_list$Shared <- rbind(GO_SASP_clusters_KEGG_df$Shared, GO_SASP_clusters_HallMark_df$Shared, GO_SASP_clusters_REACT_df$Shared, GOBP_SASP_clusters_df$Shared,GO_SASP_clusters_MF_df$Shared)
 
 # order GO enrichment results from different databases by padj values
 for(i in 1:length(GO_SASP_list)){
@@ -348,17 +379,10 @@ GO_SASP_list_mat[ ,i] <- ifelse(GO_SASP_list_mat[ ,i] %in% NA, 0, GO_SASP_list_m
 }
 GO_SASP_list_mat <- GO_SASP_list_mat[!is.na(row.names(GO_SASP_list_mat)), ] # remove padj values that are NA 
 
-GO_anno_colors <-  list(database=c("GO:BP"="#3B4992FF", "Hallmark"="#EE0000FF", "KEGG"="#008B45FF", "REACTOME" ="#631879FF"), Cluster=c("CellCycle"="#66C2A5", "Palbo1"="#FC8D62", "Palbo2"="#8DA0CB","Doxo1"="#E78AC3","Doxo2"="#FFD92F", "Shared"="#E5C494"))
-names(GO_anno_colors$Cluster) <- cluster_names 
 # annotation dataframe for rows of heatmap to indicate which database GO term came from 
 GO_anno <- data.frame(row.names=row.names(GO_SASP_list_mat), database=GO_SASP_df[match(row.names(GO_SASP_list_mat), GO_SASP_df$ID), ]$Database)
 # annotation dataframe for columns of heatmap to color by Cluster colors. 
 Cluster_anno <- data.frame(Cluster=cluster_names , row.names = colnames(GO_SASP_list_mat))
-
-# plot heatmap of -log10 pvalues of GO enrichment results 
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP/GO_SASP_mat.pdf", height=5, width=15)
-pheatmap(GO_SASP_list_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100),breaks = seq(0, 10,length.out = 100), annotation_row = GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, clustering_distance_rows = "correlation", border_color = "black")
-dev.off()
 ```
 
 # RNA-seq: GSEA Analysis
@@ -558,7 +582,7 @@ pheatmap(IPA_TF_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, n
 ```
 
 # RNA-seq: make matrix with log2FC values of significant genes
-```{r}
+```{r log2FC sig genes matrix}
 # get log2FC values of significantly changing genes over time
 sig_LFCMat <- matrix(ncol=length(LFCResultsall_RNA), nrow=nrow(clusterDF))
 colnames(sig_LFCMat) <- names(LFCResultsall_RNA)
@@ -568,8 +592,6 @@ sig_LFCMat[ ,i] <- LFCResultsall_RNA[[i]][row.names(LFCResultsall_RNA[[i]]) %in%
 }
 
 row.names(sig_LFCMat) <-  ifelse(genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(sig_LFCMat), genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id)
-
-row.names(ordered_sigMat)[grep("^H1.[0-9]", row.names(ordered_sigMat))]  <- gsub("*H1.", "H1-",row.names(ordered_sigMat[grepl("^H1.[0-9]", row.names(ordered_sigMat)), ]) )
 
 sig_LFCMat <- sig_LFCMat[match(row.names(ordered_sigMat), row.names(sig_LFCMat)), ] # order based on k-means & hierarchical ordering of rlog counts. 
 
@@ -604,8 +626,6 @@ anno_sigLFC <- data.frame(
   Treatment = c(rep("Doxo", 7), rep("Palbo", 9), rep("DoxovsPalbo",4)),
   Timepoint = c("3", "10", "14", "21", "10", "14", "21", "3", "10", "14", "21", "28", "10", "14", "21", "28","3", "10", "14", "21")
 )
-
-row.names(clusterDF)[grep("^H1.[0-9]", row.names(clusterDF))]  <- gsub("*H1.", "H1-",row.names(clusterDF[grepl("^H1.[0-9]", row.names(clusterDF)), ]) ) # correction: to match with row.names in sig_LFCMat, replace - with . for linker histone genes. 
 ```
 
 # ATAC-seq: import MEME-AME results into dataframe from DrugandArrest_PvsD peak list (peaks within 50kb of sig changing genes, categorized by DoxovsCyc, Doxovsday3, PalbovsCyc, Palbovsday3)
@@ -625,6 +645,15 @@ PvsD_AME_mergeClusters$Group <- gsub("(Doxo|Palbo).*", "\\1", PvsD_AME_mergeClus
 -------------------------------------------------------------------------------------------------------------------------
 # *FIGURES*
 
+
+# RNA-seq: plot master heatmap of -log10 pvalues of GO enrichment results for all clusters
+```{r}
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+pdf(paste0(pdf_dir, "/GO_results_list_mat.pdf"), height=20, width=15)
+pheatmap(GO_results_list_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100),breaks = seq(0, 10,length.out = 100), annotation_row = GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, clustering_distance_rows = "correlation", border_color = "black")
+dev.off()
+```
+
 # RNA-seq: plot padj values of GO enrichment results for top 5 drug distinct up genes
 ```{r}
 # Still showing the pvalues of the other clusters
@@ -643,23 +672,30 @@ GO_results_mat_clusters[[i]] <- GO_results_list_mat[row.names(GO_results_list_ma
 GO_results_mat_clusters[[i]] <- GO_results_mat_clusters[[i]][order(GO_results_mat_clusters[[i]][ ,i], decreasing=T), ]
 }
 
-pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
 pdf(paste0(pdf_dir, "/GO_results_Palbo1_clusters.pdf"), width=8, height=2)
-pheatmap(GO_results_mat_clusters[[3]][1:5, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 20,length.out = 100), cluster_rows = F, main=cluster_names[2], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
+pheatmap(GO_results_mat_clusters[[3]][1:5, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 20,length.out = 100), cluster_rows = F, main=cluster_names[3], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 dev.off()
 
-pdf(paste0(pdf_dir, "/GO_results_Palbo2_clusters.pdf"), width=5, height=2)
-pheatmap(GO_results_mat_clusters[[4]][1:5, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[3], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
+pdf(paste0(pdf_dir, "/GO_results_Palbo2_clusters.pdf"), width=5.5, height=2)
+pheatmap(GO_results_mat_clusters[[4]][1:5, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[4], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 dev.off()
 
-pdf(paste0(pdf_dir, "/GO_results_Doxo1_clusters.pdf"), width=8.5, height=2)
-pheatmap(GO_results_mat_clusters[[5]][1:5, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 5,length.out = 100), cluster_rows = F, main=cluster_names[4], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
+pdf(paste0(pdf_dir, "/GO_results_Doxo1_clusters.pdf"), width=9, height=2)
+pheatmap(GO_results_mat_clusters[[5]][1:5, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 5,length.out = 100), cluster_rows = F, main=cluster_names[5], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 dev.off()
 
-pdf(paste0(pdf_dir, "/GO_results_Doxo2_clusters.pdf"), width=11, height=2)
-pheatmap(GO_results_mat_clusters[[6]][1:5, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 8,length.out = 100), cluster_rows = F, main=cluster_names[5], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
+pdf(paste0(pdf_dir, "/GO_results_Doxo2_clusters.pdf"), width=6.5, height=2)
+pheatmap(GO_results_mat_clusters[[6]][1:5, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 8,length.out = 100), cluster_rows = F, main=cluster_names[6], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 dev.off()
 ```
+
+# plot heatmap of -log10 pvalues of GO enrichment results of sig changing SASP genes
+```{r}
+pdf(paste0(pdf_dir, "/GO_SASP_mat.pdf"), height=5, width=15)
+pheatmap(GO_SASP_list_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100),breaks = seq(0, 10,length.out = 100), annotation_row = GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, clustering_distance_rows = "correlation", border_color = "black")
+dev.off()
+```
+
 # RNA-seq: plot padj values of GO enrichment results for top 5 drug distinct upregulated SASP genes
 ```{r}
 # plot padj values for top 5 GO terms for each cluster individually. Still showing the pvalues of the other clusters as columns but only the top GO terms from the cluster of interest. 
@@ -670,25 +706,24 @@ GO_SASP_mat_clusters[[i]] <- GO_SASP_list_mat[row.names(GO_SASP_list_mat) %in% G
 GO_SASP_mat_clusters[[i]] <- GO_SASP_mat_clusters[[i]][order(GO_SASP_mat_clusters[[i]][ ,i], decreasing=T), ]
 }
 
-pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP"
-pdf(paste0(pdf_dir, "/GO_SASP_Palbo1_clusters.pdf"), width=12.75, height=2)
-pheatmap(GO_SASP_mat_clusters[[2]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[2], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
+pdf(paste0(pdf_dir, "/GO_SASP_Palbo1_clusters.pdf"), width=6, height=2)
+pheatmap(GO_SASP_mat_clusters[[3]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 30,length.out = 100), cluster_rows = F, main=cluster_names[3], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 dev.off()
 
-pdf(paste0(pdf_dir, "/GO_SASP_Palbo2_clusters.pdf"), width=6, height=2)
-pheatmap(GO_SASP_mat_clusters[[3]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[3], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
-dev.off()
-
-pdf(paste0(pdf_dir, "/GO_SASP_Doxo1_clusters.pdf"), width=8.5, height=2)
+pdf(paste0(pdf_dir, "/GO_SASP_Palbo2_clusters.pdf"), width=13, height=2)
 pheatmap(GO_SASP_mat_clusters[[4]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[4], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 dev.off()
 
-pdf(paste0(pdf_dir, "/GO_SASP_Doxo2_clusters.pdf"), width=13.5, height=2)
+pdf(paste0(pdf_dir, "/GO_SASP_Doxo1_clusters.pdf"), width=8.5, height=2)
 pheatmap(GO_SASP_mat_clusters[[5]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[5], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 dev.off()
 
-pdf(paste0(pdf_dir, "/GO_SASP_Shared_clusters.pdf"), width=6.5, height=2)
+pdf(paste0(pdf_dir, "/GO_SASP_Doxo2_clusters.pdf"), width=8.5, height=2)
 pheatmap(GO_SASP_mat_clusters[[6]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[6], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
+dev.off()
+
+pdf(paste0(pdf_dir, "/GO_SASP_Shared_clusters.pdf"), width=6.5, height=2)
+pheatmap(GO_SASP_mat_clusters[[7]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[7], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 dev.off()
 ```
 
