@@ -316,6 +316,43 @@ drug_cat_list <- list(sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterD
   ordered_sigMat <- do.call(rbind, ordered_sigMat)
 ```
 
+
+# RNA-seq: compare gene lists for k-means=7 vs kmeans=8 since I initially did k-means=8 for my RNA heatmap of sig changing genes. Double check that the clustering isn't massively changing anything. 
+```{r}
+# k-means cluster=7 of sig changing genes 
+set.seed(2025)
+k_7 <- pheatmap(sigMat, scale = "row", kmeans_k = 7, cluster_cols=F, cluster_rows=F)
+k_7_genes <- factor(k_7$kmeans$cluster, levels=c(2,5,7,1,4,6,3))
+
+#k-means=7
+# 2: shared down, slower in Doxo (533)
+# 5: shared down, slower in Palbo (209)
+# 7: Palbo upregulated vs Cycling (554)
+# 1: Palbo upregulated vs day3 (481)
+# 4: Doxo upregulated vs Cycling (574)
+# 6: Doxo upregulated vs day3 (905)
+# 3: shared up (488)
+
+
+# k-means cluster=8 of sig changing genes 
+set.seed(2025)
+k_8 <- pheatmap(sigMat, scale = "row", kmeans_k = 8, cluster_cols=F, cluster_rows=F)
+k_8_genes <- factor(k_8$kmeans$cluster, levels=c(5,2,7,1,4,6,3,8))
+
+#k-means=8
+# 2: shared down, slower in Doxo (535)
+# 5: shared down, slower in Palbo (205)
+# 7: Palbo upregulated vs Cycling (525)
+# 1: Palbo upregulated vs day3 (474)
+# 4: Doxo upregulated vs Cycling (338)
+# 6: Doxo upregulated vs Cycling (550)
+# 3: Doxo upregulated vs day 3 (717)
+# 8: shared up (400)
+
+# compare clusters with k-means=7 & k-means =8. number of genes for each drug category assigned to cluster appears mostly similar. Doxo upregulated clusters have 126 more genes with k-means=7 than k-means=8. The differences in the other clusters are less than this. 
+plot_grid(k_7[[4]], k_8[[4]])
+```
+
 # DESeq analysis for ATAC-seq
 ```{r}
 # load in fragment counts under peaks
