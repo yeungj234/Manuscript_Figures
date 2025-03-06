@@ -264,6 +264,7 @@ set.seed(2025)
 k <- pheatmap(sigMat, scale = "row", kmeans_k = 7)
 clusterDF <- as.data.frame(factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3)))
 colnames(clusterDF) <- "Clusters"
+row.names(clusterDF) <- make.unique(names(factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3))))
 
 order <- order(clusterDF$Clusters)
 clusterDF <- data.frame(row.names=row.names(clusterDF)[order], Clusters=clusterDF[order, ])
@@ -291,24 +292,28 @@ drug_cat_list <- list(sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterD
 
 
   ordered_sigMat <- list()
-   for(i in 1:length(drug_cat_list)){
+  for (i in 1:length(drug_cat_list)) {
   ordered_sigMat[[i]] <- sigMat[row.names(sigMat) %in% row.names(drug_cat_list[[i]]), ]
-  # Calculate the distance matrix
-  distance_matrix <- dist(ordered_sigMat[[i]])
   
-  # Perform hierarchical clustering within each drug category
-  set.seed(123)  # For reproducibility
-  
-  # Perform hierarchical clustering
-  hc <- hclust(distance_matrix, method="complete")
-  
-  # Order the rows based on hierarchical clustering
-  order <- hc$order
-  
-  # Reorder the original data matrix
-  ordered_sigMat[[i]] <- ordered_sigMat[[i]][order, ]
-   }
-  
+  # Check if the subset has at least 2 rows before clustering
+  if (nrow(ordered_sigMat[[i]]) >= 2) {
+    # Calculate the distance matrix
+    distance_matrix <- dist(ordered_sigMat[[i]])
+    
+    # Perform hierarchical clustering
+    set.seed(123)  # For reproducibility
+    hc <- hclust(distance_matrix, method = "complete")
+    
+    # Order the rows based on hierarchical clustering
+    order <- hc$order
+    
+    # Reorder the original data matrix
+    ordered_sigMat[[i]] <- ordered_sigMat[[i]][order, ]
+  } else {
+    # Skip clustering and keep as is
+    message(paste("Skipping clustering for category", i, "due to insufficient rows"))
+  }
+}
   # merge back into master counts matrix, ordered by drug category/ k-means cluster. 
   ordered_sigMat <- do.call(rbind, ordered_sigMat)
 ```

@@ -386,7 +386,7 @@ Cluster_anno <- data.frame(Cluster=cluster_names , row.names = colnames(GO_SASP_
 ```
 
 # RNA-seq: GSEA Analysis
-```{r}
+```{r RNAseq GSEA analysis}
 ranked_res_forGSEA <- list()
 for(i in 1:length(LFCResultsall_RNA)){
 # Filter for significant genes (optional)
@@ -409,19 +409,19 @@ names(ranked_res_forGSEA) <- names(LFCResultsall_RNA)
 
 # run GSEA analysis using: 
 GSEA_Results_H <- list() # msigdb Hallmark database
-GSEA_Results_REACT <- list() # msigdb KEGG database
+GSEA_Results_KEGG <- list() # msigdb KEGG database
 GSEA_Results_REACT <- list() # msigdb Reactome database
 GSEA_plots_H <- list()
-GSEA_plots_REACT <- list()
+GSEA_plots_KEGG <- list()
 GSEA_plots_REACT <- list()
 for(i in 1:length(ranked_res_forGSEA)){
  GSEA_Results_H[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_H) 
- GSEA_Results_REACT[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_REACT) 
+ GSEA_Results_KEGG[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_KEGG) 
  GSEA_Results_REACT[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_REACT) 
 }
 
 names(GSEA_Results_H) <- names(LFCResultsall_RNA)
-names(GSEA_Results_REACT) <- names(LFCResultsall_RNA)
+names(GSEA_Results_KEGG) <- names(LFCResultsall_RNA)
 names(GSEA_Results_REACT) <- names(LFCResultsall_RNA)
 
 # generate running score plots for GSEA results
@@ -496,26 +496,29 @@ for(i in 1:length(genes_in_clusters)){
   
   IPA_input <- as.data.frame(genes_in_clusters[[i]])
   colnames(IPA_input) <- "ID"
-  write.table(IPA_input, file=paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure p53 activity is different depending on the presence of DNA damage/IPA_files/", cluster_names[i], ".csv"), row.names=F, sep=",")
+  write.table(IPA_input, file=paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/input/", cluster_names[i], ".csv"), row.names=F, sep=",")
 }
 # DESeq Wald Test results for pairwise comparisons. 
 for(i in 1:length(LFCResultsall_RNA)){
-  write.table(as.data.frame(LFCResultsall_RNA[[i]]), file=paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure p53 activity is different depending on the presence of DNA damage/IPA_files/DESeq_results_input/", names(LFCResultsall_RNA)[i], ".csv"), sep=",")
+  write.table(as.data.frame(LFCResultsall_RNA[[i]]), file=paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files/DESeq_results_input/", names(LFCResultsall_RNA)[i], ".csv"), sep=",")
 }
 ```
 
-# # RNA-seq: import IPA upstream regulators & pathways
-```{r}
-setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure p53 activity is different depending on the presence of DNA damage/IPA_files/output/")
+# RNA-seq: import IPA upstream regulators & pathways
+```{r import IPA results}
+setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/output")
 IPA_upstream_regs <- list()
 IPA_pathways <- list()
 # read in information for enriched IPA pathways per hierarchical cluster (clustering based on scaled rlog normalized counts)
 for(i in 1:length(cluster_names)){
-IPA_pathways[[i]]<- read_tsv(paste0(cluster_names[i], "_IPA_Pathways.txt"), skip=2)
+IPA_pathways[[i]]<- read_tsv(paste0(cluster_names[i], "_IPA_pathways.txt"), skip=2)
 # read in information for enriched upstream regulators 
-IPA_upstream_regs[[i]] <- read.table(paste0(cluster_names[i], "_IPA_UpstreamRegs.txt"), sep="\t", skip=2, header=T)
+IPA_upstream_regs[[i]] <- read.table(paste0(cluster_names[i], "_IPA_upstream_regs.txt"), sep="\t", skip=2, header=T)
 IPA_upstream_regs[[i]] <- IPA_upstream_regs[[i]][!grepl("mir|miR|Mir", IPA_upstream_regs[[i]]$Upstream.Regulator), ] # remove upstream regulators that are miRNAs (uncertain if they will be informative & there is a lot of them)
 }
+
+names(IPA_upstream_regs) <- cluster_names
+names(IPA_pathways) <- cluster_names
 
 # filter out upstream regulators that are not expressed in this cell line. 
 
@@ -523,15 +526,12 @@ IPA_upstream_regs[[i]] <- IPA_upstream_regs[[i]][!grepl("mir|miR|Mir", IPA_upstr
 expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
 
 # keep only upstream regulators that are part of expressed genes or have lower case letters (these are upstream regulators that could be miRNAs or protein complexes)
-IPA_upstream_regs <- lapply(IPA_upstream_regs, function(IPA_upstream_regs){IPA_upstream_regs[c(grep('[:lower:]', IPA_upstream_regs$Upstream.Regulator), which(IPA_upstream_regs$Upstream.Regulator %in% expressedGenes)), ]})
+#IPA_upstream_regs <- lapply(IPA_upstream_regs, function(IPA_upstream_regs){IPA_upstream_regs[c(grep('[:lower:]', IPA_upstream_regs$Upstream.Regulator), which(IPA_upstream_regs$Upstream.Regulator %in% expressedGenes)), ]})
 
-names(IPA_upstream_regs) <- cluster_names
-
-names(IPA_pathways) <- cluster_names
 ```
 
-## plotting padj values of top IPA predicted upstream regulators of all clusters
-```{r}
+# RNA-seq: plotting padj values of top IPA predicted upstream regulators of all clusters
+```{r IPA results matrix}
 create_ipa_regs_matrix <- function(IPA_upstream_regs, cluster_names, filter_keyword = "complex", top_n = 25) {
   # Extract unique upstream regulators based on the filter keyword
   unique_upstream_regs <- unique(unlist(lapply(IPA_upstream_regs, function(x) {
@@ -741,13 +741,13 @@ IPA_group_regs_clusters[[i]] <-IPA_group_regs_mat[row.names(IPA_group_regs_mat) 
 IPA_group_regs_clusters[[i]] <- IPA_group_regs_clusters[[i]][order(IPA_group_regs_clusters[[i]][ ,i], decreasing=T), ] # sort by decreasing padj value
 }
 
-# make heatmap of top 5 IPA predicted upstream regulators for shared up genes. 
+# make heatmap of top 5 IPA predicted upstream regulators for drug distinct upregulated genes
 pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP/RNA_IPA_TF_regs_drug_distinct_up_genes.pdf", width=3, height=2)
-pheatmap(IPA_TF_regs_clusters[[2]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 50,length.out = 100), cluster_rows = F, main="Shared down genes: predicted TF regulators", border_color = "black",  annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
+pheatmap(IPA_TF_regs_clusters[[6]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 100,length.out = 100), cluster_rows = F, main="Shared down genes: predicted TF regulators", border_color = "black",  annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
 dev.off()
 
 pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP/RNA_IPA_group_regs_SharedDown_genes.pdf", width=3.8, height=2)
-pheatmap(IPA_group_regs_clusters[[1]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 50,length.out = 100), cluster_rows = F, main="Shared down genes: predicted group regulators", border_color = "black", annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
+pheatmap(IPA_group_regs_clusters[[1]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 100,length.out = 100), cluster_rows = F, main="Shared down genes: predicted group regulators", border_color = "black", annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
 dev.off()
 ```
 
