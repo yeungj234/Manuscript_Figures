@@ -262,12 +262,10 @@ row.names(metaDataall) <- samplenames
 # perform k-means clustering
 set.seed(2025)
 k <- pheatmap(sigMat, scale = "row", kmeans_k = 7)
-clusterDF <- as.data.frame(factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3)))
-colnames(clusterDF) <- "Clusters"
-row.names(clusterDF) <- make.unique(names(factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3))))
-
-order <- order(clusterDF$Clusters)
-clusterDF <- data.frame(row.names=row.names(clusterDF)[order], Clusters=clusterDF[order, ])
+clusterDF <- data.frame(Clusters=factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3)), 
+                           gene_id=names(factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3))))
+# order rows by k-means cluster & assigned drug category
+clusterDF <- clusterDF[order(clusterDF$Cluster), ]
 
 # annotate which genes are part of the SASP 
 clusterDF$SASP <- ifelse(row.names(clusterDF) %in% SASP_all, "Yes", "No")
@@ -277,17 +275,14 @@ clusterDF$Cell_Cycle <- ifelse(row.names(clusterDF) %in% c(msigdbr_df_H[msigdbr_
 
 # annotate genes based on previous clustering
 clusterDF$clusters_cutree8 <- anno_genes[match(row.names(clusterDF), row.names(anno_genes)), ]$clusters_cutree8
-clusterDF <- clusterDF[order(clusterDF$Cluster), ]
 
-# order rows by k-means cluster & assigned drug category
-
-drug_cat_list <- list(sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "2", ]), ], 
-                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "5", ]), ], 
-                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "7", ]), ], 
-                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "1", ]), ], 
-                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "4", ]), ],
-                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "6", ]), ],
-                      sigMat[row.names(sigMat) %in% row.names(clusterDF[clusterDF$Clusters %in% "3", ]), ]
+drug_cat_list <- list(sigMat[row.names(sigMat) %in% clusterDF[clusterDF$Clusters %in% "2", ]$gene_id, ], 
+                      sigMat[row.names(sigMat) %in% clusterDF[clusterDF$Clusters %in% "5", ]$gene_id, ], 
+                      sigMat[row.names(sigMat) %in% clusterDF[clusterDF$Clusters %in% "7", ]$gene_id, ], 
+                      sigMat[row.names(sigMat) %in% clusterDF[clusterDF$Clusters %in% "1", ]$gene_id, ], 
+                      sigMat[row.names(sigMat) %in% clusterDF[clusterDF$Clusters %in% "4", ]$gene_id, ],
+                      sigMat[row.names(sigMat) %in% clusterDF[clusterDF$Clusters %in% "6", ]$gene_id, ],
+                      sigMat[row.names(sigMat) %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id, ]
 )
 
 
@@ -585,6 +580,10 @@ drug_cat_list <- list(drug_cat[drug_cat$Palbo %in% "Yes" & drug_cat$Doxo %in% "N
   )
   dev.off()
 }
+```
+# save workspace because most of the files generated here are inputs for other analysis. 
+```{r}
+save.image("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Global_transcriptome_and_chromatin_accessibility_is_dynamic_in_both_types_of_therapy_induced_senescence/workspace.RData")
 ```
 ---------------------------------------------------------------------------------------
 # *FIGURES*

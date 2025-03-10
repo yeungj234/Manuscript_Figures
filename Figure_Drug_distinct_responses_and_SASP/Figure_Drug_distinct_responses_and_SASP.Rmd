@@ -6,43 +6,46 @@ output: html_document
 ---
 
 ```{r}
+# data wrangling
+library(preprocessCore)
 library(readr)
-library(GenomicFeatures)
-library(DESeq2)
-library(apeglm)
+library(readxl)
+library(stringr)
+# plotting
 library(gridExtra)
 library(ggplot2)
 library(pheatmap)
-library(msigdbr)
-library(stringr)
-library(org.Hs.eg.db)
-library(ggrepel)
-library(rtracklayer)
 library(cowplot)
-library(readxl)
-library(EnsDb.Hsapiens.v79)
 library(viridis)
+library(RColorBrewer)
+library(scales)
+library(ggrepel)
+
+# genomics data wrangling and analysis
+library(rtracklayer)
+library(Biostrings)
+library(GenomicFeatures)
 library(GenomicRanges)
 library(rtracklayer)
-library(RColorBrewer)
-library(cowplot)
-library(preprocessCore)
-library(scales)
+library(DESeq2)
+library(apeglm)
 library(ChIPseeker)
-library(TxDb.Hsapiens.UCSC.hg38.knownGene)
-library(org.Hs.eg.db)
-library(BSgenome.Hsapiens.UCSC.hg38)
+library(clusterProfiler)
+library(msigdbr)
 library(MotifDb)
 library(motifmatchr)
-library(Biostrings)
-library(clusterProfiler)
-library(pheatmap)
+
+# genome annotation databases
+library(EnsDb.Hsapiens.v79)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(BSgenome.Hsapiens.UCSC.hg38)
+library(org.Hs.eg.db)
 ```
 
 # annotation colors for pheatmap
 ```{r}
 hm_cols_RNA <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
-                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD"), 
+                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD", "DoxovsPalbo"="#CCEBC5"), 
                 Biorep=c("1"="orange", "2"="light blue", "3"="pink"), 
                 log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "DoxovsPalbo"="#CCEBC5"), 
                 Clusters=c("2"="#66C2A5","5"="#A6D854","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#FFD92F","3"="#E5C494"), 
@@ -93,7 +96,7 @@ return(gene_go)
 
 # assign significant genes to relevant k-means clusters & drug + cell cycle arrest categories. 
 ```{r genes_in_clusters}
-genes_in_clusters <- lapply(levels(clusterDF$Clusters), function(x){row.names(clusterDF[clusterDF$Clusters %in% x, ])})
+genes_in_clusters <- lapply(levels(clusterDF$Clusters), function(x){clusterDF[clusterDF$Clusters %in% x, ]$gene_id})
 cluster_names <- c("CellCycle1", "CellCycle2", "Palbo1", "Palbo2", "Doxo1", "Doxo2", "Shared") 
 names(genes_in_clusters) <- cluster_names
 ```
@@ -256,133 +259,25 @@ GO_anno <- data.frame(row.names=row.names(GO_results_list_mat), database=GO_resu
 Cluster_anno <- data.frame(Cluster=cluster_names , row.names = colnames(GO_results_list_mat))
 ```
 
-# RNA-seq: GO enrichment on significant SASP genes
-```{r GO enrichment analysis SASP}
-# GO enrichment analysis with msigdb GO:BP database:
-GOBP_SASP_clusters <- list()
-# GO SASP analysis with msigdb REACT database:
-GO_SASP_clusters_KEGG <- list()
-# GO SASP analysis with msigdb Hallmark database:
-GO_SASP_clusters_HallMark <- list()
-# GO SASP analysis with msigdb REACT database:
-GO_SASP_clusters_REACT <- list()
+### MEME-AME analysis on DESeq_Peaks pairwise comparison 
+```{bash}
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq
 
-# GO SASP analysis with msigdb GO:MF database:
-GO_SASP_clusters_MF <- list()
+# all up peaks- background peak set set to corresponding down peaks of the same DESeq comparison. 
+sbatch -p risc,hpc --array=1-16 \
+--export=backgroundpeakslist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoDown/inputfiles_annoDown_DESeq_peaks.txt,\
+inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoUp/inputfiles_annoUp_DESeq_peaks.txt,\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_output/DESeq/annoUp,\
+folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoUp/folderlist_annoUp_DESeq_peaks.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
 
-SASP_genes_in_clusters <- lapply(genes_in_clusters, function(x){x[x %in% row.names(clusterDF[clusterDF$SASP %in% "Yes", ])]})
-
-for(i in 1:length(SASP_genes_in_clusters)){
-  
-GOBP_SASP_clusters[[i]] <-getGOenrichment(SASP_genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_GO_BP) # do GO SASP analysis with background gene set set as all gene expressed, database used is msigdb GO:BP
-
-GO_SASP_clusters_KEGG[[i]] <- getGOenrichment(SASP_genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_KEGG)
-
-GO_SASP_clusters_HallMark[[i]] <- getGOenrichment(SASP_genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_H)
-
-GO_SASP_clusters_REACT[[i]] <- getGOenrichment(SASP_genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_REACT)
-
- GO_SASP_clusters_MF[[i]] <- getGOenrichment(SASP_genes_in_clusters[[i]], as.character(universe$entrezid),msigdbr_t2g_GO_MF)
-}
-```
-
-### RNA-seq: format GO SASP terms from each cluster into matrix of -log10(padj values)
-```{r}
-# convert each clusters' GO SASP terms into dataframes
-GO_SASP_clusters_KEGG_df <- list()
- GO_SASP_clusters_REACT_df <- list()
- GO_SASP_clusters_HallMark_df <- list()
- GOBP_SASP_clusters_df <- list()
-  GO_SASP_clusters_MF_df <- list()
-  
-for(i in 1:length(GO_SASP_clusters_REACT)){
-  GO_SASP_clusters_KEGG_df[[i]] <- as.data.frame(GO_SASP_clusters_KEGG[[i]])
-   GO_SASP_clusters_REACT_df[[i]] <- as.data.frame(GO_SASP_clusters_REACT[[i]])
- GO_SASP_clusters_HallMark_df[[i]] <- as.data.frame(GO_SASP_clusters_HallMark[[i]])
- GOBP_SASP_clusters_df[[i]] <- as.data.frame(GOBP_SASP_clusters[[i]])
- GO_SASP_clusters_MF_df[[i]] <- as.data.frame(GO_SASP_clusters_MF[[i]])
-}
-
- # indicate names of each list as the cluster number
- names(GO_SASP_clusters_KEGG_df) <- cluster_names 
- names(GO_SASP_clusters_REACT_df) <- cluster_names 
- names(GO_SASP_clusters_HallMark_df) <- cluster_names 
- names(GOBP_SASP_clusters_df) <- cluster_names
-  names(GO_SASP_clusters_MF_df) <- cluster_names 
- 
- # remove any cluster of genes that have 0 GO enrichment terms
- GO_SASP_clusters_KEGG_df <-  GO_SASP_clusters_KEGG_df[sapply( GO_SASP_clusters_KEGG_df, nrow)>0]
- GO_SASP_clusters_REACT_df <-  GO_SASP_clusters_REACT_df[sapply( GO_SASP_clusters_REACT_df, nrow)>0]
- GO_SASP_clusters_HallMark_df <-  GO_SASP_clusters_HallMark_df[sapply( GO_SASP_clusters_HallMark_df, nrow)>0]
- GOBP_SASP_clusters_df <-  GOBP_SASP_clusters_df[sapply( GOBP_SASP_clusters_df, nrow)>0]
-GO_SASP_clusters_MF_df <-  GO_SASP_clusters_HallMark_df[sapply( GO_SASP_clusters_MF_df, nrow)>0]
- 
- # indicate which cluster and database each dataframe comes from 
- for(i in 1:length(GO_SASP_clusters_KEGG_df)){
-  GO_SASP_clusters_KEGG_df[[i]]$Cluster <- names(GO_SASP_clusters_KEGG_df)[i]
-  GO_SASP_clusters_KEGG_df[[i]]$Database <- "KEGG"
- }
-  for(i in 1:length(GO_SASP_clusters_REACT_df)){
-   GO_SASP_clusters_REACT_df[[i]]$Cluster <-  names(GO_SASP_clusters_REACT_df)[i]
-   GO_SASP_clusters_REACT_df[[i]]$Database <- "REACTOME"
-  }
-  for(i in 1:length(GO_SASP_clusters_HallMark_df)){
- GO_SASP_clusters_HallMark_df[[i]]$Cluster <- names(GO_SASP_clusters_HallMark_df)[i]
- GO_SASP_clusters_HallMark_df[[i]]$Database <- "Hallmark"
-  }
- 
-  for(i in 1:length(GOBP_SASP_clusters_df)){
- GOBP_SASP_clusters_df[[i]]$Cluster <- names(GOBP_SASP_clusters_df)[i]
-  GOBP_SASP_clusters_df[[i]]$Database <- "GO:BP"
-  }
-
- for(i in 1:length(GO_SASP_clusters_MF_df)){
- GO_SASP_clusters_MF_df[[i]]$Cluster <- names(GO_SASP_clusters_MF_df)[i]
- GO_SASP_clusters_MF_df[[i]]$Database <- "GO:MF"
-  }
-
-# combine GO enrichment results from different databases into 1 dataframe for each cluster of genes. 
-GO_SASP_list <- vector()
-GO_SASP_list$CellCycle1 <- rbind(GO_SASP_clusters_HallMark_df$CellCycle1, GO_SASP_clusters_REACT_df$CellCycle1, GOBP_SASP_clusters_df$CellCycle1, GO_SASP_clusters_MF_df$CellCycle1)
-
-GO_SASP_list$CellCycle2 <- rbind(GO_SASP_clusters_KEGG_df$CellCycle2, GO_SASP_clusters_HallMark_df$CellCycle2, GO_SASP_clusters_REACT_df$CellCycle2, GOBP_SASP_clusters_df$CellCycle2, GO_SASP_clusters_MF_df$CellCycle2)
-
-GO_SASP_list$Palbo1 <- rbind(GO_SASP_clusters_KEGG_df$Palbo1, GO_SASP_clusters_HallMark_df$Palbo1 , GO_SASP_clusters_REACT_df$Palbo1, GOBP_SASP_clusters_df$Palbo1,GO_SASP_clusters_MF_df$Palbo1)
-
-GO_SASP_list$Palbo2 <- rbind(GO_SASP_clusters_KEGG_df$Palbo2, GO_SASP_clusters_HallMark_df$Palbo2, GO_SASP_clusters_REACT_df$Palbo2, GOBP_SASP_clusters_df$Palbo2, GO_SASP_clusters_MF_df$Palbo2)
-
-GO_SASP_list$Doxo1 <- rbind(GO_SASP_clusters_KEGG_df$Doxo1, GO_SASP_clusters_HallMark_df$Doxo1, GO_SASP_clusters_REACT_df$Doxo1, GOBP_SASP_clusters_df$Doxo1, GO_SASP_clusters_MF_df$Doxo1)
-
-GO_SASP_list$Doxo2 <- rbind(GO_SASP_clusters_KEGG_df$Doxo2, GO_SASP_clusters_REACT_df$Doxo2, GOBP_SASP_clusters_df$Doxo2, GO_SASP_clusters_MF_df$Doxo2)
-
-GO_SASP_list$Shared <- rbind(GO_SASP_clusters_KEGG_df$Shared, GO_SASP_clusters_HallMark_df$Shared, GO_SASP_clusters_REACT_df$Shared, GOBP_SASP_clusters_df$Shared,GO_SASP_clusters_MF_df$Shared)
-
-# order GO enrichment results from different databases by padj values
-for(i in 1:length(GO_SASP_list)){
-  GO_SASP_list[[i]] <- GO_SASP_list[[i]][order(GO_SASP_list[[i]]$p.adjust), ]
-}
-
-# combine dataframes of each cluster of gene's GO enrichment results into 1 master dataframe
-GO_SASP_df <- do.call(rbind, GO_SASP_list)
-
-# create matrix of -log10pvalues of the top 15 enriched pathways for each cluster
-
-GO_SASP_list_mat <- matrix(nrow=length(unique(unlist(lapply(GO_SASP_list, function(GO_SASP_list){GO_SASP_list$ID[1:5]})))), ncol=length(GO_SASP_list)) # make empty matrix, number of columns are the clusters of genes and number of total top GO terms of all clusters
-
-row.names(GO_SASP_list_mat) <- unique(unlist(lapply(GO_SASP_list, function(GO_SASP_list){GO_SASP_list$ID[1:5]}))) # row names are top 12 GO enrichment terms for each cluster combined
-colnames(GO_SASP_list_mat) <- cluster_names  # column names are clusters
-
-# pathways that are not enriched in the cluster are listed as NA so just change the value to 0 so that it can be plotted in heatmap
-for(i in 1:ncol(GO_SASP_list_mat)){
-GO_SASP_list_mat[ ,i] <- -log10(GO_SASP_list[[i]][match(row.names(GO_SASP_list_mat), GO_SASP_list[[i]]$ID), ]$p.adjust)
-GO_SASP_list_mat[ ,i] <- ifelse(GO_SASP_list_mat[ ,i] %in% NA, 0, GO_SASP_list_mat[ ,i])
-}
-GO_SASP_list_mat <- GO_SASP_list_mat[!is.na(row.names(GO_SASP_list_mat)), ] # remove padj values that are NA 
-
-# annotation dataframe for rows of heatmap to indicate which database GO term came from 
-GO_anno <- data.frame(row.names=row.names(GO_SASP_list_mat), database=GO_SASP_df[match(row.names(GO_SASP_list_mat), GO_SASP_df$ID), ]$Database)
-# annotation dataframe for columns of heatmap to color by Cluster colors. 
-Cluster_anno <- data.frame(Cluster=cluster_names , row.names = colnames(GO_SASP_list_mat))
+# all down peaks- background peak set set to corresponding up peaks of the same DESeq comparison. 
+sbatch -p risc,hpc --array=1-16 \
+--export=backgroundpeakslist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoUp/inputfiles_annoUp_DESeq_peaks.txt,\
+inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoDown/inputfiles_annoDown_DESeq_peaks.txt,\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_output/DESeq/annoDown,\
+folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoDown/folderlist_annoDown_DESeq_peaks.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
 ```
 
 # RNA-seq: GSEA Analysis
@@ -489,7 +384,7 @@ names(GSEA_plots_KEGG) <- names(which(unlist(lapply(GSEA_Results_KEGG, function(
 names(GSEA_plots_REACT) <- names(which(unlist(lapply(GSEA_Results_REACT, function(x){length(x$ID)})) >0))
 ```
 
-# # RNA-seq: generate input files for IPA pathways. 
+# RNA-seq: generate input files for IPA pathways. 
 ```{r}
 # clusters of genes 
 for(i in 1:length(genes_in_clusters)){
@@ -501,6 +396,12 @@ for(i in 1:length(genes_in_clusters)){
 # DESeq Wald Test results for pairwise comparisons. 
 for(i in 1:length(LFCResultsall_RNA)){
   write.table(as.data.frame(LFCResultsall_RNA[[i]]), file=paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files/DESeq_results_input/", names(LFCResultsall_RNA)[i], ".csv"), sep=",")
+}
+
+# log2FC values of each sig changing gene clusters. 
+for(i in 1:length(drug_cat_list)){
+table <- sig_LFCMat[row.names(sig_LFCMat) %in% row.names(drug_cat_list[[i]]), ]
+    write.table(table, file=paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/input/sigGenes_log2FC/", cluster_names[i], "_log2FC.csv"), sep=",", row.names = T)
 }
 ```
 
@@ -591,7 +492,7 @@ for(i in 1:ncol(sig_LFCMat)){
 sig_LFCMat[ ,i] <- LFCResultsall_RNA[[i]][row.names(LFCResultsall_RNA[[i]]) %in% sigGenes, ]$log2FoldChange
 }
 
-row.names(sig_LFCMat) <-  ifelse(genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(sig_LFCMat), genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id)
+row.names(sig_LFCMat) <-  make.unique(ifelse(genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(sig_LFCMat), genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id))
 
 sig_LFCMat <- sig_LFCMat[match(row.names(ordered_sigMat), row.names(sig_LFCMat)), ] # order based on k-means & hierarchical ordering of rlog counts. 
 
@@ -606,30 +507,9 @@ LFCMat[ ,i] <- LFCResultsall_RNA[[i]]$log2FoldChange
 row.names(LFCMat) <-  ifelse(genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(LFCMat), genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id)
 ```
 
-# RNA-seq: SASP signatures
-```{r}
-# extract genes under Hallmark terms P53 PATHWAY & TNFA SIGNALING VIA NFKB
-p53_Hallmark <- msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_P53_PATHWAY", ]$gene_symbol
-NFKB_Hallmark <- msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_TNFA_SIGNALING_VIA_NFKB", ]$gene_symbol
 
-# filter for E2F target genes from IPA
-E2F_Targets=unique(c(unlist(lapply(IPA_upstream_regs, function(x){str_split(x[grep("E2F", x$Upstream.Regulator), ]$Target.Molecules.in.Dataset, ",")})), 
-              msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_E2F_TARGETS", ]$gene_symbol
-))
-
-# make log2FC matrix of SASP genes going up with drug treatment
-SASP_sig_LFCMat <- sig_LFCMat[row.names(sig_LFCMat) %in% row.names(clusterDF[clusterDF$SASP %in% "Yes" & ! clusterDF$Clusters %in% c("5", "2"), ]), ]
-
-anno_sigLFC <- data.frame(
-  row.names = colnames(sig_LFCMat),
-  log2FC = c(rep("vs Cyc", 4), rep("vs day3", 3), rep("vs Cyc", 5), rep("vs day3", 4), rep("DoxovsPalbo",4)),
-  Treatment = c(rep("Doxo", 7), rep("Palbo", 9), rep("DoxovsPalbo",4)),
-  Timepoint = c("3", "10", "14", "21", "10", "14", "21", "3", "10", "14", "21", "28", "10", "14", "21", "28","3", "10", "14", "21")
-)
-```
 
 # ATAC-seq: import MEME-AME results into dataframe from DrugandArrest_PvsD peak list (peaks within 50kb of sig changing genes, categorized by DoxovsCyc, Doxovsday3, PalbovsCyc, Palbovsday3)
-
 ```{r}
 load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/expressedGenes.RData")
 
@@ -642,9 +522,54 @@ PvsD_AME_mergeClusters$Comparison <- as.factor(PvsD_AME_mergeClusters$Comparison
 PvsD_AME_mergeClusters$Direction <- ifelse(grepl("Up", PvsD_AME_mergeClusters$Comparison), "Up", "Down")
 PvsD_AME_mergeClusters$Group <- gsub("(Doxo|Palbo).*", "\\1", PvsD_AME_mergeClusters$Comparison)
 ```
+
+# ATAC-seq: create input fasta files for MEME-AME analysis on all up or down peaks. 
+```{r}
+directory <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq"
+outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_input"
+
+
+# specify file paths for input to MEME-AME analysis for up peaks
+folderlist <- c("day10PalbovsDoxoUpPeaks_vsCycling", 
+                "day10PalbovsDoxoUpPeaks_vsday3", 
+                "day14PalbovsDoxoUpPeaks_vsCycling", 
+                "day14PalbovsDoxoUpPeaks_vsday3",
+                "day21PalbovsDoxoUpPeaks_vsCycling", 
+                "day21PalbovsDoxoUpPeaks_vsday3",
+                "day28Palbovsday21DoxoUpPeaks_vsCycling", 
+                "day28Palbovsday21DoxoUpPeaks_vsday3",
+                "day3PalbovsDoxoUpPeaks_vsCycling")
+
+writeLines(dir(paste0(directory, "/annoUp"), full.names=T, pattern="Palbovs"), con=paste0(outdir, "/inputfiles_annoUp_DESeq_Palbopeaks.txt")) # directory paths to fasta files of Up peaks
+
+writeLines(c(dir(paste0(directory, "/annoUp"), full.names=T, pattern="Doxovs")[1:6], dir(paste0(directory, "/annoUp"), full.names=T, pattern="Doxovs")[5:7]), con=paste0(outdir, "/inputfiles_annoUp_DESeq_Doxopeaks.txt")) # directory paths to fasta files of Up peaks 
+# since Doxo doesn't have day 28 timepoint, repeat day 21 DESeq comparison files for comparing to day28 Palbo. 
+
+writeLines(folderlist, con=paste0(outdir, "/folderlist_annoUp_DESeq_PalbovsDoxoPeaks.txt")) # write folder names
+```
+
+### ATAC-seq: MEME-AME analysis on DESeq_Peaks pairwise comparison between up Palbo and up Doxo peaks to find differences in enriched motifs between upregulated drug distinct peaks. 
+```{bash}
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_input
+
+# what is enriched in Palbo up peaks that is different from Doxo up peaks? set Doxo up peaks as background. 
+sbatch -p risc,hpc --array=1-9 \
+--export=backgroundpeakslist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_input/inputfiles_annoUp_DESeq_Doxopeaks.txt,\
+inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_input/inputfiles_annoUp_DESeq_Palbopeaks.txt,\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_output/annoUp_PalbovsDoxo,\
+folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_input/folderlist_annoUp_DESeq_PalbovsDoxoPeaks.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
+
+# what is enriched in Doxo up peaks that is different from Palbo up peaks? set Palbo up peaks as background.  
+sbatch -p risc,hpc --array=1-9 \
+--export=backgroundpeakslist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_input/inputfiles_annoUp_DESeq_Palbopeaks.txt,\
+inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_input/inputfiles_annoUp_DESeq_Doxopeaks.txt,\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_output/annoUp_DoxovsPalbo,\
+folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_input/folderlist_annoUp_DESeq_PalbovsDoxoPeaks.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
+```
 -------------------------------------------------------------------------------------------------------------------------
 # *FIGURES*
-
 
 # RNA-seq: plot master heatmap of -log10 pvalues of GO enrichment results for all clusters
 ```{r}
@@ -689,44 +614,6 @@ pheatmap(GO_results_mat_clusters[[6]][1:5, ], cluster_cols = F, colorRampPalette
 dev.off()
 ```
 
-# plot heatmap of -log10 pvalues of GO enrichment results of sig changing SASP genes
-```{r}
-pdf(paste0(pdf_dir, "/GO_SASP_mat.pdf"), height=5, width=15)
-pheatmap(GO_SASP_list_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100),breaks = seq(0, 10,length.out = 100), annotation_row = GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, clustering_distance_rows = "correlation", border_color = "black")
-dev.off()
-```
-
-# RNA-seq: plot padj values of GO enrichment results for top 5 drug distinct upregulated SASP genes
-```{r}
-# plot padj values for top 5 GO terms for each cluster individually. Still showing the pvalues of the other clusters as columns but only the top GO terms from the cluster of interest. 
-GO_SASP_mat_clusters <- list()
-for(i in 1:length(GO_SASP_list)){
-
-GO_SASP_mat_clusters[[i]] <- GO_SASP_list_mat[row.names(GO_SASP_list_mat) %in% GO_SASP_list[[i]]$ID[1:5], ]
-GO_SASP_mat_clusters[[i]] <- GO_SASP_mat_clusters[[i]][order(GO_SASP_mat_clusters[[i]][ ,i], decreasing=T), ]
-}
-
-pdf(paste0(pdf_dir, "/GO_SASP_Palbo1_clusters.pdf"), width=6, height=2)
-pheatmap(GO_SASP_mat_clusters[[3]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 30,length.out = 100), cluster_rows = F, main=cluster_names[3], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
-dev.off()
-
-pdf(paste0(pdf_dir, "/GO_SASP_Palbo2_clusters.pdf"), width=13, height=2)
-pheatmap(GO_SASP_mat_clusters[[4]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[4], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
-dev.off()
-
-pdf(paste0(pdf_dir, "/GO_SASP_Doxo1_clusters.pdf"), width=8.5, height=2)
-pheatmap(GO_SASP_mat_clusters[[5]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[5], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
-dev.off()
-
-pdf(paste0(pdf_dir, "/GO_SASP_Doxo2_clusters.pdf"), width=8.5, height=2)
-pheatmap(GO_SASP_mat_clusters[[6]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[6], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
-dev.off()
-
-pdf(paste0(pdf_dir, "/GO_SASP_Shared_clusters.pdf"), width=6.5, height=2)
-pheatmap(GO_SASP_mat_clusters[[7]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main=cluster_names[7], annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
-dev.off()
-```
-
 # RNA-seq: plot padj values for top 5 IPA upstream regs for each cluster individually. 
 ```{r}
 # Still showing the pvalues of the other clusters as columns but only the top IPA upstream regs from the cluster of interest. 
@@ -748,46 +635,6 @@ dev.off()
 
 pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP/RNA_IPA_group_regs_SharedDown_genes.pdf", width=3.8, height=2)
 pheatmap(IPA_group_regs_clusters[[1]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 100,length.out = 100), cluster_rows = F, main="Shared down genes: predicted group regulators", border_color = "black", annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
-dev.off()
-```
-
-# RNA-seq: plot heatmap of SASP genes, clustered based on log2FC from day 3 treatment controls & Cycling controls
-```{r}
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP/RNA_log2FC_SASP_mat.pdf", width=4.35, height=6)
-pheatmap(SASP_sig_LFCMat, show_rownames = F, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("p53_All", "NFKB_All", "Clusters")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="SASP")
-dev.off()
-```
-
-# RNA-seq: plot table of SASP gene IDs, colored by whether they are p53, NF-kB or both target genes
-```{r}
-# Add a column to specify the color based on conditions
-clusterDF$Color <- ifelse(clusterDF$p53_All == "Yes" & clusterDF$NFKB_All == "Yes", "purple",
-                     ifelse(clusterDF$NFKB_All == "Yes", "red",
-                            ifelse(clusterDF$p53_All == "Yes", "#00B0F0", "black")))
-Clusters_drugCat <- data.frame(Clusters=c("5", "2", "1", "7", "4", "6", "3", "8"), drugCat=c("CellCycle", "CellCycle", "Palbo1", "Palbo2", "Doxo1", "Doxo1", "Doxo2", "Shared"))
-
-clusterDF$drugCat <- Clusters_drugCat[match(clusterDF$Clusters, Clusters_drugCat$Clusters), ]$drugCat
-
-c("5"="#66C2A5","2"="#A6D854","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#E78AC3","3"="#FFD92F","8"="#E5C494")
-
-SASP_DF <- lapply(cluster_names, function(x){df <- clusterDF[clusterDF$drugCat %in% x & clusterDF$SASP %in% "Yes", ]
-                                             df <- df[sort(row.names(df)), ]
-                                             return(df)})
-SASP_DF <- do.call(rbind, SASP_DF)
-
-# Plot the row names
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP/RNA_Table_SASP_geneIDs.pdf", width=7.5, height=11)
-ggplot(SASP_DF , aes(x = drugCat, y =1:nrow(SASP_DF ), color = Color)) +
-  geom_text(aes(label = row.names(SASP_DF))) +
-  scale_color_identity() +
-  theme_minimal() +
-  theme(axis.text.x = element_blank(),
-        axis.text.y = element_blank(),
-        axis.title.x = element_blank(),
-        axis.title.y = element_blank(),
-        panel.grid = element_blank())+
-    facet_wrap(~drugCat, scales="free", ncol=6)+
-  ggtitle("Table: SASP gene IDs")
 dev.off()
 ```
 

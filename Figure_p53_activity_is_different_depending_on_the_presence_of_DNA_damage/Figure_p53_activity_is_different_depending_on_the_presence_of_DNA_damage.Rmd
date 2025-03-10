@@ -282,10 +282,7 @@ anno_sigLFC <- data.frame(
 # add annotation to significant genes based on if they are NF-kB or p53 targets. 
 clusterDF$NFKB_All <- ifelse(row.names(clusterDF) %in% c(Gilmore_NFKB_Targets, NFKB_Hallmark, IPA_targets$NFKB), "Yes", "No") # annotate sig genes as NF-kB targets if they are part of Gilmore_NFKB_Targets or TNFA SIGNALING VIA NFKB Hallmark term 
 clusterDF$p53_All <- ifelse(row.names(clusterDF) %in% c(Fischer_Oncogene_2017_p53_census_target_genes$`Gene Symbol`, p53_Hallmark), "Yes", "No")
-
-row.names(clusterDF)[grep("^H1.[0-9]", row.names(clusterDF))]  <- gsub("*H1.", "H1-",row.names(clusterDF[grepl("^H1.[0-9]", row.names(clusterDF)), ]) ) # correction: to match with row.names in sig_LFCMat, replace - with . for linker histone genes. 
 ```
-
 
 # make matrix of normalized counts across drug & time. 
 ```{r}
