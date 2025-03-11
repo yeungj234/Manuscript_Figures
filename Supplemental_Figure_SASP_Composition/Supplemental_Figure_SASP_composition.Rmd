@@ -311,7 +311,6 @@ IPA_SASP_upstream_regs_mat <- lapply(IPA_SASP_upstream_regs, function(x){
   remove <- which(rowSums(mat != 0) == 0) # Find rows where the entire row (all columns) is exactly 0 to remove upstream regulators that have no activation score across all columns (DESeq comparisons)
   return(mat[-remove, ])
 })
-
 ```
 ---------------------------------------------------------------------------------------------------------------------
 #*FIGURES*
@@ -415,11 +414,10 @@ dev.off()
 
 # RNA-seq: plotting padj values of top IPA predicted upstream regulators of SASP genes
 ```{r IPA results matrix}
-
 filter_upstream_regulators <- function(mat, threshold_neg1 = -0.5, threshold_pos1 = 0.5,  threshold_neg2 = -0.5, threshold_pos2 = 0.5) {
   # Identify upstream regulators that are differentially regulated between Doxo & Palbo
-  filt_negDoxo_posPalbo <- which(rowSums(mat[, 1:4]) <= threshold_neg1 & rowSums(mat[, 4:8]) >= threshold_pos1)
-  filt_posDoxo_negPalbo <- which(rowSums(mat[, 1:4]) >= threshold_pos2 & rowSums(mat[, 4:8]) <= threshold_neg2)
+  filt_negDoxo_posPalbo <- which(rowSums(mat[, 1:4]) <= threshold_neg1 & rowSums(mat[, 5:8]) >= threshold_pos1)
+  filt_posDoxo_negPalbo <- which(rowSums(mat[, 1:4]) >= threshold_pos2 & rowSums(mat[, 5:8]) <= threshold_neg2)
   
   # Combine filtered indices
   filt_mat <- mat[c(filt_negDoxo_posPalbo, filt_posDoxo_negPalbo), , drop = FALSE]

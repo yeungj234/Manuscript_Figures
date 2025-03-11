@@ -166,12 +166,13 @@ process_motif_data <- function(base_dir, expressed_genes = NULL) {
   # Filter for motifs that are expressed, if provided
   if (!is.null(expressed_genes)) {
     Peaks_AME_df <- Peaks_AME_df %>%
-      filter(motif_ID %in% expressed_genes)
+      dplyr::filter(motif_ID %in% expressed_genes)
   }
 colnames(Peaks_AME_df)[c(7,15,17)] <- c("adj_pvalue", "percentTP", "percentFP") # change column names without special symbols 
 Peaks_AME_df$neglog10padj <- -log10(Peaks_AME_df$adj_pvalue) # add in column for -log10(adj pvalue)
   return(Peaks_AME_df)
 }
+save(process_motif_data, file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Functions/process_motif_data.RData")
 
 Peaks_AME_Clusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_sigPeaks", expressed_genes = expressedGenes)
 

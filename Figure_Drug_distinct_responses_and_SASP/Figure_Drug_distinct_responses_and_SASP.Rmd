@@ -482,6 +482,49 @@ pheatmap(IPA_group_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7
 pheatmap(IPA_TF_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100))
 ```
 
+# RNA-seq: import comparison analysis of IPA upstream regulators and pathways for sig changing genes
+```{r import IPA results}
+setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/output/sigGenes_log2FC")
+IPA_Compare_upstream_regs <- list()
+IPA_Compare_pathways <- list()
+# read in information for enriched IPA pathways per hierarchical cluster (clustering based on scaled rlog normalized counts)
+
+upstream_regs_files <- dir(pattern="_IPA_upstream_regs.txt")
+pathways_files <- dir(pattern="_IPA_pathways.txt")
+for(i in 1:length(pathways_files)){
+# read in information for enriched pathways
+IPA_Compare_pathways[[i]]<- read_tsv(pathways_files[i], skip=2)
+# read in information for enriched upstream regulators 
+IPA_Compare_upstream_regs[[i]] <- read_tsv(upstream_regs_files[i], skip=2)
+
+  IPA_Compare_pathways[[i]] <- IPA_Compare_pathways[[i]] %>%
+  mutate(across(where(is.character), ~ replace(.x, .x == "N/A", "0"))) %>%
+  mutate(across(-`Canonical Pathways`, as.numeric)) # Convert all except the first column to numeric
+  
+  IPA_Compare_upstream_regs[[i]] <- IPA_Compare_upstream_regs[[i]] %>%
+  mutate(across(where(is.character), ~ replace(.x, .x == "N/A", "0"))) %>%
+    mutate(across(-`Upstream Regulators`, as.numeric)) # Convert all except the first column to numeric
+}
+
+names(IPA_Compare_upstream_regs) <- gsub("_.*", "", pathways_files)
+names(IPA_Compare_pathways) <- gsub("_.*", "", pathways_files)
+
+# convert IPA results into matrix for plotting. 
+IPA_Compare_pathways_mat <- lapply(IPA_Compare_pathways, function(x){
+  mat <- as.matrix(x[ ,-1])
+  row.names(mat) <- x$`Canonical Pathways`
+ remove <- which(rowSums(mat != 0) == 0) # Find rows where the entire row (all columns) is exactly 0 to remove upstream regulators that have no activation score across all columns (DESeq comparisons)
+    return(mat[-remove, ])
+})
+
+IPA_Compare_upstream_regs_mat <- lapply(IPA_Compare_upstream_regs, function(x){
+  mat <- as.matrix(x[ ,-1])
+  row.names(mat) <- x$`Upstream Regulators`
+  remove <- which(rowSums(mat != 0) == 0) # Find rows where the entire row (all columns) is exactly 0 to remove upstream regulators that have no activation score across all columns (DESeq comparisons)
+  return(mat[-remove, ])
+})
+```
+
 # RNA-seq: make matrix with log2FC values of significant genes
 ```{r log2FC sig genes matrix}
 # get log2FC values of significantly changing genes over time
@@ -505,22 +548,6 @@ LFCMat[ ,i] <- LFCResultsall_RNA[[i]]$log2FoldChange
 }
 
 row.names(LFCMat) <-  ifelse(genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(LFCMat), genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id)
-```
-
-
-
-# ATAC-seq: import MEME-AME results into dataframe from DrugandArrest_PvsD peak list (peaks within 50kb of sig changing genes, categorized by DoxovsCyc, Doxovsday3, PalbovsCyc, Palbovsday3)
-```{r}
-load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/expressedGenes.RData")
-
-PvsD_AME_mergeClusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_vsCyc_vsday3_sigPeaks_RNAmergeClusters", expressed_genes = expressedGenes)
-
-# Add column to specify which RNA cluster
-PvsD_AME_mergeClusters$Cluster <- gsub("^[^_]*_|\\.[0-9]*$", "",row.names(PvsD_AME_mergeClusters))
-PvsD_AME_mergeClusters$Comparison <- gsub("_.*", "",  row.names(PvsD_AME_mergeClusters)) 
-PvsD_AME_mergeClusters$Comparison <- as.factor(PvsD_AME_mergeClusters$Comparison)
-PvsD_AME_mergeClusters$Direction <- ifelse(grepl("Up", PvsD_AME_mergeClusters$Comparison), "Up", "Down")
-PvsD_AME_mergeClusters$Group <- gsub("(Doxo|Palbo).*", "\\1", PvsD_AME_mergeClusters$Comparison)
 ```
 
 # ATAC-seq: create input fasta files for MEME-AME analysis on all up or down peaks. 
@@ -568,6 +595,32 @@ outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distin
 folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_input/folderlist_annoUp_DESeq_PalbovsDoxoPeaks.txt \
 /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
 ```
+
+# ATAC-seq: import MEME-AME results into dataframe: MEME-AME was done to find differential motifs under up peaks between Doxo & Palbo at different timepoints relative to cycling or day 3. 
+```{r}
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/expressedGenes.RData")
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Functions/process_motif_data.RData")
+
+# differential motifs: Doxo vs Palbo
+annoUp_DvsP_AME <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_output/annoUp_DoxovsPalbo", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+annoUp_DvsP_AME$Comparison <- gsub('\\.[0-9]*$', "",  row.names(annoUp_DvsP_AME)) 
+annoUp_DvsP_AME$Comparison <- factor(annoUp_DvsP_AME$Comparison, levels=unique(annoUp_DvsP_AME$Comparison)[c(9,1,3,5,7,2,4,6,8)])
+# Add column to specify whether up peaks are relative to cycling or day 3 controls. 
+annoUp_DvsP_AME$Group <- ifelse(grepl("vsCycling", annoUp_DvsP_AME$Comparison), "vsCycling", "vsday3")
+
+# differential motifs: Palbo vs Doxo
+annoUp_PvsD_AME <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/motif_analysis_output/annoUp_PalbovsDoxo", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+annoUp_PvsD_AME$Comparison <- gsub('\\.[0-9]*$', "",  row.names(annoUp_PvsD_AME)) 
+annoUp_PvsD_AME$Comparison <- factor(annoUp_PvsD_AME$Comparison, unique(annoUp_DvsP_AME$Comparison)[c(9,1,3,5,7,2,4,6,8)])
+
+# Add column to specify whether up peaks are relative to cycling or day 3 controls. 
+annoUp_PvsD_AME$Group <- ifelse(grepl("vsCycling", annoUp_PvsD_AME$Comparison), "vsCycling", "vsday3")
+```
+
 -------------------------------------------------------------------------------------------------------------------------
 # *FIGURES*
 
@@ -767,32 +820,58 @@ dev.off()
 # ATAC-seq, merged RNA clusters: plot motif enrichment results of all clusters as heatmap of p-adj values for each type ("PalboDownvsCyc", "PalboDownvsday3",  "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3") of sig changing peaks
 ```{r}
 # load in required functions 
-load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Functions/create_AME_peaks_matrix_byCluster.RData")
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Functions/create_AME_peaks_matrix.RData")
 
-AME_padj_mat <- list()
-comparisons <- c("PalboDownvsCyc", "PalboDownvsday3",  "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3")
+# get top enriched motifs for Doxo vs Palbo MEME-AME analysis results
+AME_padj_mat_DvsP <- list()
+comparisons <- levels(annoUp_DvsP_AME$Comparison)
 
 for(i in 1:length(comparisons)){
-AME_padj_mat[[i]] <- create_AME_peaks_matrix_byCluster(PvsD_AME_mergeClusters[PvsD_AME_mergeClusters$Comparison %in% comparisons[i], ])
+AME_padj_mat_DvsP[[i]] <- create_AME_peaks_matrix(annoUp_DvsP_AME[annoUp_DvsP_AME$Comparison %in% comparisons[i], ])
 
-AME_padj_mat[[i]] <- AME_padj_mat[[i]][order(rowSums(AME_padj_mat[[i]]), decreasing=T), ] # sort motif IDs by overall significance across clusters. 
+AME_padj_mat_DvsP[[i]] <- AME_padj_mat_DvsP[[i]][order(rowSums(AME_padj_mat_DvsP[[i]]), decreasing=T), ] # sort motif IDs by overall significance across clusters. 
 }
 
-names(AME_padj_mat) <- comparisons
+names(AME_padj_mat_DvsP) <- comparisons
 
-AME_padj_dots <- list()
+AME_padj_dots_DvsP <- list()
 for(i in 1:length(comparisons)){
-AME_padj_dots[[i]] <- PvsD_AME_mergeClusters[PvsD_AME_mergeClusters$Comparison %in% comparisons[i], ]
+AME_padj_dots_DvsP[[i]] <- annoUp_DvsP_AME[annoUp_DvsP_AME$Comparison %in% comparisons[i], ]
 
-max_number <- ifelse(nrow(AME_padj_mat[[i]]) >=10, 10, nrow(AME_padj_mat[[i]]))
-AME_padj_dots[[i]] <- AME_padj_dots[[i]][AME_padj_dots[[i]]$motif_ID %in% row.names(AME_padj_mat[[i]][1:max_number, ]), ] # show only top 15 most significant padj values motif IDs
-AME_padj_dots[[i]]$motif_ID <- factor(AME_padj_dots[[i]]$motif_ID, levels=rev(unique(AME_padj_dots[[i]]$motif_ID)))
+max_number <- ifelse(nrow(AME_padj_mat_DvsP[[i]]) >=7, 7, nrow(AME_padj_mat_DvsP[[i]]))
+AME_padj_dots_DvsP[[i]] <- AME_padj_dots_DvsP[[i]][AME_padj_dots_DvsP[[i]]$motif_ID %in% row.names(AME_padj_mat_DvsP[[i]][1:max_number, ]), ] # show only top 15 most significant padj values motif IDs
+AME_padj_dots_DvsP[[i]]$motif_ID <- factor(AME_padj_dots_DvsP[[i]]$motif_ID, levels=rev(unique(AME_padj_dots_DvsP[[i]]$motif_ID)))
 }
-names(AME_padj_dots) <- comparisons
+
+AME_padj_dots_DvsP <- do.call(rbind, AME_padj_dots_DvsP)
+
+
+# get top enriched motifs for Doxo vs Palbo MEME-AME analysis results
+AME_padj_mat_PvsD <- list()
+comparisons <- levels(annoUp_PvsD_AME$Comparison)
+
+for(i in 1:length(comparisons)){
+AME_padj_mat_PvsD[[i]] <- create_AME_peaks_matrix(annoUp_PvsD_AME[annoUp_PvsD_AME$Comparison %in% comparisons[i], ])
+
+AME_padj_mat_PvsD[[i]] <- AME_padj_mat_PvsD[[i]][order(rowSums(AME_padj_mat_PvsD[[i]]), decreasing=T), ] # sort motif IDs by overall significance across clusters. 
+}
+
+names(AME_padj_mat_PvsD) <- comparisons
+
+AME_padj_dots_PvsD <- list()
+for(i in 1:length(comparisons)){
+AME_padj_dots_PvsD[[i]] <- annoUp_PvsD_AME[annoUp_PvsD_AME$Comparison %in% comparisons[i], ]
+
+max_number <- ifelse(nrow(AME_padj_mat_PvsD[[i]]) >=7, 7, nrow(AME_padj_mat_PvsD[[i]]))
+AME_padj_dots_PvsD[[i]] <- AME_padj_dots_PvsD[[i]][AME_padj_dots_PvsD[[i]]$motif_ID %in% row.names(AME_padj_mat_PvsD[[i]][1:max_number, ]), ] # show only top 15 most significant padj values motif IDs
+AME_padj_dots_PvsD[[i]]$motif_ID <- factor(AME_padj_dots_PvsD[[i]]$motif_ID, levels=rev(unique(AME_padj_dots_PvsD[[i]]$motif_ID)))
+}
+
+AME_padj_dots_PvsD <- do.call(rbind, AME_padj_dots_PvsD)
 
 # create function for plotting motif enrichment results as dotplot
 create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50, size_limit=4.5 ){
-  ggplot(AME_df, aes(x=Cluster, y=motif_ID, size=TPvsFP)) +
+  ggplot(AME_df, aes(x=Comparison, y=motif_ID, size=TPvsFP)) +
     geom_point(aes(fill=neglog10padj), colour="black", pch=21, alpha=0.8) +
     scale_fill_gradient(name="-log10(padj)", 
                         low="light yellow", high="dark orange",
@@ -801,25 +880,75 @@ create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50
     scale_size_continuous(name="%TP - %FP", 
                           limits=c(0, size_limit), 
                           range=c(1, 10)) +  # Adjust dot sizes
-    theme_minimal() +
     ggtitle(Title) +
+    theme_classic()+
     theme(
       text = element_text(size=8), 
-      axis.text.x = element_text(size=8), 
+      axis.text.x = element_text(size=8, angle=90), 
       strip.text.x = element_text(size=8, face="bold"),
       strip.text.y = element_text(size=8, face="bold")
     ) +
-  theme_classic()+
-    facet_wrap(~Cluster, scales="free_x", nrow=1)+
-    labs(x="RNA cluster", y="motif ID")
+    facet_wrap(~Group, nrow=1, scales="free") +
+    labs(x="Comparison", y="motif ID")
 }
 
 
-pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP"
-pdf(paste0(pdf_dir, "/PvsD.near.mergedRNAclusters.enriched.top10motifs.dotplots.pdf"), width=6, height=4)
-for(i in 1:length(AME_padj_dots[5:8])){
-p <- create_AME_dotplots(AME_padj_dots[5:8][[i]], Title=names(AME_padj_dots[5:8])[i], fill_limit = 60, size_limit = 20) 
-print(p)
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+pdf(paste0(pdf_dir, "/ATAC_PalbovsDoxo_top_differential_motifs_UpPeaks.dotplots.pdf"), width=5, height=7)
+create_AME_dotplots(AME_padj_dots_DvsP, Title="Doxo vs Palbo Up peaks", fill_limit = 200, size_limit = 35) 
+create_AME_dotplots(AME_padj_dots_PvsD, Title="Palbo vs Doxo Up peaks", fill_limit = 100, size_limit = 25) 
+dev.off()
+```
+
+# RNA-seq: plotting padj values of top IPA predicted upstream regulators of drug distinct gene clusters. 
+```{r}
+filter_upstream_regulators <- function(mat, threshold_neg1 = -0.5, threshold_pos1 = 0.5,  threshold_neg2 = -0.5, threshold_pos2 = 0.5) {
+  # Identify upstream regulators that are differentially regulated between Doxo & Palbo
+  filt_negDoxo_posPalbo <- which(rowSums(mat[, 1:5]) <= threshold_neg1 & rowSums(mat[, 6:10]) >= threshold_pos1)
+  filt_posDoxo_negPalbo <- which(rowSums(mat[, 1:5]) >= threshold_pos2 & rowSums(mat[, 6:10]) <= threshold_neg2)
+  
+  # Combine filtered indices
+  filt_mat <- mat[c(filt_negDoxo_posPalbo, filt_posDoxo_negPalbo), , drop = FALSE]
+  
+  # Remove random drugs/chemicals (upstream regulators that contain at least 2 uppercase letters)
+  filt_mat <- filt_mat[grep("[A-Z].*[A-Z]", rownames(filt_mat)), , drop = FALSE]
+  
+  return(filt_mat)
 }
+
+# plot most differentially activated upstream regulators of Palbo1 upregulated genes
+filt_mat <- filter_upstream_regulators(IPA_Compare_upstream_regs_mat$Palbo1, threshold_neg1 = -8.5, threshold_pos1 = 10,  threshold_neg2 = -6, threshold_pos2 = 8) # set differential thresholds for Palbo vs Doxo. 
+
+remove_id <- which(grepl("drug|chemical", IPA_upstream_regs$Palbo1[match(row.names(filt_mat), IPA_upstream_regs$Palbo1$Upstream.Regulator), ]$Molecule.Type)) # remove upstream regulators that are drugs/chemicals
+filt_mat <- filt_mat[-remove_id, ]
+
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+# plot heatmap of -log10 pvalue of overlap of enriched complex regulators
+pdf(paste0(pdf_dir, "/RNA_IPA_Palbo1_upstream_regs_Comparison.pdf"), width=3, height=3)
+pheatmap(filt_mat[order(rowSums(filt_mat[ ,6:10]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-3, 3,length.out = 100), main="Activation scores")
+dev.off()
+
+# plot most differentially activated upstream regulators of Palbo2 upregulated genes
+filt_mat <- filter_upstream_regulators(IPA_Compare_upstream_regs_mat$Palbo2, threshold_neg1 = 1, threshold_pos1 = 7, threshold_neg2 = -0.5, threshold_pos2 =0.5)
+filt_mat <- filt_mat[grep("-", rownames(filt_mat), invert = T), , drop = FALSE]
+
+pdf(paste0(pdf_dir, "/RNA_IPA_Palbo2_upstream_regs_Comparison.pdf"), width=3, height=3)
+pheatmap(filt_mat[order(rowSums(filt_mat[ ,6:10]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-2.5, 2.5,length.out = 100), main="Activation scores")
+dev.off()
+
+# plot most differentially activated upstream regulators of Doxo1 upregulated genes
+filt_mat <- filter_upstream_regulators(IPA_Compare_upstream_regs_mat$Doxo1, threshold_neg1 = -4.2, threshold_pos1 = 4.2, threshold_neg2 = -4.2, threshold_pos2 =4.2)
+filt_mat <- filt_mat[grep("-|GW9662", rownames(filt_mat), invert = T), , drop = FALSE] # remove anything with - or drug GW9662 from final mat to plot. 
+
+pdf(paste0(pdf_dir, "/RNA_IPA_Doxo1_upstream_regs_Comparison.pdf"), width=3, height=3)
+pheatmap(filt_mat[order(rowSums(filt_mat[ ,1:5]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-2.5, 2.5,length.out = 100), main="Activation scores")
+dev.off()
+
+# plot most differentially activated upstream regulators of Doxo2 upregulated genes
+filt_mat <- filter_upstream_regulators(IPA_Compare_upstream_regs_mat$Doxo2, threshold_neg1 = -6.5, threshold_pos1 = 0,  threshold_neg2 = -2, threshold_pos2 = 0.5)
+
+mat <- IPA_Compare_upstream_regs_mat$Doxo2
+pdf(paste0(pdf_dir, "/RNA_IPA_Doxo2_upstream_regs_Comparison.pdf"), width=3, height=3)
+pheatmap(filt_mat[order(rowSums(filt_mat[ ,1:5]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-2.5, 2.5,length.out = 100), main="Activation scores")
 dev.off()
 ```
