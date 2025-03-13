@@ -11,6 +11,8 @@ library(preprocessCore)
 library(readr)
 library(readxl)
 library(stringr)
+library(dplyr)
+
 # plotting
 library(gridExtra)
 library(ggplot2)
@@ -42,10 +44,38 @@ library(BSgenome.Hsapiens.UCSC.hg38)
 library(org.Hs.eg.db)
 ```
 
+# make function to specify code chunk to run from other Rmd file to avoid copying and pasting large lines of code. 
+```{r}
+# arguments: 
+# Rmd_file=file path & name of Rmd file with code chunk
+# chunk_name= name of code chunk to run from Rmd file. 
+run_code_chunk <- function(Rmd_file, chunk_name){ 
+  # Read the Rmd file
+lines <- readLines(Rmd_file)
+
+# Identify the start and end of the specific chunk
+chunk_start <- grep(paste0("^```\\{r\\s*", chunk_name), lines)  # Find chunk start
+chunk_end <- grep("^```$", lines)  # Find all chunk end lines
+
+# Find the first `chunk_end` after `chunk_start`
+chunk_end <- chunk_end[chunk_end > chunk_start][1]
+
+  if (is.na(chunk_end)) {
+    stop(paste("End of chunk", chunk_name, "not found. Check the Rmd file for missing delimiters."))
+  }
+
+# specify lines inside chunk, removing lines that make up the start and end of the chunk. 
+chunk_to_run <- lines[(chunk_start[1]+1):(chunk_end[1]-1)]
+
+# Evaluate the extracted code
+  eval(parse(text = paste(chunk_to_run, collapse = "\n")), envir = .GlobalEnv)
+}
+```
+
 # annotation colors for pheatmap
 ```{r}
 hm_cols_RNA <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
-                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD", "DoxovsPalbo"="#CCEBC5"), 
+                Treatment=c("Doxo"="#B3C543", "Palbo"="#E0ADCD", "DoxovsPalbo"="#CCEBC5"), 
                 Biorep=c("1"="orange", "2"="light blue", "3"="pink"), 
                 log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "DoxovsPalbo"="#CCEBC5"), 
                 Clusters=c("2"="#66C2A5","5"="#A6D854","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#FFD92F","3"="#E5C494"), 
@@ -71,6 +101,40 @@ hm_cols_ATAC <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A
 ```{r}
 load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence/workspace.RData")
 ```
+
+# download msigdb databases, to be used for GO enrichment analysis. 
+```{r}
+# msigdb GO Biological Processes database
+msigdbr_df_GO_BP <- as.data.frame(msigdbr(species = "Homo sapiens", category="C5", subcategory ="GO:BP"))
+msigdbr_t2g_GO_BP = msigdbr_df_GO_BP %>% dplyr::distinct(gs_name, entrez_gene) %>% as.data.frame()
+msigdbr_t2g_GO_BP$gs_name <- sub("GOBP_", "", msigdbr_t2g_GO_BP$gs_name)
+msigdbr_t2g_GO_BP$gs_name <- gsub("_", " ", msigdbr_t2g_GO_BP$gs_name)
+
+# msigdb GO Molecular Function Processes database
+msigdbr_df_GO_MF <- as.data.frame(msigdbr(species = "Homo sapiens", category="C5", subcategory ="GO:MF"))
+msigdbr_t2g_GO_MF = msigdbr_df_GO_MF %>% dplyr::distinct(gs_name, entrez_gene) %>% as.data.frame()
+msigdbr_t2g_GO_MF$gs_name <- sub("GOMF_", "", msigdbr_t2g_GO_MF$gs_name)
+msigdbr_t2g_GO_MF$gs_name <- gsub("_", " ", msigdbr_t2g_GO_MF$gs_name)
+
+# msigdb Hallmark database
+msigdbr_df_H <- as.data.frame(msigdbr(species = "Homo sapiens", category="H", subcategory =""))
+msigdbr_t2g_H = msigdbr_df_H %>% dplyr::distinct(gs_name, entrez_gene) %>% as.data.frame()
+msigdbr_t2g_H$gs_name <- sub("HALLMARK_", "", msigdbr_t2g_H$gs_name)
+msigdbr_t2g_H$gs_name <- gsub("_", " ", msigdbr_t2g_H$gs_name)
+
+# msigdb KEGG pathway database
+msigdbr_df_KEGG <- as.data.frame(msigdbr(species = "Homo sapiens", category="C2", subcategory ="CP:KEGG"))
+msigdbr_t2g_KEGG = msigdbr_df_KEGG %>% dplyr::distinct(gs_name, entrez_gene) %>% as.data.frame()
+msigdbr_t2g_KEGG$gs_name <- sub("KEGG_", "", msigdbr_t2g_KEGG$gs_name)
+msigdbr_t2g_KEGG$gs_name <- gsub("_", " ", msigdbr_t2g_KEGG$gs_name)
+
+# msigdb Reactome database
+msigdbr_df_REACT <- as.data.frame(msigdbr(species = "Homo sapiens", category="C2", subcategory="CP:REACTOME"))
+msigdbr_t2g_REACT = msigdbr_df_REACT %>% dplyr::distinct(gs_name, entrez_gene) %>% as.data.frame()
+msigdbr_t2g_REACT$gs_name <- sub("REACTOME_", "", msigdbr_t2g_REACT$gs_name)
+msigdbr_t2g_REACT$gs_name <- gsub("_", " ", msigdbr_t2g_REACT$gs_name)
+```
+
 
 #### universe (background gene set) for GO enrichment analysis is all genes expressed
 ```{r}
@@ -548,6 +612,14 @@ LFCMat[ ,i] <- LFCResultsall_RNA[[i]]$log2FoldChange
 }
 
 row.names(LFCMat) <-  ifelse(genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(LFCMat), genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id)
+
+
+anno_sigLFC <- data.frame(
+  row.names = colnames(sig_LFCMat),
+  log2FC = c(rep("vs Cyc", 4), rep("vs day3", 3), rep("vs Cyc", 5), rep("vs day3", 4), rep("DoxovsPalbo",4)),
+  Treatment = c(rep("Doxo", 7), rep("Palbo", 9), rep("DoxovsPalbo",4)),
+  Timepoint = c("3", "10", "14", "21", "10", "14", "21", "3", "10", "14", "21", "28", "10", "14", "21", "28","3", "10", "14", "21")
+)
 ```
 
 # ATAC-seq: create input fasta files for MEME-AME analysis on all up or down peaks. 
@@ -624,9 +696,21 @@ annoUp_PvsD_AME$Group <- ifelse(grepl("vsCycling", annoUp_PvsD_AME$Comparison), 
 -------------------------------------------------------------------------------------------------------------------------
 # *FIGURES*
 
+# RNA-seq: plot heatmap of drug distinct genes, clustered based on log2FC from day 3 treatment controls & Cycling controls
+```{r}
+sig_LFCMat_drugdistinct <- sig_LFCMat[row.names(sig_LFCMat) %in% clusterDF[clusterDF$Clusters %in% c("7", "1", "4", "6"), ]$gene_id & !row.names(sig_LFCMat) %in% c("Y_RNA", "Metazoa_SRP"), ]
+
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+
+pdf(paste0(pdf_dir, "/RNA_log2FC_drug_distinct_sig_LFCmat.pdf"), width=4.35, height=5)
+pheatmap(sig_LFCMat_drugdistinct, show_rownames = F, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-4.5, 4.5,length.out = 100), annotation_row = clusterDF[ ,c("SASP", "Clusters")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="drug distinct upreg genes")
+dev.off()
+```
+
 # RNA-seq: plot master heatmap of -log10 pvalues of GO enrichment results for all clusters
 ```{r}
 pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+
 pdf(paste0(pdf_dir, "/GO_results_list_mat.pdf"), height=20, width=15)
 pheatmap(GO_results_list_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100),breaks = seq(0, 10,length.out = 100), annotation_row = GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, clustering_distance_rows = "correlation", border_color = "black")
 dev.off()
@@ -918,19 +1002,29 @@ filter_upstream_regulators <- function(mat, threshold_neg1 = -0.5, threshold_pos
 
 # plot most differentially activated upstream regulators of Palbo1 upregulated genes
 filt_mat <- filter_upstream_regulators(IPA_Compare_upstream_regs_mat$Palbo1, threshold_neg1 = -8.5, threshold_pos1 = 10,  threshold_neg2 = -6, threshold_pos2 = 8) # set differential thresholds for Palbo vs Doxo. 
+filt_mat <- filt_mat[!row.names(filt_mat) %in% c("SB203580", "LY294002", "SB-431542"), ]  # remove upstream regulators that are drugs/chemicals
 
-remove_id <- which(grepl("drug|chemical", IPA_upstream_regs$Palbo1[match(row.names(filt_mat), IPA_upstream_regs$Palbo1$Upstream.Regulator), ]$Molecule.Type)) # remove upstream regulators that are drugs/chemicals
-filt_mat <- filt_mat[-remove_id, ]
+length(row.names(filt_mat)[row.names(filt_mat) %in% expressedGenes])/length(row.names(filt_mat)) # double check that the upstream regulators are expressed genes
+# only"TGF beta" dropped out which is fine because its a family, not a specific gene. 
 
 pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
 # plot heatmap of -log10 pvalue of overlap of enriched complex regulators
 pdf(paste0(pdf_dir, "/RNA_IPA_Palbo1_upstream_regs_Comparison.pdf"), width=3, height=3)
 pheatmap(filt_mat[order(rowSums(filt_mat[ ,6:10]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-3, 3,length.out = 100), main="Activation scores")
-dev.off()
+dev.off() # order by top to bottom sum of scores. 
 
 # plot most differentially activated upstream regulators of Palbo2 upregulated genes
-filt_mat <- filter_upstream_regulators(IPA_Compare_upstream_regs_mat$Palbo2, threshold_neg1 = 1, threshold_pos1 = 7, threshold_neg2 = -0.5, threshold_pos2 =0.5)
-filt_mat <- filt_mat[grep("-", rownames(filt_mat), invert = T), , drop = FALSE]
+filt_mat <- filter_upstream_regulators(IPA_Compare_upstream_regs_mat$Palbo2, threshold_neg1 = 1.2, threshold_pos1 = 6.2, threshold_neg2 = -0.5, threshold_pos2 =0.5)
+
+length(row.names(filt_mat)[row.names(filt_mat) %in% expressedGenes])/length(row.names(filt_mat)) # double check that the upstream regulators are expressed genes
+
+# finding genes that did not appear in expressed genes using their ENSG identifier to double check it really isn't being expressed. 
+# normCounts[grepl("ENSG00000112116", row.names(normCounts)), ]
+
+filt_mat <- filt_mat[grep("IL5|IL17F|VH032|IOX2", rownames(filt_mat), invert = T), , drop = FALSE]
+nrow(filt_mat) # filter out chemicals and non-expressed genes 
+
+# only"TGF beta" dropped out which is fine because its a family, not a specific gene. 
 
 pdf(paste0(pdf_dir, "/RNA_IPA_Palbo2_upstream_regs_Comparison.pdf"), width=3, height=3)
 pheatmap(filt_mat[order(rowSums(filt_mat[ ,6:10]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-2.5, 2.5,length.out = 100), main="Activation scores")
@@ -938,7 +1032,10 @@ dev.off()
 
 # plot most differentially activated upstream regulators of Doxo1 upregulated genes
 filt_mat <- filter_upstream_regulators(IPA_Compare_upstream_regs_mat$Doxo1, threshold_neg1 = -4.2, threshold_pos1 = 4.2, threshold_neg2 = -4.2, threshold_pos2 =4.2)
-filt_mat <- filt_mat[grep("-|GW9662", rownames(filt_mat), invert = T), , drop = FALSE] # remove anything with - or drug GW9662 from final mat to plot. 
+
+length(row.names(filt_mat)[row.names(filt_mat) %in% expressedGenes])/length(row.names(filt_mat)) # double check that the upstream regulators are expressed genes
+row.names(filt_mat)[!row.names(filt_mat) %in% expressedGenes]
+filt_mat <- filt_mat[grep("GW9662|PG3-Oc", rownames(filt_mat), invert = T), , drop = FALSE]  # filter out chemicals and non-expressed genes. AURK and p38 MAPK are encoded by AURKA, MAPK14 respectively 
 
 pdf(paste0(pdf_dir, "/RNA_IPA_Doxo1_upstream_regs_Comparison.pdf"), width=3, height=3)
 pheatmap(filt_mat[order(rowSums(filt_mat[ ,1:5]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-2.5, 2.5,length.out = 100), main="Activation scores")
@@ -947,8 +1044,168 @@ dev.off()
 # plot most differentially activated upstream regulators of Doxo2 upregulated genes
 filt_mat <- filter_upstream_regulators(IPA_Compare_upstream_regs_mat$Doxo2, threshold_neg1 = -6.5, threshold_pos1 = 0,  threshold_neg2 = -2, threshold_pos2 = 0.5)
 
-mat <- IPA_Compare_upstream_regs_mat$Doxo2
+length(row.names(filt_mat)[row.names(filt_mat) %in% expressedGenes])/length(row.names(filt_mat)) # double check that the upstream regulators are expressed genes
+row.names(filt_mat)[!row.names(filt_mat) %in% expressedGenes]
+normCounts[grep("ENSG00000182968|ENSG00000134595|ENSG00000222028", row.names(normCounts)), ]
+filt_mat <- filt_mat[grep("GW9662|PG3-Oc|PSMB11|SOX1|SOX3", rownames(filt_mat), invert = T), , drop = FALSE]  # filter out chemicals and non-expressed genes. AURK and p38 MAPK are encoded by AURKA, MAPK14 respectively 
+
 pdf(paste0(pdf_dir, "/RNA_IPA_Doxo2_upstream_regs_Comparison.pdf"), width=3, height=3)
 pheatmap(filt_mat[order(rowSums(filt_mat[ ,1:5]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-2.5, 2.5,length.out = 100), main="Activation scores")
 dev.off()
+
 ```
+
+# plot differential upstream regs based on thresholding of the largest differences between overall sum of activation scores between Doxo & Palbo instead of thresholding. 
+```{r}
+mat <- IPA_Compare_upstream_regs_mat$Palbo2
+diff_regs <- names(rev(sort(rowSums(mat[ ,6:10]) - rowSums(mat[ ,1:5]))))[1:20]
+diff_regs <- diff_regs[!diff_regs %in% c("arsenic trioxide", "cadmium chloride", "VH032", "IOX2")]
+
+#pdf(paste0(pdf_dir, "/RNA_IPA_Palbo2_diff_regs_bydifference.pdf"), width=3, height=3)
+pheatmap(mat[row.names(mat) %in% diff_regs[1:12], ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-2.5, 2.5,length.out = 100), main="Activation scores")
+
+mat <- IPA_Compare_upstream_regs_mat$Palbo1
+diff_regs <- names(rev(sort(rowSums(mat[ ,6:10]) - rowSums(mat[ ,1:5]))))[1:20]
+diff_regs <- diff_regs[!diff_regs %in% c("arsenic trioxide", "cadmium chloride", "VH032", "IOX2")]
+```
+
+
+# run code necessary for matching top activated/inhibited transcriptional regulators with ATAC-seq motif enrichment results from up peaks across time. 
+```{r}
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks.Rmd", chunk_name="create_AME_peaks_matrix")
+
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks.Rmd", chunk_name="create_AME_dotplots")
+
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks.Rmd", chunk_name="annoUpPeaks_AME_df")
+
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks.Rmd", chunk_name="annoDownPeaks_AME_df")
+
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks.Rmd", chunk_name="UpPeaks_AME_mat")
+
+row.names(Doxo_UpPeaks_AME_mat)[grep("P53|P63|P73", row.names(Doxo_UpPeaks_AME_mat))] <- c("TP53", "TP73", "TP63")
+```
+
+# RNA-seq + ATAC-seq: instead of differentially activated upstream regs between drug treatments, plot top activated & top inhibited upstream Transcriptional regulators 
+```{r}
+# read in database matching upstream regulators to molecule type and target molecules. 
+IPA_TFs_db <- list() 
+db_files <- dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/output/sigGenes_log2FC/databases", pattern="transcription_regulators_database.txt", full.names = T)
+for(i in 1:length(db_files)){
+IPA_TFs_db[[i]] <- read_delim(db_files[i], 
+    delim = "\t", escape_double = FALSE, 
+    trim_ws = TRUE, skip = 2)
+}
+names(IPA_TFs_db) <- gsub("_.*", "", dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/output/sigGenes_log2FC/databases", pattern="transcription_regulators_database.txt"))
+
+# function to filter for top upstream regulators and plot activation scores as heatmap
+plot_upstream_reg_heatmaps <- function(mat, cluster_name, tf_db, zscore_cols, atac_peaks, pdf_dir) {
+  # Ensure the output directory exists
+  if (!dir.exists(pdf_dir)) {
+    dir.create(pdf_dir, recursive = TRUE)
+  }
+
+  # Order the matrix by highest to lowest overall activation z-scores
+  ordered_mat <- mat[order(rowSums(zscore_cols), decreasing = TRUE), ]
+
+  # Filter by transcriptional regulators
+  filt_mat <- ordered_mat[row.names(ordered_mat) %in% tf_db, ]
+
+  # Define filtering conditions
+  filter_conditions <- list(
+    list(
+      name = paste0("RNA_IPA_",cluster_name, "_top_act_inh_upstream_regs"),
+      data = filt_mat
+    ),
+    list(
+      name = paste0("RNA_IPA_" ,cluster_name, "_top_act_inh_filt_by_ATAC_upstream_regs"),
+      data = filt_mat[row.names(filt_mat) %in% row.names(atac_peaks), ]
+    )
+  )
+
+  # Loop through each filtering condition and generate heatmaps
+  for (condition in filter_conditions) {
+    filt_data <- condition$data
+
+    # Get top activated & inhibited upstream transcriptional regulators
+    top_regs <- c(row.names(head(filt_data)), row.names(tail(filt_data)))
+
+    # Define the output PDF filename
+    pdf_filename <- paste0(pdf_dir, "/", condition$name, ".pdf")
+
+    # Generate heatmap and save to PDF
+    pdf(pdf_filename, width = 3, height = 3)
+    pheatmap(
+      filt_data[row.names(filt_data) %in% top_regs, ],
+      cluster_cols = FALSE,
+      cluster_rows = FALSE,
+      colorRampPalette(rev(brewer.pal(n = 7, name = "PuOr")))(100),
+      breaks = seq(-4, 4, length.out = 100),
+      main = "Activation scores"
+    )
+    dev.off()
+  }
+}
+```
+
+# RNA-seq + ATAC-seq: generate plots of top activated and inhibited upstream transcriptional regulators for each cluster of sig changing upregulated genes. 
+```{r}
+plot_upstream_reg_heatmaps(
+  mat = IPA_Compare_upstream_regs_mat$Doxo1, 
+  cluster_name = "Doxo1", 
+  tf_db = IPA_TFs_db$Doxo1$`Upstream Regulator`, 
+  zscore_cols = IPA_Compare_upstream_regs_mat$Doxo1[, 1:5], 
+  atac_peaks = Doxo_UpPeaks_AME_mat, 
+  pdf_dir = "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+)
+
+plot_upstream_reg_heatmaps(
+  mat = IPA_Compare_upstream_regs_mat$Doxo2, 
+  cluster_name = "Doxo2", 
+  tf_db = IPA_TFs_db$Doxo2$`Upstream Regulator`, 
+  zscore_cols = IPA_Compare_upstream_regs_mat$Doxo2[, 1:5], 
+  atac_peaks = Doxo_UpPeaks_AME_mat, 
+  pdf_dir = "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+)
+
+plot_upstream_reg_heatmaps(
+  mat = IPA_Compare_upstream_regs_mat$Palbo1, 
+  cluster_name = "Palbo1", 
+  tf_db = IPA_TFs_db$Palbo1$`Upstream Regulator`, 
+  zscore_cols = IPA_Compare_upstream_regs_mat$Palbo1[, 6:10], 
+  atac_peaks = Palbo_UpPeaks_AME_mat, 
+  pdf_dir = "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+)
+
+plot_upstream_reg_heatmaps(
+  mat = IPA_Compare_upstream_regs_mat$Palbo2, 
+  cluster_name = "Palbo2", 
+  tf_db = IPA_TFs_db$Palbo2$`Upstream Regulator`, 
+  zscore_cols = IPA_Compare_upstream_regs_mat$Palbo2[, 6:10], 
+  atac_peaks = Palbo_UpPeaks_AME_mat, 
+  pdf_dir = "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+)
+
+plot_upstream_reg_heatmaps(
+  mat = IPA_Compare_upstream_regs_mat$Shared, 
+  cluster_name = "Shared", 
+  tf_db = IPA_TFs_db$Shared$`Upstream Regulator`, 
+  zscore_cols = IPA_Compare_upstream_regs_mat$Shared[, 1:10], 
+  atac_peaks = Palbo_UpPeaks_AME_mat, 
+  pdf_dir = "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+)
+```
+
+
+# plot ESR1 expression for Justin (not related to this paper)
+```{r}
+normCounts <- counts(RNAddsall, normalized=T)
+normCounts_ESR1 <- log2(normCounts[grep("ENSG00000091831", row.names(normCounts)), ]+1)
+
+NormCounts_df_ESR1 <- data.frame(Counts=normCounts_ESR1, metaDataall)
+ggplot(NormCounts_df_ESR1, aes(x=as.numeric(Timepoint), y=Counts, color=Treatment, shape=Biorep))+geom_point(size=3)+scale_color_manual(values=hm_cols_RNA$Treatment)+theme_minimal()+ylab("log2 Normalized Counts")+xlab("Length of Treatment (days)")+ggtitle("ESR1")
+
+violinplot(log2(normCounts+1), las = 2, col = "lightblue", main = "Expression Levels", 
+        ylab = "log2 normalized counts")
+
+```
+

@@ -720,5 +720,3 @@ create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50
 
 save(create_AME_dotplots, file=paste0(functions_dir, "/create_AME_dotplots.RData"))
 ```
-
-  

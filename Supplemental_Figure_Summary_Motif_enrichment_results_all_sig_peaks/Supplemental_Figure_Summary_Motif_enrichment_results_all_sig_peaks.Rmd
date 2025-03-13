@@ -115,16 +115,17 @@ folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_F
 /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
 ```
 # ATAC-seq: import motif enrichment results 
-```{r}
+
+
+# ATAC-seq: import motif enrichment results under up peaks across all timepoint comparisons & drug treatment. 
+```{r annoUpPeaks_AME_df}
+# extract ids of all expressed genes
+expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
+expressedGenes[grep("TP53$|TP63$|TP73$", expressedGenes)] <- c("P63", "P73", "P53")
+
 # load in process_motif_data function. 
 load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Functions/process_motif_data.RData")
 
-# extract ids of all expressed genes
-expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
-```
-
-# ATAC-seq: import motif enrichment results under up peaks across all timepoint comparisons & drug treatment. 
-```{r}
 annoUpPeaks_AME_df <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_output/DESeq/annoUp", expressed_genes = expressedGenes)
 
 annoUpPeaks_AME_df$Comparison <- gsub("\\..*", "", row.names(annoUpPeaks_AME_df))
@@ -137,7 +138,7 @@ annoUpPeaks_AME_df$Timepoint <- factor(annoUpPeaks_AME_df$Timepoint, levels=c("d
 ```
 
 # ATAC-seq: import motif enrichment results under down peaks across all timepoint comparisons & drug treatment. 
-```{r}
+```{r annoDownPeaks_AME_df}
 annoDownPeaks_AME_df <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_output/DESeq/annoDown", expressed_genes = expressedGenes)
 
 annoDownPeaks_AME_df$Comparison <- gsub("\\..*", "", row.names(annoDownPeaks_AME_df))
@@ -152,7 +153,7 @@ annoDownPeaks_AME_df$Timepoint <- factor(annoDownPeaks_AME_df$Timepoint, levels=
 ----------------------------------------------------------------------
 # *FIGURES*
 # create function that stores the -log10(padj) value of each motif ID for each DESeq comparison
-```{r}
+```{r create_AME_peaks_matrix}
 create_AME_peaks_matrix <- function(sig_peaks_df) {
   # Create an empty matrix for significant peaks
   unique_motifs <- unique(sig_peaks_df$motif_ID)
@@ -175,7 +176,7 @@ save(create_AME_peaks_matrix, file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscri
 ```
 
 # create function to plot motif enrichment results as dotplot where the fill color indicates -log10(padj) values & size of dot indicates %TP-%FP
-```{r}
+```{r create_AME_dotplots}
 create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50, size_limit=4.5){
   AME_df <- AME_df %>% mutate(Comparison = Timepoint)
   ggplot(AME_df, aes(x=Comparison, y=motif_ID, size=TPvsFP)) +
@@ -199,12 +200,13 @@ create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50
     theme_classic() +
     labs(x="Comparison", y="motif ID")
 }
-
+```
+```{r}
 save(create_AME_dotplots, file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Functions/create_AME_dotplots.RData")
 ```
 
-# ATAC-seq: plot heatmap of -log10(padj) values of top 50 enriched motifs in up Doxo peaks & up Palbo peaks across time. 
-```{r}
+# ATAC-seq: plot heatmap of -log10(padj) values of top 50 enriched motifs in up Doxo peaks & up Palbo peaks across time.
+```{r UpPeaks_AME_mat}
 Palbo_UpPeaks_AME_mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[grepl("Palbo", annoUpPeaks_AME_df$Comparison), ])
 
 Palbo_UpPeaks_AME_mat <- Palbo_UpPeaks_AME_mat[order(rowSums(Palbo_UpPeaks_AME_mat), decreasing=T), grepl("Palbo", colnames(Palbo_UpPeaks_AME_mat))] # order by overall most to least enriched motifs & filter for only Palbo comparison columns. 
@@ -215,20 +217,20 @@ Doxo_UpPeaks_AME_mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[grepl("Doxo",
 Doxo_UpPeaks_AME_mat <- Doxo_UpPeaks_AME_mat[order(rowSums(Doxo_UpPeaks_AME_mat), decreasing=T), grepl("Doxo", colnames(Doxo_UpPeaks_AME_mat))] # order by overall most to least enriched motifs & filter for only Doxo comparison columns. 
 
 # # create matrix of -log10(padj) values of top 50 most enriched motifs in Palbo & top 50 most enriched motifs in Doxo (several of these motifs are enriched in both drug treatments)
-top50_motifs <- unique(c(row.names(Doxo_UpPeaks_AME_mat)[1:50], row.names(Palbo_UpPeaks_AME_mat)[1:50]))
-top50_motifs_Palbo_Doxo_AME_Mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[annoUpPeaks_AME_df$motif_ID %in% top50_motifs, ])
+top65_motifs <- unique(c(row.names(Doxo_UpPeaks_AME_mat)[1:65], row.names(Palbo_UpPeaks_AME_mat)[1:65]))
+top65_motifs_Palbo_Doxo_AME_Mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[annoUpPeaks_AME_df$motif_ID %in% top65_motifs, ])
 
-top50_motifs_Palbo_Doxo_AME_Mat <- top50_motifs_Palbo_Doxo_AME_Mat[order(rowSums(top50_motifs_Palbo_Doxo_AME_Mat), decreasing=T), ]# order by overall most to least enriched motifs
+top65_motifs_Palbo_Doxo_AME_Mat <- top65_motifs_Palbo_Doxo_AME_Mat[order(rowSums(top65_motifs_Palbo_Doxo_AME_Mat), decreasing=T), ]# order by overall most to least enriched motifs
 
 # plot top 50 overall most enriched motifs of each drug category in all up peaks as heatmap of -log10(padj) values
 outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks"
 pdf(paste0(outdir, "/UpPeaks_AME_mat.pdf"), width=4.5, height=9)
 
-pheatmap(top50_motifs_Palbo_Doxo_AME_Mat , cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 200,length.out = 100), main="top 50 enriched motifs in up peaks")
+pheatmap(top65_motifs_Palbo_Doxo_AME_Mat , cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 200,length.out = 100), main="top 50 enriched motifs in up peaks")
 dev.off()
 
 # plot top 50 overall most enriched motifs of each drug category in all up peaks as dotplots
-pdf(paste0(outdir, "/UpPeaks_AME_dotplots.pdf"), width=10, height=9)
+pdf(paste0(outdir, "/UpPeaks_AME_dotplots.pdf"), width=10, height=13)
 create_AME_dotplots(annoUpPeaks_AME_df[annoUpPeaks_AME_df$motif_ID %in% top50_motifs, ], Title="top 50 enriched motifs in up peaks", fill_limit=200, size_limit=51)
 dev.off()
 ```
@@ -277,3 +279,15 @@ pheatmap(drug_enriched_motifs_Up_Peaks_AME_mat, cluster_rows = F, cluster_cols=F
 # note: most of the Doxo enriched motifs only appear in day21 Doxo & only two motifs are unique in Palbo. Therefore, I do not think this figure is informative. 
 ```
 
+```{r}
+Palbo2_IPA_TFs <- read_delim("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/output/sigGenes_log2FC/databases/Palbo2_sigLFC_Comparison_Analysis_IPA_upstream_regs_transcription_regulators_database.txt", 
+    delim = "\t", escape_double = FALSE, 
+    trim_ws = TRUE, skip = 2)
+mat <- IPA_Compare_upstream_regs_mat$Palbo2[order(rowSums(IPA_Compare_upstream_regs_mat$Palbo2[ ,6:10]), decreasing=T), ]
+filt_mat <- mat[row.names(mat) %in% Palbo2_IPA_TFs$`Upstream Regulator`, ]
+top_regs <- c(row.names(head(filt_mat)), row.names(tail(filt_mat)))
+
+filt_mat <- filt_mat[row.names(filt_mat) %in% row.names(Palbo_UpPeaks_AME_mat), ]
+```
+
+  

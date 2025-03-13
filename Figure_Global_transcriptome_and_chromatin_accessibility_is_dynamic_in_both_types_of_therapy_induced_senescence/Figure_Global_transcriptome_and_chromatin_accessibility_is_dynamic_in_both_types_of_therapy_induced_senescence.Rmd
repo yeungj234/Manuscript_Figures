@@ -268,13 +268,16 @@ clusterDF <- data.frame(Clusters=factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3
 clusterDF <- clusterDF[order(clusterDF$Cluster), ]
 
 # annotate which genes are part of the SASP 
-clusterDF$SASP <- ifelse(row.names(clusterDF) %in% SASP_all, "Yes", "No")
+clusterDF$SASP <- ifelse(clusterDF$gene_id %in% SASP_all, "Yes", "No")
 
 # annotate which genes belong to the cell cycle based on whether or not they are found in the following MSigDb datasets. 
-clusterDF$Cell_Cycle <- ifelse(row.names(clusterDF) %in% c(msigdbr_df_H[msigdbr_df_H$gs_name %in% c("HALLMARK_E2F_TARGETS", "HALLMARK_G2M_CHECKPOINT"), ]$gene_symbol, msigdbr_df_REACT[msigdbr_df_REACT$gs_name %in% c("REACTOME_CELL_CYCLE", "REACTOME_CELL_CYCLE_CHECKPOINTS", "REACTOME_CELL_CYCLE_MITOTIC"), ]$gene_symbol, msigdbr_df_KEGG[msigdbr_df_KEGG$gs_name %in% "KEGG_CELL_CYCLE", ]$gene_symbol), "Yes", "No")
+clusterDF$Cell_Cycle <- ifelse(clusterDF$gene_id %in% c(msigdbr_df_H[msigdbr_df_H$gs_name %in% c("HALLMARK_E2F_TARGETS", "HALLMARK_G2M_CHECKPOINT"), ]$gene_symbol, msigdbr_df_REACT[msigdbr_df_REACT$gs_name %in% c("REACTOME_CELL_CYCLE", "REACTOME_CELL_CYCLE_CHECKPOINTS", "REACTOME_CELL_CYCLE_MITOTIC"), ]$gene_symbol, msigdbr_df_KEGG[msigdbr_df_KEGG$gs_name %in% "KEGG_CELL_CYCLE", ]$gene_symbol), "Yes", "No")
 
 # annotate genes based on previous clustering
-clusterDF$clusters_cutree8 <- anno_genes[match(row.names(clusterDF), row.names(anno_genes)), ]$clusters_cutree8
+clusterDF$clusters_cutree8 <- anno_genes[match(clusterDF$gene_id, row.names(anno_genes)), ]$clusters_cutree8
+
+# set row names as gene ids 
+row.names(clusterDF) <- make.unique(as.character(clusterDF$gene_id))
 
 drug_cat_list <- list(sigMat[row.names(sigMat) %in% clusterDF[clusterDF$Clusters %in% "2", ]$gene_id, ], 
                       sigMat[row.names(sigMat) %in% clusterDF[clusterDF$Clusters %in% "5", ]$gene_id, ], 
