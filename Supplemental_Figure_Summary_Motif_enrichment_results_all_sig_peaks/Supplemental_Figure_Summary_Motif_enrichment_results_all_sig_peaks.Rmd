@@ -209,29 +209,31 @@ save(create_AME_dotplots, file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_F
 ```{r UpPeaks_AME_mat}
 Palbo_UpPeaks_AME_mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[grepl("Palbo", annoUpPeaks_AME_df$Comparison), ])
 
-Palbo_UpPeaks_AME_mat <- Palbo_UpPeaks_AME_mat[order(rowSums(Palbo_UpPeaks_AME_mat), decreasing=T), grepl("Palbo", colnames(Palbo_UpPeaks_AME_mat))] # order by overall most to least enriched motifs & filter for only Palbo comparison columns. 
+# create matrix of -log10(padj) values of enriched motifs in all Palbo comparisons. Order by overall most to least enriched motifs across timepoints relative to Cycling or day 3. 
+Palbo_UpPeaks_AME_mat <- list(vsCycling=Palbo_UpPeaks_AME_mat[order(rowSums(Palbo_UpPeaks_AME_mat[ ,1:5]), decreasing=T), ], # # order results by timepoints relative to Cycling
+                              vsday3=Palbo_UpPeaks_AME_mat[order(rowSums(Palbo_UpPeaks_AME_mat[ ,6:9]), decreasing=T), ]) # # order results by timepoints relative to day3
                                                       
-# create matrix of -log10(padj) values of enriched motifs in all Doxo comparisons
+# create matrix of -log10(padj) values of enriched motifs in all Doxo comparisons. Order by overall most to least enriched motifs across timepoints relative to Cycling or day 3. 
 Doxo_UpPeaks_AME_mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[grepl("Doxo", annoUpPeaks_AME_df$Comparison), ])
                                                       
-Doxo_UpPeaks_AME_mat <- Doxo_UpPeaks_AME_mat[order(rowSums(Doxo_UpPeaks_AME_mat), decreasing=T), grepl("Doxo", colnames(Doxo_UpPeaks_AME_mat))] # order by overall most to least enriched motifs & filter for only Doxo comparison columns. 
+Doxo_UpPeaks_AME_mat <- list(vsCycling=Doxo_UpPeaks_AME_mat[order(rowSums(Doxo_UpPeaks_AME_mat[ ,1:4]), decreasing=T), ], # order results by timepoints relative to Cycling
+                              vsday3=Doxo_UpPeaks_AME_mat[order(rowSums(Doxo_UpPeaks_AME_mat[ ,5:7]), decreasing=T), ]) # order results by timepoints relative to day3
 
-# # create matrix of -log10(padj) values of top 50 most enriched motifs in Palbo & top 50 most enriched motifs in Doxo (several of these motifs are enriched in both drug treatments)
-top65_motifs <- unique(c(row.names(Doxo_UpPeaks_AME_mat)[1:65], row.names(Palbo_UpPeaks_AME_mat)[1:65]))
-top65_motifs_Palbo_Doxo_AME_Mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[annoUpPeaks_AME_df$motif_ID %in% top65_motifs, ])
+# create matrix of -log10(padj) values of top 50 most enriched motifs in Palbo & top 50 most enriched motifs in Doxo (several of these motifs are enriched in both drug treatments)
+top35_motifs <- unique(c(row.names(Doxo_UpPeaks_AME_mat$vsCycling)[1:60], row.names(Palbo_UpPeaks_AME_mat$vsCycling)[1:35], row.names(Doxo_UpPeaks_AME_mat$vsday3)[1:10], row.names(Palbo_UpPeaks_AME_mat$vsday3)[1:35]))
+top35_motifs_Palbo_Doxo_AME_Mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[annoUpPeaks_AME_df$motif_ID %in% top35_motifs, ])
 
-top65_motifs_Palbo_Doxo_AME_Mat <- top65_motifs_Palbo_Doxo_AME_Mat[order(rowSums(top65_motifs_Palbo_Doxo_AME_Mat), decreasing=T), ]# order by overall most to least enriched motifs
+top35_motifs_Palbo_Doxo_AME_Mat <- top35_motifs_Palbo_Doxo_AME_Mat[order(rowSums(top35_motifs_Palbo_Doxo_AME_Mat), decreasing=T), ]# order by overall most to least enriched motifs
 
-# plot top 50 overall most enriched motifs of each drug category in all up peaks as heatmap of -log10(padj) values
+# plot top 35 overall most enriched motifs of each drug category in all up peaks as heatmap of -log10(padj) values
 outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks"
-pdf(paste0(outdir, "/UpPeaks_AME_mat.pdf"), width=4.5, height=9)
-
-pheatmap(top65_motifs_Palbo_Doxo_AME_Mat , cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 200,length.out = 100), main="top 50 enriched motifs in up peaks")
+pdf(paste0(outdir, "/UpPeaks_AME_mat.pdf"), width=4.5, height=11)
+pheatmap(top35_motifs_Palbo_Doxo_AME_Mat , cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 200,length.out = 100), main="top 35 enriched motifs in up peaks")
 dev.off()
 
-# plot top 50 overall most enriched motifs of each drug category in all up peaks as dotplots
+# plot top 35 overall most enriched motifs of each drug category in all up peaks as dotplots
 pdf(paste0(outdir, "/UpPeaks_AME_dotplots.pdf"), width=10, height=13)
-create_AME_dotplots(annoUpPeaks_AME_df[annoUpPeaks_AME_df$motif_ID %in% top50_motifs, ], Title="top 50 enriched motifs in up peaks", fill_limit=200, size_limit=51)
+create_AME_dotplots(annoUpPeaks_AME_df[annoUpPeaks_AME_df$motif_ID %in% top35_motifs, ], Title="top 35 enriched motifs in up peaks", fill_limit=200, size_limit=51)
 dev.off()
 ```
 
@@ -239,42 +241,45 @@ dev.off()
 ```{r}
 Palbo_DownPeaks_AME_mat <- create_AME_peaks_matrix(annoDownPeaks_AME_df[grepl("Palbo", annoDownPeaks_AME_df$Comparison), ])
 
-Palbo_DownPeaks_AME_mat <- Palbo_DownPeaks_AME_mat[order(rowSums(Palbo_DownPeaks_AME_mat), decreasing=T), grepl("Palbo", colnames(Palbo_DownPeaks_AME_mat))] # order by overall most to least enriched motifs & filter for only Palbo comparison columns. 
+# create matrix of -log10(padj) values of enriched motifs in all Palbo comparisons. Order by overall most to least enriched motifs across timepoints relative to Cycling or day 3. 
+Palbo_DownPeaks_AME_mat <- list(vsCycling=Palbo_DownPeaks_AME_mat[order(rowSums(Palbo_DownPeaks_AME_mat[ ,1:5]), decreasing=T), ], # # order results by timepoints relative to Cycling
+                              vsday3=Palbo_DownPeaks_AME_mat[order(rowSums(Palbo_DownPeaks_AME_mat[ ,6:9]), decreasing=T), ]) # # order results by timepoints relative to day3
                                                       
-# create matrix of -log10(padj) values of enriched motifs in all Doxo comparisons
+# create matrix of -log10(padj) values of enriched motifs in all Doxo comparisons. Order by overall most to least enriched motifs across timepoints relative to Cycling or day 3. 
 Doxo_DownPeaks_AME_mat <- create_AME_peaks_matrix(annoDownPeaks_AME_df[grepl("Doxo", annoDownPeaks_AME_df$Comparison), ])
                                                       
-Doxo_DownPeaks_AME_mat <- Doxo_DownPeaks_AME_mat[order(rowSums(Doxo_DownPeaks_AME_mat), decreasing=T), grepl("Doxo", colnames(Doxo_DownPeaks_AME_mat))] # order by overall most to least enriched motifs & filter for only Doxo comparison columns. 
+Doxo_DownPeaks_AME_mat <- list(vsCycling=Doxo_DownPeaks_AME_mat[order(rowSums(Doxo_DownPeaks_AME_mat[ ,1:4]), decreasing=T), ], # order results by timepoints relative to Cycling
+                              vsday3=Doxo_DownPeaks_AME_mat[order(rowSums(Doxo_DownPeaks_AME_mat[ ,5:7]), decreasing=T), ]) # order results by timepoints relative to day3
 
-# # create matrix of -log10(padj) values of top 50 most enriched motifs in Palbo & top 50 most enriched motifs in Doxo (several of these motifs are enriched in both drug treatments)
-top50_motifs <- unique(c(row.names(Doxo_DownPeaks_AME_mat)[1:50], row.names(Palbo_DownPeaks_AME_mat)[1:50]))
-top50_motifs_Palbo_Doxo_AME_Mat <- create_AME_peaks_matrix(annoDownPeaks_AME_df[annoDownPeaks_AME_df$motif_ID %in% top50_motifs, ])
+# create matrix of -log10(padj) values of top 50 most enriched motifs in Palbo & top 50 most enriched motifs in Doxo (several of these motifs are enriched in both drug treatments)
+top35_motifs <- unique(c(row.names(Doxo_DownPeaks_AME_mat$vsCycling)[1:60], row.names(Palbo_DownPeaks_AME_mat$vsCycling)[1:35], row.names(Doxo_DownPeaks_AME_mat$vsday3)[1:10], row.names(Palbo_DownPeaks_AME_mat$vsday3)[1:35]))
+top35_motifs_Palbo_Doxo_AME_Mat <- create_AME_peaks_matrix(annoDownPeaks_AME_df[annoDownPeaks_AME_df$motif_ID %in% top35_motifs, ])
 
-top50_motifs_Palbo_Doxo_AME_Mat <- top50_motifs_Palbo_Doxo_AME_Mat[order(rowSums(top50_motifs_Palbo_Doxo_AME_Mat), decreasing=T), ]# order by overall most to least enriched motifs
+top35_motifs_Palbo_Doxo_AME_Mat <- top35_motifs_Palbo_Doxo_AME_Mat[order(rowSums(top35_motifs_Palbo_Doxo_AME_Mat), decreasing=T), ]# order by overall most to least enriched motifs
 
-# plot top 50 overall most enriched motifs of each drug category in all Down peaks as heatmap of -log10(padj) values
-pdf(paste0(outdir, "/DownPeaks_AME_mat.pdf"), width=4.5, height=9)
-
-pheatmap(top50_motifs_Palbo_Doxo_AME_Mat , cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 200,length.out = 100), main="top 50 enriched motifs in Down peaks")
+# plot top 35 overall most enriched motifs of each drug category in all Down peaks as heatmap of -log10(padj) values
+outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks"
+pdf(paste0(outdir, "/DownPeaks_AME_mat.pdf"), width=4.5, height=11)
+pheatmap(top35_motifs_Palbo_Doxo_AME_Mat , cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 300,length.out = 100), main="top 35 enriched motifs in Down peaks")
 dev.off()
 
-# plot top 50 overall most enriched motifs of each drug category in all Down peaks as dotplots
-pdf(paste0(outdir, "/DownPeaks_AME_dotplots.pdf"), width=10, height=9)
-create_AME_dotplots(annoDownPeaks_AME_df[annoDownPeaks_AME_df$motif_ID %in% top50_motifs, ], Title="top 50 enriched motifs in Down peaks", fill_limit=200, size_limit=51)
+# plot top 35 overall most enriched motifs of each drug category in all Down peaks as dotplots
+pdf(paste0(outdir, "/DownPeaks_AME_dotplots.pdf"), width=10, height=13)
+create_AME_dotplots(annoDownPeaks_AME_df[annoDownPeaks_AME_df$motif_ID %in% top35_motifs, ], Title="top 35 enriched motifs in Down peaks", fill_limit=300, size_limit=51)
 dev.off()
 ```
 
 
-# ATAC-seq: plot motifs that appear to be drug specific in up peaks i.e. enriched in Doxo at any timepoint but not Palbo & vice versa 
+# ATAC-seq: plot motifs that appear to be drug specific in Down peaks i.e. enriched in Doxo at any timepoint but not Palbo & vice versa 
 ```{r}
 # get IDs of drug specific motifs
-drug_unique_motifs <- c(row.names(Doxo_UpPeaks_AME_mat)[!row.names(Doxo_UpPeaks_AME_mat) %in% row.names(Palbo_UpPeaks_AME_mat)], row.names(Palbo_UpPeaks_AME_mat)[!row.names(Palbo_UpPeaks_AME_mat) %in% row.names(Doxo_UpPeaks_AME_mat)]) 
+drug_unique_motifs <- c(row.names(Doxo_DownPeaks_AME_mat)[!row.names(Doxo_DownPeaks_AME_mat) %in% row.names(Palbo_DownPeaks_AME_mat)], row.names(Palbo_DownPeaks_AME_mat)[!row.names(Palbo_DownPeaks_AME_mat) %in% row.names(Doxo_DownPeaks_AME_mat)]) 
 
 # create matrix of -log10(padj) values of each motif ID for each DESeq comparison of drug specific motifs
-drug_enriched_motifs_Up_Peaks_AME_mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[annoUpPeaks_AME_df$motif_ID %in% drug_unique_motifs, ])
-drug_enriched_motifs_Up_Peaks_AME_mat <- drug_enriched_motifs_Up_Peaks_AME_mat[order(rowSums(drug_enriched_motifs_Up_Peaks_AME_mat), decreasing=T), ]
+drug_enriched_motifs_Down_Peaks_AME_mat <- create_AME_peaks_matrix(annoDownPeaks_AME_df[annoDownPeaks_AME_df$motif_ID %in% drug_unique_motifs, ])
+drug_enriched_motifs_Down_Peaks_AME_mat <- drug_enriched_motifs_Down_Peaks_AME_mat[order(rowSums(drug_enriched_motifs_Down_Peaks_AME_mat), decreasing=T), ]
 
-pheatmap(drug_enriched_motifs_Up_Peaks_AME_mat, cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 10,length.out = 100), main="all Up: enriched motifs")
+pheatmap(drug_enriched_motifs_Down_Peaks_AME_mat, cluster_rows = F, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 10,length.out = 100), main="all Down: enriched motifs")
 
 # note: most of the Doxo enriched motifs only appear in day21 Doxo & only two motifs are unique in Palbo. Therefore, I do not think this figure is informative. 
 ```
