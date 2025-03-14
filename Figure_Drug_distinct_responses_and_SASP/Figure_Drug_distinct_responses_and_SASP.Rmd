@@ -370,82 +370,19 @@ names(ranked_res_forGSEA) <- names(LFCResultsall_RNA)
 GSEA_Results_H <- list() # msigdb Hallmark database
 GSEA_Results_KEGG <- list() # msigdb KEGG database
 GSEA_Results_REACT <- list() # msigdb Reactome database
-GSEA_plots_H <- list()
-GSEA_plots_KEGG <- list()
-GSEA_plots_REACT <- list()
+GSEA_Results_MF <- list() # msigdb GO:MF database
 for(i in 1:length(ranked_res_forGSEA)){
  GSEA_Results_H[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_H) 
  GSEA_Results_KEGG[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_KEGG) 
  GSEA_Results_REACT[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_REACT) 
+ GSEA_Results_MF[[i]] <- GSEA(ranked_res_forGSEA[[i]], TERM2GENE = msigdbr_t2g_GO_MF) 
 }
 
 names(GSEA_Results_H) <- names(LFCResultsall_RNA)
 names(GSEA_Results_KEGG) <- names(LFCResultsall_RNA)
 names(GSEA_Results_REACT) <- names(LFCResultsall_RNA)
+names(GSEA_Results_MF) <- names(LFCResultsall_RNA)
 
-# generate running score plots for GSEA results
-# GSEA Hallmark
-for(i in 1:length(GSEA_Results_H)){
-  maxplots <- length(GSEA_Results_H[[i]]$ID)
-GSEA_plots_H[[i]] <- list()
-GSEA_plots_KEGG[[i]] <- list()
-GSEA_plots_REACT[[i]] <- list()
-  for(j in 1:maxplots){
-  GSEA_plots_H[[i]][[j]] <- gseaplot(GSEA_Results_H[[i]], geneSetID = j, by = "runningScore", title = paste0(names(GSEA_Results_H)[i], ": " , GSEA_Results_H[[i]]$ID[j]) )
-  }
-  names(GSEA_plots_H[[i]]) <- GSEA_Results_H[[i]]$ID[1:maxplots]
-}
-
-# GSEA KEGG
-for (i in 1:length(GSEA_Results_KEGG)) {
-  # Check if the current object is not empty
-  if (!is.null(GSEA_Results_KEGG[[i]]) && length(GSEA_Results_KEGG[[i]]$ID) > 0) {
-    maxplots <- length(GSEA_Results_KEGG[[i]]$ID)
-    GSEA_plots_KEGG[[i]] <- list()  # Initialize a list to store plots for this object
-    
-    for (j in 1:maxplots) {
-      GSEA_plots_KEGG[[i]][[j]] <- gseaplot(
-        GSEA_Results_KEGG[[i]], 
-        geneSetID = j, 
-        by = "runningScore", 
-        title = GSEA_Results_KEGG[[i]]$ID[j]
-      )
-    }
-    # Assign names to the plots
-    names(GSEA_plots_KEGG[[i]]) <- GSEA_Results_KEGG[[i]]$ID[1:maxplots]
-  } else {
-    # If empty, set the current slot in GSEA_plots_KEGG to NULL
-    GSEA_plots_KEGG[[i]] <- NULL
-  }
-}
-
-# GSEA Reactome
-for (i in 1:length(GSEA_Results_REACT)) {
-  # Check if the current object is not empty
-  if (!is.null(GSEA_Results_REACT[[i]]) && length(GSEA_Results_REACT[[i]]$ID) > 0) {
-    maxplots <- length(GSEA_Results_REACT[[i]]$ID)
-    GSEA_plots_REACT[[i]] <- list()  # Initialize a list to store plots for this object
-    
-    for (j in 1:maxplots) {
-      GSEA_plots_REACT[[i]][[j]] <- gseaplot(
-        GSEA_Results_REACT[[i]], 
-        geneSetID = j, 
-        by = "runningScore", 
-        title = GSEA_Results_REACT[[i]]$ID[j]
-      )
-    }
-    # Assign names to the plots
-    names(GSEA_plots_REACT[[i]]) <- GSEA_Results_REACT[[i]]$ID[1:maxplots]
-  } else {
-    # If empty, set the current slot in GSEA_plots_REACT to NULL
-    GSEA_plots_REACT[[i]] <- NULL
-  }
-}
-
-# assign names to plots based on which DESeq comparison GSEA was done on. 
-names(GSEA_plots_H) <- names(LFCResultsall_RNA)
-names(GSEA_plots_KEGG) <- names(which(unlist(lapply(GSEA_Results_KEGG, function(x){length(x$ID)})) >0))
-names(GSEA_plots_REACT) <- names(which(unlist(lapply(GSEA_Results_REACT, function(x){length(x$ID)})) >0))
 ```
 
 # RNA-seq: generate input files for IPA pathways. 
@@ -751,6 +688,53 @@ pheatmap(GO_results_mat_clusters[[6]][1:5, ], cluster_cols = F, colorRampPalette
 dev.off()
 ```
 
+# RNA-seq: save GSEA running score for Hallmark EPITHELIAL MESENCHYMAL TRANSITION
+```{r}
+library(enrichplot)
+library(patchwork)
+
+# Get padj value of GSEA result for EPITHELIAL MESENCHYMAL TRANSITION to add onto GSEA plots
+GSEA_padj <- GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% "EPITHELIAL MESENCHYMAL TRANSITION", ]$p.adjust
+GSEA_padj <- format(round(GSEA_padj, 4), nsmall = 4) # round to 4 decimal places 
+
+# plot GSEA RES
+p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "EPITHELIAL MESENCHYMAL TRANSITION", by="runningScore", title = "day 14 Doxo vs Cycling: EPITHELIAL MESENCHYMAL TRANSITION", color.line="#B3C543", color="#B3C543", color.vline ="#B3C543")+theme_classic()+ylim(-0.7, 0.7)
+
+p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "EPITHELIAL MESENCHYMAL TRANSITION", by="runningScore", title = "day 14 Palbo vs Cycling: EPITHELIAL MESENCHYMAL TRANSITION", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.7, 0.7)+geom_text(label=paste0("padj=" ,GSEA_padj), y=0.5, x=10000)
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark_EPITHELIAL_MESENCHYMAL_TRANSITION.pdf", width=3, height=5)
+plot_grid(p1, p2, ncol=1)
+dev.off()
+
+
+# Get padj value of GSEA result for HYPOXIA to add onto GSEA plots
+GSEA_padj <- GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% "HYPOXIA", ]$p.adjust
+GSEA_padj <- format(round(GSEA_padj, 4), nsmall = 4) # round to 4 decimal places 
+
+# plot GSEA RES
+p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "HYPOXIA", by="runningScore", title = "day 14 Doxo vs Cycling: HYPOXIA", color.line="#B3C543", color="#B3C543", color.vline ="#B3C543")+theme_classic()+ylim(-0.3, 0.8)
+
+p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "HYPOXIA", by="runningScore", title = "day 14 Palbo vs Cycling: HYPOXIA", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.3, 0.8)+geom_text(label=paste0("padj=" ,GSEA_padj), y=0.5, x=10000)
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark_HYPOXIA.pdf", width=3, height=5)
+plot_grid(p1, p2, ncol=1)
+dev.off()
+
+# Get padj value of GSEA result for DNA DOUBLE STRAND BREAK RESPONSE to add onto GSEA plots
+GSEA_padj <- GSEA_Results_REACT$`Doxo14 vs Cycling0`@result[GSEA_Results_REACT$`Doxo14 vs Cycling0`@result$ID %in% "DNA DOUBLE STRAND BREAK RESPONSE", ]$p.adjust
+GSEA_padj <- format(round(GSEA_padj, 4), nsmall = 4) # round to 4 decimal places 
+
+# plot GSEA RES
+p1 <- gseaplot(GSEA_Results_REACT$`Doxo14 vs Cycling0`, geneSetID = "DNA DOUBLE STRAND BREAK RESPONSE", by="runningScore", title = "day 14 Doxo vs Cycling: DNA DOUBLE STRAND BREAK RESPONSE", color.line="#B3C543", color="#B3C543", color.vline ="#B3C543")+theme_classic()+ylim(-0.3, 0.8)+geom_text(label=paste0("padj=" ,GSEA_padj), y=0.5, x=10000)
+
+p2 <- gseaplot(GSEA_Results_REACT$`Palbo14 vs Cycling0`, geneSetID = "DNA DOUBLE STRAND BREAK RESPONSE", by="runningScore", title = "day 14 Palbo vs Cycling: DNA DOUBLE STRAND BREAK RESPONSE", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.3, 0.8)
+
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark_DNA DOUBLE STRAND BREAK RESPONSE.pdf", width=3, height=5)
+plot_grid(p1, p2, ncol=1)
+dev.off()
+```
+
+
 # RNA-seq: plot padj values for top 5 IPA upstream regs for each cluster individually. 
 ```{r}
 # Still showing the pvalues of the other clusters as columns but only the top IPA upstream regs from the cluster of interest. 
@@ -775,131 +759,7 @@ pheatmap(IPA_group_regs_clusters[[1]], cluster_cols = F, colorRampPalette(brewer
 dev.off()
 ```
 
-# plot log2FC of E2F target genes at day 14 Palbo & day 14 Doxo relative to Cycling. 
-```{r}
 
-log2FC_E2F <- rbind(
-          data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Palbo3 vs Cycling0"], 
-           Condition="day 3 Palbo", 
-           Comparison="vs Cycling"),
-  
-          data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Palbo14 vs Cycling0"], 
-           Condition="day 14 Palbo", 
-           Comparison="vs Cycling" ), 
-           
-           data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Palbo21 vs Cycling0"], 
-           Condition="day 21 Palbo", 
-           Comparison="vs Cycling" ), 
-           
-           data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Palbo28 vs Cycling0"], 
-           Condition="day 28 Palbo", 
-           Comparison="vs Cycling" ),
-           
-           data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Doxo3 vs Cycling0"], 
-           Condition="day 3 Doxo", 
-           Comparison="vs Cycling"),
-      
-      data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Doxo14 vs Cycling0"], 
-           Condition="day 14 Doxo", 
-           Comparison="vs Cycling"), 
-      
-          data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Doxo21 vs Cycling0"], 
-           Condition="day 21 Doxo", 
-           Comparison="vs Cycling"), 
-      
-      data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Palbo14 vs Palbo3"], 
-           Condition="day 14 Palbo",
-           Comparison="vs day 3"), 
-      
-       data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Palbo21 vs Palbo3"], 
-           Condition="day 21 Palbo",
-           Comparison="vs day 3" ), 
-           
-           data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Palbo28 vs Palbo3"], 
-           Condition="day 28 Palbo",
-           Comparison="vs day 3" ),
-      
-      data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Doxo14 vs Doxo3"], 
-           Condition="day 14 Doxo",
-           Comparison="vs day 3"),
-      
-      data.frame(genes= E2F_genes , 
-           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% E2F_genes, "Doxo21 vs Doxo3"], 
-           Condition="day 21 Doxo",
-           Comparison="vs day 3")
-)
-# function to create violin plot of log2FC values of genes
-create_violin_plot <- function(data=log2FC_E2F, plot_title="RNA: log2FC of p53 target genes") {
-  library(ggplot2)
-  library(ggbeeswarm)
-  
-  ggplot(
-    data,
-    aes(x = Condition, y = log2FC, fill = Condition)
-  ) +
-    geom_violin() +
-    geom_quasirandom(
-      color = "black", alpha = 0.2,
-      method = "pseudorandom", # Aligns jitter points to violin shape
-      groupOnX = TRUE,
-      size = 0.5
-    ) +
-    stat_summary(
-      fun = "median",
-      geom = "crossbar",
-      color = "white",
-      width = 0.5
-    ) +
-    theme_classic() +
-    theme(
-      axis.text.x = element_text(angle = 90, size = 8),
-      axis.text.y = element_text(size = 8),
-      axis.title.y = element_text(size = 10)
-    ) +
-    facet_wrap(~Comparison, scales = "free_x") +
-    scale_fill_manual(
-      values = c(
-        "day 3 Doxo" = "#B3C543",
-        "day 14 Doxo" = "#B3C543",
-        "day 21 Doxo" = "#B3C543",
-        "day 3 Palbo" = "#E0ADCD",
-        "day 14 Palbo" = "#E0ADCD",
-        "day 21 Palbo" = "#E0ADCD",
-        "day 28 Palbo" = "#E0ADCD"
-      )
-    ) +
-    ylab("log2FC") +
-    xlab("") +
-    ggtitle(plot_title)
-}
-
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP/RNA_log2FC_E2F_targets.pdf", width=7, height=3)
-library(ggbeeswarm)
-create_violin_plot(
-  data = log2FC_E2F,
-  plot_title = "RNA: log2FC of E2F Target genes"
-)
-dev.off()
-
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug distinct responses and SASP/RNA_log2FC_day14_E2F_targets.pdf", width=4, height=3)
-library(ggbeeswarm)
-create_violin_plot(
-  data = log2FC_E2F[log2FC_E2F$Condition %in% c("day 14 Palbo", "day 14 Doxo"), ],
-  plot_title = "RNA: log2FC of E2F Target genes"
-)
-dev.off()
-```
 
 # ATAC-seq, merged RNA clusters: plot motif enrichment results of all clusters as heatmap of p-adj values for each type ("PalboDownvsCyc", "PalboDownvsday3",  "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3") of sig changing peaks
 ```{r}
