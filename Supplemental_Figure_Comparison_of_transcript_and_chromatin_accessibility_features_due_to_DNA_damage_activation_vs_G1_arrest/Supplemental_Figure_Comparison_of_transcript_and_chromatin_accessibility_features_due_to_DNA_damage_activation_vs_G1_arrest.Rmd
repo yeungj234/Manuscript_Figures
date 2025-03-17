@@ -1,0 +1,238 @@
+---
+title: "Supplemental Figure 1: Comparison of transcript & chromatin accessibility features due to DNA damage activation vs G1 arrest"
+author: "Joanna Yeung"
+date: '2025-03-17'
+output: html_document
+---
+
+```{r}
+# data wrangling
+library(preprocessCore)
+library(readr)
+library(readxl)
+library(stringr)
+library(dplyr)
+
+# plotting
+library(gridExtra)
+library(ggplot2)
+library(pheatmap)
+library(cowplot)
+library(viridis)
+library(RColorBrewer)
+library(scales)
+library(ggrepel)
+
+# genomics data wrangling and analysis
+library(rtracklayer)
+library(Biostrings)
+library(GenomicFeatures)
+library(GenomicRanges)
+library(rtracklayer)
+library(DESeq2)
+library(apeglm)
+library(ChIPseeker)
+library(clusterProfiler)
+library(msigdbr)
+library(MotifDb)
+library(motifmatchr)
+
+# genome annotation databases
+library(EnsDb.Hsapiens.v79)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(BSgenome.Hsapiens.UCSC.hg38)
+library(org.Hs.eg.db)
+```
+# make function to specify code chunk to run from other Rmd file to avoid copying and pasting large lines of code. 
+```{r}
+# arguments: 
+# Rmd_file=file path & name of Rmd file with code chunk
+# chunk_name= name of code chunk to run from Rmd file. 
+run_code_chunk <- function(Rmd_file, chunk_name){ 
+  # Read the Rmd file
+lines <- readLines(Rmd_file)
+
+# Identify the start and end of the specific chunk
+chunk_start <- grep(paste0("^```\\{r\\s*", chunk_name), lines)  # Find chunk start
+chunk_end <- grep("^```$", lines)  # Find all chunk end lines
+
+# Find the first `chunk_end` after `chunk_start`
+chunk_end <- chunk_end[chunk_end > chunk_start][1]
+
+  if (is.na(chunk_end)) {
+    stop(paste("End of chunk", chunk_name, "not found. Check the Rmd file for missing delimiters."))
+  }
+
+# specify lines inside chunk, removing lines that make up the start and end of the chunk. 
+chunk_to_run <- lines[(chunk_start[1]+1):(chunk_end[1]-1)]
+
+# Evaluate the extracted code
+  eval(parse(text = paste(chunk_to_run, collapse = "\n")), envir = .GlobalEnv)
+}
+```
+
+# load in workspace with DESeq results and rlog counts matrix of genes. 
+```{r}
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Global_transcriptome_and_chromatin_accessibility_is_dynamic_in_both_types_of_therapy_induced_senescence/workspace.RData")
+```
+
+# RNA-seq: extract type of drug distinct upregulated genes. 
+```{r}
+# import gtf file for genes
+genes_anno <- import("/lustre/fs4/risc_lab/store/jyeung/references/gencode.v41.GRCh38.p13.annotation.gtf")
+genes_anno <- genes_anno[genes_anno$type %in% "gene", ] # filter for regions that are only genes 
+genes_anno$gene_id <- gsub('\\.[0-9]*$', '', genes_anno$gene_id) # remove numbers after . in gene id column 
+genes_anno <- genes_anno[ ,c("source", "type", "gene_id", "gene_type", "gene_name", "level")] # keep only these columns
+
+expressed_genes_anno <- as.data.frame(genes_anno[genes_anno$gene_id %in% row.names(LFCResultsall_RNA$`Doxo3 vs Cycling0`), ])
+
+# Count occurrences of each gene_type and calculate percentage for all expressed genes
+gene_counts <- expressed_genes_anno %>%
+  count(gene_type) %>%
+  mutate(percentage = (n / sum(n)) * 100) %>%  # Convert counts to percentages
+  arrange(desc(percentage))  # Sort for better visualization
+gene_counts$gene_type <- factor(gene_counts$gene_type, levels=gene_counts$gene_type)
+gene_counts$Cluster <- "all expressed genes"
+
+# get occurences of each gene type for sig changing genes. 
+sigMat <- assay(RNAddsall_rlog)[gsub('\\.[0-9]*$', '', row.names(assay(RNAddsall_rlog))) %in% sigGenes, ]
+row.names(sigMat) <-  gsub('\\.[0-9]*$', '', row.names(sigMat))
+
+sigMat <- sigMat[ ,c(1,9,15,2,10,16,3,17,4,11,5,12,18,6,19,7,13,8,14)] # reorder columns into sensible order based on time. 
+
+# assign genes to clusters (redoing it b/c we want the ids in ENSG format.)
+set.seed(2025)
+k <- pheatmap(sigMat, scale = "row", kmeans_k = 7)
+clusterDF <- data.frame(Clusters=factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3)), 
+                           gene_id=names(factor(k$kmeans$cluster, levels=c(2,5,7,1,4,6,3))))
+# order rows by k-means cluster & assigned drug category
+clusterDF <- clusterDF[order(clusterDF$Cluster), ]
+
+sig_genetype_counts <- list()
+for(i in 1:length(unique(clusterDF$Clusters))){
+filt_genes <- as.data.frame(genes_anno[genes_anno$gene_id %in% clusterDF[clusterDF$Clusters %in% unique(clusterDF$Clusters)[i], ]$gene_id, ])
+
+# Count occurrences of each gene_type and calculate percentage for each cluster of sig changing genes
+sig_genetype_counts[[i]] <- filt_genes %>%
+  count(gene_type) %>%
+  mutate(percentage = (n / sum(n)) * 100) %>%  # Convert counts to percentages
+  arrange(desc(percentage))  # Sort for better visualization
+sig_genetype_counts[[i]]$gene_type <- factor(sig_genetype_counts[[i]]$gene_type, levels=gene_counts$gene_type)
+sig_genetype_counts[[i]]$Cluster <- unique(clusterDF$Clusters)[i]
+}
+# merge into single dataframe for plotting. 
+merged_genetype_counts <- rbind(do.call(rbind, sig_genetype_counts), gene_counts)
+```
+
+-----------------------------------------------------------------------------------------------------------
+# *FIGURES*
+# RNA-seq: plot types of sig changing genes as piechart. 
+```{r}
+# Create pie chart with percentages
+colors <- c("#8C57A2FF","#17BECFFF","#82581FFF","#2F509EFF","#E5614CFF","#358DB9FF","#CF4E9CFF","#97A1A7FF","#3DA873FF", "#DC9445FF","#FF7F0EFF","#2CA02CFF","#D62728FF","#7F7F7FFF","#2E2A2BFF", rep("#BCBD22FF", 12))
+names(colors) <- gene_counts$gene_type
+
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Comparison_of_transcript_and_chromatin_accessibility_features_due_to_DNA_damage_activation_vs_G1_arrest"
+pdf(paste0(pdf_dir, "/RNA_gene_types_percentages.pdf"), width=12, height=10)
+ggplot(merged_genetype_counts, aes(x = "", y = percentage, fill = gene_type)) +
+  geom_bar(stat = "identity", width = 1) + 
+  coord_polar(theta = "y") +  # Convert bar chart to pie chart
+  theme_void() +  # Remove unnecessary chart elements
+  facet_wrap(~Cluster, nrow=2)+
+  labs(fill = "Gene Type", title = "Distribution of Gene Types (Percentage)") +
+  theme(legend.position = "right") +
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), size = 4)+
+  scale_fill_manual(values=colors)
+dev.off()
+```
+
+# function to create proportional venn diagram
+```{r}
+# write function to create venn diagrams that are proportional to size of each category. 
+create_proportional_venn <- function(sets, set_labels, colors = c("#E0ADCD", "#B3C543", "#A0ADCD")) {
+  library(eulerr)
+  # Check if sets and labels are provided correctly
+  if (length(sets) != length(set_labels)) {
+    stop("The number of sets and set_labels must be the same.")
+  }
+  
+  # Prepare the data for eulerr
+  venn_data <- setNames(sets, set_labels)
+  
+  # Use eulerr to calculate the Venn diagram
+  venn_fit <- euler(venn_data)
+  
+  # Plot the Venn diagram
+  plot(venn_fit, 
+       fills = colors, 
+       labels = list(cex = 1, fontfamily = "Helvetica"),
+       quantities = list(cex = 1),
+       edges = list(lwd = 2))
+}
+```
+
+# ATAC-seq: Plot the Venn diagram of significantly upregulated and downregulated peaks that Palbo & Doxo share
+```{r}
+allUpvsCycling <- list(Palbo=unique(unlist(GRangesList(annoUp[grepl("PalbovsCycling", names(annoUp))]))), Doxo=unique(unlist(GRangesList(annoUp[grepl("DoxovsCycling", names(annoUp))]))) )
+allDownvsCycling <- list(Palbo=unique(unlist(GRangesList(annoDown[grepl("PalbovsCycling", names(annoDown))]))), Doxo=unique(unlist(GRangesList(annoDown[grepl("DoxovsCycling", names(annoDown))]))) )
+
+allUpvsday3 <- list(Palbo=unique(unlist(GRangesList(annoUp[grepl("Palbovsday3Palbo", names(annoUp))]))), Doxo= unique(unlist(GRangesList(annoUp[grepl("Doxovsday3Doxo", names(annoUp))]))) )
+allDownvsday3 <- list(Palbo=unique(unlist(GRangesList(annoDown[grepl("Palbovsday3Palbo", names(annoDown))]))), Doxo=unique(unlist(GRangesList(annoDown[grepl("Doxovsday3Doxo", names(annoDown))]))) )
+
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Comparison_of_transcript_and_chromatin_accessibility_features_due_to_DNA_damage_activation_vs_G1_arrest"
+
+pdf(paste0(pdf_dir, "/vsCyc_vsday3_DiffPeaks_VennDiagram.pdf"), width=4, height=4)
+create_proportional_venn(sets=list(allUpvsCycling$Palbo$name, allUpvsCycling$Doxo$name), 
+                         set_labels = c("Palbo Up vs Cycling", "Doxo Up vs Cycling"), 
+                         colors = c("#E0ADCD","#B3C543") )
+create_proportional_venn(sets=list(allUpvsday3$Palbo$name, allUpvsday3$Doxo$name), 
+                         set_labels = c("Palbo Up vs day3", "Doxo Up vs day3"), 
+                         colors = c("#E0ADCD","#B3C543") )
+create_proportional_venn(sets=list(allDownvsCycling$Palbo$name, allDownvsCycling$Doxo$name), 
+                         set_labels = c("Palbo Down vs Cycling", "Doxo Down vs Cycling"), 
+                         colors = c("#E0ADCD","#B3C543") )
+create_proportional_venn(sets=list(allDownvsday3$Palbo$name, allDownvsday3$Doxo$name), 
+                         set_labels = c("Palbo Down vs day3", "Doxo Down vs day3"), 
+                         colors = c("#E0ADCD","#B3C543") )
+create_proportional_venn(sets=list(allUpvsCycling$Palbo$name, allUpvsday3$Palbo$name), 
+                         set_labels = c("Palbo Up vs Cycling", "Palbo Up vs day3"), 
+                         colors = c("#E0ADCD","#DD2B91") )
+create_proportional_venn(sets=list(allUpvsCycling$Doxo$name, allUpvsday3$Doxo$name), 
+                         set_labels = c("Doxo Up vs Cycling", "Doxo Up vs day3"), 
+                         colors = c("#B3C543", "#6C7933") )
+
+create_proportional_venn(sets=list(allDownvsCycling$Palbo$name, allDownvsday3$Palbo$name), 
+                         set_labels = c("Palbo Down vs Cycling", "Palbo Down vs day3"), 
+                         colors = c("#E0ADCD","#DD2B91") )
+create_proportional_venn(sets=list(allDownvsCycling$Doxo$name, allDownvsday3$Doxo$name), 
+                         set_labels = c("Doxo Down vs Cycling", "Doxo Down vs day3"), 
+                         colors = c("#B3C543", "#6C7933") )
+dev.off()
+```
+
+```{r}
+# ATAC-seq:  make pie chart of peak annotation for merged differential peaks across timepoints. 
+allUpvsCycling[["Palbo"]]@ranges@NAMES <- NULL
+allUpvsCycling[["Doxo"]]@ranges@NAMES <- NULL
+annoallUpvsCyc <- lapply(allUpvsCycling, annotatePeak, TxDb=TxDb.Hsapiens.UCSC.hg38.knownGene)
+allUpvsday3[["Palbo"]]@ranges@NAMES <- NULL
+allUpvsday3[["Doxo"]]@ranges@NAMES <- NULL
+annoallUpvsday3 <- lapply(allUpvsday3, annotatePeak, TxDb=TxDb.Hsapiens.UCSC.hg38.knownGene)
+
+allDownvsCycling[["Palbo"]]@ranges@NAMES <- NULL
+allDownvsCycling[["Doxo"]]@ranges@NAMES <- NULL
+annoallDownvsCyc <- lapply(allDownvsCycling, annotatePeak, TxDb=TxDb.Hsapiens.UCSC.hg38.knownGene)
+allDownvsday3[["Palbo"]]@ranges@NAMES <- NULL
+allDownvsday3[["Doxo"]]@ranges@NAMES <- NULL
+annoallDownvsday3 <- lapply(allDownvsday3, annotatePeak, TxDb=TxDb.Hsapiens.UCSC.hg38.knownGene)
+
+pdf(paste0(pdf_dir, "/ATAC_plotAnnoPie_vsCyc_vsday3_DiffPeaks.pdf"))
+for(i in 1:2){
+  plotAnnoPie(annoallUpvsCyc[[i]], main=paste0("Up vs Cyc:", names(annoallUpvsCyc)[i]))
+  plotAnnoPie(annoallUpvsday3[[i]], main=paste0("Up vs day3:", names(annoallUpvsday3)[i]))
+   plotAnnoPie(annoallDownvsCyc[[i]], main=paste0("Down vs Cyc:", names(annoallDownvsCyc)[i]))
+  plotAnnoPie(annoallDownvsday3[[i]], main=paste0("Down vs day3:", names(annoallDownvsday3)[i]))
+}
+dev.off()
+```

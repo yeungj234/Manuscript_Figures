@@ -99,7 +99,7 @@ hm_cols_ATAC <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A
 
 # load in workspace with DESeq results and rlog counts matrix of genes. 
 ```{r}
-load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Global transcriptome and chromatin accessibility is dynamic in both types of therapy induced senescence/workspace.RData")
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Global_transcriptome_and_chromatin_accessibility_is_dynamic_in_both_types_of_therapy_induced_senescence/workspace.RData")
 ```
 
 # download msigdb databases, to be used for GO enrichment analysis. 
@@ -348,22 +348,27 @@ folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_F
 ```{r RNAseq GSEA analysis}
 ranked_res_forGSEA <- list()
 for(i in 1:length(LFCResultsall_RNA)){
-# Filter for significant genes (optional)
   
-rank <- LFCResultsall_RNA[[i]][!is.na(LFCResultsall_RNA[[i]]$padj), ]
+  rank <- LFCResultsall_RNA[[i]]
+  
+  # Assign a default p-value for genes with NA padj (maximum p-value)
+  rank$pvalue[is.na(rank$padj)] <- 1 
+  
+  # Create a ranked list based on log2FoldChange and -log10(p-value)
+  rank$rank_metric <- sign(rank$log2FoldChange) * -log10(rank$pvalue)
+  
+  # Sort by the ranking metric
+  rank <- rank[order(rank$rank_metric, decreasing = TRUE), ]
+  
+  # Store the ranked values
+  ranked_res_forGSEA[[i]] <- rank$rank_metric
+  names(ranked_res_forGSEA[[i]]) <- row.names(rank)
 
-# Create a ranked list based on a metric (e.g., log2 fold change or -log10(p-value))
-# Here, we rank by the sign of log2FoldChange * -log10(p-value)
-rank$rank_metric <- sign(rank$log2FoldChange) * -log10(rank$pvalue)
+  # Convert gene IDs to Entrez IDs if available
+  entrez_ids <- genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid
+  names(ranked_res_forGSEA[[i]]) <- ifelse(is.na(entrez_ids), names(ranked_res_forGSEA[[i]]), entrez_ids)
+}
 
-rank <- rank[order(rank$rank_metric, decreasing = TRUE), ]
-
-# Sort the LFCResultsall_RNA results by the ranking metric
-ranked_res_forGSEA[[i]] <- rank$rank_metric
-names(ranked_res_forGSEA[[i]]) <- row.names(rank)
-
-names(ranked_res_forGSEA[[i]]) <- ifelse(genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid %in% NA, names(ranked_res_forGSEA[[i]]), genes_anno_type[match(names(ranked_res_forGSEA[[i]]), genes_anno_type$ensembl_id), ]$entrezid)
-} # convert to entrez id for input into GSEA function. 
 names(ranked_res_forGSEA) <- names(LFCResultsall_RNA)
 
 # run GSEA analysis using: 
@@ -688,49 +693,148 @@ pheatmap(GO_results_mat_clusters[[6]][1:5, ], cluster_cols = F, colorRampPalette
 dev.off()
 ```
 
-# RNA-seq: save GSEA running score for Hallmark EPITHELIAL MESENCHYMAL TRANSITION
+# create function that gets GSEA enrichmentScores that trend opposite between drugs to figure out which enriched terms to plot runningScore plots with. 
+```{r get_opposing_GSEA_enrichment}
+get_opposing_GSEA_enrichment <- function(Results_enriched=GSEA_Results_H$`Palbo14 vs Cycling0`, Results_opposite=GSEA_Results_H$`Doxo14 vs Cycling0`, names=c("Palbo", "Doxo"), database="Hallmark") {
+  # Extract positively enriched terms in drug114 vs Cycling0
+  GSEApos <- Results_enriched[
+    Results_enriched$enrichmentScore > 0, 
+    c("ID", "enrichmentScore", "p.adjust")
+  ]
+  
+ # Find terms that are positively enriched in drug1 but negatively enriched in drug2
+GSEAopp <- Results_opposite[
+  Results_opposite$ID %in% GSEApos$ID & 
+    Results_opposite$enrichmentScore < 0, 
+  c("ID", "enrichmentScore", "p.adjust")
+]
+
+# Initialize an empty dataframe for opp_df
+opp_df <- data.frame()
+
+# Only proceed if GSEAopp has rows
+if (nrow(GSEAopp) > 0) {
+  opp_df <- data.frame(
+    ID = GSEAopp$ID,
+    Resultsopp_enrichmentScore = GSEAopp$enrichmentScore,
+    Resultsenr_enrichmentScore = GSEApos[match(GSEAopp$ID, GSEApos$ID), ]$enrichmentScore,
+    database = database
+  )
+  
+  # Sort by drug1 enrichment score in descending order
+  opp_df <- opp_df[order(opp_df$Resultsenr_enrichmentScore, decreasing = TRUE), ]
+}
+  # Find enriched terms in drug1 that are not enriched in drug2
+  enriched_GSEA <- Results_enriched[
+    !Results_enriched$ID %in% Results_opposite$ID, 
+    c("ID", "enrichmentScore", "p.adjust")
+  ]
+  
+  # Sort by drug1 enrichment score in descending order
+  enriched_GSEA <- enriched_GSEA[order(enriched_GSEA$enrichmentScore, decreasing = TRUE), ]
+  
+  # Create dataframe for terms enriched in drug1 but not found in drug2
+  notinopp_df <- data.frame(
+    ID = enriched_GSEA$ID,
+    Resultsopp_enrichmentScore = 0,
+    Resultsenr_enrichmentScore = enriched_GSEA$enrichmentScore,
+   database= database
+  )
+  
+  # Merge results
+  positiveenr_Results1 <- rbind(opp_df, notinopp_df)
+  colnames(positiveenr_Results1) <- c("ID", paste0(names[2], "enrichmentScore"), paste0(names[1], "enrichmentScore"), "database")
+  return(positiveenr_Results1 )
+}
+```
+
+# RNA-seq: find GSEA enrichment Scores that are opposing between drug treatments
+```{r}
+# find positive enriched terms in day 14 Palbo vs Cycling
+Palbo_enriched_GSEA <- rbind(get_opposing_GSEA_enrichment(Results_enriched=GSEA_Results_H$`Palbo14 vs Cycling0`, Results_opposite=GSEA_Results_H$`Doxo14 vs Cycling0`, names=c("Palbo", "Doxo"), database="Hallmark"), 
+                            get_opposing_GSEA_enrichment(Results_enriched=GSEA_Results_KEGG$`Palbo14 vs Cycling0`, Results_opposite=GSEA_Results_KEGG$`Doxo14 vs Cycling0`, names=c("Palbo", "Doxo"), database="KEGG"), 
+                            get_opposing_GSEA_enrichment(Results_enriched=GSEA_Results_REACT$`Palbo14 vs Cycling0`, Results_opposite=GSEA_Results_REACT$`Doxo14 vs Cycling0`, names=c("Palbo", "Doxo"), database="REACTOME"), 
+                            get_opposing_GSEA_enrichment(Results_enriched=GSEA_Results_MF$`Palbo14 vs Cycling0`, Results_opposite=GSEA_Results_MF$`Doxo14 vs Cycling0`, names=c("Palbo", "Doxo"), database="GO:MF")
+                            )
+# find positive enriched terms in day 14 Doxo vs Cycling
+Doxo_enriched_GSEA <- rbind(get_opposing_GSEA_enrichment(Results_enriched=GSEA_Results_H$`Doxo14 vs Cycling0`, Results_opposite=GSEA_Results_H$`Palbo14 vs Cycling0`, names=c("Doxo", "Palbo"), database="Hallmark"), 
+                            get_opposing_GSEA_enrichment(Results_enriched=GSEA_Results_KEGG$`Doxo14 vs Cycling0`, Results_opposite=GSEA_Results_KEGG$`Palbo14 vs Cycling0`, names=c("Doxo", "Palbo"), database="KEGG"), 
+                            get_opposing_GSEA_enrichment(Results_enriched=GSEA_Results_REACT$`Doxo14 vs Cycling0`, Results_opposite=GSEA_Results_REACT$`Palbo14 vs Cycling0`, names=c("Doxo", "Palbo"), database="REACTOME"), 
+                            get_opposing_GSEA_enrichment(Results_enriched=GSEA_Results_MF$`Doxo14 vs Cycling0`, Results_opposite=GSEA_Results_MF$`Palbo14 vs Cycling0`, names=c("Doxo", "Palbo"), database="GO:MF")
+                            )
+# Palbo: order by highest to lowest enrichment scores and corresponding Doxo enrichment Score is negative
+Palbo_enriched_GSEA <- Palbo_enriched_GSEA[Palbo_enriched_GSEA$DoxoenrichmentScore < 0, ]
+Palbo_enriched_GSEA <- Palbo_enriched_GSEA[order(Palbo_enriched_GSEA$PalboenrichmentScore, decreasing=T), ]
+
+# Doxo: order by highest to lowest enrichment scores and corresponding Palbo enrichment Score is negative
+Doxo_enriched_GSEA <- Doxo_enriched_GSEA[order(Doxo_enriched_GSEA$DoxoenrichmentScore, decreasing=T) & Doxo_enriched_GSEA$PalboenrichmentScore < 0, ]
+```
+
+# RNA-seq: save GSEA running score enriched terms trending in opposite directions between drugs
 ```{r}
 library(enrichplot)
 library(patchwork)
 
-# Get padj value of GSEA result for EPITHELIAL MESENCHYMAL TRANSITION to add onto GSEA plots
-GSEA_padj <- GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% "EPITHELIAL MESENCHYMAL TRANSITION", ]$p.adjust
-GSEA_padj <- format(round(GSEA_padj, 4), nsmall = 4) # round to 4 decimal places 
+# Define the gene sets and corresponding titles
+genesetID <- c("ANGIOGENESIS", "EPITHELIAL MESENCHYMAL TRANSITION")
+# Get padj value of GSEA results to be plotted
+#GSEA_padj <- data.frame(ID=GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% genesetID, ]$ID, 
+                        palbo_p.adjust= GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% genesetID, ]$p.adjust, 
+                        doxo_p.adjust= GSEA_Results_H$`Doxo14 vs Cycling0`@result[GSEA_Results_H$`Doxo14 vs Cycling0`@result$ID %in% genesetID, ]$p.adjust)
 
-# plot GSEA RES
-p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "EPITHELIAL MESENCHYMAL TRANSITION", by="runningScore", title = "day 14 Doxo vs Cycling: EPITHELIAL MESENCHYMAL TRANSITION", color.line="#B3C543", color="#B3C543", color.vline ="#B3C543")+theme_classic()+ylim(-0.7, 0.7)
+# Open PDF for saving plots
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
+pdf(paste0(pdf_dir, "/GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark.pdf"), width=3, height=5)
+# Loop through each gene set
+for (i in 1:length(genesetID)) {
+  
+  # Generate GSEA plots for Doxo and Palbo
+  p_doxo <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = genesetID[i], by="runningScore", 
+                      title = paste("day 14 Doxo vs Cycling:", genesetID[i]), 
+                      color.line="#B3C543", color="#B3C543", color.vline ="#B3C543") +
+            theme_classic() + ylim(-0.75, 0.85)
+  
+  p_palbo <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = genesetID[i], by="runningScore", 
+                      title = paste("day 14 Palbo vs Cycling:", genesetID[i]), 
+                      color.line="#E0ADCD", color="#E0ADCD", color.vline ="#E0ADCD") +
+            theme_classic() + ylim(-0.75, 0.85)
+  
+  # Plot the figures
+  print(plot_grid(p_doxo, p_palbo, ncol=1))
+}
 
-p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "EPITHELIAL MESENCHYMAL TRANSITION", by="runningScore", title = "day 14 Palbo vs Cycling: EPITHELIAL MESENCHYMAL TRANSITION", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.7, 0.7)+geom_text(label=paste0("padj=" ,GSEA_padj), y=0.5, x=10000)
-
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark_EPITHELIAL_MESENCHYMAL_TRANSITION.pdf", width=3, height=5)
-plot_grid(p1, p2, ncol=1)
+# Close PDF
 dev.off()
 
+# Define the gene sets and corresponding titles
+genesetID <- c("CROSSLINKING OF COLLAGEN FIBRILS", "ECM PROTEOGLYCANS", "INTEGRIN CELL SURFACE INTERACTIONS", "MEIOTIC RECOMBINATION", "DISEASES OF PROGRAMMED CELL DEATH", "DEPOSITION OF NEW CENPA CONTAINING NUCLEOSOMES AT THE CENTROMERE", "OXIDATIVE STRESS INDUCED SENESCENCE")
+titles <- genesetID
+# Get padj value of GSEA results to be plotted
+GSEA_padj <- data.frame(ID=GSEA_Results_REACT$`Palbo14 vs Cycling0`@result[GSEA_Results_REACT$`Palbo14 vs Cycling0`@result$ID %in% genesetID, ]$ID, 
+                        palbo_p.adjust= GSEA_Results_REACT$`Palbo14 vs Cycling0`@result[GSEA_Results_REACT$`Palbo14 vs Cycling0`@result$ID %in% genesetID, ]$p.adjust, 
+                        doxo_p.adjust= GSEA_Results_REACT$`Doxo14 vs Cycling0`@result[GSEA_Results_REACT$`Doxo14 vs Cycling0`@result$ID %in% genesetID, ]$p.adjust)
 
-# Get padj value of GSEA result for HYPOXIA to add onto GSEA plots
-GSEA_padj <- GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% "HYPOXIA", ]$p.adjust
-GSEA_padj <- format(round(GSEA_padj, 4), nsmall = 4) # round to 4 decimal places 
+# Open PDF for saving plots
+pdf(paste0(pdf_dir, "/GSEA_day14Doxo_day14Palbo_vs_Cyc_REACTOME.pdf"), width=3, height=5)
+# Loop through each gene set
+for (i in 1:length(genesetID)) {
+  
+  # Generate GSEA plots for Doxo and Palbo
+  p_doxo <- gseaplot(GSEA_Results_REACT$`Doxo14 vs Cycling0`, geneSetID = genesetID[i], by="runningScore", 
+                      title = paste("day 14 Doxo vs Cycling:", genesetID[i]), 
+                      color.line="#B3C543", color="#B3C543", color.vline ="#B3C543") +
+            theme_classic() + ylim(-0.8, 0.85)
+  
+  p_palbo <- gseaplot(GSEA_Results_REACT$`Palbo14 vs Cycling0`, geneSetID = genesetID[i], by="runningScore", 
+                      title = paste("day 14 Palbo vs Cycling:", genesetID[i]), 
+                      color.line="#E0ADCD", color="#E0ADCD", color.vline ="#E0ADCD") +
+            theme_classic() + ylim(-0.8, 0.85)
+  
+  # Plot the figures
+  print(plot_grid(p_doxo, p_palbo, ncol=1))
+}
 
-# plot GSEA RES
-p1 <- gseaplot(GSEA_Results_H$`Doxo14 vs Cycling0`, geneSetID = "HYPOXIA", by="runningScore", title = "day 14 Doxo vs Cycling: HYPOXIA", color.line="#B3C543", color="#B3C543", color.vline ="#B3C543")+theme_classic()+ylim(-0.3, 0.8)
-
-p2 <- gseaplot(GSEA_Results_H$`Palbo14 vs Cycling0`, geneSetID = "HYPOXIA", by="runningScore", title = "day 14 Palbo vs Cycling: HYPOXIA", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.3, 0.8)+geom_text(label=paste0("padj=" ,GSEA_padj), y=0.5, x=10000)
-
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark_HYPOXIA.pdf", width=3, height=5)
-plot_grid(p1, p2, ncol=1)
-dev.off()
-
-# Get padj value of GSEA result for DNA DOUBLE STRAND BREAK RESPONSE to add onto GSEA plots
-GSEA_padj <- GSEA_Results_REACT$`Doxo14 vs Cycling0`@result[GSEA_Results_REACT$`Doxo14 vs Cycling0`@result$ID %in% "DNA DOUBLE STRAND BREAK RESPONSE", ]$p.adjust
-GSEA_padj <- format(round(GSEA_padj, 4), nsmall = 4) # round to 4 decimal places 
-
-# plot GSEA RES
-p1 <- gseaplot(GSEA_Results_REACT$`Doxo14 vs Cycling0`, geneSetID = "DNA DOUBLE STRAND BREAK RESPONSE", by="runningScore", title = "day 14 Doxo vs Cycling: DNA DOUBLE STRAND BREAK RESPONSE", color.line="#B3C543", color="#B3C543", color.vline ="#B3C543")+theme_classic()+ylim(-0.3, 0.8)+geom_text(label=paste0("padj=" ,GSEA_padj), y=0.5, x=10000)
-
-p2 <- gseaplot(GSEA_Results_REACT$`Palbo14 vs Cycling0`, geneSetID = "DNA DOUBLE STRAND BREAK RESPONSE", by="runningScore", title = "day 14 Palbo vs Cycling: DNA DOUBLE STRAND BREAK RESPONSE", color="#E0ADCD", color.line="#E0ADCD")+theme_classic()+ylim(-0.3, 0.8)
-
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/GSEA_day14Doxo_day14Palbo_vs_Cyc_Hallmark_DNA DOUBLE STRAND BREAK RESPONSE.pdf", width=3, height=5)
-plot_grid(p1, p2, ncol=1)
+# Close PDF
 dev.off()
 ```
 
@@ -758,8 +862,6 @@ pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure Drug dis
 pheatmap(IPA_group_regs_clusters[[1]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 100,length.out = 100), cluster_rows = F, main="Shared down genes: predicted group regulators", border_color = "black", annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
 dev.off()
 ```
-
-
 
 # ATAC-seq, merged RNA clusters: plot motif enrichment results of all clusters as heatmap of p-adj values for each type ("PalboDownvsCyc", "PalboDownvsday3",  "DoxoDownvsCyc","DoxoDownvsday3", "PalboUpvsCyc", "PalboUpvsday3", "DoxoUpvsCyc", "DoxoUpvsday3") of sig changing peaks
 ```{r}
