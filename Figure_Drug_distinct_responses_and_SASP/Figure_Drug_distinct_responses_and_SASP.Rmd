@@ -387,7 +387,6 @@ names(GSEA_Results_H) <- names(LFCResultsall_RNA)
 names(GSEA_Results_KEGG) <- names(LFCResultsall_RNA)
 names(GSEA_Results_REACT) <- names(LFCResultsall_RNA)
 names(GSEA_Results_MF) <- names(LFCResultsall_RNA)
-
 ```
 
 # RNA-seq: generate input files for IPA pathways. 
@@ -431,10 +430,10 @@ names(IPA_pathways) <- cluster_names
 
 #extract ids of all expressed genes
 expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
-
+```
+```{r}
 # keep only upstream regulators that are part of expressed genes or have lower case letters (these are upstream regulators that could be miRNAs or protein complexes)
 #IPA_upstream_regs <- lapply(IPA_upstream_regs, function(IPA_upstream_regs){IPA_upstream_regs[c(grep('[:lower:]', IPA_upstream_regs$Upstream.Regulator), which(IPA_upstream_regs$Upstream.Regulator %in% expressedGenes)), ]})
-
 ```
 
 # RNA-seq: plotting padj values of top IPA predicted upstream regulators of all clusters
@@ -778,7 +777,7 @@ library(patchwork)
 # Define the gene sets and corresponding titles
 genesetID <- c("ANGIOGENESIS", "EPITHELIAL MESENCHYMAL TRANSITION")
 # Get padj value of GSEA results to be plotted
-#GSEA_padj <- data.frame(ID=GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% genesetID, ]$ID, 
+GSEA_padj <- data.frame(ID=GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% genesetID, ]$ID, 
                         palbo_p.adjust= GSEA_Results_H$`Palbo14 vs Cycling0`@result[GSEA_Results_H$`Palbo14 vs Cycling0`@result$ID %in% genesetID, ]$p.adjust, 
                         doxo_p.adjust= GSEA_Results_H$`Doxo14 vs Cycling0`@result[GSEA_Results_H$`Doxo14 vs Cycling0`@result$ID %in% genesetID, ]$p.adjust)
 

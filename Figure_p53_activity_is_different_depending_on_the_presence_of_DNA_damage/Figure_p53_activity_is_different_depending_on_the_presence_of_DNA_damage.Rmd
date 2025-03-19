@@ -442,10 +442,10 @@ create_proportional_venn <- function(sets, set_labels, colors = c("#E0ADCD", "#B
        quantities = list(cex = 1),
        edges = list(lwd = 2))
 }
-venn_data_Doxo <- list(row.names(clusterDF[clusterDF$Clusters %in% c("4", "6", "3") & clusterDF$p53_All %in% "Yes", ]), 
-                  row.names(clusterDF[clusterDF$Clusters %in% c("4", "6", "3") & clusterDF$NFKB_All %in% "Yes", ]), 
-                  row.names(clusterDF[clusterDF$Clusters %in% c("4", "6", "3") & clusterDF$SASP%in% "Yes", ]), 
-                  row.names(clusterDF[clusterDF$Clusters %in% c("4", "6", "3"), ]))
+venn_data_Doxo <- list(row.names(clusterDF[clusterDF$Clusters %in% c("4", "6") & clusterDF$p53_All %in% "Yes", ]), 
+                  row.names(clusterDF[clusterDF$Clusters %in% c("4", "6") & clusterDF$NFKB_All %in% "Yes", ]), 
+                  row.names(clusterDF[clusterDF$Clusters %in% c("4", "6") & clusterDF$SASP%in% "Yes", ]), 
+                  row.names(clusterDF[clusterDF$Clusters %in% c("4", "6"), ]))
 
 venn_data_Palbo <- list(row.names(clusterDF[clusterDF$Clusters %in% c("1", "7") & clusterDF$p53_All %in% "Yes", ]), 
                   row.names(clusterDF[clusterDF$Clusters %in% c("1", "7") & clusterDF$NFKB_All %in% "Yes", ]), 

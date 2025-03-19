@@ -641,3 +641,27 @@ matrix <- mergedDiff_hm_rmOutlier$DownPalbo.DownDoxo
   
 generatemergedDiff_hm(matrix=mergedDiff_hm_rmOutlier$DownPalbo.DownDoxo, breaks = seq(-3, 3,length.out = 100), output_file=paste0(outdir,"/ATAC_all_Down_Peaks_Peaks_Mat.pdf"), hm_colors=hm_cols_ATAC, plot_Title = paste0("all Down Peaks:", nrow(mergedDiff_hm_rmOutlier$DownPalbo.DownDoxo)), annoCol=annoCol, DoxoGR=mergedDiffGR$allDown_Doxo, PalboGR=mergedDiffGR$allDown_Palbo)
 ```
+
+```{r}
+# merge technical replicates into 1 sample to make the heatmap look like overwhelming & stripy. 
+dds_filt$group <- factor(paste0(dds_filt$Condition, dds_filt$Biorep))
+#dds_filt_collapsed <- collapseReplicates(dds_filt, dds_filt$group)
+dds_filt_collapsed <- collapseReplicates(dds_filt, dds_filt$Condition)
+dds_filt_collapsed <- estimateSizeFactors(dds_filt_collapsed) 
+dds_filt_collapsed <- dds_filt_collapsed[ ,c(1,9,2,4,6,10,3,5,7,8)] # reorder samples by time & drug
+# generate vst transformed counts from collapsed DESeq counts. 
+vstdds_collapsed <- vst(dds_filt_collapsed)
+vstdds_matrix_collapsed <- assays(vstdds_collapsed)[[1]]
+
+# create dataframe to annotate columns of counts matrix by color
+annoCol_collapsed <- colData(dds_filt_collapsed)[ ,c("Condition", "Treatment", "Timepoint")]
+annoCol_collapsed <- as.data.frame(annoCol_collapsed[c(1,9,2,4,6,10,3,5,7,8), ])
+
+collapsed_hm <- list(UpPalbo.UpDoxo=vstdds_matrix_collapsed[row.names(vstdds_matrix_collapsed) %in% row.names(mergedDiff_hm_rmOutlier$UpPalbo.UpDoxo), ], DownPalbo.DownDoxo=vstdds_matrix_collapsed[row.names(vstdds_matrix_collapsed) %in% row.names(mergedDiff_hm_rmOutlier$DownPalbo.DownDoxo), ])
+
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Global_transcriptome_and_chromatin_accessibility_is_dynamic_in_both_types_of_therapy_induced_senescence"
+
+generatemergedDiff_hm(matrix=collapsed_hm$UpPalbo.UpDoxo, breaks = seq(-3, 3,length.out = 100), output_file=paste0(pdf_dir, "/ATAC_all_Up_Peaks_collapsedMat.pdf"), hm_colors=hm_cols_ATAC, plot_Title = paste0("all Up Peaks: ", nrow(mergedDiff_hm_rmOutlier$UpPalbo.UpDoxo)), annoCol=annoCol, DoxoGR=mergedDiffGR$allUp_Doxo, PalboGR=mergedDiffGR$allUp_Palbo)
+
+generatemergedDiff_hm(matrix=collapsed_hm$DownPalbo.DownDoxo, breaks = seq(-3, 3,length.out = 100), output_file=paste0(pdf_dir, "/ATAC_all_Down_Peaks_collapsedMat.pdf"), hm_colors=hm_cols_ATAC, plot_Title = paste0("all Down Peaks: ", nrow(mergedDiff_hm_rmOutlier$DownPalbo.DownDoxo)), annoCol=annoCol, DoxoGR=mergedDiffGR$allDown_Doxo, PalboGR=mergedDiffGR$allDown_Palbo)
+```

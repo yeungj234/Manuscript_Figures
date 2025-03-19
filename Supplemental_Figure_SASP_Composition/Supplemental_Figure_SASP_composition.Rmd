@@ -444,7 +444,8 @@ filter_upstream_regulators <- function(mat, threshold_neg1 = -0.5, threshold_pos
 }
 
 # plot most differentially activated upstream regulators of Doxo SASP genes
-filt_mat <- filter_upstream_regulators(IPA_SASP_upstream_regs_mat$Doxo, threshold_neg1 = 17, threshold_pos1 = 17,  threshold_neg2 = -0.5, threshold_pos2 = 0.5)
+filt_mat <- filter_upstream_regulators(IPA_SASP_upstream_regs_mat$Doxo, threshold_neg1 = -17, threshold_pos1 = 17,  threshold_neg2 = -0.5, threshold_pos2 = 0.5)
+nrow(filt_mat)
 pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_SASP_Composition"
 # plot heatmap of -log10 pvalue of overlap of enriched complex regulators
 pdf(paste0(pdf_dir, "/RNA_IPA_DoxoSASP_upstream_regs_Comparison.pdf"), width=3, height=3)

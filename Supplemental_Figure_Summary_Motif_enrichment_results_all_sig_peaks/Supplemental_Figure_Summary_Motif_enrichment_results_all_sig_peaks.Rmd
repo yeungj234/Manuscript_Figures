@@ -220,7 +220,8 @@ Doxo_UpPeaks_AME_mat <- list(vsCycling=Doxo_UpPeaks_AME_mat[order(rowSums(Doxo_U
                               vsday3=Doxo_UpPeaks_AME_mat[order(rowSums(Doxo_UpPeaks_AME_mat[ ,5:7]), decreasing=T), ]) # order results by timepoints relative to day3
 
 # create matrix of -log10(padj) values of top 50 most enriched motifs in Palbo & top 50 most enriched motifs in Doxo (several of these motifs are enriched in both drug treatments)
-top35_motifs <- unique(c(row.names(Doxo_UpPeaks_AME_mat$vsCycling)[1:60], row.names(Palbo_UpPeaks_AME_mat$vsCycling)[1:35], row.names(Doxo_UpPeaks_AME_mat$vsday3)[1:10], row.names(Palbo_UpPeaks_AME_mat$vsday3)[1:35]))
+top35_motifs <- unique(c(
+row.names(Doxo_UpPeaks_AME_mat$vsCycling)[1:40], row.names(Palbo_UpPeaks_AME_mat$vsCycling)[1:25], row.names(Doxo_UpPeaks_AME_mat$vsday3)[1:10], row.names(Palbo_UpPeaks_AME_mat$vsday3)[1:25]))
 top35_motifs_Palbo_Doxo_AME_Mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[annoUpPeaks_AME_df$motif_ID %in% top35_motifs, ])
 
 top35_motifs_Palbo_Doxo_AME_Mat <- top35_motifs_Palbo_Doxo_AME_Mat[order(rowSums(top35_motifs_Palbo_Doxo_AME_Mat), decreasing=T), ]# order by overall most to least enriched motifs
