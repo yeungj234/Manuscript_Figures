@@ -109,6 +109,75 @@ cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_pe
 
 sbatch -p risc --array=1-28 --export=backgroundpeakslist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks_kmeans7_RNA_clusters/inputfiles_staticPeaks_in_geneclusters.txt,inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks_kmeans7_RNA_clusters/inputfiles_sigPeaks_in_geneclusters.txt,outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_output/allDoxo_allPalbo_sigPeaks_kmeans7_RNA_clusters,folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/motif_analysis_input/allDoxo_allPalbo_sigPeaks_kmeans7_RNA_clusters/folderlist_sigPeaks_in_geneclusters.txt /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/06222024/motif_analysis/motif_analysis_input/MEME_AME.slurm
 ```
+
+# ATAC-seq: make matrix of vst normalized counts under nearby upregulated peaks (within 50kb) of sig changing gene clusters. 
+```{r}
+# function to reorder counts matrix by drug category
+reorder_by_drug_cat <- function(matrix,DoxoGR=DoxoGR, PalboGR=PalboGR) {
+  
+  # make dataframe to specify which drug treatment peak belongs to: Palbo, Doxo or both. 
+  drug_cat <- data.frame(row.names=row.names(matrix), Palbo=ifelse(row.names(matrix) %in% PalboGR$name, "Yes", "No"), 
+                         Doxo=ifelse(row.names(matrix) %in% DoxoGR$name, "Yes", "No"), 
+                         Both=ifelse(row.names(matrix) %in% DoxoGR$name & row.names(matrix) %in% PalboGR$name, "Yes", "No"),
+                         vsCyc=ifelse(row.names(matrix) %in% vsCyc$name, "Yes", "No"), 
+                         vsday3=ifelse(row.names(matrix) %in% vsday3$name, "Yes", "No") )
+  
+  # order rows by Palbo, Doxo then both peaks
+  drug_cat_list <- list(drug_cat[drug_cat$Palbo %in% "Yes" & drug_cat$Doxo %in% "No" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "No", ],
+                        drug_cat[drug_cat$Palbo %in% "Yes" & drug_cat$Doxo %in% "No" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "Yes", ],
+                        drug_cat[drug_cat$Palbo %in% "Yes" & drug_cat$Doxo %in% "No" & drug_cat$vsCyc %in% "No" & drug_cat$vsday3 %in% "Yes", ],
+                        drug_cat[drug_cat$Both %in% "Yes" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "No", ],
+                        drug_cat[drug_cat$Both %in% "Yes" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "Yes", ],
+                        drug_cat[drug_cat$Both %in% "Yes" & drug_cat$vsCyc %in% "No" & drug_cat$vsday3 %in% "Yes", ],
+                        drug_cat[drug_cat$Palbo %in% "No" & drug_cat$Doxo %in% "Yes" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "No", ], 
+                        drug_cat[drug_cat$Palbo %in% "No" & drug_cat$Doxo %in% "Yes" & drug_cat$vsCyc %in% "Yes" & drug_cat$vsday3 %in% "Yes", ],
+                        drug_cat[drug_cat$Palbo %in% "No" & drug_cat$Doxo %in% "Yes" & drug_cat$vsCyc %in% "No" & drug_cat$vsday3 %in% "Yes", ]
+  )
+  ordered_matrix <- list()
+  for(i in 1:length(drug_cat_list)){
+    ordered_matrix[[i]] <- matrix[row.names(matrix) %in% row.names(drug_cat_list[[i]]), ]
+  }
+  # merge back into master counts matrix
+  ordered_matrix <- do.call(rbind, ordered_matrix)
+}
+
+# Up Peaks
+# get changing peaks nearby each RNA-seq gene cluster
+Uppeaks_in_geneclusters_heatmap <- list()
+Up_geneclusters_anno <- list()
+for(i in 1:length(peaks_in_geneclusters)){
+  Uppeaks_in_geneclusters_heatmap[[i]] <- mergedDiff_hm_rmOutlier$UpPalbo.UpDoxo[row.names(mergedDiff_hm_rmOutlier$UpPalbo.UpDoxo) %in% peaks_in_geneclusters[[i]]$name, ]
+  Up_geneclusters_anno[[i]] <- data.frame(row.names=row.names(Uppeaks_in_geneclusters_heatmap[[i]]))
+}
+# annotate which RNA_seq cluster peak is nearby to
+for(i in 1:length(peaks_in_geneclusters)){
+  for(j in 1:length(peaks_in_geneclusters)){
+  Up_geneclusters_anno[[i]][ ,j] <- ifelse(row.names(Up_geneclusters_anno[[i]]) %in% peaks_in_geneclusters[[j]]$name, "Yes", "No")
+  }
+}
+# reorder each RNA-seq cluster by drug category peak belongs to
+Uppeaks_in_geneclusters_heatmap <- lapply(Uppeaks_in_geneclusters_heatmap, reorder_by_drug_cat, DoxoGR=mergedDiffGR$allUp_Doxo, PalboGR=mergedDiffGR$allUp_Palbo)
+
+# merge clusters into 1 heatmap
+Uppeaks_in_geneclusters_heatmap <- do.call(rbind, Uppeaks_in_geneclusters_heatmap)
+# merge annotation of peaks into 1 heatmap
+Up_geneclusters_anno <- do.call(rbind, Up_geneclusters_anno)
+# remove duplicate peaks since a peak can belong to more than 1 cluster. 
+Uppeaks_in_geneclusters_heatmap <- Uppeaks_in_geneclusters_heatmap[!duplicated(row.names(Uppeaks_in_geneclusters_heatmap)) & !row.names(Uppeaks_in_geneclusters_heatmap) %in% "", ]
+
+# match order of annotation of peaks to the heatmap 
+Up_geneclusters_anno<- Up_geneclusters_anno[match(row.names(Uppeaks_in_geneclusters_heatmap), row.names(Up_geneclusters_anno)), ]
+colnames(Up_geneclusters_anno) <- names(peaks_in_geneclusters)
+
+# annotate other peak features. 
+UpannoRow <- data.frame(Doxo=ifelse(row.names(Uppeaks_in_geneclusters_heatmap) %in% mergedDiffGR$allUp_Doxo$name, "Yes", "No"), 
+                      Palbo=ifelse(row.names(Uppeaks_in_geneclusters_heatmap) %in% mergedDiffGR$allUp_Palbo$name, "Yes", "No"), 
+                      Peak_anno=simpleannomasterpeaks_pval0.2[match(row.names(Uppeaks_in_geneclusters_heatmap), simpleannomasterpeaks_pval0.2$name)]$annotation,
+                      row.names = row.names(Uppeaks_in_geneclusters_heatmap))
+# merge other annotation with annotation of RNA-seq clusters. 
+UpannoRow <- cbind(UpannoRow, Up_geneclusters_anno)
+```
+
 #ATAC-seq: import motif enrichment results of changing peaks within 50kb of each RNA cluster of changing genes. 
 ```{r import nearby peaks kmeans 7 RNA clusters}
 #extract ids of all expressed genes
@@ -183,6 +252,7 @@ Peaks_AME_Clusters$Comparison <- as.factor(Peaks_AME_Clusters$Comparison)
 Peaks_AME_Clusters$Direction <- ifelse(grepl("Up", Peaks_AME_Clusters$Comparison), "Up", "Down")
 Peaks_AME_Clusters$Group <- gsub("^[^_]*_", "", Peaks_AME_Clusters$Comparison)
 ```
+
 # ATAC-seq:convert dataframe of enriched motif results to matrix for input into plotting in pheatmap
 ```{r convert AME df to matrix}
 # create function that stores the -log10(padj) value of each motif ID for each cluster
@@ -216,7 +286,54 @@ names(AME_padj_mat) <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_P
 
 #*FIGURES*
 
+# generate heatmap of vst counts under nearby upregulated peaks
+```{r}
+# merge technical replicates into 1 sample to make the heatmap look like overwhelming & stripy. 
+dds_filt$group <- factor(paste0(dds_filt$Condition, dds_filt$Biorep))
+#dds_filt_collapsed <- collapseReplicates(dds_filt, dds_filt$group)
+dds_filt_collapsed <- collapseReplicates(dds_filt, dds_filt$Condition)
+dds_filt_collapsed <- estimateSizeFactors(dds_filt_collapsed) 
+dds_filt_collapsed <- dds_filt_collapsed[ ,c(1,9,2,4,6,10,3,5,7,8)] # reorder samples by time & drug
+# generate vst transformed counts from collapsed DESeq counts. 
+vstdds_collapsed <- vst(dds_filt_collapsed)
+vstdds_matrix_collapsed <- assays(vstdds_collapsed)[[1]]
 
+# create dataframe to annotate columns of counts matrix by color
+annoCol_collapsed <- colData(dds_filt_collapsed)[ ,c( "Treatment", "Timepoint")]
+annoCol_collapsed <- as.data.frame(annoCol_collapsed[c(1,9,2,4,6,10,3,5,7,8), ])
+
+Upcollapsed_hm <- vstdds_matrix_collapsed[match(row.names( Uppeaks_in_geneclusters_heatmap), row.names(vstdds_matrix_collapsed)), ]
+
+
+anno_colors <- list(Doxo=hm_cols_ATAC$Doxo, 
+                    Palbo=hm_cols_ATAC$Palbo, 
+                    Peak_anno=hm_cols_ATAC$Peak_anno, 
+                    Timepoint=hm_cols_ATAC$Timepoint,
+                    Treatment=hm_cols_ATAC$Treatment,
+                CellCycle1=c("Yes"="#66C2A5", No="white"),
+                CellCycle2=c("Yes"="#A6D854", No="white"),
+                Palbo1=c("Yes"="#8DA0CB", No="white"),
+                Palbo2=c("Yes"="#FC8D62", No="white"),
+                Doxo1=c("Yes"="#E78AC3", No="white"),
+                Doxo2=c("Yes"="#FFD92F", No="white"),
+                Shared=c("Yes"="#E5C494", No="white")
+)
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment"
+pdf(paste0(pdf_dir, "/ATAC_Up.peaks.near.RNAclusters_mat.pdf"))
+pheatmap(
+  Upcollapsed_hm, 
+  scale = "row",
+  breaks=seq(-3, 3,length.out = 100),
+  show_rownames = FALSE, 
+  cluster_cols = FALSE, 
+  cluster_rows= FALSE,
+  annotation_col = annoCol_collapsed, 
+  annotation_colors = anno_colors,
+  annotation_row = UpannoRow[ , !colnames(UpannoRow) %in% "Peak_anno"], 
+  main=paste0("Up peaks within 50kb of RNA-seq clusters:", nrow(Uppeaks_in_geneclusters_heatmap), " Peaks"
+))
+dev.off()
+```
 
 # ATAC-seq, separate RNA clusters: plot motif enrichment results of all clusters as heatmap of p-adj values for each type (up, down, Doxo, Palbo) of sig changing peak 
 ```{r}
@@ -264,11 +381,10 @@ merged_Down_AME_mat[is.na(merged_Down_AME_mat)] <- 0
 
 merged_Down_AME_mat <- as.matrix(merged_Down_AME_mat)
 
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Up.Down.mergedpeaks.near.RNAclusters.enriched.motifs.pdf", width=3, height=9)
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Up.Down.mergedpeaks.near.RNAclusters.enriched.motifs.pdf", width=6, height=12)
+pheatmap(merged_Down_AME_mat, cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84",  "#EF6548", "#B30000", "#7F0000", "#7F0000"))(100), breaks = seq(0, 30,length.out = 100), main="all down peaks near RNA clusters: enriched motifs, left: Doxo, right: Palbo")
 
-pheatmap(merged_Down_AME_mat, cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 50,length.out = 100), main="all down peaks near RNA clusters: enriched motifs, left: Doxo, right: Palbo")
-
-pheatmap(merged_Up_AME_mat, cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 30,length.out = 100), main="all up peaks near RNA clusters: enriched motifs, left: Doxo, right: Palbo")
+pheatmap(merged_Up_AME_mat, cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84",  "#EF6548", "#B30000", "#7F0000", "#7F0000"))(100), breaks = seq(0, 30,length.out = 100), main="all up peaks near RNA clusters: enriched motifs, left: Doxo, right: Palbo")
 dev.off()
 ```
 
@@ -276,31 +392,31 @@ dev.off()
 ```{r}
 AME_padj_dots <- list()
 comparisons <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
-for(i in 1:length(comparisons)){
-AME_padj_dots[[i]] <- Peaks_AME_Clusters[Peaks_AME_Clusters$Comparison %in% comparisons[i], ]
-AME_padj_dots[[i]] <- AME_padj_dots[[i]][AME_padj_dots[[i]]$motif_ID %in% row.names(AME_padj_mat[[i]][1:15, ]), ] # show only top 15 most significant padj values motif IDs
-AME_padj_dots[[i]]$motif_ID <- factor(AME_padj_dots[[i]]$motif_ID, levels=rev(unique(AME_padj_dots[[i]]$motif_ID)))
-}
-names(AME_padj_dots) <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+AME_padj_dots <- list(allDown=Peaks_AME_Clusters[Peaks_AME_Clusters$Comparison %in% c("allDown_Doxo", "allDown_Palbo"), ],
+                      allUp=Peaks_AME_Clusters[Peaks_AME_Clusters$Comparison %in% c("allUp_Doxo", "allUp_Palbo"), ])
+
+AME_padj_dots$allDown$motif_ID <- factor(AME_padj_dots$allDown$motif_ID, levels=row.names(merged_Down_AME_mat)[(hclust(dist(merged_Down_AME_mat))$order)])
+
+AME_padj_dots$allUp$motif_ID <- factor(AME_padj_dots$allUp$motif_ID, row.names(merged_Up_AME_mat)[(hclust(dist(merged_Up_AME_mat))$order)] )                
 ```
 
 # ATAC-seq: create function to plot motif enrichment results as dotplot where the fill color indicates -log10(padj) values & size of dot indicates %TP-%FP
 ```{r create_AME_dotplots}
-create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50, size_limit=4.5){
+create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=c(1,10), size_limit=4.5, midpoint=20){
   AME_df <- AME_df %>% mutate(Comparison = Cluster)
   ggplot(AME_df, aes(x=Comparison, y=motif_ID, size=TPvsFP)) +
     geom_point(aes(fill=neglog10padj), colour="black", pch=21, alpha=0.8) +
-    scale_fill_gradient(name="-log10(padj)", 
-                        low="light yellow", high="dark orange",
-                        limits=c(0, fill_limit), 
-                        oob=scales::squish) + # Adjust fill scale
+    scale_fill_gradient2(name="-log10(padj)", 
+                        low="white", mid="light yellow", high="dark orange",
+                        midpoint = midpoint,
+                        limits=fill_limit) + # Adjust fill scale
     scale_size_continuous(name="%TP - %FP", 
-                          limits=c(0, size_limit), 
+                          limits=size_limit, 
                           range=c(1, 10)) +  # Adjust dot sizes
     theme_minimal() +
     ggtitle(Title) +
     scale_x_discrete(labels = function(x) AME_df$Cluster[match(x, AME_df$Comparison)]) +  # to replace Comparison with Cluster labels on the x-axis. 
-    facet_wrap(~Group, nrow=1, scales="free") +
+    facet_wrap(~Group, nrow=1) +
     theme(
       axis.text.x = element_text(size=8, angle = 90, hjust=1),  # Rotate x-axis labels
       strip.text.x = element_text(size=8, face="bold"),
@@ -311,11 +427,42 @@ create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50
 ``` 
 
 ```{r}
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Up.Down.peaks.near.RNAclusters.enriched.motifs.dotplots.pdf", width=8, height=5)
-for(i in 1:length(AME_padj_dots)){
-p <- create_AME_dotplots(AME_padj_dots[[i]], Title=names(AME_padj_dots)[i]) 
-print(p)
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment"
+pdf(paste0(pdf_dir, "/Up.Down.mergedpeaks.near.RNAclusters.enriched.motifs.dotplots.pdf"), width=8, height=15)
+create_AME_dotplots(AME_padj_dots$allUp, Title="nearby up peaks", fill_limit=c(0, 70), size_limit=c(0, 20.05), midpoint=2)
+create_AME_dotplots(AME_padj_dots$allDown, Title="nearby down peaks", fill_limit=c(0, 305), size_limit=c(0, 39.4), midpoint=10)
+dev.off()
+```
+# plot number of input peaks that went into foreground peak set for MEME-AME analysis: 
+```{r}
+
+input_sigpeaks_df <-  list()
+for(i in 1:length(sigPeaks_in_geneclusters)){
+
+input_sigpeaks_df[[i]] <- data.frame(Peaks=unlist(lapply(sigPeaks_in_geneclusters[[i]],length)), 
+                                     RNA_Cluster=names(unlist(lapply(sigPeaks_in_geneclusters$allDown_Palbo,length))),
+                                     Comparison=names(sigPeaks_in_geneclusters)[[i]], 
+                                     MeanPeaks=mean(unlist(lapply(sigPeaks_in_geneclusters[[i]],length))))
 }
+input_sigpeaks_df <- do.call(rbind, input_sigpeaks_df)
+input_sigpeaks_df$RNA_Cluster <- factor(input_sigpeaks_df$RNA_Cluster, levels=cluster_names)
+
+colors <- hm_cols_RNA$Clusters
+names(colors) <- cluster_names
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment"
+
+pdf(paste0(pdf_dir, "/ATAC_Number_of_nearby.peaks_MEMEAME_input.pdf"), height=4, width=6)
+ggplot(input_sigpeaks_df, aes(x=RNA_Cluster, y=Peaks, label=Peaks, fill=RNA_Cluster))+
+  geom_bar(stat="identity", position="dodge")+
+  geom_hline(data=input_sigpeaks_df, aes(yintercept = MeanPeaks), color="darkgrey", linetype="dashed")+
+  facet_wrap(~Comparison)+geom_text()+
+  scale_fill_manual(values=colors)+
+    theme(
+      axis.text.x = element_text(angle = 90, size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title.y = element_text(size = 10)
+    ) +
+  theme_classic()
 dev.off()
 ```
 

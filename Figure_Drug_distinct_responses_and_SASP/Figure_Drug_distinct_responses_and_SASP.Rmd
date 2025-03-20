@@ -75,10 +75,10 @@ chunk_to_run <- lines[(chunk_start[1]+1):(chunk_end[1]-1)]
 # annotation colors for pheatmap
 ```{r}
 hm_cols_RNA <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
-                Treatment=c("Doxo"="#B3C543", "Palbo"="#E0ADCD", "DoxovsPalbo"="#CCEBC5"), 
+                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD"), 
                 Biorep=c("1"="orange", "2"="light blue", "3"="pink"), 
                 log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "DoxovsPalbo"="#CCEBC5"), 
-                Clusters=c("2"="#66C2A5","5"="#A6D854","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#FFD92F","3"="#E5C494"), 
+                Clusters=c("2"="#66C2A5","5"="#A6D854","7"="#8DA0CB", "1"="#FC8D62", "4"="#E78AC3","6"="#FFD92F","3"="#E5C494"), 
                 SASP = c("Yes"="dark green", "No"="white"),
                 Cell_Cycle = c("Yes"="dark blue", "No"="white"), 
                 clusters_cutree8=brewer.pal(8, "Set2"), 
@@ -314,7 +314,7 @@ GO_results_list_mat <- GO_results_list_mat[!is.na(row.names(GO_results_list_mat)
 
 # specify GO results matrix annotation colors: based on ggsci:pal_aaas palette. 
 GO_anno_colors <-  list(database=c("GO:BP"="#3B4992FF", "Hallmark"="#EE0000FF", "KEGG"="#008B45FF", "REACTOME" ="#631879FF", "GO:MF"="#808180FF"), 
-                        Cluster=c("CellCycle1"="#66C2A5", "CellCycle2"="#A6D854", "Palbo1"="#FC8D62", "Palbo2"="#8DA0CB","Doxo1"="#E78AC3","Doxo2"="#FFD92F", "Shared"="#E5C494"))
+                        Cluster=c("CellCycle1"="#66C2A5", "CellCycle2"="#A6D854", "Palbo1"="#8DA0CB", "Palbo2"= "#FC8D62","Doxo1"="#E78AC3","Doxo2"="#FFD92F", "Shared"="#E5C494"))
 names(GO_anno_colors$Cluster) <- cluster_names 
 
 # annotation dataframe for rows of heatmap to indicate which database GO term came from 

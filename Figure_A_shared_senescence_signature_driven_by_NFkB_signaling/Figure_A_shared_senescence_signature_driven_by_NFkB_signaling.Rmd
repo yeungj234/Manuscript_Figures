@@ -395,6 +395,61 @@ annoUpPeaks_AME_df$Timepoint <-  gsub("(day[0-9]{1,2}).*", "\\1", annoUpPeaks_AM
 annoUpPeaks_AME_df$Timepoint <- factor(annoUpPeaks_AME_df$Timepoint, levels=c("day3", "day10", "day14", "day21", "day28"))
 ```
 
+# ATAC-seq: get peak ids for peaks that are true positive peaks for E2F motif from motif enrichment analysis (MEME-AME)
+```{r}
+input_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_output/DESeq/annoUp"
+
+out_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/NFKB_tp_peaks"
+
+# generate input file containing directory paths to sequences.tsv file from MEME-AME output. 
+writeLines(paste0(dir(input_dir, full.names = T), "/sequences.tsv"), con=paste0(out_dir, "/DESeq_annoUp_sequencefiles.txt"))
+```
+
+# ATAC-seq: extract peak ids of true positive peaks of NFKB from sequences.tsv file from MEME-AME output
+```{bash}
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/NFKB_tp_peaks
+
+# for all NFKB motifs
+sbatch -p risc --array=1-16 \
+--export=outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/NFKB_tp_peaks,\
+inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/NFKB_tp_peaks/DESeq_annoUp_sequencefiles.txt,\
+names=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoUp/folderlist_annoUp_DESeq_peaks.txt,\
+motif="NFKB" \
+get_tp_peaks_motifs.slurm
+
+rm $(ls|egrep '.err|.out')
+
+# for all REL motifs
+sbatch -p risc --array=1-16 \
+--export=outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/NFKB_tp_peaks,\
+inputfiles=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/NFKB_tp_peaks/DESeq_annoUp_sequencefiles.txt,\
+names=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/motif_analysis_input/DESeq/annoUp/folderlist_annoUp_DESeq_peaks.txt,\
+motif="REL" \
+get_tp_peaks_motifs.slurm
+
+rm $(ls|egrep '.err|.out')
+```
+
+```{r}
+# import peak ids of true positive down peaks containing any NFKB motif
+setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling/NFKB_tp_peaks")
+
+file_ids <- dir()
+all_NFKB_tp_peaks <- list()
+
+for (i in seq_along(file_ids)) {
+  file_path <- file_ids[i]  # Get full file name
+
+  # Check if file is empty
+  if (file.info(file_path)$size > 0) {
+    all_NFKB_tp_peaks[[file_path]] <- read_tsv(file_path, col_names = FALSE) %>% pull(X1)
+  }
+}
+
+names(all_NFKB_tp_peaks) <- gsub("_all_tp_Uppeaks_ids\\.tsv", "", names(all_NFKB_tp_peaks))
+all_NFKB_tp_peaks <- all_NFKB_tp_peaks[!names(all_NFKB_tp_peaks) %in% c("DESeq_annoUp_sequencefiles.txt", "get_tp_peaks_motifs.slurm")]
+```
+
 # *FIGURES*
 # RNA-seq: save GSEA running score for day 14 Doxo vs Cycling's Hallmark TNFA SIGNALING VIA NFKB Pathway
 ```{r}
@@ -692,7 +747,7 @@ create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=c(
     theme_minimal() +
     ggtitle(Title) +
     scale_x_discrete(labels = function(x) AME_df$Cluster[match(x, AME_df$Comparison)]) +  # to replace Comparison with Cluster labels on the x-axis. 
-    facet_wrap(~Group, nrow=1, scales="free") +
+    facet_wrap(~Group, nrow=1) +
     theme(
       axis.text.x = element_text(size=8, angle = 90, hjust=1),  # Rotate x-axis labels
       strip.text.x = element_text(size=8, face="bold"),
@@ -783,28 +838,19 @@ create_proportional_venn <- function(sets, set_labels, colors = c("#E0ADCD", "#B
        edges = list(lwd = 2))
 }
 
-# unique peak ids for Doxo vs Cycling down tp peaks with E2F1 motif
-tp_downpeaks_Doxo <- unique(unlist(E2F1_tp_peaks[grepl("Doxo", names(E2F1_tp_peaks))]))
+# unique peak ids for Doxo vs Cycling up tp peaks with NFKB motifs
+tp_uppeaks_Doxo <- unique(unlist(all_NFKB_tp_peaks[grepl("Doxo", names(all_NFKB_tp_peaks))]))
 
-# unique peak ids for Palbo vs Cycling down tp peaks with E2F1 motif
-tp_downpeaks_Palbo <- unique(unlist(E2F1_tp_peaks[grepl("Palbo", names(E2F1_tp_peaks))]))
+# unique peak ids for Palbo vs Cycling up tp peaks with NFKB motifs
+tp_uppeaks_Palbo <- unique(unlist(all_NFKB_tp_peaks[grepl("Palbo", names(all_NFKB_tp_peaks))]))
 
-# peak ids for all down peaks 
-all_downpeaks_ids <- unique(c(mergedDiffGR$allDown_Doxo$name, mergedDiffGR$allDown_Palbo$name))
+# peak ids for all up peaks 
+all_uppeaks_ids <- unique(c(mergedDiffGR$allUp_Doxo$name, mergedDiffGR$allUp_Palbo$name))
 
-# plot venn diagram showing overlap of E2F1 containing down peaks between Doxo & Palbo against number of all down peaks
-pdf(paste0(outdir, "/ATAC_E2F1_tp_downpeaks_PalbovsDoxo_overlap_venn.pdf"), width=6, height=4)
-create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "#F6F2EA"))
-dev.off()
+outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling"
 
-# unique peak ids for Doxo vs Cycling down tp peaks with any E2F motif
-tp_downpeaks_Doxo <- unique(unlist(all_E2F_tp_peaks[grepl("Doxo", names(all_E2F_tp_peaks))]))
-
-# unique peak ids for Palbo vs Cycling down tp peaks with any E2F motif
-tp_downpeaks_Palbo <- unique(unlist(all_E2F_tp_peaks[grepl("Palbo", names(all_E2F_tp_peaks))]))
-
-# plot venn diagram showing overlap of all E2F containing down peaks between Doxo & Palbo against number of all down peaks
-pdf(paste0(outdir, "/ATAC_all_E2F_tp_downpeaks_PalbovsDoxo_overlap_venn.pdf"), width=6, height=4)
-create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "#F6F2EA"))
+# plot venn diagram showing overlap of NFKB1 containing up peaks between Doxo & Palbo against number of all up peaks
+pdf(paste0(outdir, "/ATAC_NFKB1_tp_uppeaks_PalbovsDoxo_overlap_venn.pdf"), width=6, height=4)
+create_proportional_venn(sets=list(Palbo=tp_uppeaks_Palbo, Doxo=tp_uppeaks_Doxo, allup=all_uppeaks_ids), set_labels = c("Palbo", "Doxo", "all up"), colors = c("#E0ADCD", "#B3C543", "#F6F2EA"))
 dev.off()
 ```

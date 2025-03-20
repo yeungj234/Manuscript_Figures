@@ -222,106 +222,21 @@ names(GSEA_plots_KEGG) <- names(which(unlist(lapply(GSEA_Results_KEGG, function(
 names(GSEA_plots_REACT) <- names(which(unlist(lapply(GSEA_Results_REACT, function(x){length(x$ID)})) >0))
 ```
 
-# RNA-seq: import IPA upstream regulators & pathways
+# RNA-seq: run code chunks for GSEA analysis
 ```{r}
-setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_p53_activity_is_different_depending_on_the_presence_of_DNA_damage/IPA_files/output/")
-IPA_upstream_regs <- list()
-IPA_pathways <- list()
-# read in information for enriched IPA pathways per hierarchical cluster (clustering based on scaled rlog normalized counts)
-for(i in 1:length(cluster_names)){
-IPA_pathways[[i]]<- read_tsv(paste0(cluster_names[i], "_IPA_Pathways.txt"), skip=2)
-# read in information for enriched upstream regulators 
-IPA_upstream_regs[[i]] <- read.table(paste0(cluster_names[i], "_IPA_UpstreamRegs.txt"), sep="\t", skip=2, header=T)
-IPA_upstream_regs[[i]] <- IPA_upstream_regs[[i]][!grepl("mir|miR|Mir", IPA_upstream_regs[[i]]$Upstream.Regulator), ] # remove upstream regulators that are miRNAs (uncertain if they will be informative & there is a lot of them)
-}
-
-#extract ids of all expressed genes
-expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
-
-# keep only upstream regulators that are part of expressed genes or have lower case letters (these are upstream regulators that could be miRNAs or protein complexes)
-IPA_upstream_regs <- lapply(IPA_upstream_regs, function(IPA_upstream_regs){IPA_upstream_regs[c(grep('[:lower:]', IPA_upstream_regs$Upstream.Regulator), which(IPA_upstream_regs$Upstream.Regulator %in% expressedGenes)), ]})
-
-names(IPA_upstream_regs) <- cluster_names
-
-names(IPA_pathways) <- cluster_names
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/Figure_Drug_distinct_responses_and_SASP.Rmd", chunk_name="RNAseq GSEA analysis")
 ```
 
-## plotting padj values of top IPA predicted upstream regulators of all clusters
+# RNA-seq: run code chunks to import IPA results
 ```{r}
-create_ipa_regs_matrix <- function(IPA_upstream_regs, cluster_names, filter_keyword = "complex", top_n = 25) {
-  # Extract unique upstream regulators based on the filter keyword
-  unique_upstream_regs <- unique(unlist(lapply(IPA_upstream_regs, function(x) {
-    x$Upstream.Regulator[grepl(filter_keyword, x$Molecule.Type)][1:top_n]
-  })))
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/Figure_Drug_distinct_responses_and_SASP.Rmd", chunk_name="import IPA results")
 
-  # Create a matrix to store -log10 p-values
-  IPA_complex_regs_mat <- matrix(
-    nrow = length(unique_upstream_regs),
-    ncol = length(IPA_upstream_regs)
-  )
-  row.names(IPA_complex_regs_mat) <- unique_upstream_regs # Set row names to upstream regulators
-  colnames(IPA_complex_regs_mat) <- cluster_names        # Set column names to cluster names
-
-  # Fill in the matrix with -log10 p-values
-  for (i in seq_len(ncol(IPA_complex_regs_mat))) {
-    # Match and extract p-values for each cluster
-    IPA_complex_regs_mat[, i] <- -log10(IPA_upstream_regs[[i]][
-      match(row.names(IPA_complex_regs_mat), IPA_upstream_regs[[i]]$Upstream.Regulator),
-      "p.value.of.overlap"
-    ])
-
-    # Replace NA values with 0 for heatmap compatibility
-    IPA_complex_regs_mat[, i][is.na(IPA_complex_regs_mat[, i])] <- 0
-  }
-
-  return(IPA_complex_regs_mat)
-}
-
-IPA_group_regs_mat <- create_ipa_regs_matrix(
-  IPA_upstream_regs = IPA_upstream_regs,
-  cluster_names = cluster_names,
-  filter_keyword = "group",
-  top_n = 25
-)
-
-IPA_TF_regs_mat <- create_ipa_regs_matrix(
-  IPA_upstream_regs = IPA_upstream_regs,
-  cluster_names = cluster_names,
-  filter_keyword = "transcription",
-  top_n = 25
-)
-
-# plot heatmap of -log10 pvalue of overlap of enriched complex regulators
-pheatmap(IPA_group_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100))
-
-pheatmap(IPA_TF_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100))
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/Figure_Drug_distinct_responses_and_SASP.Rmd", chunk_name="IPA results matrix")
 ```
 
 # RNA-seq: make matrix with log2FC values of significant genes
 ```{r}
-# get log2FC values of significantly changing genes over time
-sig_LFCMat <- matrix(ncol=length(LFCResultsall_RNA), nrow=nrow(clusterDF))
-colnames(sig_LFCMat) <- names(LFCResultsall_RNA)
-row.names(sig_LFCMat) <-row.names(LFCResultsall_RNA[[10]][row.names(LFCResultsall_RNA[[10]]) %in% sigGenes, ])
-for(i in 1:ncol(sig_LFCMat)){
-sig_LFCMat[ ,i] <- LFCResultsall_RNA[[i]][row.names(LFCResultsall_RNA[[i]]) %in% sigGenes, ]$log2FoldChange
-}
-
-row.names(sig_LFCMat) <-  ifelse(genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(sig_LFCMat), genes_anno_type[match(row.names(sig_LFCMat), genes_anno_type$ensembl_id), ]$gene_id)
-
-row.names(ordered_sigMat)[grep("^H1.[0-9]", row.names(ordered_sigMat))]  <- gsub("*H1.", "H1-",row.names(ordered_sigMat[grepl("^H1.[0-9]", row.names(ordered_sigMat)), ]) )
-
-sig_LFCMat <- sig_LFCMat[match(row.names(ordered_sigMat), row.names(sig_LFCMat)), ] # order based on k-means & hierarchical ordering of rlog counts. 
-
-# get log2FC values of all expressed genes over time 
-LFCMat <- matrix(ncol=length(LFCResultsall_RNA), nrow=nrow(LFCResultsall_RNA[[1]]))
-colnames(LFCMat) <- names(LFCResultsall_RNA)
-row.names(LFCMat) <-row.names(LFCResultsall_RNA[[1]])
-for(i in 1:ncol(LFCMat)){
-LFCMat[ ,i] <- LFCResultsall_RNA[[i]]$log2FoldChange
-}
-
-row.names(LFCMat) <-  ifelse(genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(LFCMat), genes_anno_type[match(row.names(LFCMat), genes_anno_type$ensembl_id), ]$gene_id)
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/Figure_Drug_distinct_responses_and_SASP.Rmd", chunk_name="log2FC sig genes matrix")
 ```
 
 # RNA-seq: cell cycle arrest signatures
@@ -347,8 +262,6 @@ anno_sigLFC <- data.frame(
 
 # add annotation to significant genes based on if they are E2F targets. 
 clusterDF$E2F <- ifelse(row.names(clusterDF) %in% E2F_Targets, "Yes", "No") # annotate sig genes that are E2F targets
-
-row.names(clusterDF)[grep("^H1.[0-9]", row.names(clusterDF))]  <- gsub("*H1.", "H1-",row.names(clusterDF[grepl("^H1.[0-9]", row.names(clusterDF)), ]) ) # correction: to match with row.names in sig_LFCMat, replace - with . for linker histone genes. 
 ```
 
 # ATAC-seq: plot Tn5 insertion sites around E2F1 motifs overlapping down peaks to show cell cycle signature is also reflected at the chromatin accessibility level in both drugs. 
@@ -453,8 +366,8 @@ out_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_C
 writeLines(paste0(dir(input_dir, full.names = T), "/sequences.tsv"), con=paste0(out_dir, "/DESeq_annoDown_sequencefiles.txt"))
 ```
 
+# ATAC-seq: extract peak ids of true positive peaks of E2F from sequences.tsv file from MEME-AME output
 ```{bash}
-# extract peak ids of true positive peaks from sequences.tsv file from MEME-AME output
 cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/E2F_tp_peaks
 
 # for all E2F motifs
@@ -559,9 +472,9 @@ GO_results_mat_clusters[[i]] <- GO_results_mat_clusters[[i]][order(GO_results_ma
 }
 
 pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/RNA_GO_results_SharedDown_genes.pdf", width=6, height=2.5)
-pheatmap(GO_results_mat_clusters[[1]][1:10, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0,70,length.out = 100), cluster_rows = F, main="GO enrichment: shared up genes", annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
+pheatmap(GO_results_mat_clusters[[1]][1:10, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0,70,length.out = 100), cluster_rows = F, main="GO enrichment: shared down genes", annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 
-pheatmap(GO_results_mat_clusters[[2]][1:10, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0,20,length.out = 100), cluster_rows = F, main="GO enrichment: shared up genes", annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
+pheatmap(GO_results_mat_clusters[[2]][1:10, ], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Purples"))(100), breaks = seq(0,20,length.out = 100), cluster_rows = F, main="GO enrichment: shared down genes", annotation_row=GO_anno, annotation_col = Cluster_anno, annotation_colors = GO_anno_colors, border_color = "black")
 dev.off()
 ```
 
@@ -582,10 +495,12 @@ IPA_group_regs_clusters[[i]] <- IPA_group_regs_clusters[[i]][order(IPA_group_reg
 # make heatmap of top 5 IPA predicted upstream regulators for shared up genes. 
 pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/RNA_IPA_TF_regs_SharedDown_genes.pdf", width=3, height=2)
 pheatmap(IPA_TF_regs_clusters[[1]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 50,length.out = 100), cluster_rows = F, main="Shared down genes: predicted TF regulators", border_color = "black",  annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
+pheatmap(IPA_TF_regs_clusters[[2]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main="Shared down genes: predicted TF regulators", border_color = "black",  annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
 dev.off()
 
 pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Cell_Cycle_Arrest_Signature_in_Both_Drugs/RNA_IPA_group_regs_SharedDown_genes.pdf", width=3.8, height=2)
 pheatmap(IPA_group_regs_clusters[[1]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 50,length.out = 100), cluster_rows = F, main="Shared down genes: predicted group regulators", border_color = "black", annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
+pheatmap(IPA_group_regs_clusters[[2]], cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100), cluster_rows = F, main="Shared down genes: predicted group regulators", border_color = "black", annotation_col=Cluster_anno, annotation_colors = GO_anno_colors)
 dev.off()
 ```
 
