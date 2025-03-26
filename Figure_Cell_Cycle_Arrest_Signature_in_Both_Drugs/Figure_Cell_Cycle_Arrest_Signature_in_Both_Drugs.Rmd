@@ -37,6 +37,7 @@ library(Biostrings)
 library(clusterProfiler)
 library(pheatmap)
 library(dplyr)
+library(stringr)
 ```
 
 # annotation colors for pheatmap

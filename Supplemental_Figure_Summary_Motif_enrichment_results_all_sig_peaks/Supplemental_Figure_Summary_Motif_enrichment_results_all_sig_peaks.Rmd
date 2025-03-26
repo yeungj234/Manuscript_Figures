@@ -33,16 +33,15 @@ library(pheatmap)
 ```
 
 # annotation colors for pheatmap
-```{r}
+```{r heatmap_colors}
 hm_cols_RNA <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
-                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD", "DoxovsPalbo"="#CCEBC5"), 
+                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD"), 
                 Biorep=c("1"="orange", "2"="light blue", "3"="pink"), 
                 log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "DoxovsPalbo"="#CCEBC5"), 
-                clusters_cutree8=brewer.pal(8, "Set2"), 
-                Clusters=c("5"="#66C2A5","2"="#A6D854","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#E78AC3","3"="#FFD92F","8"="#E5C494"), 
+                Clusters=c("2"="#66C2A5","5"="#A6D854","7"="#8DA0CB", "1"="#FC8D62", "4"="#E78AC3","6"="#FFD92F","3"="#E5C494"), 
                 SASP = c("Yes"="dark green", "No"="white"),
                 Cell_Cycle = c("Yes"="dark blue", "No"="white"), 
-                E2F = c("Yes"="dark blue", "No"="white"), 
+                clusters_cutree8=brewer.pal(8, "Set2"), 
                 p53_All=c("Yes"="#00B0F0", "No"="white"),
                 NFKB_All=c("Yes"="red", "No"="white"))
 names(hm_cols_RNA$clusters_cutree8) <- as.factor(1:8)

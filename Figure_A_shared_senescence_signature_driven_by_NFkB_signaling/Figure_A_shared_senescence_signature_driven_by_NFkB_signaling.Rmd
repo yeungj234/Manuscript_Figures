@@ -202,7 +202,7 @@ run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/
 ```
 
 # RNA-seq: P53 & NF-kB signatures
-```{r}
+```{r p53 NFKB databases}
 # import p53 census target gene database from https://tp53.isb-cgc.org/target_genes
 Fischer_Oncogene_2017_p53_census_target_genes <- read_excel("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/external_databases/Fischer_Oncogene_2017_p53_census_target_genes.xlsx")
 
@@ -737,9 +737,9 @@ compare_log2FC_differences <- function(condition1_log2FC, condition2_log2FC) {
 
   # Visualize distribution of differences
   library(ggplot2)
-  ggplot(data.frame(differences), aes(x = differences)) +
+  print(ggplot(data.frame(differences), aes(x = differences)) +
     geom_histogram(binwidth = 0.2, fill = "skyblue", color = "black", alpha = 0.7) +
-    labs(title = "Distribution of Log2FC Differences", x = "Difference (Drug1 - Drug2)", y = "Count")
+    labs(title = "Distribution of Log2FC Differences", x = "Difference (Drug1 - Drug2)", y = "Count"))
 
   # Perform appropriate statistical test based on normality
   if (shapiro_test$p.value > 0.05) {
@@ -754,13 +754,13 @@ compare_log2FC_differences <- function(condition1_log2FC, condition2_log2FC) {
 
 ```{r}
 # for shared upregulated NF-kB target genes
-d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 14 Palbo vs Cycling
+d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Palbo vs Cycling
 
-d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 14 Doxo vs Cycling
+d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Doxo vs Cycling
 
-d3_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 3 Palbo vs Cycling
+d3_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Palbo vs Cycling
 
-d3_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 3 Doxo vs Cycling
+d3_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Doxo vs Cycling
 
 
 compare_log2FC_differences(d14_Palbo_log2FC, d14_Doxo_log2FC) # shared NF-kB target genes between day 14 Palbo and day 14 Doxo vs cycling 
@@ -774,33 +774,33 @@ compare_log2FC_differences(d3_Doxo_log2FC, d14_Doxo_log2FC) # shared NF-kB targe
 
 ```{r}
 # for Palbo upregulated NF-kB target genes
-d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 14 Palbo vs Cycling
+d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Palbo vs Cycling
 
-d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 14 Doxo vs Cycling
+d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Doxo vs Cycling
 
-d3_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 3 Palbo vs Cycling
+d3_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Palbo vs Cycling
 
-d3_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 3 Doxo vs Cycling
+d3_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Doxo vs Cycling
 
 
-compare_log2FC_differences(d14_Palbo_log2FC, d14_Doxo_log2FC) # shared NF-kB target genes between day 14 Palbo and day 14 Doxo vs cycling 
+compare_log2FC_differences(d14_Palbo_log2FC, d14_Doxo_log2FC) # Palbo upregulated NF-kB target genes between day 14 Palbo and day 14 Doxo vs cycling 
 
-compare_log2FC_differences(d3_Palbo_log2FC, d3_Doxo_log2FC) # shared NF-kB target genes between day 3 Palbo and day 3 Doxo vs cycling 
+compare_log2FC_differences(d3_Palbo_log2FC, d3_Doxo_log2FC) # Palbo upregulated NF-kB target genes between day 3 Palbo and day 3 Doxo vs cycling 
 
-compare_log2FC_differences(d3_Palbo_log2FC, d14_Palbo_log2FC) # shared NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
+compare_log2FC_differences(d3_Palbo_log2FC, d14_Palbo_log2FC) # Palbo upregulated NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
 
-compare_log2FC_differences(d3_Doxo_log2FC, d14_Doxo_log2FC) # shared NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
+compare_log2FC_differences(d3_Doxo_log2FC, d14_Doxo_log2FC) # Palbo upregulated NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
 ```
 
 ```{r}
 # for Doxo upregulated NF-kB target genes
-d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 14 Palbo vs Cycling
+d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Palbo vs Cycling
 
-d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 14 Doxo vs Cycling
+d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Doxo vs Cycling
 
-d3_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 3 Palbo vs Cycling
+d3_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Palbo vs Cycling
 
-d3_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of p53 targets in day 3 Doxo vs Cycling
+d3_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Doxo vs Cycling
 
 
 compare_log2FC_differences(d14_Palbo_log2FC, d14_Doxo_log2FC) # shared NF-kB target genes between day 14 Palbo and day 14 Doxo vs cycling 
@@ -890,7 +890,7 @@ NFkB_UpPeaks_AME_mat <- NFkB_UpPeaks_AME_mat[order(rowSums(NFkB_UpPeaks_AME_mat)
 outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_A_shared_senescence_signature_driven_by_NFkB_signaling"
 
 # plot motif enrichment values of NFkB motifs in all Up peaks for all timepoints vs Cycling. 
-pdf(paste0(outdir, "/ATAC_NFkB_UpPeaks_AME_dotplots.pdf"), width=8, height=2.5)
+pdf(paste0(outdir, "/ATAC_NFkB_UpPeaks_AME_dotplots.pdf"), width=8, height=4)
 create_AME_dotplots(annoUpPeaks_AME_df[grepl("NFKB|REL", annoUpPeaks_AME_df$motif_ID), ], Title="NFkB Motifs enriched in Up peaks", fill_limit=c(2, 92), size_limit=c(0, 17.4))
 dev.off()
 ```

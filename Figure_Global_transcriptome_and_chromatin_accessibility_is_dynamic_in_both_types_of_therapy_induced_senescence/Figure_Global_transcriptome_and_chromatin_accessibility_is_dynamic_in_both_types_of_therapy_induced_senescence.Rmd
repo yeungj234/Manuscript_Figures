@@ -83,12 +83,12 @@ load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_ana
 ```
 
 # annotation colors for pheatmap
-```{r}
+```{r heatmap_colors}
 hm_cols_RNA <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
                 Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD"), 
                 Biorep=c("1"="orange", "2"="light blue", "3"="pink"), 
                 log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "DoxovsPalbo"="#CCEBC5"), 
-                Clusters=c("2"="#66C2A5","5"="#A6D854","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#FFD92F","3"="#E5C494"), 
+                Clusters=c("2"="#66C2A5","5"="#A6D854","7"="#8DA0CB", "1"="#FC8D62", "4"="#E78AC3","6"="#FFD92F","3"="#E5C494"), 
                 SASP = c("Yes"="dark green", "No"="white"),
                 Cell_Cycle = c("Yes"="dark blue", "No"="white"), 
                 clusters_cutree8=brewer.pal(8, "Set2"), 
@@ -157,7 +157,7 @@ metaDataall <- data.frame(Biorep=c(rep("1", 8), rep("2", 6), rep("3", 5)),
          )
          
 RNAddsallLRT <- DESeqDataSetFromTximport(txi.kallisto.all, metaDataall, ~Biorep+Treatment+Timepoint)
-keep <- rowSums(counts(RNAddsallLRT)) >= 50 # filter out rows with rowsum less than 30 to remove genes that aren't being expressed across samples. 
+keep <- rowSums(counts(RNAddsallLRT)) >= 50 # filter out rows with rowsum less than 50 to remove genes that aren't being expressed across samples. 
 RNAddsallLRT <- RNAddsallLRT[keep,]
 
 RNAddsallLRT <- DESeq(RNAddsallLRT, test="LRT", reduced=~Biorep) #perform DESeq

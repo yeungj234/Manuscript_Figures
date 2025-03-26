@@ -182,6 +182,7 @@ UpannoRow <- cbind(UpannoRow, Up_geneclusters_anno)
 ```{r import nearby peaks kmeans 7 RNA clusters}
 #extract ids of all expressed genes
 expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
+expressedGenes[grep("TP53$|TP63$|TP73$", expressedGenes)] <- c("P63", "P73", "P53")
 
 # function to import motif data. 
 process_motif_data <- function(base_dir, expressed_genes = NULL) {
@@ -256,7 +257,8 @@ Peaks_AME_Clusters$Group <- gsub("^[^_]*_", "", Peaks_AME_Clusters$Comparison)
 # ATAC-seq:convert dataframe of enriched motif results to matrix for input into plotting in pheatmap
 ```{r convert AME df to matrix}
 # create function that stores the -log10(padj) value of each motif ID for each cluster
-create_AME_peaks_matrix_byCluster <- function(sig_peaks_df) {
+create_AME_peaks_matrix_byCluster <- function(
+    sig_peaks_df) {
   # Create an empty matrix for significant peaks
   unique_motifs <- unique(sig_peaks_df$motif_ID)
   cluster <- unique(sig_peaks_df$Cluster)
@@ -279,6 +281,7 @@ AME_padj_mat <- list()
 comparisons <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
 for(i in 1:length(comparisons)){
 AME_padj_mat[[i]] <- create_AME_peaks_matrix_byCluster(Peaks_AME_Clusters[Peaks_AME_Clusters$Comparison %in% comparisons[i], ])
+AME_padj_mat[[i]] <- AME_padj_mat[[i]][ ,c(1,2,5,6,3,4,7)]
 }
 names(AME_padj_mat) <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
 ```
@@ -348,7 +351,8 @@ pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_
   pheatmap(AME_padj_mat[[4]], cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84", "#B30000"))(100), breaks = seq(0, 30,length.out = 100), main="all Up Palbo: enriched motifs")
 
 dev.off()
-
+```
+```{r merged_nearby_enriched_motifs_mat}
 # merge motif enrichment results from all up Doxo and all up Palbo peaks. 
 merged_Up_AME_mat <- merge(
   data.frame(motif = rownames(AME_padj_mat$allUp_Doxo), AME_padj_mat$allUp_Doxo, row.names = NULL),
@@ -380,7 +384,8 @@ merged_Down_AME_mat$motif <- NULL
 merged_Down_AME_mat[is.na(merged_Down_AME_mat)] <- 0
 
 merged_Down_AME_mat <- as.matrix(merged_Down_AME_mat)
-
+```
+```{r}
 pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Up.Down.mergedpeaks.near.RNAclusters.enriched.motifs.pdf", width=6, height=12)
 pheatmap(merged_Down_AME_mat, cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84",  "#EF6548", "#B30000", "#7F0000", "#7F0000"))(100), breaks = seq(0, 30,length.out = 100), main="all down peaks near RNA clusters: enriched motifs, left: Doxo, right: Palbo")
 
@@ -433,9 +438,8 @@ create_AME_dotplots(AME_padj_dots$allUp, Title="nearby up peaks", fill_limit=c(0
 create_AME_dotplots(AME_padj_dots$allDown, Title="nearby down peaks", fill_limit=c(0, 305), size_limit=c(0, 39.4), midpoint=10)
 dev.off()
 ```
-# plot number of input peaks that went into foreground peak set for MEME-AME analysis: 
+# ATAC-seq: plot number of input peaks that went into foreground peak set for MEME-AME analysis: 
 ```{r}
-
 input_sigpeaks_df <-  list()
 for(i in 1:length(sigPeaks_in_geneclusters)){
 

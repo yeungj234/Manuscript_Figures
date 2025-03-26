@@ -298,7 +298,7 @@ for(i in 1:length(GO_results_list)){
 # combine dataframes of each cluster of gene's GO enrichment results into 1 master dataframe
 GO_results_df <- do.call(rbind, GO_results_list)
 
-# create matrix of -log10pvalues of the top 15 enriched pathways for each cluster
+# create matrix of -log10pvalues of the top 50 enriched pathways for each cluster
 
 GO_results_list_mat <- matrix(nrow=length(unique(unlist(lapply(GO_results_list, function(GO_results_list){GO_results_list$ID[1:50]})))), ncol=length(GO_results_list)) # make empty matrix, number of columns are the clusters of genes and number of total top GO terms of all clusters
 
@@ -412,14 +412,14 @@ table <- sig_LFCMat[row.names(sig_LFCMat) %in% row.names(drug_cat_list[[i]]), ]
 
 # RNA-seq: import IPA upstream regulators & pathways
 ```{r import IPA results}
-setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/output")
+IPA_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/output"
 IPA_upstream_regs <- list()
 IPA_pathways <- list()
 # read in information for enriched IPA pathways per hierarchical cluster (clustering based on scaled rlog normalized counts)
 for(i in 1:length(cluster_names)){
-IPA_pathways[[i]]<- read_tsv(paste0(cluster_names[i], "_IPA_pathways.txt"), skip=2)
+IPA_pathways[[i]]<- read_tsv(paste0(IPA_dir, "/", cluster_names[i], "_IPA_pathways.txt"), skip=2)
 # read in information for enriched upstream regulators 
-IPA_upstream_regs[[i]] <- read.table(paste0(cluster_names[i], "_IPA_upstream_regs.txt"), sep="\t", skip=2, header=T)
+IPA_upstream_regs[[i]] <- read.table(paste0(IPA_dir, "/", cluster_names[i], "_IPA_upstream_regs.txt"), sep="\t", skip=2, header=T)
 IPA_upstream_regs[[i]] <- IPA_upstream_regs[[i]][!grepl("mir|miR|Mir", IPA_upstream_regs[[i]]$Upstream.Regulator), ] # remove upstream regulators that are miRNAs (uncertain if they will be informative & there is a lot of them)
 }
 
@@ -430,8 +430,7 @@ names(IPA_pathways) <- cluster_names
 
 #extract ids of all expressed genes
 expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
-```
-```{r}
+
 # keep only upstream regulators that are part of expressed genes or have lower case letters (these are upstream regulators that could be miRNAs or protein complexes)
 #IPA_upstream_regs <- lapply(IPA_upstream_regs, function(IPA_upstream_regs){IPA_upstream_regs[c(grep('[:lower:]', IPA_upstream_regs$Upstream.Regulator), which(IPA_upstream_regs$Upstream.Regulator %in% expressedGenes)), ]})
 ```
@@ -488,7 +487,7 @@ pheatmap(IPA_TF_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, n
 ```
 
 # RNA-seq: import comparison analysis of IPA upstream regulators and pathways for sig changing genes
-```{r import IPA results}
+```{r import_IPA_comparison_results}
 setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/output/sigGenes_log2FC")
 IPA_Compare_upstream_regs <- list()
 IPA_Compare_pathways <- list()
@@ -610,7 +609,7 @@ folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_di
 ```
 
 # ATAC-seq: import MEME-AME results into dataframe: MEME-AME was done to find differential motifs under up peaks between Doxo & Palbo at different timepoints relative to cycling or day 3. 
-```{r}
+```{r import_differential_MEMEAME_results}
 load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/expressedGenes.RData")
 load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Functions/process_motif_data.RData")
 
