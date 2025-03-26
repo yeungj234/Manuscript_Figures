@@ -649,24 +649,10 @@ d14_Doxo_log2FC <- log2FC_E2F[log2FC_E2F$Condition %in% "day 14 Doxo" & log2FC_E
 
 differences <- d14_Palbo_log2FC - d14_Doxo_log2FC
 
-# Shapiro-Wilk test for normality
-shapiro_test <- shapiro.test(differences)
-print(shapiro_test)
-
-# Visualize distribution of differences
-ggplot(data.frame(differences), aes(x = differences)) +
-  geom_histogram(binwidth = 0.2, fill = "skyblue", color = "black", alpha = 0.7) +
-  labs(title = "Distribution of Log2FC Differences", x = "Difference (Drug1 - Drug2)", y = "Count")
-
 # Perform Paired t-test if normality assumption holds
-if (shapiro_test$p.value > 0.05) {
   t_test_result <- t.test(d14_Palbo_log2FC, d14_Doxo_log2FC, paired = TRUE)
   print(t_test_result)
-} else {
-  # Use Wilcoxon signed-rank test if normality is violated
-  wilcox_test_result <- wilcox.test(d14_Palbo_log2FC, d14_Doxo_log2FC, paired = TRUE)
-  print(wilcox_test_result)
-}
+
 ```
 
 

@@ -725,31 +725,16 @@ dev.off()
 
 # get significance of log2FC values between day 14 Palbo & day 14 Doxo vs Cycling based on paired student t-test
 ```{r}
+# note: after talking with Justin, do paired t-test for all log2FC distribution comparisons. Overall, log2FC distribution of all genes follows a normal distribution so if I break it up by different types of transcription factor targets, it comes from an overall normal distribution. 
 compare_log2FC_differences <- function(condition1_log2FC, condition2_log2FC) {
   # Extract log2FC values for the specified cluster and condition
-
   # Compute differences
   differences <- condition1_log2FC - condition2_log2FC
-
-  # Perform Shapiro-Wilk test for normality
-  shapiro_test <- shapiro.test(differences)
-  print(shapiro_test)
-
-  # Visualize distribution of differences
-  library(ggplot2)
-  print(ggplot(data.frame(differences), aes(x = differences)) +
-    geom_histogram(binwidth = 0.2, fill = "skyblue", color = "black", alpha = 0.7) +
-    labs(title = "Distribution of Log2FC Differences", x = "Difference (Drug1 - Drug2)", y = "Count"))
-
-  # Perform appropriate statistical test based on normality
-  if (shapiro_test$p.value > 0.05) {
+  # print paired t-test result. 
     t_test_result <- t.test(condition1_log2FC, condition2_log2FC, paired = TRUE)
     print(t_test_result)
-  } else {
-    wilcox_test_result <- wilcox.test(condition1_log2FC, condition2_log2FC, paired = TRUE)
-    print(wilcox_test_result)
   }
-}
+
 ```
 
 ```{r}
