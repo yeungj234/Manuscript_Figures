@@ -387,7 +387,7 @@ merged_Down_AME_mat <- as.matrix(merged_Down_AME_mat)
 ```
 ```{r}
 # filter out overall lowly enriched motifs. 
-filtered_merged_Up_AME_mat <-merged_Up_AME_mat[apply(merged_Up_AME_mat, 1, max) >= 5.2, ]
+filtered_merged_Up_AME_mat <-merged_Up_AME_mat[apply(merged_Up_AME_mat, 1, max) >= 4.8, ]
 filtered_merged_Down_AME_mat <-merged_Down_AME_mat[apply(merged_Down_AME_mat, 1, max) >= 9.3, ]
 pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Up.Down.mergedpeaks.near.RNAclusters.enriched.motifs.pdf", width=6, height=12)
 pheatmap(filtered_merged_Down_AME_mat, cluster_rows = T, cluster_cols=F, color = colorRampPalette(c("white",  "#FDBB84",  "#EF6548", "#B30000", "#7F0000", "#7F0000"))(100), breaks = seq(0, 30,length.out = 100), main="all down peaks near RNA clusters: enriched motifs, left: Doxo, right: Palbo")

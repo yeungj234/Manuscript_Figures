@@ -610,7 +610,8 @@ folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_di
 
 # ATAC-seq: import MEME-AME results into dataframe: MEME-AME was done to find differential motifs under up peaks between Doxo & Palbo at different timepoints relative to cycling or day 3. 
 ```{r import_differential_MEMEAME_results}
-load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/post_kallisto_analysis/workspaces/expressedGenes.RData")
+expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
+expressedGenes[grep("TP53$|TP63$|TP73$", expressedGenes)] <- c("P63", "P73", "P53")
 load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_peaks_50kb_of_RNAclusters_heatmap_motif_enrichment/Functions/process_motif_data.RData")
 
 # differential motifs: Doxo vs Palbo
@@ -867,51 +868,76 @@ dev.off()
 load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Figure_Summary_Motif_enrichment_results_all_sig_peaks/Functions/create_AME_peaks_matrix.RData")
 
 # get top enriched motifs for Doxo vs Palbo MEME-AME analysis results
-AME_padj_mat_DvsP <- list()
-comparisons <- levels(annoUp_DvsP_AME$Comparison)
+AME_padj_mat_DvsP <- create_AME_peaks_matrix(annoUp_DvsP_AME)
 
-for(i in 1:length(comparisons)){
-AME_padj_mat_DvsP[[i]] <- create_AME_peaks_matrix(annoUp_DvsP_AME[annoUp_DvsP_AME$Comparison %in% comparisons[i], ])
+filt_AME_padj_mat_DvsP_vsCyc <- AME_padj_mat_DvsP[rowSums(AME_padj_mat_DvsP[ , 1:5] > 0) >= 5, ] # filter by motifs that are enriched in all cycling comparisons. 
+filt_AME_padj_mat_DvsP_vsCyc <- filt_AME_padj_mat_DvsP_vsCyc[order(rowSums(filt_AME_padj_mat_DvsP_vsCyc), decreasing=T), ] # order by overall enrichment across comparisons vs cycling. 
+filt_AME_padj_mat_DvsP_vsday3 <- AME_padj_mat_DvsP[rowSums(AME_padj_mat_DvsP[ , 6:9] > 0) >= 4, ] # filter by motifs that are enriched in all day3 comparisons. 
+filt_AME_padj_mat_DvsP_vsday3 <- filt_AME_padj_mat_DvsP_vsday3[order(rowSums(filt_AME_padj_mat_DvsP_vsday3), decreasing=T), ] # order by overall enrichment across comparisons vs day3. 
 
-AME_padj_mat_DvsP[[i]] <- AME_padj_mat_DvsP[[i]][order(rowSums(AME_padj_mat_DvsP[[i]]), decreasing=T), ] # sort motif IDs by overall significance across clusters. 
-}
+# make list of filtered matrices of -log10(padj) to loop through
+filt_matrices <- c(
+  rep(list(filt_AME_padj_mat_DvsP_vsCyc), 5),
+  rep(list(filt_AME_padj_mat_DvsP_vsday3), 4)
+)
+comparisons=levels(annoUp_DvsP_AME$Comparison)
+AME_padj_dots_DvsP <- vector("list", length(comparisons))
 
-names(AME_padj_mat_DvsP) <- comparisons
-
-AME_padj_dots_DvsP <- list()
-for(i in 1:length(comparisons)){
-AME_padj_dots_DvsP[[i]] <- annoUp_DvsP_AME[annoUp_DvsP_AME$Comparison %in% comparisons[i], ]
-
-max_number <- ifelse(nrow(AME_padj_mat_DvsP[[i]]) >=7, 7, nrow(AME_padj_mat_DvsP[[i]]))
-AME_padj_dots_DvsP[[i]] <- AME_padj_dots_DvsP[[i]][AME_padj_dots_DvsP[[i]]$motif_ID %in% row.names(AME_padj_mat_DvsP[[i]][1:max_number, ]), ] # show only top 15 most significant padj values motif IDs
-AME_padj_dots_DvsP[[i]]$motif_ID <- factor(AME_padj_dots_DvsP[[i]]$motif_ID, levels=rev(unique(AME_padj_dots_DvsP[[i]]$motif_ID)))
+#  filter for overall top enriched motifs from dataframe of MEME-AME results for input to make as dotplot. 
+for (i in seq_along(comparisons)) {
+  AME_padj_dots_DvsP[[i]] <- annoUp_DvsP_AME[annoUp_DvsP_AME$Comparison %in% comparisons[i], ]
+  
+  max_number <- min(15, nrow(filt_matrices[[i]]))
+  
+  AME_padj_dots_DvsP[[i]] <- AME_padj_dots_DvsP[[i]][
+    AME_padj_dots_DvsP[[i]]$motif_ID %in% row.names(filt_matrices[[i]][1:max_number, ]), 
+  ]
+  
+  AME_padj_dots_DvsP[[i]]$motif_ID <- factor(
+    AME_padj_dots_DvsP[[i]]$motif_ID, 
+    levels = rev(unique(AME_padj_dots_DvsP[[i]]$motif_ID))
+  )
 }
 
 AME_padj_dots_DvsP <- do.call(rbind, AME_padj_dots_DvsP)
 
 
 # get top enriched motifs for Doxo vs Palbo MEME-AME analysis results
-AME_padj_mat_PvsD <- list()
-comparisons <- levels(annoUp_PvsD_AME$Comparison)
+AME_padj_mat_PvsD <- create_AME_peaks_matrix(annoUp_PvsD_AME)
 
-for(i in 1:length(comparisons)){
-AME_padj_mat_PvsD[[i]] <- create_AME_peaks_matrix(annoUp_PvsD_AME[annoUp_PvsD_AME$Comparison %in% comparisons[i], ])
+filt_AME_padj_mat_PvsD_vsCyc <- AME_padj_mat_PvsD[rowSums(AME_padj_mat_PvsD[, 1:5] > 20) >= 3, ] # filter for motifs that are enriched in at least 4/5 comparisons to cycling
+filt_AME_padj_mat_PvsD_vsCyc <- filt_AME_padj_mat_PvsD_vsCyc[order(rowSums(filt_AME_padj_mat_PvsD_vsCyc), decreasing=T), ] # order by overall enrichment across comparisons vs cycling. 
+filt_AME_padj_mat_PvsD_vsday3 <- AME_padj_mat_PvsD[rowSums(AME_padj_mat_PvsD[, 6:9] > 20) >= 2, ] # filter for motifs that are enriched in at least 3/4 comparisons to day3
+filt_AME_padj_mat_PvsD_vsday3<- filt_AME_padj_mat_PvsD_vsday3[order(rowSums(filt_AME_padj_mat_PvsD_vsday3), decreasing=T), ] # order by overall enrichment across comparisons vs cycling. 
 
-AME_padj_mat_PvsD[[i]] <- AME_padj_mat_PvsD[[i]][order(rowSums(AME_padj_mat_PvsD[[i]]), decreasing=T), ] # sort motif IDs by overall significance across clusters. 
-}
+# since the enrichment patterns are different for Palbo and not exclusive to day 21 timepoint looking very different from the rest maybe its best to try to go back to filtering by overall enrichment across both Cycling and day3 instead of treating them separately. 
 
-names(AME_padj_mat_PvsD) <- comparisons
+filt_matrices <- c(
+  rep(list(filt_AME_padj_mat_PvsD_vsCyc), 5),
+  rep(list(filt_AME_padj_mat_PvsD_vsday3), 4)
+)
+comparisons=levels(annoUp_DvsP_AME$Comparison)
+AME_padj_dots_PvsD <- vector("list", length(comparisons))
 
-AME_padj_dots_PvsD <- list()
-for(i in 1:length(comparisons)){
-AME_padj_dots_PvsD[[i]] <- annoUp_PvsD_AME[annoUp_PvsD_AME$Comparison %in% comparisons[i], ]
-
-max_number <- ifelse(nrow(AME_padj_mat_PvsD[[i]]) >=7, 7, nrow(AME_padj_mat_PvsD[[i]]))
-AME_padj_dots_PvsD[[i]] <- AME_padj_dots_PvsD[[i]][AME_padj_dots_PvsD[[i]]$motif_ID %in% row.names(AME_padj_mat_PvsD[[i]][1:max_number, ]), ] # show only top 15 most significant padj values motif IDs
-AME_padj_dots_PvsD[[i]]$motif_ID <- factor(AME_padj_dots_PvsD[[i]]$motif_ID, levels=rev(unique(AME_padj_dots_PvsD[[i]]$motif_ID)))
+#  filter for overall top enriched motifs from dataframe of MEME-AME results for input to make as dotplot. 
+for (i in seq_along(comparisons)) {
+  AME_padj_dots_PvsD[[i]] <- annoUp_PvsD_AME[annoUp_PvsD_AME$Comparison %in% comparisons[i], ]
+  
+  max_number <- min(15, nrow(filt_matrices[[i]]))
+  
+  AME_padj_dots_PvsD[[i]] <- AME_padj_dots_PvsD[[i]][
+    AME_padj_dots_PvsD[[i]]$motif_ID %in% row.names(filt_matrices[[i]][1:max_number, ]), 
+  ]
+  
+  AME_padj_dots_PvsD[[i]]$motif_ID <- factor(
+    AME_padj_dots_PvsD[[i]]$motif_ID, 
+    levels = rev(unique(AME_padj_dots_PvsD[[i]]$motif_ID))
+  )
 }
 
 AME_padj_dots_PvsD <- do.call(rbind, AME_padj_dots_PvsD)
+
+filt_AME_padj_mat_PvsD <- AME_padj_mat_PvsD[order(rowSums(AME_padj_mat_PvsD), decreasing=T), ] # filter for motifs that are enriched in at least 4/5 comparisons to cycling
 
 # create function for plotting motif enrichment results as dotplot
 create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50, size_limit=4.5 ){
@@ -938,9 +964,16 @@ create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=50
 
 
 pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP"
-pdf(paste0(pdf_dir, "/ATAC_PalbovsDoxo_top_differential_motifs_UpPeaks.dotplots.pdf"), width=5, height=7)
+pdf(paste0(pdf_dir, "/ATAC_PalbovsDoxo_top_differential_motifs_UpPeaks.dotplots.pdf"), width=5, height=10)
 create_AME_dotplots(AME_padj_dots_DvsP, Title="Doxo vs Palbo Up peaks", fill_limit = 200, size_limit = 35) 
 create_AME_dotplots(AME_padj_dots_PvsD, Title="Palbo vs Doxo Up peaks", fill_limit = 100, size_limit = 25) 
+dev.off()
+
+
+# plot all differentially enriched motifs as heatmap to refer to. 
+pdf(paste0(pdf_dir, "/ATAC_PalbovsDoxo_all_differential_motifs_UpPeaks.heatmap.pdf"), width=5, height=20)
+pheatmap(AME_padj_mat_DvsP, cluster_cols = F, cluster_rows=T,  colorRampPalette(brewer.pal(n = 7, name ="Reds"))(100), breaks = seq(0, 200 ,length.out = 100), main="-log10(padj)")
+pheatmap(AME_padj_mat_PvsD, cluster_cols = F, cluster_rows=T,  colorRampPalette(brewer.pal(n = 7, name ="Reds"))(100), breaks = seq(0, 100 ,length.out = 100), main="-log10(padj)")
 dev.off()
 ```
 
