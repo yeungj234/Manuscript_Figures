@@ -97,11 +97,6 @@ hm_cols_ATAC <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A
                 )
 ```
 
-# load in workspace with DESeq results and rlog counts matrix of genes. 
-```{r}
-load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Global_transcriptome_and_chromatin_accessibility_is_dynamic_in_both_types_of_therapy_induced_senescence/workspace.RData")
-```
-
 # download msigdb databases, to be used for GO enrichment analysis. 
 ```{r}
 # msigdb GO Biological Processes database
@@ -160,6 +155,8 @@ return(gene_go)
 
 # assign significant genes to relevant k-means clusters & drug + cell cycle arrest categories. 
 ```{r genes_in_clusters}
+# load in workspace with DESeq results and rlog counts matrix of genes. 
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Global_transcriptome_and_chromatin_accessibility_is_dynamic_in_both_types_of_therapy_induced_senescence/workspace.RData")
 genes_in_clusters <- lapply(levels(clusterDF$Clusters), function(x){clusterDF[clusterDF$Clusters %in% x, ]$gene_id})
 cluster_names <- c("CellCycle1", "CellCycle2", "Palbo1", "Palbo2", "Doxo1", "Doxo2", "Shared") 
 names(genes_in_clusters) <- cluster_names

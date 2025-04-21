@@ -76,7 +76,7 @@ chunk_to_run <- lines[(chunk_start[1]+1):(chunk_end[1]-1)]
 }
 ```
 
-# RNA: make supplemental table of significantly changing genes. 
+# RNA Table S2: make supplemental table of log2FC & padj values of expressed genes. Include information on genes that were considered significantly changing. 
 ```{r}
 IPA_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/IPA_files_kmeans7_clusters/output"
 IPA_upstream_regs <- list()
@@ -113,148 +113,100 @@ clusterDF$RNA_Cluster_Description <- ifelse(clusterDF$Clusters %in% c("2", "5"),
 # reformat number assigned by kmeans clustering to 1:7 as indicated in the figures. 
 kmeansCluster_to_RNACluster <- data.frame(Cluster=levels(clusterDF$Clusters), RNA_cluster=factor(1:7))
 clusterDF$RNA_Cluster <- kmeansCluster_to_RNACluster[match(clusterDF$Clusters, kmeansCluster_to_RNACluster$Cluster), ]$RNA_cluster
-```
-```{r}
+
 # change column names for annotation of significantly changing genes. 
 clusterDF <- clusterDF[ ,c("Clusters", "RNA_Cluster", "RNA_Cluster_Description", "gene_id", "ENSG_id", "SASP", "Cell_Cycle", "NFKB_All", "p53_All", "E2F")]
 colnames(clusterDF) <- c("Kmeans_assigned_Cluster_number", "RNA_Cluster", "RNA_Cluster_Description", "gene_symbol", "gene_id", "SASP", "Cell_Cycle", "NFKB_target", "p53_target", "E2F_target")
 
-# change column names for counts & log2FC matrix of sig changing genes. 
-# match order of sigMat
-metaDataall <- metaDataall[match(colnames(ordered_sigMat), row.names(metaDataall)), ]
-
-new_LFCnames <- gsub("(Doxo|Palbo)(\\d+) vs (Doxo|Palbo|Cycling)(\\d*)", 
-                 "day\\2 \\1 vs day\\4 \\3", colnames(sig_LFCMat))
-
-# Remove "day " before "Cycling" since it shouldn't have a day value
-new_LFCnames <- gsub("day  Cycling", "Cycling", new_LFCnames)
-
-# change column names for counts & log2FC matrix of sig changing genes. 
-colnames(ordered_sigMat) <- paste0("Biorep", metaDataall$Biorep, "_", metaDataall$Treatment, "_day", metaDataall$Timepoint)
-colnames(sig_LFCMat) <- new_LFCnames
-
-# convert to dataframe
-ordered_sigMat <- data.frame(gene_symbol=row.names(ordered_sigMat), ordered_sigMat)
-sig_LFCMat <-  data.frame(gene_symbol=row.names(sig_LFCMat), sig_LFCMat)
-
-# all genes counts matrix, normalized counts 
-all_genes_counts_matrix <- counts(RNAddsall, normalize=T)
-colnames(all_genes_counts_matrix) <-  paste0("Biorep", metaDataall$Biorep, "_", metaDataall$Treatment, "_day", metaDataall$Timepoint)
-all_genes_counts_matrix <- all_genes_counts_matrix[ ,c(1,9,15,2,10,16,3,17,4,11,5,12,18,6,19,7,13,8,14)]
-# export all genes counts matrix for GEO submission
-write.csv(all_genes_counts_matrix, file="/lustre/fs4/risc_lab/store/jyeung/Senescence_Liposarcoma_GEO_submission/RNAseq/Normalized_by_DESeq2_RNA_counts_matrix.csv")
-```
-```{r}
-Table_num <- "1"
-write_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Tables"
-# Write to an Excel file with each table as a separate sheet
-write_xlsx(list("Annotation" = clusterDF, "rlog_normalized_counts" = ordered_sigMat, "log2FoldChange"=sig_LFCMat), paste0(write_dir, "/Supplemental_Table", Table_num, "_RNA_significantly_changing_genes.xlsx"))
-```
-
-# Supplemental Table of vst normalized counts under ATAC-seq peaks
-```{r}
-ATAC_sigPeaks_Table <- function(matrix, sigLFCResults_ATAC=sigLFCResults_ATACUp, DoxoGR=mergedDiffGR$allUp_Doxo, PalboGR=mergedDiffGR$allUp_Palbo) {
-
-# make dataframe to specify which drug treatment peak belongs to: Palbo, Doxo or both. 
-drug_cat <- data.frame(
-                       peak_id=row.names(matrix),
-                       row.names=row.names(matrix), Palbo=ifelse(row.names(matrix) %in% PalboGR$name, "Yes", "No"), 
-                       Doxo=ifelse(row.names(matrix) %in% DoxoGR$name, "Yes", "No"), 
-                       Both=ifelse(row.names(matrix) %in% DoxoGR$name & row.names(matrix) %in% PalboGR$name, "Yes", "No") )
-
-# order rows by Palbo, Doxo then both peaks
-drug_cat_list <- list(Palbo=drug_cat[drug_cat$Palbo %in% "Yes" & drug_cat$Doxo %in% "No", ],
-                      Shared=drug_cat[drug_cat$Both %in% "Yes", ],
-                      Doxo=drug_cat[drug_cat$Palbo %in% "No" & drug_cat$Doxo %in% "Yes", ]
-)
-drug_cat <- do.call(rbind, drug_cat_list)
-
-ordered_matrix <- matrix[match(drug_cat$peak_id, row.names(matrix)), ]
-
-# Apply the function to create a list of data frames with dynamic column names
-result_list <- lapply(names(sigLFCResults_ATAC), function(comp_name) {
-  x <- sigLFCResults_ATAC[[comp_name]]
-  df <- data.frame(
-    peak_id = drug_cat$peak_id, 
-    Comparison = ifelse(drug_cat$peak_id %in% row.names(x), "Yes", "No")
-  )
-  # Set the column name of 'Comparison' to the name of the current list element
-   colnames(df)[2] <- comp_name
-  return(df)
-})
-
-# Merge all data frames by the 'peak_id' column
-merged_result <- do.call(cbind, result_list)
-merged_result <- merged_result[ ,c(1, which(!colnames(merged_result) %in% "peak_id"))]
-merged_anno <- cbind(drug_cat, merged_result)
-merged_anno <- merged_anno[ ,c(1, which(!colnames(merged_anno) %in% "peak_id"))]
-merged_anno <- cbind(merged_anno, as.data.frame(annomasterpeaks_pval0.2[match(merged_anno$peak_id, annomasterpeaks_pval0.2$name), ])[ ,c("annotation", "geneId", "distanceToTSS")])
-
-colnames(ordered_matrix) <- gsub("None", "Cycling", paste0("Biorep", annoCol$Biorep, "_", annoCol$Treatment, "_day", annoCol$Timepoint))
-# convert to dataframe
-ordered_matrix <- data.frame(peak_id=row.names(ordered_matrix), ordered_matrix)
-
-return(list(matrix=ordered_matrix, peak_anno=merged_anno))
+# get log2FC values of all expressed genes over time 
+LFCMat <- matrix(ncol=length(LFCResultsall_RNA), nrow=nrow(LFCResultsall_RNA[[1]]))
+colnames(LFCMat) <- names(LFCResultsall_RNA)
+row.names(LFCMat) <- row.names(LFCResultsall_RNA[[1]])
+for(i in 1:ncol(LFCMat)){
+LFCMat[ ,i] <- LFCResultsall_RNA[[i]]$log2FoldChange
 }
-```
-```{r}
-sigUp_ATACPeaksTable <- ATAC_sigPeaks_Table(matrix=mergedDiff_hm_rmOutlier$UpPalbo.UpDoxo, sigLFCResults_ATAC=sigLFCResults_ATACUp, DoxoGR=mergedDiffGR$allUp_Doxo, PalboGR=mergedDiffGR$allUp_Palbo)
 
-sigDown_ATACPeaksTable <- ATAC_sigPeaks_Table(matrix=mergedDiff_hm_rmOutlier$DownPalbo.DownDoxo, sigLFCResults_ATAC=sigLFCResults_ATACDown, DoxoGR=mergedDiffGR$allDown_Doxo, PalboGR=mergedDiffGR$allDown_Palbo)
-
-Table_num <- 2
-# Write to an Excel file with each table as a separate sheet
-write_xlsx(list("UpPeaks_Annotation" = sigUp_ATACPeaksTable$peak_anno, "vst_normalized_counts_UpPeaks" = sigUp_ATACPeaksTable$matrix, "DownPeaks_Annotation" = sigDown_ATACPeaksTable$peak_anno, "vst_normalized_counts_DownPeaks" = sigDown_ATACPeaksTable$matrix), paste0(write_dir, "/Supplemental_Table", Table_num, "_ATAC_significantly_changing_peaks.xlsx"))
-
-# counts matrix for ATAC-seq peaks 
-ATAC_normCounts_matrix <- counts(dds_filt, normalized=T)
-ATAC_normCounts_matrix <- ATAC_normCounts_matrix[, c(1:5, 38, 40, 39, 41, 42, 28:32, 43:45, 6:7, 49:51, 11:15, 33:37, 46:48, 8:10, 52:54, 16:27)]
-colnames(ATAC_normCounts_matrix) <- c("Cycling_Biorep1.1","Cycling_Biorep1.2","Cycling_Biorep2.1","Cycling_Biorep2.2","Cycling_Biorep2.3","Cycling_Biorep3.2","Cycling_Biorep3.3","Cycling_Biorep4.1","Cycling_Biorep4.2","Cycling_Biorep4.3","day3_Doxo_Biorep1.1","day3_Doxo_Biorep1.2","day3_Doxo_Biorep2.1","day3_Doxo_Biorep2.2","day3_Doxo_Biorep2.3","day10_Doxo_Biorep1.1","day10_Doxo_Biorep1.2","day10_Doxo_Biorep1.3","day14_Doxo_Biorep2.1","day14_Doxo_Biorep2.2","day14_Doxo_Biorep1.1","day14_Doxo_Biorep1.2","day14_Doxo_Biorep1.3","day21_Doxo_Biorep1.1","day21_Doxo_Biorep1.2","day21_Doxo_Biorep1.3","day21_Doxo_Biorep2.1","day21_Doxo_Biorep2.2","day3_Palbo_Biorep1.1","day3_Palbo_Biorep1.2","day3_Palbo_Biorep2.1","day3_Palbo_Biorep2.2","day3_Palbo_Biorep2.3","day10_Palbo_Biorep1.1","day10_Palbo_Biorep1.2","day10_Palbo_Biorep1.3","day14_Palbo_Biorep2.1","day14_Palbo_Biorep2.2","day14_Palbo_Biorep2.3","day14_Palbo_Biorep1.1","day14_Palbo_Biorep1.2","day14_Palbo_Biorep1.3","day21_Palbo_Biorep1.1","day21_Palbo_Biorep1.2","day21_Palbo_Biorep1.3","day21_Palbo_Biorep2.1","day21_Palbo_Biorep2.2","day21_Palbo_Biorep2.3","day28_Palbo_Biorep1.1","day28_Palbo_Biorep1.2","day28_Palbo_Biorep1.3","day28_Palbo_Biorep2.1","day28_Palbo_Biorep2.2","day28_Palbo_Biorep2.3")
-
-# export all genes counts matrix for GEO submission
-write.csv(ATAC_normCounts_matrix, file="/lustre/fs4/risc_lab/store/jyeung/Senescence_Liposarcoma_GEO_submission/ATACseq/Normalized_by_DESeq2_ATAC_counts_matrix.csv")
-```
+# add in columns for padj values from DESeq LRT Test and gene symbol.
+Table_S2 <- as.data.frame(LFCMat)
+row.names(acrossGroups) <- gsub('\\.[0-9]*$', '', row.names(acrossGroups) )
+Table_S2 <- cbind(Table_S2, acrossGroups[match(row.names(Table_S2), row.names(acrossGroups)), c("padj", "SYMBOL")])
 
 # Supplemental table of RNA databases of target genes
-```{r}
-SASP_db <- data.frame(SASP_genes = unique(SASP_all) )
-CellCycle_db <- data.frame(CellCycle_genes=unique(c(msigdbr_df_H[msigdbr_df_H$gs_name %in% c("HALLMARK_E2F_TARGETS", "HALLMARK_G2M_CHECKPOINT"), ]$gene_symbol, msigdbr_df_REACT[msigdbr_df_REACT$gs_name %in% c("REACTOME_CELL_CYCLE", "REACTOME_CELL_CYCLE_CHECKPOINTS", "REACTOME_CELL_CYCLE_MITOTIC"), ]$gene_symbol, msigdbr_df_KEGG[msigdbr_df_KEGG$gs_name %in% "KEGG_CELL_CYCLE", ]$gene_symbol))
-)
-NFKB_Targets_db <- data.frame(NFKB_targets=unique(c(Gilmore_NFKB_Targets, NFKB_Hallmark, IPA_targets$NFKB))
-)
-p53_Targets_db <- data.frame(p53_targets=unique(c(Fischer_Oncogene_2017_p53_census_target_genes$`Gene Symbol`, p53_Hallmark))
+target_genes_db <- list(SASP_genes=unique(SASP_all), 
+                        CellCycle_genes=unique(c(msigdbr_df_H[msigdbr_df_H$gs_name %in% c("HALLMARK_E2F_TARGETS", "HALLMARK_G2M_CHECKPOINT"), ]$gene_symbol, msigdbr_df_REACT[msigdbr_df_REACT$gs_name %in% c("REACTOME_CELL_CYCLE", "REACTOME_CELL_CYCLE_CHECKPOINTS", "REACTOME_CELL_CYCLE_MITOTIC"), ]$gene_symbol, msigdbr_df_KEGG[msigdbr_df_KEGG$gs_name %in% "KEGG_CELL_CYCLE", ]$gene_symbol)),
+                        NFKB_targets=unique(c(Gilmore_NFKB_Targets, NFKB_Hallmark, IPA_targets$NFKB)),
+                        p53_targets=unique(c(Fischer_Oncogene_2017_p53_census_target_genes$`Gene Symbol`, p53_Hallmark)),
+                        E2F_targets=unique(E2F_Targets)
 )
 
-E2F_Targets_db <- data.frame(E2F_targets=unique(E2F_Targets) )
+# add in columns for which genes are target genes and SASP/CellCycle genes. 
+for(i in 1:length(target_genes_db)) {
+  Table_S2[[names(target_genes_db)[i]]] <- ifelse(Table_S2$SYMBOL %in% target_genes_db[[i]], "Yes", "No")
+}
 
-Table_num <- 3
-# Write to an Excel file with each table as a separate sheet
-write_xlsx(list("SASP genes" = SASP_db, "Cell cycle genes" = CellCycle_db, "NFkB target genes" = NFKB_Targets_db, "p53 target genes" = p53_Targets_db, "E2F target genes"=E2F_Targets_db ), paste0(write_dir, "/Supplemental_Table", Table_num, "_RNA_Curated_databases_for_gene_annotation.xlsx"))
+# add in columns containing info on significantly changing genes. 
+Table_S2 <- cbind(Table_S2, clusterDF[match(row.names(Table_S2), clusterDF$gene_id), c("Kmeans_assigned_Cluster_number", "RNA_Cluster", "RNA_Cluster_Description")])
+# add ensg id type as column
+Table_S2$gene_id <- row.names(Table_S2)
+
+# change column names for counts & log2FC matrix of sig changing genes. 
+# match order of sigMat
+metaDataall <- metaDataall[match(colnames(LFCMat), row.names(metaDataall)), ]
+
+new_LFCnames <- gsub("(Doxo|Palbo)(\\d+) vs (Doxo|Palbo|Cycling)(\\d*)", 
+                 "day\\2 \\1 vs day\\4 \\3", colnames(LFCMat))
+
+# Remove "day " before "Cycling" since it shouldn't have a day value
+new_LFCnames <- gsub("day0 Cycling", "Cycling", new_LFCnames)
+new_LFCnames <- paste(new_LFCnames, "log2FC")
+
+# rename columns
+colnames(Table_S2) <- c(new_LFCnames, "padj (DESeq LRT)", "gene_symbol", colnames(Table_S2)[23:31])
+# reorder columns
+Table_S2 <- Table_S2[ ,c(31,22,1:21, 23:30)]
+write_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Tables"
+write_xlsx(TableS2, paste0(write_dir, "/Table", Table_num, "_RNA_information_on_expressed_genes.xlsx"))
 ```
 
-# Supplemental table of activation scores from IPA_Comparison_Analysis on upstream regulators from RNA log2FC comparisons.  
+#Table S3: activation scores from IPA_Comparison_Analysis on upstream regulators from RNA log2FC comparisons.  
 ```{r}
 run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/Figure_Drug_distinct_responses_and_SASP.Rmd", chunk_name=" import_IPA_comparison_results")
 
-IPA_Compare_upstream_regs_df <- lapply(IPA_Compare_upstream_regs_mat, function(x){
+# Assign names to your list of matrices
+names(IPA_Compare_upstream_regs_mat) <- c(
+  "Shared down (RNA Cluster 1)", 
+  "Shared down (RNA Cluster 2)", 
+  "Doxo up (RNA Cluster 5)", 
+  "Doxo up (RNA Cluster 6)", 
+  "Palbo up (RNA Cluster 3)", 
+  "Palbo up (RNA Cluster 4)", 
+  "Shared up (RNA Cluster 7)"
+)
+
+# Process each matrix in the list and add cluster label
+IPA_Compare_upstream_regs_df <- lapply(names(IPA_Compare_upstream_regs_mat), function(name) {
+  x <- IPA_Compare_upstream_regs_mat[[name]]
+  
+  # Rename columns
   new_LFCnames <- gsub("(Doxo|Palbo)(\\d+) vs (Doxo|Palbo|Cycling)(\\d*)", 
-                 "day\\2 \\1 vs day\\4 \\3", colnames(x))
+                       "day\\2 \\1 vs day\\4 \\3", colnames(x))
+  new_LFCnames <- gsub("day  Cycling", "Cycling", new_LFCnames)  # clean up extra space
+  colnames(x) <- new_LFCnames
 
-# Remove "day " before "Cycling" since it shouldn't have a day value
-new_LFCnames <- gsub("day  Cycling", "Cycling", new_LFCnames)
-
-colnames(x) <- new_LFCnames
-
-df <- data.frame(upstream_regulator=row.names(x), x)
-return(df)
+  # Convert to dataframe with upstream_regulator as a column
+  df <- data.frame(upstream_regulator = rownames(x), x)
+  
+  # Add the RNA_Cluster label
+  df[["RNA_Cluster"]] <- name
+  return(df)
 })
 
-names(IPA_Compare_upstream_regs_df) <- c("Shared down (RNA Cluster 1)", "Shared down (RNA Cluster 2)", "Doxo up (RNA Cluster 5)", "Doxo up (RNA Cluster 6)", "Palbo up (RNA Cluster 3)", "Palbo up (RNA Cluster 4)", "Shared up (RNA Cluster 7)" )
 
 IPA_Compare_upstream_regs_df <- IPA_Compare_upstream_regs_df[c(1,2,5,6,3,4,7)]
-Table_num <- 4
+IPA_Compare_upstream_regs_df <- do.call(rbind, IPA_Compare_upstream_regs_df)
+Table_num <- "S3"
 # Write to an Excel file with each table as a separate sheet
-write_xlsx(IPA_Compare_upstream_regs_df, paste0(write_dir, "/Supplemental_Table", Table_num, "_RNA_Comparison_Analysis_upstream_regulators_activation_scores.xlsx"))
+write_xlsx(IPA_Compare_upstream_regs_df, paste0(write_dir, "/Table", Table_num, "_RNA_Comparison_Analysis_upstream_regulators_activation_scores.xlsx"))
 ```
 
 # Supplemental table of IPA upstream regulators & GO enrichment results from RNA-seq data (based on gene IDs input)
@@ -271,6 +223,11 @@ run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/
 
 names(GO_results_list) <- c("Shared down (RNA Cluster 1)", "Shared down (RNA Cluster 2)", "Palbo up (RNA Cluster 3)", "Palbo up (RNA Cluster 4)", "Doxo up (RNA Cluster 5)", "Doxo up (RNA Cluster 6)", "Shared up (RNA Cluster 7)" )
 
+for(i in 1:length(IPA_upstream_regs)){
+IPA_upstream_regs[[i]]$RNA_Cluster <- names(GO_results_list)[i]
+}
+
+
 GO_results_list <- lapply(seq_along(GO_results_list), function(i) {
   x <- GO_results_list[[i]]
   x$RNA_Cluster <- names(GO_results_list)[i]  # Assign the correct name
@@ -278,22 +235,14 @@ GO_results_list <- lapply(seq_along(GO_results_list), function(i) {
   return(x)
 })
 
-names(IPA_upstream_regs) <- c("Shared down (RNA Cluster 1)", "Shared down (RNA Cluster 2)", "Palbo up (RNA Cluster 3)", "Palbo up (RNA Cluster 4)", "Doxo up (RNA Cluster 5)", "Doxo up (RNA Cluster 6)", "Shared up (RNA Cluster 7)" )
-
-IPA_upstream_regs <- lapply(seq_along(IPA_upstream_regs), function(i) {
-  x <- IPA_upstream_regs[[i]]
-  x$RNA_Cluster <- names(IPA_upstream_regs)[i]  # Assign the correct name
-  return(x)
-})
 
 GO_results_df <- do.call(rbind, GO_results_list)
 IPA_upstream_regs_df <- do.call(rbind, IPA_upstream_regs)
 
-Table_num <- 5
-# Write to an Excel file with each table as a separate sheet
-write_xlsx(list("GO_enrichment_results"=GO_results_df, "Predicted_Upstream_Regulators"=IPA_upstream_regs_df), paste0(write_dir, "/Supplemental_Table", Table_num, "_RNA_GO_enrichment_IPA_upstream_regulators_results.xlsx"))
+Table_num <- "S4"
+# Write to an Excel file with each table as a separate sheet (will change it after downloading so that both tables are side by side in 1 sheet)
+write_xlsx(list("GO_enrichment_results"=GO_results_df, "Predicted_Upstream_Regulators"=IPA_upstream_regs_df), paste0(write_dir, "/Table", Table_num, "_RNA_GO_enrichment_IPA_upstream_regulators_results.xlsx"))
 ```
-
 
 # Supplemental table of ATAC motif enrichment results on up/down peaks at each timepoint. 
 ```{r}
@@ -331,14 +280,20 @@ annoUpPeaks_AME_df <- annoUpPeaks_AME_df[ ,!colnames(annoUpPeaks_AME_df) %in% c(
 annoDownPeaks_AME_df <- annoDownPeaks_AME_df[ ,!colnames(annoDownPeaks_AME_df) %in% c("rank", "motif_DB", "motif_alt_ID")]
 colnames(annoUpPeaks_AME_df) <- c("motif_ID", "consensus", "p-value", "adj-pvalue", "E-value", "tests", "FASTA_max", "pos", "neg", "PWM_min", "True_Positive(TP)", "percent_TP", "False_Positive(FP)", "percent_FP", "Percent_TP - Percent_FP", "-log10(padj)value", "Comparison", "Group", "Timepoint")
 colnames(annoDownPeaks_AME_df) <- colnames(annoUpPeaks_AME_df)
+# rename Group to be clear which direction peaks are. 
+annoUpPeaks_AME_df$Group <- paste("Up", annoUpPeaks_AME_df$Group, "ATAC-seq peaks")
+annoDownPeaks_AME_df$Group <- paste("Down", annoDownPeaks_AME_df$Group, "ATAC-seq peaks")
 
 # convert matrices of -log10(padj) values to dataframe for writexl. 
-Palbo_Doxo_AME_UpPeaks_Mat <- data.frame(motif_ID=row.names(Palbo_Doxo_AME_UpPeaks_Mat), Palbo_Doxo_AME_UpPeaks_Mat)
-Palbo_Doxo_AME_DownPeaks_Mat <- data.frame(motif_ID=row.names(Palbo_Doxo_AME_DownPeaks_Mat), Palbo_Doxo_AME_DownPeaks_Mat)
+Palbo_Doxo_AME_UpPeaks_Mat <- data.frame(motif_ID=row.names(Palbo_Doxo_AME_UpPeaks_Mat), Palbo_Doxo_AME_UpPeaks_Mat, Group="Up ATAC-seq peaks")
+Palbo_Doxo_AME_DownPeaks_Mat <- data.frame(motif_ID=row.names(Palbo_Doxo_AME_DownPeaks_Mat), Palbo_Doxo_AME_DownPeaks_Mat, Group="Down ATAC-seq peaks")
 
-Table_num <- 6
-# Write to an Excel file with each table as a separate sheet
-write_xlsx(list("MEME-AME Results Up Peaks"=annoUpPeaks_AME_df, "MEME-AME Results Down Peaks"=annoDownPeaks_AME_df, "-log10(padj)values Up Peaks"=Palbo_Doxo_AME_UpPeaks_Mat, "-log10(padj)values Down Peaks"=Palbo_Doxo_AME_DownPeaks_Mat), paste0(write_dir, "/Supplemental_Table", Table_num, "_ATAC_MEMEAME_Motif_enrichment_results_Dynamic_Peaks.xlsx"))
+# rbind dataframes so that everything is on 1 excel spreadsheet. 
+annoPeaks_AME_df <- rbind(annoUpPeaks_AME_df, annoDownPeaks_AME_df)
+AME_Peaks_Mat <- rbind(Palbo_Doxo_AME_UpPeaks_Mat, Palbo_Doxo_AME_DownPeaks_Mat)
+Table_num <- "S5"
+# Write to an Excel file with each table as a separate sheet (will merge the two spreadsheets into 1 manually after downloading)
+write_xlsx(list("MEME-AME Results"=annoPeaks_AME_df, "-log10(padj)values MEME-AME"=AME_Peaks_Mat), paste0(write_dir, "/Table", Table_num, "_ATAC_MEMEAME_Motif_enrichment_results_Dynamic_Peaks.xlsx"))
 ```
 
 # Supplemental table of differentially enriched motifs between drugs in up ATAC-seq peaks
@@ -354,20 +309,25 @@ colnames(annoUp_PvsD_AME) <- c("motif_ID", "consensus", "p-value", "adj-pvalue",
 colnames(annoUp_DvsP_AME) <- colnames(annoUp_PvsD_AME)
 
 # rename column names (Comparisons) to something more readable. 
-rename_Comparison_df <- data.frame(original_names=colnames(annoUp_PvsD_AME_mat), new_names=c("day3Palbo.vs.day3Doxo_UpPeaks.vs.Cycling", "day10Palbo.vs.day10Doxo_UpPeaks.vs.Cycling", "day14Palbo.vs.day14Doxo_UpPeaks.vs.Cycling", "day21Palbo.vs.day21Doxo_UpPeaks.vs.Cycling", "day28Palbo.vs.day21Doxo_UpPeaks.vs.Cycling", "day10Palbo.vs.day10Doxo_UpPeaks.vs.day3", "day14Palbo.vs.day14Doxo_UpPeaks.vs.day3", "day21Palbo.vs.day21Doxo_UpPeaks.vs.day3", "day28Palbo.vs.day21Doxo_UpPeaks.vs.day3")
-                                   )
-colnames(annoUp_PvsD_AME_mat) <- rename_Comparison_df$new_names
-colnames(annoUp_DvsP_AME_mat) <- rename_Comparison_df$new_names
-annoUp_PvsD_AME$Comparison <- rename_Comparison_df[match(annoUp_PvsD_AME$Comparison, rename_Comparison_df$original_names), ]$new_names
-annoUp_DvsP_AME$Comparison <- rename_Comparison_df[match(annoUp_DvsP_AME$Comparison, rename_Comparison_df$original_names), ]$new_names
+rename_Comparison_df <- data.frame(original_names=colnames(annoUp_PvsD_AME_mat),
+                                   new_namesPvsD=c("day3Palbo.vs.day3Doxo_UpPeaks.vs.Cycling", "day10Palbo.vs.day10Doxo_UpPeaks.vs.Cycling", "day14Palbo.vs.day14Doxo_UpPeaks.vs.Cycling", "day21Palbo.vs.day21Doxo_UpPeaks.vs.Cycling", "day28Palbo.vs.day21Doxo_UpPeaks.vs.Cycling", "day10Palbo.vs.day10Doxo_UpPeaks.vs.day3", "day14Palbo.vs.day14Doxo_UpPeaks.vs.day3", "day21Palbo.vs.day21Doxo_UpPeaks.vs.day3", "day28Palbo.vs.day21Doxo_UpPeaks.vs.day3"), 
+                                   new_namesDvsP=c("day3Doxo.vs.day3Palbo_UpPeaks.vs.Cycling", "day10Doxo.vs.day10Palbo_UpPeaks.vs.Cycling", "day14Doxo.vs.day14Palbo_UpPeaks.vs.Cycling", "day21Doxo.vs.day21Palbo_UpPeaks.vs.Cycling", "day21Doxo.vs.day28Palbo_UpPeaks.vs.Cycling", "day10Doxo.vs.day10Palbo_UpPeaks.vs.day3", "day14Doxo.vs.day14Palbo_UpPeaks.vs.day3", "day21Doxo.vs.day21Palbo_UpPeaks.vs.day3", "day21Doxo.vs.day28Palbo_UpPeaks.vs.day3")
+)
+colnames(annoUp_PvsD_AME_mat) <- rename_Comparison_df$new_namesPvsD
+colnames(annoUp_DvsP_AME_mat) <- rename_Comparison_df$new_namesPvsD
+annoUp_PvsD_AME$Comparison <- rename_Comparison_df[match(annoUp_PvsD_AME$Comparison, rename_Comparison_df$original_names), ]$new_namesPvsD
+annoUp_DvsP_AME$Comparison <- rename_Comparison_df[match(annoUp_DvsP_AME$Comparison, rename_Comparison_df$original_names), ]$new_namesDvsP
 
 # convert matrices of -log10(padj) values to dataframe for writexl. 
-annoUp_PvsD_AME_mat <- data.frame(motif_ID=row.names(annoUp_PvsD_AME_mat), annoUp_PvsD_AME_mat)
-annoUp_DvsP_AME_mat <- data.frame(motif_ID=row.names(annoUp_DvsP_AME_mat ), annoUp_DvsP_AME_mat)
+annoUp_PvsD_AME_mat <- data.frame(motif_ID=row.names(annoUp_PvsD_AME_mat), annoUp_PvsD_AME_mat, Group= "Motifs more enriched in Palbo-upregulated ATAC-seq peaks than Doxo-upregulated peaks")
+annoUp_DvsP_AME_mat <- data.frame(motif_ID=row.names(annoUp_DvsP_AME_mat ), annoUp_DvsP_AME_mat, Group= "Motifs more enriched in Doxo-upregulated ATAC-seq peaks than Palbo-upregulated peaks")
 
-Table_num <- 7
+
+annoUp_AME <- rbind(annoUp_PvsD_AME, annoUp_DvsP_AME)
+annoUp_AME_mat <- rbind(annoUp_PvsD_AME_mat, annoUp_DvsP_AME_mat)
+Table_num <- "S6"
 # Write to an Excel file with each table as a separate sheet
-write_xlsx(list("More enriched in Palbo"=annoUp_PvsD_AME, "More enriched in Doxo"=annoUp_DvsP_AME, "-log10(padj)-More enrichedPalbo"=Palbo_Doxo_AME_UpPeaks_Mat, "-log10(padj)-More enrichedDoxo"=Palbo_Doxo_AME_DownPeaks_Mat), paste0(write_dir, "/Supplemental_Table", Table_num, "_ATAC_MEMEAME_differential_enriched_motifs_between_drugs_Up_Peaks.xlsx"))
+write_xlsx(list("MEME-AME Results"=annoUp_AME , "-log10(padj)values MEME-AME"=annoUp_AME_mat), paste0(write_dir, "/Table", Table_num, "_ATAC_MEMEAME_differential_enriched_motifs_between_drugs_Up_Peaks.xlsx"))
 ```
 # Supplemental table of MEME-AME motifs enriched under nearby dynamic ATAC-seq peaks to RNA Cluster
 ```{r}
@@ -391,16 +351,27 @@ colnames(merged_Down_AME_mat) <- colnames(merged_Up_AME_mat)
 merged_Up_AME_mat <- data.frame(motif_ID=row.names(merged_Up_AME_mat), merged_Up_AME_mat)
 merged_Down_AME_mat <- data.frame(motif_ID=row.names(merged_Down_AME_mat), merged_Down_AME_mat)
 
-Table_num <- 8
+Table_num <- "S7"
 # Write to an Excel file with each table as a separate sheet
-write_xlsx(list("MEME-AME Results"=Peaks_AME_Clusters, "-log10(padj)-nearby.Up.Peaks"=merged_Up_AME_mat, "-log10(padj)-nearby.Down.Peaks" =merged_Down_AME_mat), paste0(write_dir, "/Supplemental_Table", Table_num, "_ATAC_MEMEAME__enriched_motifs_in_nearby_RNA_Clusters_dynamic_peaks.xlsx"))
+write_xlsx(list("MEME-AME Results"=Peaks_AME_Clusters, "-log10(padj)-nearby.Up.Peaks"=merged_Up_AME_mat, "-log10(padj)-nearby.Down.Peaks" =merged_Down_AME_mat), paste0(write_dir, "/Table", Table_num, "_ATAC_MEMEAME__enriched_motifs_in_nearby_RNA_Clusters_dynamic_peaks.xlsx"))
 ```
 
-# GEO to do list: 
-# annotated master peak set
-# MACS2 narrowPeak file per tech rep 
-# merged bigwigs 
-# merged bams
+# GEO supplemental files
+```{r}
+# all genes counts matrix, normalized counts 
+all_genes_counts_matrix <- counts(RNAddsall, normalize=T)
+colnames(all_genes_counts_matrix) <-  paste0("Biorep", metaDataall$Biorep, "_", metaDataall$Treatment, "_day", metaDataall$Timepoint)
+all_genes_counts_matrix <- all_genes_counts_matrix[ ,c(1,9,15,2,10,16,3,17,4,11,5,12,18,6,19,7,13,8,14)]
+# export all genes counts matrix for GEO submission
+write.csv(all_genes_counts_matrix, file="/lustre/fs4/risc_lab/store/jyeung/Senescence_Liposarcoma_GEO_submission/RNAseq/Normalized_by_DESeq2_RNA_counts_matrix.csv")
+```
+```{r}
+# counts matrix for ATAC-seq peaks 
+ATAC_normCounts_matrix <- counts(dds_filt, normalized=T)
+ATAC_normCounts_matrix <- ATAC_normCounts_matrix[, c(1:5, 38, 40, 39, 41, 42, 28:32, 43:45, 6:7, 49:51, 11:15, 33:37, 46:48, 8:10, 52:54, 16:27)]
+colnames(ATAC_normCounts_matrix) <- c("Cycling_Biorep1.1","Cycling_Biorep1.2","Cycling_Biorep2.1","Cycling_Biorep2.2","Cycling_Biorep2.3","Cycling_Biorep3.2","Cycling_Biorep3.3","Cycling_Biorep4.1","Cycling_Biorep4.2","Cycling_Biorep4.3","day3_Doxo_Biorep1.1","day3_Doxo_Biorep1.2","day3_Doxo_Biorep2.1","day3_Doxo_Biorep2.2","day3_Doxo_Biorep2.3","day10_Doxo_Biorep1.1","day10_Doxo_Biorep1.2","day10_Doxo_Biorep1.3","day14_Doxo_Biorep2.1","day14_Doxo_Biorep2.2","day14_Doxo_Biorep1.1","day14_Doxo_Biorep1.2","day14_Doxo_Biorep1.3","day21_Doxo_Biorep1.1","day21_Doxo_Biorep1.2","day21_Doxo_Biorep1.3","day21_Doxo_Biorep2.1","day21_Doxo_Biorep2.2","day3_Palbo_Biorep1.1","day3_Palbo_Biorep1.2","day3_Palbo_Biorep2.1","day3_Palbo_Biorep2.2","day3_Palbo_Biorep2.3","day10_Palbo_Biorep1.1","day10_Palbo_Biorep1.2","day10_Palbo_Biorep1.3","day14_Palbo_Biorep2.1","day14_Palbo_Biorep2.2","day14_Palbo_Biorep2.3","day14_Palbo_Biorep1.1","day14_Palbo_Biorep1.2","day14_Palbo_Biorep1.3","day21_Palbo_Biorep1.1","day21_Palbo_Biorep1.2","day21_Palbo_Biorep1.3","day21_Palbo_Biorep2.1","day21_Palbo_Biorep2.2","day21_Palbo_Biorep2.3","day28_Palbo_Biorep1.1","day28_Palbo_Biorep1.2","day28_Palbo_Biorep1.3","day28_Palbo_Biorep2.1","day28_Palbo_Biorep2.2","day28_Palbo_Biorep2.3")
 
-
+# export all genes counts matrix for GEO submission
+write.csv(ATAC_normCounts_matrix, file="/lustre/fs4/risc_lab/store/jyeung/Senescence_Liposarcoma_GEO_submission/ATACseq/Normalized_by_DESeq2_ATAC_counts_matrix.csv")
+```
 
