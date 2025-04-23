@@ -12,7 +12,81 @@
 ## SUMMARY 
 Cancer therapies can trigger geroconversion in tumor cells which influences patient outcomes, however it remains unclear how the characteristics of therapy-induced senescent states vary between treatments. While senescence is generally initiated by some form of DNA damage, CDK4/6 inhibitors (CDK4/6i) are unique in that they cause geroconversion in a damage-independent manner. Here, we use a multi-omics approach to profile the temporal dynamics of transcriptional rewiring during therapy-induced senescence in CDK4/6i-treated liposarcoma cells and compare this to the chemotherapy drug doxorubicin, which generates double-stranded breaks prompting geroconversion. We found the dynamics of senescence-related phenotypes varies between therapies, largely explained by a DNA damage-dependent signature specific to doxorubicin. Inevitably, there emerged a shared senescence-associated secretory phenotype (SASP) marked by NF-κB activation, coinciding with stable arrest. Pharmacological inhibition of NF-κB suppressed upregulation of this shared SASP program, confirming its regulatory role even in the absence of DNA damage. 
 
-## Description of scripts
+
+## Directory tree
+```
+├── Figure2
+│   └── Figure2.Rmd 
+├── Figure3
+│   ├── deepTools_files
+│   │   └── deeptools_Coverage_1kb.slurm
+│   └── Figure3.Rmd
+├── Figure4
+│   ├── Figure4.Rmd
+│   └── motif_analysis_input
+│       └── MEME_AME.slurm
+├── Figure5
+│   └── Figure5.Rmd
+├── Figure6
+│   ├── deepTools_files
+│   │   └── deeptools_Coverage_1kb.slurm
+│   ├── Figure6.Rmd
+│   └── NFKB_tp_peaks
+│       └── get_tp_peaks_motifs.slurm
+├── FigureS1
+│   └── FigureS1.Rmd
+├── FigureS2
+│   ├── deepTools_files
+│   │   └── deeptools_Coverage_1kb.slurm
+│   ├── E2F_tp_peaks
+│   │   └── get_tp_peaks_motifs.slurm
+│   └── FigureS2.Rmd
+├── FigureS3
+│   ├── FigureS3.Rmd
+│   └── motif_analysis_input
+│       └── MEME_AME.slurm
+├── FigureS4
+│   └── FigureS4.Rmd
+├── FigureS5
+│   ├── FigureS5.Rmd
+│   └── Supplemental_Figure_SASP_composition.Rmd
+├── FigureS6
+│   ├── FigureS6.Rmd
+│   └── motif_analysis_input
+│       └── MEME_AME.slurm
+├── generate_script_tree.sh
+├── Preprocessing_scripts
+│   ├── Assess_QC_metrics
+│   │   ├── calculate_FRIP_R_script.R
+│   │   ├── calculate_FRIP_scores_R.slurm
+│   │   ├── cat_duplication_metrics.sh
+│   │   ├── cat_PBC_QC.sh
+│   │   ├── count_mito_readpairs.sh
+│   │   ├── get_total_reads.sh
+│   │   ├── run_array_job.sh
+│   │   └── tss_enrichment_score.sh
+│   ├── ATACseq
+│   │   ├── atac_1_fastq_trim.slurm
+│   │   ├── atac_2_fastq_align.slurm
+│   │   ├── atac_3_bam_managemito.slurm
+│   │   ├── atac_4_bam_markduplicates.slurm
+│   │   ├── atac_5_bam_FLD.slurm
+│   │   ├── atac_6.3_IDR_tagalign.slurm
+│   │   ├── atac_6_IDR_tagalign_2reps.slurm
+│   │   ├── bamCoverage_scaleFactor_noOffset.slurm
+│   │   ├── cutsCoverage.R
+│   │   ├── cutsCoverage.slurm
+│   │   ├── iterative_peak_filtering
+│   │   │   ├── mergedFW_peakCall.R
+│   │   │   └── peakfiltering.slurm
+│   │   └── mergebam.slurm
+│   └── RNAseq
+│       └── kallisto_counting.slurm
+└── Supplemental_Tables
+    └── Supplemental_Tables.Rmd
+```
+
+### Description of scripts
 - `./Figure2/Figure2.Rmd`  
   ⤷ *code to generate figures for Figure 2*
 
@@ -138,75 +212,3 @@ Cancer therapies can trigger geroconversion in tumor cells which influences pati
 
 - `./Supplemental_Tables/Supplemental_Tables.Rmd`  
   ⤷ *code to generate supplemental tables*
-
-```
-├── Figure2
-│   └── Figure2.Rmd 
-├── Figure3
-│   ├── deepTools_files
-│   │   └── deeptools_Coverage_1kb.slurm
-│   └── Figure3.Rmd
-├── Figure4
-│   ├── Figure4.Rmd
-│   └── motif_analysis_input
-│       └── MEME_AME.slurm
-├── Figure5
-│   └── Figure5.Rmd
-├── Figure6
-│   ├── deepTools_files
-│   │   └── deeptools_Coverage_1kb.slurm
-│   ├── Figure6.Rmd
-│   └── NFKB_tp_peaks
-│       └── get_tp_peaks_motifs.slurm
-├── FigureS1
-│   └── FigureS1.Rmd
-├── FigureS2
-│   ├── deepTools_files
-│   │   └── deeptools_Coverage_1kb.slurm
-│   ├── E2F_tp_peaks
-│   │   └── get_tp_peaks_motifs.slurm
-│   └── FigureS2.Rmd
-├── FigureS3
-│   ├── FigureS3.Rmd
-│   └── motif_analysis_input
-│       └── MEME_AME.slurm
-├── FigureS4
-│   └── FigureS4.Rmd
-├── FigureS5
-│   ├── FigureS5.Rmd
-│   └── Supplemental_Figure_SASP_composition.Rmd
-├── FigureS6
-│   ├── FigureS6.Rmd
-│   └── motif_analysis_input
-│       └── MEME_AME.slurm
-├── generate_script_tree.sh
-├── Preprocessing_scripts
-│   ├── Assess_QC_metrics
-│   │   ├── calculate_FRIP_R_script.R
-│   │   ├── calculate_FRIP_scores_R.slurm
-│   │   ├── cat_duplication_metrics.sh
-│   │   ├── cat_PBC_QC.sh
-│   │   ├── count_mito_readpairs.sh
-│   │   ├── get_total_reads.sh
-│   │   ├── run_array_job.sh
-│   │   └── tss_enrichment_score.sh
-│   ├── ATACseq
-│   │   ├── atac_1_fastq_trim.slurm
-│   │   ├── atac_2_fastq_align.slurm
-│   │   ├── atac_3_bam_managemito.slurm
-│   │   ├── atac_4_bam_markduplicates.slurm
-│   │   ├── atac_5_bam_FLD.slurm
-│   │   ├── atac_6.3_IDR_tagalign.slurm
-│   │   ├── atac_6_IDR_tagalign_2reps.slurm
-│   │   ├── bamCoverage_scaleFactor_noOffset.slurm
-│   │   ├── cutsCoverage.R
-│   │   ├── cutsCoverage.slurm
-│   │   ├── iterative_peak_filtering
-│   │   │   ├── mergedFW_peakCall.R
-│   │   │   └── peakfiltering.slurm
-│   │   └── mergebam.slurm
-│   └── RNAseq
-│       └── kallisto_counting.slurm
-└── Supplemental_Tables
-    └── Supplemental_Tables.Rmd
-```
