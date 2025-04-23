@@ -168,46 +168,6 @@ write_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplementa
 write_xlsx(TableS2, paste0(write_dir, "/Table", Table_num, "_RNA_information_on_expressed_genes.xlsx"))
 ```
 
-#Table S3: activation scores from IPA_Comparison_Analysis on upstream regulators from RNA log2FC comparisons.  
-```{r}
-run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/Figure_Drug_distinct_responses_and_SASP.Rmd", chunk_name=" import_IPA_comparison_results")
-
-# Assign names to your list of matrices
-names(IPA_Compare_upstream_regs_mat) <- c(
-  "Shared down (RNA Cluster 1)", 
-  "Shared down (RNA Cluster 2)", 
-  "Doxo up (RNA Cluster 5)", 
-  "Doxo up (RNA Cluster 6)", 
-  "Palbo up (RNA Cluster 3)", 
-  "Palbo up (RNA Cluster 4)", 
-  "Shared up (RNA Cluster 7)"
-)
-
-# Process each matrix in the list and add cluster label
-IPA_Compare_upstream_regs_df <- lapply(names(IPA_Compare_upstream_regs_mat), function(name) {
-  x <- IPA_Compare_upstream_regs_mat[[name]]
-  
-  # Rename columns
-  new_LFCnames <- gsub("(Doxo|Palbo)(\\d+) vs (Doxo|Palbo|Cycling)(\\d*)", 
-                       "day\\2 \\1 vs day\\4 \\3", colnames(x))
-  new_LFCnames <- gsub("day  Cycling", "Cycling", new_LFCnames)  # clean up extra space
-  colnames(x) <- new_LFCnames
-
-  # Convert to dataframe with upstream_regulator as a column
-  df <- data.frame(upstream_regulator = rownames(x), x)
-  
-  # Add the RNA_Cluster label
-  df[["RNA_Cluster"]] <- name
-  return(df)
-})
-
-
-IPA_Compare_upstream_regs_df <- IPA_Compare_upstream_regs_df[c(1,2,5,6,3,4,7)]
-IPA_Compare_upstream_regs_df <- do.call(rbind, IPA_Compare_upstream_regs_df)
-Table_num <- "S3"
-# Write to an Excel file with each table as a separate sheet
-write_xlsx(IPA_Compare_upstream_regs_df, paste0(write_dir, "/Table", Table_num, "_RNA_Comparison_Analysis_upstream_regulators_activation_scores.xlsx"))
-```
 
 # Supplemental table of IPA upstream regulators & GO enrichment results from RNA-seq data (based on gene IDs input)
 ```{r }
@@ -239,7 +199,7 @@ GO_results_list <- lapply(seq_along(GO_results_list), function(i) {
 GO_results_df <- do.call(rbind, GO_results_list)
 IPA_upstream_regs_df <- do.call(rbind, IPA_upstream_regs)
 
-Table_num <- "S4"
+Table_num <- "S3"
 # Write to an Excel file with each table as a separate sheet (will change it after downloading so that both tables are side by side in 1 sheet)
 write_xlsx(list("GO_enrichment_results"=GO_results_df, "Predicted_Upstream_Regulators"=IPA_upstream_regs_df), paste0(write_dir, "/Table", Table_num, "_RNA_GO_enrichment_IPA_upstream_regulators_results.xlsx"))
 ```
@@ -291,11 +251,51 @@ Palbo_Doxo_AME_DownPeaks_Mat <- data.frame(motif_ID=row.names(Palbo_Doxo_AME_Dow
 # rbind dataframes so that everything is on 1 excel spreadsheet. 
 annoPeaks_AME_df <- rbind(annoUpPeaks_AME_df, annoDownPeaks_AME_df)
 AME_Peaks_Mat <- rbind(Palbo_Doxo_AME_UpPeaks_Mat, Palbo_Doxo_AME_DownPeaks_Mat)
-Table_num <- "S5"
+Table_num <- "S4"
 # Write to an Excel file with each table as a separate sheet (will merge the two spreadsheets into 1 manually after downloading)
 write_xlsx(list("MEME-AME Results"=annoPeaks_AME_df, "-log10(padj)values MEME-AME"=AME_Peaks_Mat), paste0(write_dir, "/Table", Table_num, "_ATAC_MEMEAME_Motif_enrichment_results_Dynamic_Peaks.xlsx"))
 ```
 
+#Supplemental Table: activation scores from IPA_Comparison_Analysis on upstream regulators from RNA log2FC comparisons.
+```{r}
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/Figure_Drug_distinct_responses_and_SASP.Rmd", chunk_name=" import_IPA_comparison_results")
+
+# Assign names to your list of matrices
+names(IPA_Compare_upstream_regs_mat) <- c(
+  "Shared down (RNA Cluster 1)", 
+  "Shared down (RNA Cluster 2)", 
+  "Doxo up (RNA Cluster 5)", 
+  "Doxo up (RNA Cluster 6)", 
+  "Palbo up (RNA Cluster 3)", 
+  "Palbo up (RNA Cluster 4)", 
+  "Shared up (RNA Cluster 7)"
+)
+
+# Process each matrix in the list and add cluster label
+IPA_Compare_upstream_regs_df <- lapply(names(IPA_Compare_upstream_regs_mat), function(name) {
+  x <- IPA_Compare_upstream_regs_mat[[name]]
+  
+  # Rename columns
+  new_LFCnames <- gsub("(Doxo|Palbo)(\\d+) vs (Doxo|Palbo|Cycling)(\\d*)", 
+                       "day\\2 \\1 vs day\\4 \\3", colnames(x))
+  new_LFCnames <- gsub("day  Cycling", "Cycling", new_LFCnames)  # clean up extra space
+  colnames(x) <- new_LFCnames
+
+  # Convert to dataframe with upstream_regulator as a column
+  df <- data.frame(upstream_regulator = rownames(x), x)
+  
+  # Add the RNA_Cluster label
+  df[["RNA_Cluster"]] <- name
+  return(df)
+})
+
+
+IPA_Compare_upstream_regs_df <- IPA_Compare_upstream_regs_df[c(1,2,5,6,3,4,7)]
+IPA_Compare_upstream_regs_df <- do.call(rbind, IPA_Compare_upstream_regs_df)
+Table_num <- "S5"
+# Write to an Excel file with each table as a separate sheet
+write_xlsx(IPA_Compare_upstream_regs_df, paste0(write_dir, "/Table", Table_num, "_RNA_Comparison_Analysis_upstream_regulators_activation_scores.xlsx"))
+```
 # Supplemental table of differentially enriched motifs between drugs in up ATAC-seq peaks
 ```{r}
 run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure_Drug_distinct_responses_and_SASP/Figure_Drug_distinct_responses_and_SASP.Rmd", chunk_name="import_differential_MEMEAME_results")
