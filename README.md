@@ -1,8 +1,147 @@
-## 🧾 Script File Structure
+# Original code for bioinformatics analysis of ATAC-seq & RNA-seq data
+## A shared NF-κB-driven senescence response shows distinct temporal dynamics under CDK4/6 inhibition and doxorubicin treatment in liposarcoma
 
-.
+### Authors: Joanna Lan-Hing Yeung,1,3 Justin Rendleman,1,3 Nicole Pagane,1 Lauren Anderson,1 Irene Duba,1 Ria Hosuru,1 Bat-Ider Tumenbayar,1 Andrew Koff,2 Viviana I. Risca1,4,* 
+
+1Laboratory of Genome Architecture and Dynamics, The Rockefeller University, New York, NY 10065, USA.
+2Molecular Biology Program, Memorial Sloan Kettering Cancer Center, New York, NY 10065, USA. 
+3These authors contributed equally 
+4Lead contact 
+*Correspondence: vrisca@rockefeller.edu
+
+## SUMMARY 
+Cancer therapies can trigger geroconversion in tumor cells which influences patient outcomes, however it remains unclear how the characteristics of therapy-induced senescent states vary between treatments. While senescence is generally initiated by some form of DNA damage, CDK4/6 inhibitors (CDK4/6i) are unique in that they cause geroconversion in a damage-independent manner. Here, we use a multi-omics approach to profile the temporal dynamics of transcriptional rewiring during therapy-induced senescence in CDK4/6i-treated liposarcoma cells and compare this to the chemotherapy drug doxorubicin, which generates double-stranded breaks prompting geroconversion. We found the dynamics of senescence-related phenotypes varies between therapies, largely explained by a DNA damage-dependent signature specific to doxorubicin. Inevitably, there emerged a shared senescence-associated secretory phenotype (SASP) marked by NF-κB activation, coinciding with stable arrest. Pharmacological inhibition of NF-κB suppressed upregulation of this shared SASP program, confirming its regulatory role even in the absence of DNA damage. 
+
+## Description of scripts
+- `./Figure2/Figure2.Rmd`  
+  ⤷ *code to generate figures for Figure 2*
+
+- `./Figure3/deepTools_files/deeptools_Coverage_1kb.slurm`  
+  ⤷ *code to plot Tn5 insertion sites around p53 motifs*
+
+- `./Figure3/Figure3.Rmd`  
+  ⤷ *code to generate figures for Figure 3*
+
+- `./Figure4/Figure4.Rmd`  
+  ⤷ *code to generate figures for Figure 4*
+
+- `./Figure4/motif_analysis_input/MEME_AME.slurm`  
+  ⤷ *code to perform motif enrichment analysis using MEME-AME HOCOMOCO v11 database *
+
+- `./Figure5/Figure5.Rmd`  
+  ⤷ *code to generate figures for Figure 5*
+
+- `./Figure6/deepTools_files/deeptools_Coverage_1kb.slurm`  
+  ⤷ *code to plot Tn5 insertion sites around NF-kB motifs*
+
+- `./Figure6/Figure6.Rmd`  
+  ⤷ *code to generate figures for Figure 6.*
+
+- `./Figure6/NFKB_tp_peaks/get_tp_peaks_motifs.slurm`  
+  ⤷ *code to count the number of true positive peaks for NFKB family of motifs after MEME-AME analysis.*
+
+- `./FigureS1/FigureS1.Rmd`  
+  ⤷ *code to generate figures for Figure S1.*
+
+- `./FigureS2/deepTools_files/deeptools_Coverage_1kb.slurm`  
+  ⤷ *code to plot Tn5 insertion sites around E2F motifs*
+
+- `./FigureS2/E2F_tp_peaks/get_tp_peaks_motifs.slurm`  
+  ⤷ *code to count the number of true positive peaks for E2F family of motifs after MEME-AME analysis.*
+
+- `./FigureS2/FigureS2.Rmd`  
+  ⤷ *code to generate figures for Figure S2*
+
+- `./FigureS3/FigureS3.Rmd`  
+  ⤷ *code to generate figures for Figure S3*
+
+- `./FigureS3/motif_analysis_input/MEME_AME.slurm`  
+  ⤷ *code to perform motif enrichment analysis using MEME-AME HOCOMOCO v11 database*
+
+- `./FigureS4/FigureS4.Rmd`  
+  ⤷ *code to generate figures for Figure S4*
+
+- `./FigureS5/FigureS5.Rmd`  
+  ⤷ *code to generate figures for Figure S5*
+
+- `./FigureS6/FigureS6.Rmd`  
+  ⤷ *code to generate figures for Figure S6*
+
+- `./FigureS6/motif_analysis_input/MEME_AME.slurm`  
+  ⤷ *code to perform motif enrichment analysis using MEME-AME HOCOMOCO v11 database*
+
+- `./Preprocessing_scripts/Assess_QC_metrics/calculate_FRIP_R_script.R`  
+  ⤷ *calculate FRIP score for each individual sample's narrowPeak & bam file in R*
+
+- `./Preprocessing_scripts/Assess_QC_metrics/calculate_FRIP_scores_R.slurm`  
+  ⤷ *slurm script to run ./Preprocessing_scripts/Assess_QC_metrics/calculate_FRIP_R_script.R*
+
+- `./Preprocessing_scripts/Assess_QC_metrics/cat_duplication_metrics.sh`  
+  ⤷ *script to extract duplication metrics based on the output *metrics.txt files generated from /Preprocessing_scripts/ATACseq/atac_4_bam_markduplicates.slurm*
+
+- `./Preprocessing_scripts/Assess_QC_metrics/cat_PBC_QC.sh`  
+  ⤷ *script to extract duplication metrics based on the output *PBC_QC.txt files generated from /Preprocessing_scripts/ATACseq/atac_4_bam_markduplicates.slurm*
+
+- `./Preprocessing_scripts/Assess_QC_metrics/count_mito_readpairs.sh`  
+  ⤷ *script to count the number of mitochondrial read pairs based on the output *.flagstat & *non.Mito.flagstat files generated from ./Preprocessing_scripts/ATACseq/atac_3_bam_managemito.slurm*
+
+- `./Preprocessing_scripts/Assess_QC_metrics/get_total_reads.sh`  
+  ⤷ *script to extract total raw read pairs based on the output *.log files generated from ./Preprocessing_scripts/ATACseq/atac_2_fastq_align.slurm*
+
+- `./Preprocessing_scripts/Assess_QC_metrics/run_array_job.sh`  
+  ⤷ *script to run ./Preprocessing_scripts/Assess_QC_metrics/tss_enrichment_score.sh*
+
+- `./Preprocessing_scripts/Assess_QC_metrics/tss_enrichment_score.sh`  
+  ⤷ *script to calculate TSS enrichment scores based on ENCODE ATAC-seq standards and using Gencode v41 gene annotation file*
+
+- `./Preprocessing_scripts/ATACseq/atac_1_fastq_trim.slurm`  
+  ⤷ *script to trim off Tn5 adapters from fastq files*
+
+- `./Preprocessing_scripts/ATACseq/atac_2_fastq_align.slurm`  
+  ⤷ *script to align reads from trimmed fastqs to hg38 genome & generate bam files*
+
+- `./Preprocessing_scripts/ATACseq/atac_3_bam_managemito.slurm`  
+  ⤷ *script to remove mitochondrial reads*
+
+- `./Preprocessing_scripts/ATACseq/atac_4_bam_markduplicates.slurm`  
+  ⤷ *script to generate final bam files and remove duplicate reads*
+
+- `./Preprocessing_scripts/ATACseq/atac_5_bam_FLD.slurm`  
+  ⤷ *Script that runs picard CollectInsertSizeMetrics to generate the fragment length distribution *
+
+- `./Preprocessing_scripts/ATACseq/atac_6.3_IDR_tagalign.slurm`  
+  ⤷ *script to call peaks with MACS2 and perform IDR on samples with 3 technical replicates.*
+
+- `./Preprocessing_scripts/ATACseq/atac_6_IDR_tagalign_2reps.slurm`  
+  ⤷ *script to call peaks with MACS2 and perform IDR on samples with 2 technical replicates.*
+
+- `./Preprocessing_scripts/ATACseq/bamCoverage_scaleFactor_noOffset.slurm`  
+  ⤷ *script to generate bigwigs normalized by sequencing depth from bam files*
+
+- `./Preprocessing_scripts/ATACseq/cutsCoverage.R`  
+  ⤷ *script that extracts the ends of reads after adjusting for Tn5 insertion bias and converting it to a normalized bigwig of Tn5 insertion sites to be used as input for deeptools_Coverage_1kb.slurm*
+
+- `./Preprocessing_scripts/ATACseq/cutsCoverage.slurm`  
+  ⤷ *script that runs ./Preprocessing_scripts/ATACseq/cutsCoverage.R*
+
+- `./Preprocessing_scripts/ATACseq/iterative_peak_filtering/mergedFW_peakCall.R`  
+  ⤷ *after performing IDR and concatenating all narrowPeak files into a master redundant peak set, this script iteratively filters overlapping peaks*
+
+- `./Preprocessing_scripts/ATACseq/iterative_peak_filtering/peakfiltering.slurm`  
+  ⤷ *script that runs ./Preprocessing_scripts/ATACseq/iterative_peak_filtering/mergedFW_peakCall.R*
+
+- `./Preprocessing_scripts/ATACseq/mergebam.slurm`  
+  ⤷ *script to merge bam files from the same condition*
+
+- `./Preprocessing_scripts/RNAseq/kallisto_counting.slurm`  
+  ⤷ *script to count transcript abundance using kallisto*
+
+- `./Supplemental_Tables/Supplemental_Tables.Rmd`  
+  ⤷ *code to generate supplemental tables*
+
+```
 ├── Figure2
-│   └── Figure2.Rmd
+│   └── Figure2.Rmd 
 ├── Figure3
 │   ├── deepTools_files
 │   │   └── deeptools_Coverage_1kb.slurm
@@ -48,16 +187,12 @@
 │   │   ├── cat_duplication_metrics.sh
 │   │   ├── cat_PBC_QC.sh
 │   │   ├── count_mito_readpairs.sh
-│   │   ├── cutsCoverage.slurm
-│   │   ├── deeptools_TSS_Cov_1kb.slurm
 │   │   ├── get_total_reads.sh
 │   │   ├── run_array_job.sh
 │   │   └── tss_enrichment_score.sh
 │   ├── ATACseq
-│   │   ├── atac_0_fastq_trim_readlength.slurm
 │   │   ├── atac_1_fastq_trim.slurm
 │   │   ├── atac_2_fastq_align.slurm
-│   │   ├── atac_2_fastq_align_userinputs.slurm
 │   │   ├── atac_3_bam_managemito.slurm
 │   │   ├── atac_4_bam_markduplicates.slurm
 │   │   ├── atac_5_bam_FLD.slurm
@@ -74,5 +209,4 @@
 │       └── kallisto_counting.slurm
 └── Supplemental_Tables
     └── Supplemental_Tables.Rmd
-
-25 directories, 48 files
+```
