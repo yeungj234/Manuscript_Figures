@@ -1,0 +1,10 @@
+DoxoDownvsCyc_E2F1_HMv11
+DoxoDownvsCyc_PvsD_E2F1_HMv11
+DoxoDownvsday3_E2F1_HMv11
+DoxoDownvsday3_PvsD_E2F1_HMv11
+PalboDownvsCyc_E2F1_HMv11
+PalboDownvsCyc_PvsD_E2F1_HMv11
+PalboDownvsday3_E2F1_HMv11
+PalboDownvsday3_PvsD_E2F1_HMv11
+sharedDownvsCyc_E2F1_HMv11
+sharedDownvsday3_E2F1_HMv11

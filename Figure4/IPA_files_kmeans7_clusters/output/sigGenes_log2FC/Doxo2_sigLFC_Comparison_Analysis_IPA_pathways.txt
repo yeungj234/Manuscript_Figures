@@ -1,0 +1,274 @@
+© 2000-2025 QIAGEN. All rights reserved.
+
+Canonical Pathways	Doxo3 vs Cycling0	Doxo14 vs Cycling0	Doxo21 vs Cycling0	Doxo14 vs Doxo3	Doxo21 vs Doxo3	Palbo3 vs Cycling0	Palbo14 vs Cycling0	Palbo28 vs Cycling0	Palbo14 vs Palbo3	Palbo28 vs Palbo3
+Pathogen Induced Cytokine Storm Signaling Pathway	4.146	4.899	5.0	3.873	4.0	0.243	2.111	2.982	2.5	2.668
+Phagosome Formation	5.196	5.657	5.657	4.123	4.243	-0.471	0.229	0.447	0.688	1.147
+S100 Family Signaling Pathway	5.292	5.916	5.831	4.359	4.123	-0.728	-0.5	0.447	0.0	0.471
+Molecular Mechanisms of Cancer	5.0	5.657	5.568	3.742	4.0	0.243	0.243	1.414	0.258	1.0
+CREB Signaling in Neurons	4.747	5.24	5.145	4.0	2.673	-0.728	0.0	1.091	0.5	1.0
+Neutrophil degranulation	3.5	4.359	4.123	3.742	3.606	-0.832	0.277	1.265	1.89	1.387
+Wound Healing Signaling Pathway	3.441	3.71	3.71	2.53	2.887	1.387	2.121	2.673	1.265	1.155
+Synaptogenesis Signaling Pathway	4.123	4.583	4.583	2.828	3.742	2.111	1.291	1.155	-0.333	0.0
+Irritable Bowel Syndrome Signaling Pathway	1.667	3.464	3.606	3.0	3.317	0.0	1.89	1.134	1.897	1.265
+BBSome Signaling Pathway	4.243	4.583	4.472	3.0	3.162	0.0	0.277	0.277	0.577	0.577
+Class A/1 (Rhodopsin-like receptors)	2.828	3.464	3.317	2.828	2.828	-1.89	-0.447	0.632	1.667	1.0
+GP6 Signaling Pathway	3.606	3.742	3.742	2.449	2.449	0.0	0.0	1.897	0.447	1.89
+Adrenomedullin signaling pathway	2.53	3.317	3.317	2.449	2.236	-0.816	N/A	1.633	1.342	2.449
+Cardiac Hypertrophy Signaling (Enhanced)	3.357	4.025	3.9	2.714	2.333	-0.333	-0.302	0.577	1.414	1.134
+Neuropathic Pain Signaling in Dorsal Horn Neurons	3.317	3.606	3.606	2.449	2.449	1.414	0.707	0.707	-1.0	0.447
+O-linked glycosylation	2.828	3.0	3.0	2.236	2.236	N/A	1.342	2.0	1.633	1.342
+G-Protein Coupled Receptor Signaling	3.78	3.795	3.893	2.982	2.982	-0.894	-0.209	0.0	0.471	0.447
+Role of Macrophages, Fibroblasts and Endothelial Cells in Rheumatoid Arthritis	2.496	3.5	3.638	3.317	2.333	-1.0	0.333	0.632	0.707	1.414
+Pulmonary Fibrosis Idiopathic Signaling Pathway	3.317	3.317	3.317	2.0	2.449	1.414	N/A	2.449	0.0	0.816
+Breast Cancer Regulation by Stathmin1	3.411	3.657	3.53	2.673	3.051	-1.069	0.0	0.0	1.069	0.5
+Interleukin-1 family signaling	2.236	2.646	2.646	2.236	2.449	1.0	1.633	2.0	1.0	1.0
+Neurovascular Coupling Signaling Pathway	2.309	2.84	2.84	2.121	2.646	1.897	1.134	1.667	0.0	1.342
+Serotonin Receptor Signaling	3.153	4.2	4.2	2.673	2.714	-0.535	0.277	0.0	0.707	-0.302
+Calcium Signaling	3.162	3.464	3.464	2.646	2.236	1.134	1.633	0.816	0.0	N/A
+Role of Osteoclasts in Rheumatoid Arthritis Signaling Pathway	3.0	3.3	3.3	2.646	2.309	1.155	0.0	1.265	-1.0	0.333
+Hepatic Cholestasis	2.309	3.051	2.673	2.646	1.414	1.0	1.134	2.121	0.816	1.134
+Extracellular matrix organization	3.317	3.317	3.317	2.0	2.236	-0.378	0.447	1.134	1.134	0.707
+Parkinson's Signaling Pathway	2.496	3.357	3.5	2.828	2.646	0.905	0.905	1.265	0.0	0.0
+Role of Chondrocytes in Rheumatoid Arthritis Signaling Pathway	1.633	2.646	2.646	2.236	2.236	0.447	2.0	2.0	1.0	1.0
+Hepatic Fibrosis Signaling Pathway	1.508	2.324	2.324	2.333	1.89	-1.508	1.342	1.265	1.633	1.667
+Cachexia Signaling Pathway	2.138	2.668	2.828	2.53	1.897	0.0	0.905	1.387	1.265	1.941
+G alpha (i) signalling events	3.0	3.317	3.317	2.236	2.828	0.0	0.378	1.633	-0.816	0.0
+Activin Inhibin Signaling Pathway	1.414	2.333	2.53	2.236	2.236	-0.378	2.0	1.134	1.342	1.89
+Lung Ionic Balance Signaling Pathway	3.545	3.53	3.4	1.941	1.897	-0.277	0.775	0.5	1.069	0.535
+Acetylcholine Receptor Signaling Pathway	3.317	3.742	3.742	2.646	2.0	-1.134	-0.447	-0.378	0.0	0.0
+SNARE Signaling Pathway	2.828	3.317	3.317	2.236	2.646	0.816	1.134	0.447	-0.447	0.0
+Synaptic Long Term Potentiation	3.0	3.317	3.317	2.236	2.236	1.134	0.378	0.378	-1.0	N/A
+Keratinization	2.828	3.162	3.162	2.0	2.828	-2.0	-0.447	0.447	N/A	N/A
+Oxytocin Signaling Pathway	3.0	3.464	3.464	2.646	2.449	-0.632	N/A	0.816	0.0	0.378
+Collagen biosynthesis and modifying enzymes	3.0	3.0	3.0	N/A	2.236	1.134	N/A	2.449	0.447	1.342
+Collagen chain trimerization	3.0	3.0	3.0	N/A	2.236	1.134	N/A	2.449	0.447	1.342
+Factors Promoting Cardiogenesis in Vertebrates	1.342	3.0	3.0	2.646	2.236	-1.0	-1.0	0.816	N/A	1.342
+Assembly of collagen fibrils and other multimeric structures	2.121	2.828	2.828	N/A	2.236	-0.447	N/A	2.449	1.0	2.449
+LXR/RXR Activation	-1.414	-2.333	-2.333	-2.236	-2.449	-0.378	-1.342	-1.633	-1.0	-1.0
+Ion channel transport	2.646	3.162	3.0	2.646	2.236	N/A	0.0	-1.0	0.378	-1.0
+Multiple Sclerosis Signaling Pathway	1.897	2.53	2.714	2.646	2.449	0.707	1.633	0.707	0.707	0.0
+Insulin Secretion Signaling Pathway	2.828	3.317	3.317	2.646	2.0	-0.816	0.0	-0.816	N/A	N/A
+Synaptic Long Term Depression	3.317	3.317	3.317	2.236	2.449	-0.378	0.447	0.0	0.0	0.0
+G alpha (q) signalling events	2.236	3.0	2.828	2.0	2.449	N/A	0.0	-0.447	2.0	-0.447
+IL-33 Signaling Pathway	1.89	2.828	2.828	2.236	2.236	0.0	1.0	0.816	1.0	0.447
+Gustation Pathway	2.53	3.207	3.207	1.89	1.89	0.0	0.0	0.0	-1.134	-1.134
+cAMP-mediated signaling	1.941	2.982	2.828	2.333	3.162	0.0	0.535	-0.277	0.905	0.0
+White Adipose Tissue Browning Pathway	1.89	3.162	3.162	2.236	2.236	-0.816	N/A	0.447	N/A	0.816
+p38 MAPK Signaling	1.0	2.449	2.449	2.236	2.236	0.0	2.0	1.342	N/A	1.0
+Tuberculosis Active Signaling Pathway	-1.667	-1.897	-1.897	-2.0	-2.236	-1.633	-1.633	-1.134	-0.447	0.0
+IL-17 Signaling	1.633	2.449	2.449	2.0	2.236	N/A	1.342	1.342	1.0	0.0
+Orexin Signaling Pathway	3.162	3.464	3.464	2.236	N/A	-1.667	-0.447	0.0	N/A	0.0
+Role of Hypercytokinemia/hyperchemokinemia in the Pathogenesis of Influenza	1.0	2.236	2.236	2.236	N/A	N/A	N/A	2.236	2.236	2.236
+Glutaminergic Receptor Signaling Pathway (Enhanced)	2.5	2.683	2.683	1.265	2.121	0.535	0.632	-0.277	-1.0	-0.707
+PPAR Signaling	-0.816	-1.89	-1.89	-2.0	-2.0	-0.447	-2.0	-1.342	-1.0	-1.0
+Opioid Signaling Pathway	2.309	2.84	2.673	2.333	0.816	0.707	0.816	0.707	-0.447	0.707
+NOD1/2 Signaling Pathway	1.342	2.236	2.449	2.0	2.0	0.0	1.0	0.816	1.342	0.816
+Sertoli Cell-Sertoli Cell Junction Signaling	1.667	2.111	2.111	1.342	2.646	1.134	1.633	-0.378	N/A	-0.816
+Netrin Signaling	2.309	2.496	2.496	1.414	0.816	-1.265	-0.378	-0.378	0.447	1.342
+Cell junction organization	0.816	2.449	2.449	2.0	2.236	-2.0	0.0	N/A	0.0	1.342
+Interferon gamma signaling	2.236	2.646	2.449	2.236	2.236	N/A	-0.447	1.0	0.0	N/A
+Role of Osteoblasts in Rheumatoid Arthritis Signaling Pathway	1.89	2.121	2.121	1.633	1.89	1.0	1.0	1.134	0.447	0.0
+Apelin Cardiomyocyte Signaling Pathway	2.0	2.449	2.449	2.236	N/A	-2.0	N/A	N/A	N/A	2.0
+Chromatin organization	2.646	2.646	2.646	2.646	2.236	N/A	N/A	N/A	N/A	N/A
+Collagen degradation	1.89	2.646	2.646	N/A	2.236	0.0	N/A	2.0	0.0	1.342
+Activation of NMDA receptors and postsynaptic events	2.236	2.449	2.449	N/A	N/A	2.236	1.342	2.0	N/A	N/A
+CGAS-STING Signaling Pathway	1.342	2.236	2.236	2.0	2.0	0.0	N/A	1.342	1.0	0.447
+Role of NFAT in Cardiac Hypertrophy	3.0	3.162	3.162	2.236	N/A	-0.378	0.0	0.447	N/A	N/A
+Transcriptional regulation by RUNX1	2.236	2.449	2.449	2.236	N/A	-1.0	N/A	N/A	N/A	2.0
+Phase I - Functionalization of compounds	2.646	2.828	2.828	2.0	2.0	N/A	0.0	N/A	N/A	N/A
+Glycation Signaling Pathway	0.832	1.941	1.941	2.449	2.236	0.333	0.707	1.414	0.447	0.0
+Regulation of Insulin-like Growth Factor (IGF) transport and uptake by IGFBPs	2.449	2.449	2.449	N/A	N/A	N/A	2.236	N/A	1.342	-1.0
+Post-translational protein phosphorylation	2.449	2.449	2.449	N/A	N/A	N/A	2.236	N/A	1.342	-1.0
+Cellular Effects of Sildenafil (Viagra)	-2.268	-2.137	-2.0	-1.606	-1.789	0.894	0.0	0.218	-0.471	0.447
+Replacement of protamines by nucleosomes in the male pronucleus	2.236	2.449	2.449	2.449	2.236	N/A	N/A	N/A	N/A	N/A
+Reelin Signaling in Neurons	2.0	2.236	2.236	N/A	N/A	2.0	1.342	2.0	N/A	N/A
+HIF1α Signaling	2.646	2.828	2.828	2.0	N/A	0.447	0.0	1.0	N/A	N/A
+Dopamine-DARPP32 Feedback in cAMP Signaling	2.828	3.0	3.0	2.236	N/A	0.0	N/A	-0.447	N/A	N/A
+Amyloid fiber formation	2.236	2.449	2.449	2.236	2.0	N/A	N/A	N/A	N/A	N/A
+ESR-mediated signaling	2.236	2.449	2.646	2.0	2.0	N/A	N/A	N/A	N/A	N/A
+FXR/RXR Activation	-1.0	-1.667	-1.897	-1.633	-1.89	0.0	-1.342	-1.134	-0.707	0.0
+DNA Damage/Telomere Stress Induced Senescence	2.0	2.236	2.236	2.449	2.236	N/A	N/A	N/A	N/A	N/A
+Interleukin-10 signaling	N/A	2.236	2.0	2.236	N/A	N/A	N/A	1.342	2.0	1.342
+Potassium Channels	2.0	2.646	2.646	N/A	N/A	-0.447	N/A	2.0	N/A	1.342
+Hematoma Resolution Signaling Pathway	-1.0	-1.265	-1.265	-2.449	-1.342	-1.414	-0.816	-0.707	0.378	0.378
+Signaling by the B Cell Receptor (BCR)	2.646	2.646	2.646	2.0	N/A	-0.447	0.0	0.447	N/A	N/A
+Sperm Motility	1.89	2.828	2.646	2.0	N/A	0.447	N/A	1.0	N/A	N/A
+Autism Signaling Pathway	1.5	1.698	1.698	1.897	1.265	-1.155	0.302	0.302	0.632	0.333
+Protein Kinase A Signaling	2.183	2.2	2.294	1.213	1.291	0.905	0.0	0.302	0.0	0.333
+Docosahexaenoic Acid (DHA) Signaling	2.333	2.714	2.714	2.236	N/A	0.0	N/A	0.447	N/A	N/A
+Chemokine Signaling	2.0	2.449	2.449	2.0	N/A	-0.447	0.0	1.0	N/A	N/A
+G alpha (s) signalling events	2.0	2.828	2.646	N/A	N/A	-1.0	-0.816	0.0	1.0	N/A
+L1CAM interactions	1.342	2.236	2.236	N/A	2.0	0.447	1.0	1.0	N/A	N/A
+Degradation of the extracellular matrix	1.0	2.0	2.236	2.0	2.0	N/A	N/A	N/A	N/A	1.0
+TREM1 Signaling	N/A	2.236	2.449	N/A	N/A	-1.342	0.0	0.0	2.0	2.0
+RAR Activation	1.069	1.964	1.789	0.905	0.707	-0.905	0.302	-0.535	1.508	0.302
+GPCR-Mediated Nutrient Sensing in Enteroendocrine Cells	2.646	2.828	2.828	N/A	N/A	-1.633	N/A	N/A	N/A	N/A
+Gαs Signaling	2.0	2.449	2.449	N/A	N/A	N/A	N/A	-1.0	2.0	N/A
+G Beta Gamma Signaling	2.449	2.828	2.828	N/A	N/A	-1.633	N/A	N/A	N/A	N/A
+Netrin-1 signaling	2.0	2.236	2.236	2.0	N/A	0.0	1.0	N/A	N/A	N/A
+Transport of inorganic cations/anions and amino acids/oligopeptides	2.0	2.236	2.236	2.0	N/A	1.0	N/A	N/A	N/A	N/A
+GNRH Signaling	2.0	2.646	2.646	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Adrenergic Receptor Signaling Pathway (Enhanced)	1.941	1.604	1.604	0.378	-1.0	-0.905	-0.378	-1.0	0.0	0.333
+WNT/Ca+ pathway	N/A	2.449	2.449	2.236	2.0	N/A	N/A	N/A	N/A	N/A
+Transport of bile salts and organic acids, metal ions and amine compounds	2.0	2.236	2.449	N/A	2.0	N/A	0.0	N/A	N/A	0.447
+Neutrophil Extracellular Trap Signaling Pathway	-1.387	-0.775	-0.775	0.0	-1.633	-2.111	N/A	-2.333	0.0	0.0
+Neuroinflammation Signaling Pathway	1.414	1.897	2.111	0.816	1.342	0.0	1.0	0.333	0.0	0.0
+Cargo recognition for clathrin-mediated endocytosis	2.0	2.449	2.449	N/A	2.0	N/A	N/A	N/A	N/A	N/A
+Mitotic Prophase	2.0	2.236	2.236	2.236	N/A	N/A	N/A	N/A	N/A	N/A
+DNA Double Strand Break Response	2.0	2.236	2.236	2.236	N/A	N/A	N/A	N/A	N/A	N/A
+Leukocyte Extravasation Signaling	1.89	1.89	1.89	N/A	1.0	0.378	0.447	0.0	N/A	-1.0
+Cardiac Hypertrophy Signaling	2.236	2.449	2.449	N/A	N/A	-1.342	N/A	N/A	N/A	N/A
+Gene Silencing by RNA	2.0	2.236	2.236	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Endocannabinoid Neuronal Synapse Pathway	1.667	1.667	1.667	2.0	N/A	-0.816	N/A	0.447	N/A	N/A
+Tuberculosis Latent Signaling Pathway	-1.667	-1.0	-1.0	N/A	N/A	-1.89	0.0	N/A	1.0	1.633
+Cardiac β-adrenergic Signaling	2.236	2.828	2.646	N/A	N/A	0.0	0.0	-0.447	N/A	N/A
+Glioma Signaling	2.236	2.449	2.449	N/A	N/A	0.0	0.0	1.0	N/A	N/A
+Abacavir ADME	N/A	2.0	2.0	2.0	N/A	N/A	-2.0	N/A	N/A	N/A
+RHOGDI Signaling	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A	N/A	N/A	N/A
+Integrin cell surface interactions	2.0	2.0	2.0	N/A	N/A	-1.0	N/A	N/A	1.0	N/A
+ROBO SLIT Signaling Pathway	2.236	1.633	1.633	N/A	1.0	1.342	N/A	N/A	0.0	0.0
+IL-10 Signaling	0.0	-0.816	-0.816	-0.447	-1.342	0.0	-2.0	-1.342	N/A	-1.0
+Visual phototransduction	2.0	2.236	2.236	N/A	N/A	0.0	0.0	0.0	1.0	N/A
+Serotonin Degradation	1.0	2.236	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Noradrenaline and Adrenaline Degradation	1.0	2.236	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+P2Y Purinergic Receptor Signaling Pathway	2.236	2.449	2.449	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Sensory perception of taste	1.0	2.0	2.0	N/A	N/A	1.0	1.0	N/A	N/A	N/A
+Signaling by MET	2.0	2.0	2.0	N/A	N/A	N/A	N/A	1.0	N/A	N/A
+Glutamate Receptor Signaling	2.0	2.0	2.0	N/A	N/A	N/A	N/A	1.0	N/A	N/A
+Toll-like Receptor Signaling	1.0	2.0	2.0	N/A	N/A	N/A	N/A	2.0	N/A	N/A
+Corticotropin Releasing Hormone Signaling	1.134	1.414	1.414	1.0	N/A	0.447	N/A	0.447	N/A	1.0
+eNOS Signaling	2.236	2.236	2.236	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Sensory processing of sound by inner hair cells of the cochlea	2.236	2.236	2.236	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Macrophage Classical Activation Signaling Pathway	0.816	1.134	1.134	N/A	N/A	1.342	1.0	0.816	0.447	0.0
+Nitric Oxide Signaling in the Cardiovascular System	2.0	2.449	2.236	N/A	N/A	0.0	N/A	N/A	N/A	0.0
+Superpathway of Inositol Phosphate Compounds	2.0	2.236	2.0	N/A	N/A	-0.447	0.0	N/A	N/A	N/A
+D-myo-inositol-5-phosphate Metabolism	2.0	2.236	2.0	N/A	N/A	-0.447	0.0	N/A	N/A	N/A
+Osteoarthritis Pathway	-0.447	-0.707	-0.707	-0.447	-0.378	1.342	N/A	-0.447	-1.0	-1.0
+Sleep NREM Signaling Pathway	0.447	0.707	0.707	1.0	N/A	0.447	0.0	1.633	-1.342	0.0
+Cardiac conduction	0.447	1.134	1.134	N/A	1.0	-1.342	0.0	0.0	1.0	N/A
+Erythropoietin Signaling Pathway	-0.447	-1.342	-1.342	-1.0	N/A	-1.0	N/A	-0.447	N/A	0.447
+Sensory processing of sound by outer hair cells of the cochlea	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Transcriptional regulation of granulopoiesis	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Regulation of endogenous retroelements	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Meiotic recombination	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Semaphorin interactions	N/A	2.0	N/A	2.0	2.0	0.0	N/A	N/A	N/A	N/A
+Arachidonic acid metabolism	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RNA Polymerase I Transcription	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Apoptotic execution phase	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+PRC2 methylates histones and DNA	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Nonhomologous End-Joining (NHEJ)	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Oxidative Stress Induced Senescence	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Senescence-Associated Secretory Phenotype (SASP)	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+NoRC negatively regulates rRNA expression	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+RUNX1 regulates megakaryocyte differentiation and platelet function	N/A	-2.0	-2.0	-2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Activated PKN1 stimulates transcription of AR regulated genes KLK2 and KLK3	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Pre-NOTCH Expression and Processing	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Telomere Maintenance	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+B-WICH complex positively regulates rRNA expression	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Post-translational modification: synthesis of GPI-anchored proteins	N/A	2.0	N/A	N/A	2.0	N/A	N/A	N/A	N/A	2.0
+DNA Replication Pre-Initiation	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+DNA methylation	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Activation of anterior HOX genes in hindbrain during early embryogenesis	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Chromatin modifications during the maternal to zygotic transition (MZT)	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+SIRT1 negatively regulates rRNA expression	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+HDR through Homologous Recombination (HRR) or Single Strand Annealing (SSA)	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Meiotic synapsis	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Nucleosome assembly	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+ERCC6 (CSB) and EHMT2 (G9a) positively regulate rRNA expression	N/A	2.0	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Sheddase Signaling Pathway	-1.134	0.0	0.0	0.447	1.0	0.816	N/A	N/A	-1.342	-0.816
+Integration of energy metabolism	N/A	2.236	2.236	N/A	N/A	-1.0	N/A	N/A	N/A	N/A
+Macrophage Alternative Activation Signaling Pathway	1.134	0.707	0.707	-0.447	0.0	1.0	N/A	-0.378	0.0	-0.816
+Iron uptake and transport	N/A	2.0	2.0	N/A	N/A	N/A	1.0	N/A	N/A	N/A
+Dilated Cardiomyopathy Signaling Pathway	0.816	0.707	0.707	-0.447	-1.0	0.816	-0.447	N/A	N/A	N/A
+Semaphorin Neuronal Repulsive Signaling Pathway	0.0	0.378	0.378	N/A	1.0	-1.134	-1.0	-1.0	N/A	N/A
+Sertoli Cell-Germ Cell Junction Signaling Pathway (Enhanced)	0.0	0.333	0.333	N/A	1.0	1.89	0.447	0.447	N/A	N/A
+Gαi Signaling	0.816	0.816	0.816	N/A	2.0	N/A	0.0	N/A	N/A	N/A
+Opioid Signalling	N/A	2.236	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+tRNA Splicing	N/A	2.236	2.0	N/A	N/A	N/A	0.0	0.0	N/A	N/A
+CDK5 Signaling	1.342	1.342	1.342	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+VDR/RXR Activation	1.0	1.0	1.0	N/A	N/A	N/A	N/A	1.0	N/A	N/A
+Glutamate binding, activation of AMPA receptors and synaptic plasticity	N/A	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Signaling by EGFR	N/A	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+GABA receptor activation	N/A	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Digestion	2.0	N/A	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Transcriptional Regulation by MECP2	N/A	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Melatonin Signaling	1.342	0.816	0.816	N/A	N/A	-1.0	N/A	N/A	N/A	N/A
+GABAergic Receptor Signaling Pathway (Enhanced)	-0.333	0.302	0.302	0.447	N/A	0.0	-1.0	0.447	0.816	0.0
+PPARα/RXRα Activation	1.342	0.816	0.816	N/A	N/A	-0.447	N/A	N/A	N/A	N/A
+CDX Gastrointestinal Cancer Signaling Pathway	0.707	0.632	0.632	0.0	0.378	0.0	0.0	-0.447	-0.447	0.0
+Neuroprotective Role of THOP1 in Alzheimer's Disease	1.0	1.0	1.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+LPS/IL-1 Mediated Inhibition of RXR Function	N/A	1.0	0.447	N/A	0.0	1.0	N/A	N/A	N/A	N/A
+Sleep REM Signaling Pathway	0.0	0.0	0.0	0.0	0.0	-0.447	-0.447	-1.134	0.0	0.0
+Sialic acid metabolism	N/A	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+D-myo-inositol (1,4,5,6)-Tetrakisphosphate Biosynthesis	N/A	2.0	N/A	N/A	N/A	0.0	N/A	N/A	N/A	N/A
+3-phosphoinositide Degradation	N/A	2.0	N/A	N/A	N/A	0.0	N/A	N/A	N/A	N/A
+D-myo-inositol (3,4,5,6)-tetrakisphosphate Biosynthesis	N/A	2.0	N/A	N/A	N/A	0.0	N/A	N/A	N/A	N/A
+GPCR-Mediated Integration of Enteroendocrine Signaling Exemplified by an L Cell	-0.447	-0.447	-0.447	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Xenobiotic Metabolism PXR Signaling Pathway	0.0	0.0	0.0	N/A	N/A	1.0	N/A	N/A	N/A	N/A
+Dopamine Receptor Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Tryptophan Degradation X (Mammalian, via Tryptamine)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Presynaptic depolarization and calcium channel opening	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Neurotransmitter clearance	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Regulation of beta-cell development	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Surfactant metabolism	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Striated Muscle Contraction	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Intracellular oxygen transport	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Neurexins and neuroligins	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Inhibition of Matrix Metalloproteases	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Histamine Biosynthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Atherosclerosis Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Synaptic adhesion-like molecules	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Class C/3 (Metabotropic glutamate/pheromone receptors)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Ethanol Degradation II	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Anandamide Degradation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Axonal Guidance Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Superoxide Radicals Degradation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+L-serine Degradation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Circadian Rhythm Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Catecholamine Biosynthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Tight Junction Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Gastrin-CREB signalling pathway via PKC and MAPK	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Assembly and cell surface presentation of NMDA receptors	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Transcriptional regulation of brown and beige adipocyte differentiation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Acetone Degradation I (to Methylglyoxal)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Superpathway of Melatonin Degradation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Granulocyte Adhesion and Diapedesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Thyroid Hormone Metabolism I (via Deiodination)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Cardiomyocyte Differentiation via BMP Receptors	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Thyronamine and Iodothyronamine Metabolism	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Agranulocyte Adhesion and Diapedesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Phototransduction Pathway	N/A	0.0	0.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Airway Pathology in Chronic Obstructive Pulmonary Disease	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RAB geranylgeranylation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Proline Degradation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+DAG and IP3 signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Microautophagy Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Bupropion Degradation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Receptor-type tyrosine-protein phosphatases	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Interleukin-12 family signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of Cytokines in Mediating Communication between Immune Cells	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+PXR/RXR Activation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of Pattern Recognition Receptors in Recognition of Bacteria and Viruses	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Relaxin Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+GABA Receptor Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Trafficking and processing of endosomal TLR	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Primary Immunodeficiency Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+The Visual Cycle	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+L-dopachrome Biosynthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of PKR in Interferon Induction and Antiviral Response	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Interleukin-7 signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Retinol Biosynthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Differential Regulation of Cytokine Production in Intestinal Epithelial Cells by IL-17A and IL-17F	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Hepatic Fibrosis / Hepatic Stellate Cell Activation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+nNOS Signaling in Neurons	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Differential Regulation of Cytokine Production in Macrophages and T Helper Cells by IL-17A and IL-17F	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Metabolism of amine-derived hormones	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Insulin processing	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Melatonin Degradation II	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Amyotrophic Lateral Sclerosis Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of Osteoblasts, Osteoclasts and Chondrocytes in Rheumatoid Arthritis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Estrogen Biosynthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+TNFs bind their physiological receptors	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Phenylalanine Degradation IV (Mammalian, via Side Chain)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Leptin Signaling in Obesity	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Proline catabolism	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A

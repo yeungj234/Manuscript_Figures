@@ -1,0 +1,165 @@
+© 2000-2025 QIAGEN. All rights reserved.
+
+Canonical Pathways	Doxo3 vs Cycling0	Doxo14 vs Cycling0	Doxo21 vs Cycling0	Doxo14 vs Doxo3	Doxo21 vs Doxo3	Palbo3 vs Cycling0	Palbo14 vs Cycling0	Palbo28 vs Cycling0	Palbo14 vs Palbo3	Palbo28 vs Palbo3
+Cell Cycle Checkpoints	-4.583	-7.81	-8.602	-6.325	-8.602	-8.66	-8.66	-8.544	2.673	6.557
+Mitotic Prometaphase	-4.472	-7.0	-7.141	-5.099	-7.071	-7.141	-7.141	-7.141	2.324	5.745
+Mitotic Metaphase and Anaphase	-4.359	-6.708	-6.928	-5.196	-6.856	-6.928	-6.928	-6.928	2.138	5.568
+RHO GTPases Activate Formins	-3.742	-5.916	-6.083	-4.359	-5.916	-6.083	-6.083	-6.083	1.732	5.099
+Mitotic G2-G2/M phases	-3.317	-4.899	-5.0	-3.606	-4.899	-5.0	-5.0	-5.0	1.633	3.873
+Synthesis of DNA	N/A	-4.796	-5.477	-4.123	-5.477	-5.568	-5.568	-5.477	N/A	3.162
+HDR through Homologous Recombination (HRR) or Single Strand Annealing (SSA)	N/A	-3.742	-5.0	-3.317	-5.099	-5.196	-5.196	-5.099	N/A	3.317
+Nucleosome assembly	-2.0	-4.0	-4.123	-3.162	-4.0	-4.123	-4.123	-4.123	1.89	3.464
+RHO GTPase cycle	-3.742	-3.873	-4.243	-2.449	-3.873	-4.243	-4.472	-4.359	-1.633	0.816
+Cell Cycle Control of Chromosomal Replication	N/A	-4.0	-4.583	-3.317	-4.583	-4.69	-4.69	-4.583	N/A	2.449
+Nuclear Cytoskeleton Signaling Pathway	-3.162	-3.873	-3.873	-2.828	-3.873	-4.0	-4.0	-4.0	1.0	2.236
+Activation of the pre-replicative complex	N/A	-4.123	-4.472	-3.162	-4.472	-4.472	-4.472	-4.359	N/A	2.646
+Regulation of mitotic cell cycle	-3.0	-3.742	-3.873	-3.0	-3.873	-3.873	-3.873	-3.873	N/A	2.646
+Cohesin Chromatin Regulation Pathway	-2.828	-3.71	-3.838	-2.121	-3.71	-3.838	-3.838	-3.838	0.0	2.828
+Kinetochore Metaphase Signaling Pathway	-2.887	-3.651	-3.889	-1.886	-3.889	-3.889	-3.889	-3.889	-0.707	1.886
+Intra-Golgi and retrograde Golgi-to-ER traffic	-2.828	-3.606	-3.606	-2.646	-3.464	-3.606	-3.606	-3.606	0.447	2.646
+Kinesins	-2.828	-3.606	-3.606	-2.646	-3.464	-3.606	-3.606	-3.606	0.447	2.646
+Telomere Maintenance	N/A	-3.464	-4.243	-2.646	-4.123	-4.359	-4.359	-4.243	N/A	2.0
+DNA Replication Pre-Initiation	N/A	-3.742	-4.0	-2.828	-4.0	-4.0	-4.0	-3.873	N/A	2.646
+Chronic Myeloid Leukemia Signaling	-1.633	-3.162	-3.742	-2.449	-3.606	-3.742	-3.742	-3.742	1.0	1.897
+Mitotic Prophase	-2.449	-3.606	-3.742	-2.0	-3.606	-3.742	-3.742	-3.742	N/A	2.0
+Histone Modification Signaling Pathway	N/A	-4.0	-4.123	-2.646	-4.0	-4.243	-4.243	-4.359	N/A	1.0
+Regulation of TP53 Activity through Phosphorylation	N/A	-3.162	-3.873	-2.828	-3.873	-4.0	-4.0	-3.873	N/A	2.449
+MHC class II antigen presentation	-2.449	-3.162	-3.162	-2.236	-3.0	-3.162	-3.162	-3.162	0.0	2.236
+Mitotic G1 phase and G1/S transition	2.0	2.668	2.858	2.673	2.858	2.858	2.858	2.858	-1.342	-2.111
+Meiotic recombination	N/A	-2.646	-3.162	-2.236	-3.317	-3.317	-3.317	-3.317	N/A	2.236
+TP53 Regulates Transcription of Cell Cycle Genes	-2.0	-2.828	-3.317	N/A	-3.317	-3.317	-3.317	-3.317	N/A	2.0
+SUMOylation of DNA replication proteins	-2.236	-2.449	-2.646	-2.0	-2.646	-2.646	-2.646	-2.646	N/A	2.0
+Cilium Assembly	N/A	-3.0	-3.162	N/A	-3.0	-3.162	-3.162	-3.162	N/A	2.449
+DNA Damage/Telomere Stress Induced Senescence	N/A	-2.828	-3.0	-2.0	-3.0	-3.0	-3.0	-3.0	N/A	N/A
+Senescence-Associated Secretory Phenotype (SASP)	-2.0	-2.828	-3.0	N/A	-3.0	-3.0	-3.0	-3.0	N/A	N/A
+Fanconi Anemia Pathway	N/A	-2.828	-3.0	N/A	-3.0	-3.0	-3.0	-3.0	N/A	2.0
+DNA Damage Bypass	N/A	-2.236	-3.0	-2.0	-3.0	-3.0	-3.0	-3.0	N/A	N/A
+Deubiquitination	N/A	-2.449	-2.828	-2.0	-2.828	-2.828	-2.828	-2.828	N/A	N/A
+S Phase	N/A	-2.236	-2.828	-2.0	-2.828	-2.828	-2.828	-2.828	N/A	N/A
+BER (Base Excision Repair) Pathway	N/A	-2.0	-2.828	-2.0	-2.828	-2.828	-2.828	-2.828	N/A	N/A
+Coronavirus Pathogenesis Pathway	N/A	2.0	3.0	N/A	3.0	3.0	3.0	3.0	N/A	-1.0
+p75 NTR receptor-mediated signalling	-2.0	-2.449	-2.646	N/A	-2.449	-2.646	-2.646	-2.646	N/A	N/A
+Oxidative Stress Induced Senescence	N/A	-2.236	-2.828	N/A	-2.828	-2.828	-2.828	-2.828	N/A	1.0
+Mitotic Roles of Polo-Like Kinase	-2.646	-2.111	-1.941	-1.134	-1.941	-1.941	-1.941	-1.941	N/A	1.633
+Senescence Pathway	1.0	2.121	2.496	2.0	2.496	1.807	1.807	1.807	N/A	-1.633
+Prostate Cancer Signaling	N/A	-2.0	-2.828	N/A	-2.828	-2.828	-2.828	-2.828	N/A	1.0
+Apoptotic execution phase	N/A	-2.236	-2.449	-2.236	-2.449	-2.449	-2.449	-2.449	N/A	N/A
+Chromatin organization	N/A	-2.449	-2.646	N/A	-2.828	-2.646	-2.828	-2.828	N/A	N/A
+NER (Nucleotide Excision Repair, Enhanced Pathway)	N/A	N/A	-2.828	-2.0	-2.828	-2.828	-2.828	-2.828	N/A	N/A
+Cell Cycle: G2/M DNA Damage Checkpoint Regulation	2.236	1.897	1.897	0.816	1.897	1.897	1.897	1.897	N/A	-1.633
+Protein Ubiquitination Pathway	N/A	-2.646	-2.646	N/A	-2.646	-2.646	-2.646	-2.646	N/A	N/A
+Aryl Hydrocarbon Receptor Signaling	N/A	-1.89	-2.333	-2.0	-2.333	-2.333	-2.333	-2.333	N/A	N/A
+Granzyme A Signaling	N/A	2.236	2.236	2.0	2.236	2.236	2.236	2.236	N/A	N/A
+Transcriptional Regulation by E2F6	N/A	N/A	2.449	2.0	2.449	2.449	2.449	2.449	N/A	-1.0
+Mismatch Repair in Eukaryotes	N/A	N/A	-2.646	-2.0	-2.646	-2.646	-2.646	-2.646	N/A	N/A
+ID1 Signaling Pathway	-1.0	-1.667	-1.897	N/A	-1.897	-2.111	-2.309	-2.309	-1.0	-0.378
+DNA Double Strand Break Response	N/A	-2.449	-2.449	N/A	-2.236	-2.449	-2.449	-2.449	N/A	N/A
+PKR-mediated signaling	N/A	-2.236	-2.449	N/A	-2.236	-2.449	-2.449	-2.449	N/A	N/A
+ESR-mediated signaling	N/A	-2.0	-2.449	N/A	-2.0	-2.449	-2.449	-2.449	N/A	N/A
+Cyclins and Cell Cycle Regulation	N/A	-1.633	-2.111	-1.342	-2.111	-2.111	-2.111	-2.111	N/A	N/A
+Role of BRCA1 in DNA Damage Response	N/A	-2.333	-1.604	-0.816	-1.807	-1.807	-1.807	-1.807	0.447	1.0
+Salvage Pathways of Pyrimidine Ribonucleotides	N/A	-2.236	-2.236	N/A	-2.236	-2.236	-2.236	-2.236	N/A	N/A
+Nonhomologous End-Joining (NHEJ)	N/A	-2.236	-2.236	N/A	-2.236	-2.236	-2.236	-2.236	N/A	N/A
+Pyridoxal 5'-phosphate Salvage Pathway	N/A	-2.236	-2.236	N/A	-2.236	-2.236	-2.236	-2.236	N/A	N/A
+B-WICH complex positively regulates rRNA expression	N/A	-2.236	-2.236	N/A	-2.236	-2.236	-2.236	-2.236	N/A	N/A
+Meiotic synapsis	N/A	-2.236	-2.236	N/A	-2.236	-2.236	-2.236	-2.236	N/A	N/A
+MITF-M-dependent gene expression	N/A	N/A	-2.646	N/A	-2.646	-2.646	-2.646	-2.646	N/A	N/A
+Resolution of Abasic Sites (AP sites)	N/A	N/A	-2.646	N/A	-2.646	-2.646	-2.646	-2.646	N/A	N/A
+Folate Signaling Pathway	N/A	-2.0	-2.236	N/A	-2.236	-2.236	-2.236	-2.236	N/A	N/A
+PRC2 methylates histones and DNA	N/A	-2.0	-2.236	N/A	-2.236	-2.236	-2.236	-2.236	N/A	N/A
+Estrogen-mediated S-phase Entry	N/A	-1.342	-2.333	N/A	-2.333	-2.333	-2.333	-2.333	N/A	N/A
+Mitochondrial Division Signaling Pathway	N/A	-2.0	-2.0	N/A	-2.0	-2.236	-2.236	-2.0	N/A	N/A
+Nucleotide Excision Repair	N/A	N/A	-2.449	N/A	-2.449	-2.449	-2.449	-2.449	N/A	N/A
+DNA Methylation and Transcriptional Repression Signaling	N/A	-1.633	-2.121	N/A	-2.121	-2.121	-2.121	-2.121	N/A	N/A
+Transcriptional regulation of granulopoiesis	N/A	-1.633	-2.121	N/A	-1.89	-2.121	-2.121	-2.121	N/A	N/A
+Ferroptosis Signaling Pathway	N/A	2.0	2.0	N/A	2.0	2.0	2.0	2.0	N/A	N/A
+RNA Polymerase I Transcription	N/A	-2.0	-2.0	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A
+Cerebral Malformation Signaling Pathway	N/A	2.0	2.0	N/A	2.0	2.0	2.0	2.0	N/A	N/A
+NoRC negatively regulates rRNA expression	N/A	-2.0	-2.0	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A
+Pre-NOTCH Expression and Processing	N/A	-2.0	-2.0	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A
+Transcriptional regulation by the AP-2 (TFAP2) family of transcription factors	N/A	-2.0	-2.0	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A
+DNA methylation	N/A	-2.0	-2.0	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A
+Chromatin modifications during the maternal to zygotic transition (MZT)	N/A	-2.0	-2.0	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A
+SIRT1 negatively regulates rRNA expression	N/A	-2.0	-2.0	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A
+Transcriptional regulation by RUNX1	N/A	N/A	-2.236	N/A	-2.0	-2.449	-2.449	-2.449	N/A	0.0
+Ribonucleotide Reductase Signaling Pathway	N/A	-0.378	-1.387	-1.633	-1.387	-1.387	-1.387	-1.387	1.0	1.633
+Cell Cycle Regulation by BTG Family Proteins	N/A	N/A	-2.236	N/A	-2.236	-2.236	-2.236	-2.236	N/A	N/A
+Sumoylation Pathway	N/A	N/A	2.236	N/A	2.0	2.236	2.236	2.236	N/A	N/A
+Molecular Mechanisms of Cancer	0.447	-0.577	-1.528	0.0	-1.706	-2.041	-1.877	-1.528	0.447	0.707
+Interconversion of nucleotide di- and triphosphates	N/A	N/A	-2.0	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A
+Activation of anterior HOX genes in hindbrain during early embryogenesis	N/A	N/A	-2.0	N/A	-2.0	-2.0	-2.0	-2.0	N/A	N/A
+Role of CHK Proteins in Cell Cycle Checkpoint Control	N/A	0.816	1.414	N/A	1.414	1.414	1.414	1.414	N/A	-2.0
+Transcriptional Regulation by VENTX	N/A	N/A	-2.0	N/A	N/A	-2.0	-2.0	-2.0	N/A	N/A
+Epithelial Adherens Junction Signaling	N/A	-2.0	-1.342	N/A	N/A	-1.633	-1.633	-1.342	N/A	N/A
+TR/RXR Activation	N/A	N/A	-1.342	N/A	-1.342	-1.342	-1.342	-1.342	N/A	N/A
+DNA damage-induced 14-3-3σ Signaling	N/A	0.816	1.0	N/A	1.0	1.0	1.0	1.0	N/A	-0.447
+Hereditary Breast Cancer Signaling	N/A	-0.577	0.243	1.633	0.471	0.471	0.471	0.471	N/A	0.333
+Cell Cycle: G1/S Checkpoint Regulation	N/A	-0.447	0.632	N/A	0.632	0.905	0.905	0.905	N/A	N/A
+Sirtuin Signaling Pathway	N/A	-1.0	-0.447	N/A	-0.447	-0.447	-0.447	-0.447	N/A	1.0
+Signaling by NOTCH3	N/A	N/A	N/A	N/A	N/A	-2.0	-2.0	N/A	N/A	N/A
+L1CAM interactions	N/A	N/A	N/A	N/A	N/A	N/A	-2.0	-2.0	N/A	N/A
+p53 Signaling	N/A	N/A	0.447	N/A	0.447	0.447	0.447	0.447	N/A	-1.0
+mRNA 3 Prime End Processing Signaling Pathway	N/A	N/A	-0.447	N/A	-0.447	-0.447	-0.447	-0.447	N/A	N/A
+Hepatitis B Chronic Liver Pathogenesis Signaling Pathway	N/A	N/A	-0.447	0.0	-0.447	-0.447	-0.447	-0.447	N/A	N/A
+ATM Signaling	N/A	0.333	0.0	N/A	0.0	0.0	0.0	0.0	N/A	-0.816
+GADD45 Signaling	N/A	N/A	0.447	N/A	0.447	0.0	0.0	0.0	N/A	N/A
+NCAM signaling for neurite out-growth	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Abacavir ADME	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Hypoxia Signaling in the Cardiovascular System	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Oncogene Induced Senescence	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+mRNA Editing	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Ribavirin ADME	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+M-decay: degradation of maternal mRNAs by maternally stored factors	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+G alpha (12/13) signalling events	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Vitamin D (calciferol) metabolism	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Protein ubiquitination	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Small Cell Lung Cancer Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Metabolism of folate and pterines	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Sucrose Degradation V (Mammalian)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Diphthamide Biosynthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Regulation of Cellular Mechanics by Calpain Protease	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+STAT3 Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+GDNF Family Ligand-Receptor Interactions	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+NFE2L2 regulating tumorigenic genes	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RUNX1 regulates megakaryocyte differentiation and platelet function	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Intrinsic Pathway for Apoptosis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Activated PKN1 stimulates transcription of AR regulated genes KLK2 and KLK3	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Transport of vitamins, nucleosides, and related molecules	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Non-Small Cell Lung Cancer Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Regulation of TP53 Expression and Degradation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+NGF-stimulated transcription	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RHO GTPases activate IQGAPs	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Ephrin B Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Glioma Invasiveness Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+TP53 Regulates Transcription of DNA Repair Genes	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Asparagine Degradation I	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+FAT10 Cancer Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Granzyme B Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Mismatch Repair	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+TP53 Regulates Transcription of Cell Death Genes	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Pancreatic Adenocarcinoma Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Carnitine synthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RHO GTPases activate CIT	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+NAP1L1 Transcription Regulation Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Ovarian Cancer Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Mitotic Telophase/Cytokinesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Primary Immunodeficiency Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RAN Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Fructose metabolism	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+dTMP De Novo Biosynthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+DNA Double-Strand Break Repair by Homologous Recombination	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Glioma Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Salvage Pathways of Pyrimidine Deoxyribonucleotides	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+HDR through MMEJ (alt-NHEJ)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Transmission across Electrical Synapses	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Putrescine Biosynthesis III	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-7 Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Zymosterol Biosynthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Sonic Hedgehog Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Glycine Biosynthesis I	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Pyrimidine Deoxyribonucleotides De Novo Biosynthesis I	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of OCT4 in Mammalian Embryonic Stem Cell Pluripotency	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Glioblastoma Multiforme Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Bladder Cancer Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+TNFR2 non-canonical NF-kB pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+ERCC6 (CSB) and EHMT2 (G9a) positively regulate rRNA expression	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A

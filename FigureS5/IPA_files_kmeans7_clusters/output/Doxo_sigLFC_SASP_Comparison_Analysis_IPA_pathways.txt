@@ -1,0 +1,193 @@
+© 2000-2025 QIAGEN. All rights reserved.
+
+Canonical Pathways	Doxo14 vs Cycling0	Doxo21 vs Cycling0	Doxo14 vs Doxo3	Doxo21 vs Doxo3	Palbo14 vs Cycling0	Palbo28 vs Cycling0	Palbo14 vs Palbo3	Palbo28 vs Palbo3
+Pathogen Induced Cytokine Storm Signaling Pathway	3.0	2.828	1.342	1.342	N/A	1.89	2.236	1.414
+Neutrophil degranulation	2.828	2.236	2.0	N/A	-1.0	N/A	N/A	2.0
+Wound Healing Signaling Pathway	2.111	1.897	0.447	0.447	N/A	1.134	2.0	0.707
+Cachexia Signaling Pathway	2.646	2.449	N/A	1.0	0.0	1.342	N/A	0.447
+Autism Signaling Pathway	1.89	1.89	1.0	N/A	N/A	0.447	2.0	0.0
+Irritable Bowel Syndrome Signaling Pathway	1.134	1.134	N/A	2.0	N/A	2.0	-0.447	0.447
+Hepatic Fibrosis Signaling Pathway	2.646	2.449	N/A	N/A	N/A	N/A	2.0	N/A
+S100 Family Signaling Pathway	2.828	2.646	N/A	N/A	N/A	N/A	1.342	0.0
+Role of Macrophages, Fibroblasts and Endothelial Cells in Rheumatoid Arthritis	2.449	2.236	N/A	N/A	N/A	N/A	2.0	N/A
+Collagen degradation	2.0	2.0	1.0	1.0	N/A	N/A	N/A	0.447
+Pulmonary Fibrosis Idiopathic Signaling Pathway	2.646	2.449	N/A	N/A	N/A	N/A	1.342	0.0
+Hepatic Cholestasis	2.236	2.0	N/A	N/A	N/A	2.0	N/A	N/A
+Role of Osteoclasts in Rheumatoid Arthritis Signaling Pathway	2.449	2.236	0.0	1.0	N/A	0.0	N/A	0.447
+Pulmonary Healing Signaling Pathway	2.449	2.236	N/A	N/A	N/A	N/A	1.0	N/A
+Assembly of collagen fibrils and other multimeric structures	2.0	2.0	N/A	N/A	N/A	N/A	N/A	1.342
+GP6 Signaling Pathway	2.0	2.0	N/A	N/A	N/A	0.0	N/A	1.342
+Colorectal Cancer Metastasis Signaling	2.0	2.0	N/A	N/A	N/A	N/A	1.0	N/A
+Sheddase Signaling Pathway	1.414	1.134	1.342	N/A	N/A	N/A	-0.447	0.447
+HIF1α Signaling	2.236	2.236	N/A	N/A	N/A	N/A	N/A	N/A
+PIP3 activates AKT signaling	2.449	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Extracellular matrix organization	2.0	2.0	N/A	N/A	N/A	0.0	N/A	0.447
+Tuberculosis Active Signaling Pathway	-2.236	-2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Cardiac Hypertrophy Signaling (Enhanced)	2.236	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Role of Chondrocytes in Rheumatoid Arthritis Signaling Pathway	2.236	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+RHO GTPase cycle	2.236	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Molecular Mechanisms of Cancer	2.0	2.0	N/A	N/A	N/A	N/A	N/A	N/A
+Osteoarthritis Pathway	1.633	1.342	N/A	N/A	N/A	N/A	1.0	N/A
+Glycation Signaling Pathway	1.342	1.342	N/A	N/A	N/A	N/A	N/A	0.0
+Role of Osteoblasts in Rheumatoid Arthritis Signaling Pathway	0.816	0.816	N/A	N/A	N/A	N/A	-0.447	0.447
+RAF/MAP kinase cascade	2.236	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-33 Signaling Pathway	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Interleukin-10 signaling	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Extra-nuclear estrogen signaling	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Hematoma Resolution Signaling Pathway	-1.0	-1.0	N/A	N/A	N/A	N/A	N/A	N/A
+Role of Tissue Factor in Cancer	2.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+CDX Gastrointestinal Cancer Signaling Pathway	-0.816	-0.816	N/A	N/A	N/A	N/A	N/A	N/A
+Interleukin-4 and Interleukin-13 signaling	1.0	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Tuberculosis Latent Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Activin Inhibin Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-12 Signaling and Production in Macrophages	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of NANOG in Mammalian Embryonic Stem Cell Pluripotency	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Choline catabolism	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Factors Promoting Cardiogenesis in Vertebrates	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Cell surface interactions at the vascular wall	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Agranulocyte Adhesion and Diapedesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Inhibition of ARE-Mediated mRNA Degradation Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+HEY1 Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+WNT/SHH Axonal Guidance Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Bone Mineralization Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+UDP-N-acetyl-D-galactosamine Biosynthesis II	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Renal Cell Carcinoma Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-10 Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Airway Pathology in Chronic Obstructive Pulmonary Disease	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+FXR/RXR Activation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+HER-2 Signaling in Breast Cancer	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Neutrophil Extracellular Trap Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Systemic Lupus Erythematosus in B Cell Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Reelin signalling pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Phenylethylamine Degradation I	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of JAK2 in Hormone-like Cytokine Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+LXR/RXR Activation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Airway Inflammation in Asthma	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Class B/2 (Secretin family receptors)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+COPII-mediated vesicle transport	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Regulation of the Epithelial Mesenchymal Transition in Development Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Microautophagy Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Interleukin-12 family signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Macrophage Alternative Activation Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of Cytokines in Mediating Communication between Immune Cells	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+VDR/RXR Activation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Macrophage Classical Activation Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+WNT/β-catenin Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Sertoli Cell-Germ Cell Junction Signaling Pathway (Enhanced)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-6 Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Cyclophilin Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+WNT ligand biogenesis and trafficking	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Neuroinflammation Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Th2 Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Pancreatic Adenocarcinoma Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+CLEAR Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of Pattern Recognition Receptors in Recognition of Bacteria and Viruses	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+G Beta Gamma Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Tumor Microenvironment Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Inhibition of Matrix Metalloproteases	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Activation of Matrix Metalloproteinases	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RHO GTPases activate PAKs	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Atherosclerosis Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RHO GTPases activate CIT	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+MyD88:MAL(TIRAP) cascade initiated on plasma membrane	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+ERBB Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+p38 MAPK Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-8 Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Adrenergic Receptor Signaling Pathway (Enhanced)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Basal Cell Carcinoma Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+PCP (Planar Cell Polarity) Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Post-translational protein phosphorylation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Myelination Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+CGAS-STING Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Collagen biosynthesis and modifying enzymes	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Acute Phase Response Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Signaling by EGFR	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Ovarian Cancer Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Galactose catabolism	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Signaling by VEGF	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-27 Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Transcriptional and post-translational regulation of MITF-M expression and activity	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Miscellaneous transport and binding events	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Preeclampsia Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Neuroprotective Role of THOP1 in Alzheimer's Disease	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+LPS/IL-1 Mediated Inhibition of RXR Function	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Salvage Pathways of Pyrimidine Deoxyribonucleotides	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Histidine catabolism	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+PD-1, PD-L1 cancer immunotherapy pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Human Embryonic Stem Cell Pluripotency	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Crosstalk between Dendritic Cells and Natural Killer Cells	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Interleukin-7 signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+C-type lectin receptors (CLRs)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Axonal Guidance Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+G alpha (q) signalling events	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Degradation of the extracellular matrix	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-4 Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	0.0
+Growth hormone receptor signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Colanic Acid Building Blocks Biosynthesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Hematopoiesis from Multipotent Stem Cells	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RHO GTPases Activate ROCKs	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Cerebral Malformation Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Glycine Betaine Degradation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Apoptotic execution phase	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RHO GTPases activate PKNs	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Regulation of Insulin-like Growth Factor (IGF) transport and uptake by IGFBPs	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Regulation of the Epithelial Mesenchymal Transition by Growth Factors Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+UDP-N-acetyl-D-galactosamine Biosynthesis I	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+PPARα/RXRα Activation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Neuregulin Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Differential Regulation of Cytokine Production in Intestinal Epithelial Cells by IL-17A and IL-17F	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Hepatic Fibrosis / Hepatic Stellate Cell Activation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+O-linked glycosylation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Cargo recognition for clathrin-mediated endocytosis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+RAR Activation	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Sleep REM Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+STAT3 Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Gastrin-CREB signalling pathway via PKC and MAPK	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Death Receptor Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+ILK Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Keratinization	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Leukocyte Extravasation Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Differential Regulation of Cytokine Production in Macrophages and T Helper Cells by IL-17A and IL-17F	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Oncostatin M Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of WNT/GSK-3β Signaling in the Pathogenesis of Influenza	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+NAD Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+NFE2L2 regulating tumorigenic genes	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+G-protein beta:gamma signalling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+NOD1/2 Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Erythropoietin Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Serotonin Receptor Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-17 Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Estrogen Receptor Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+PI3K/AKT Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Interleukin-1 family signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Complement System	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Docosahexaenoic Acid (DHA) Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Ephrin A Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Clathrin-mediated endocytosis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Multiple Sclerosis Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Collagen chain trimerization	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Autophagy	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Granulocyte Adhesion and Diapedesis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of Osteoblasts, Osteoclasts and Chondrocytes in Rheumatoid Arthritis	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Hereditary Breast Cancer Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Regulation of the Epithelial-Mesenchymal Transition Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Prolactin receptor signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+HMGB1 Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Th1 and Th2 Activation Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Transcriptional Regulatory Network in Embryonic Stem Cells	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+TNFs bind their physiological receptors	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Toll-like Receptor Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Integrin cell surface interactions	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+PPAR Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Histidine Degradation III	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Sertoli Cell-Sertoli Cell Junction Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Role of Hypercytokinemia/hyperchemokinemia in the Pathogenesis of Influenza	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+IL-13 Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+NAFLD Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Glioblastoma Multiforme Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+HOTAIR Regulatory Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Bladder Cancer Signaling	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Signaling by MET	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Galactose Degradation I (Leloir Pathway)	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Mitochondrial Division Signaling Pathway	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+Cargo concentration in the ER	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A

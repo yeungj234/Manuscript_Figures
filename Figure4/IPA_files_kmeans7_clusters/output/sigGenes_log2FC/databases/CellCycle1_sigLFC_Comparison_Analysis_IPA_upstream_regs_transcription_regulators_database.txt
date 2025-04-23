@@ -1,0 +1,1821 @@
+© 2000-2025 QIAGEN. All rights reserved.
+
+Analysis	Upstream Regulator	Expr Log Ratio	Molecule Type	Predicted Activation State	Activation z-score	Flags	p-value of overlap	Target Molecules in Dataset	Mechanistic Network
+Doxo21 vs Cycling0	GLI1	 	transcription regulator	 	0.691	 	2.71E-13	BCL2L11,C1QTNF3,EGR1,FOS,GLI2,HES1,IL27RA,IMPA2,INSIG1,ITGB4,LFNG,MEST,MIDN,NREP,SCD,SERTAD4,SKP2,SLC1A3,SOCS3,TERT,TM4SF1,TNFAIP8L1	57 (11)
+Doxo14 vs Cycling0	TP63	 	transcription regulator	 	0.650	 	1.39E-12	ADAMTS1,AMIGO2,AXL,CCN2,COL4A1,COL4A2,COL6A3,EDN1,EGR1,FOS,FOSB,G6PD,HES1,ITGB4,NID1,OXTR,PHGDH,RASL11A,SLC7A5,SLIT2,TERT,TPM1,WNT5B	61 (20)
+Doxo21 vs Cycling0	TP63	 	transcription regulator	 	0.514	 	2.21E-12	ADAMTS1,AMIGO2,AXL,BCL2L11,CCN2,COL4A1,COL4A2,COL6A3,EDN1,EGR1,FOS,FOSB,G6PD,HES1,ITGB4,NID1,PHGDH,RASL11A,SLC7A5,SLIT2,TERT,TPM1,WNT5B	61 (21)
+Palbo28 vs Cycling0	TP63	 	transcription regulator	 	0.014	 	1.53E-11	ADAMTS1,AMIGO2,AXL,BCL2L11,COL4A1,COL4A2,COL6A3,EDN1,EGR1,FOS,FOSB,G6PD,HES1,ITGB4,NID1,PHGDH,RASL11A,SLIT2,TERT,TINAGL1,WNT5B	51 (20)
+Doxo14 vs Cycling0	GLI1	 	transcription regulator	 	0.602	 	1.08E-10	C1QTNF3,EGR1,FOS,GLI2,HES1,IL27RA,IMPA2,INSIG1,ITGB4,LFNG,MEST,MIDN,NREP,SCD,SKP2,SLC1A3,TERT,TM4SF1,TNFAIP8L1	51 (7)
+Doxo21 vs Doxo3	TP63	 	transcription regulator	 	0.666	 	5.56E-10	AMIGO2,BCL2L11,CCN2,COL4A1,COL4A2,COL6A3,EGR1,FOS,FOSB,HES1,NID1,PHGDH,RASL11A,SLC7A5,TERT,TINAGL1	38 (20)
+Doxo21 vs Cycling0	SMAD3	 	transcription regulator	Inhibited	-2.876	bias	5.31E-09	ADAMTS1,BCL2L11,CCN2,COL4A1,COL4A2,COL6A3,EDN1,EGR1,FBN2,FOS,GLI2,NET1,TERT,TPM1	65 (19)
+Palbo28 vs Palbo3	ARID1A	 	transcription regulator	 	0.718	 	5.86E-09	COL4A1,EDN1,EGR1,FBN2,FOS,GDNF,HES1,HTRA3,ITGB4,LTBP4,MEST,NREP,PAK3,TERT	42 (19)
+Doxo21 vs Cycling0	YAP1	 	transcription regulator	Inhibited	-3.900	bias	6.25E-09	ADAMTS1,AXL,BCL2L11,CCN2,CGB7,COL4A1,COL4A2,CXCL12,EDN1,EGR1,FOS,FOSB,GLI2,PHGDH,SKP2,SLC7A5,TERT,TPM1	72 (19)
+Doxo3 vs Cycling0	GLI1	 	transcription regulator	 	0.718	 	8.31E-09	EGR1,FOS,HES1,IL27RA,INSIG1,ITGB4,MEST,MIDN,NREP,SCD,SOCS3,TERT,TM4SF1,TNFAIP8L1	37 (7)
+Doxo21 vs Doxo3	YAP1	 	transcription regulator	Inhibited	-3.513	bias	1.11E-08	BCL2L11,CCN2,CGB7,COL4A1,COL4A2,CXCL12,EGR1,FOS,FOSB,GLI2,PHGDH,SKP2,SLC7A5,TERT	39 (20)
+Doxo3 vs Cycling0	CREB1	 	transcription regulator	 	-1.787	bias	1.37E-08	ARHGAP33,CAMK4,EDN1,EGR1,FOS,FOSB,IER2,MEST,MIDN,MSMO1,NREP,PER1,SCD,SLC19A1	15 (2)
+Doxo3 vs Cycling0	ARID1A	 	transcription regulator	 	0.440	 	2.35E-08	EDN1,EGR1,FBN2,FOS,HES1,HTRA3,ITGB4,MEST,NREP,PAK3,TERT,WNT3,WNT5B	29 (10)
+Palbo28 vs Cycling0	ARID1A	 	transcription regulator	 	0.412	 	2.38E-08	COL4A1,EDN1,EGR1,FBN2,FOS,GDNF,HES1,ITGB4,LTBP4,MEST,NREP,PAK3,TERT,WNT3,WNT5B	52 (16)
+Doxo21 vs Cycling0	FOXC1	 	transcription regulator	 	-1.000	bias	2.54E-08	BCL2L11,CXCL12,DLX6,EGR1,FOS,FOSB,KLF2,LFNG,OTX1,SOCS3	56 (17)
+Doxo14 vs Cycling0	YAP1	 	transcription regulator	Inhibited	-3.770	bias	2.82E-08	ADAMTS1,AXL,CCN2,CGB7,COL4A1,COL4A2,CXCL12,EDN1,EGR1,FOS,FOSB,GLI2,PHGDH,SKP2,SLC7A5,TERT,TPM1	67 (20)
+Doxo14 vs Cycling0	SMAD3	 	transcription regulator	Inhibited	-2.708	bias	3.54E-08	ADAMTS1,CCN2,COL4A1,COL4A2,COL6A3,EDN1,EGR1,FBN2,FOS,GLI2,NET1,TERT,TPM1	67 (20)
+Palbo28 vs Palbo3	TP63	 	transcription regulator	 	0.270	 	3.64E-08	BCL2L11,COL4A1,COL4A2,EDN1,EGR1,FOS,FOSB,G6PD,HES1,ITGB4,NID1,OXTR,PHGDH,TERT,TINAGL1	35 (17)
+Doxo21 vs Cycling0	MYC	 	transcription regulator	Inhibited	-2.429	bias	4.40E-08	ADAMTS1,AXL,BCL2L11,COL4A1,COL4A2,COL6A3,CTDSPL,DLEU2,DLX6,EDN1,EGR1,FADS2,FBN2,FOS,G6PD,GLI2,HES1,IMPA2,LHX9,MIR17HG,SKP2,SLC7A5,TERT,TNFRSF19,TPM1,WNT3	62 (18)
+Palbo28 vs Cycling0	GLI1	 	transcription regulator	 	0.954	 	8.16E-08	BCL2L11,EGR1,FOS,HES1,INSIG1,ITGB4,MEST,NREP,SCD,SERTAD4,SKP2,SOCS3,TERT,TM4SF1,TNFAIP8L1	58 (15)
+Doxo3 vs Cycling0	CREM	 	transcription regulator	 	-1.820	 	8.52E-08	CAMK4,EGR1,FOS,MEST,MIDN,MSMO1,PER1,TPM1	22 (4)
+Doxo3 vs Cycling0	TP63	 	transcription regulator	 	-0.065	 	1.12E-07	ADAMTS1,AXL,EDN1,EGR1,FOS,FOSB,G6PD,HES1,ITGB4,NID1,SLIT2,TERT,TPM1,WNT5B	41 (21)
+Doxo14 vs Cycling0	MYC	 	transcription regulator	Inhibited	-2.268	bias	1.14E-07	ADAMTS1,AXL,COL4A1,COL4A2,COL6A3,CTDSPL,DLEU2,DLX6,EDN1,EGR1,FADS2,FBN2,FOS,G6PD,GLI2,HES1,IMPA2,LHX9,MIR17HG,SKP2,SLC7A5,TERT,TNFRSF19,TPM1,WNT3	63 (17)
+Doxo14 vs Cycling0	MRTFB	 	transcription regulator	Inhibited	-2.743	bias	1.14E-07	ADAMTS1,CCN2,COL6A3,CXCL12,EDN1,EGR1,FADS2,NREP,SLIT2,TPM1	37 (7)
+Palbo28 vs Cycling0	TWIST1	 	transcription regulator	 	-0.690	bias	1.19E-07	ADAMTS1,AXL,BCL2L11,CBX2,COL4A1,CXCL12,FBN2,FOS,FREM2,OLFML3	 
+Doxo21 vs Doxo3	RB1	 	transcription regulator	 	1.913	 	1.24E-07	BCL2L11,CCN2,COL4A1,COL4A2,EGR1,FOS,FOSB,GLI2,HES1,RYR3,SKP2,TERT	34 (15)
+Doxo21 vs Cycling0	MRTFB	 	transcription regulator	Inhibited	-2.743	bias	1.40E-07	ADAMTS1,CCN2,COL6A3,CXCL12,EDN1,EGR1,FADS2,NREP,SLIT2,TPM1	48 (7)
+Palbo28 vs Palbo3	GLI1	 	transcription regulator	 	1.026	 	1.51E-07	BCL2L11,EGR1,FOS,HES1,INSIG1,ITGB4,MEST,NREP,SCD,SERTAD4,SOCS3,TERT,TNFAIP8L1	37 (14)
+Palbo28 vs Cycling0	ELK1	 	transcription regulator	Inhibited	-2.363	bias	1.63E-07	EGR1,FOS,FOSB,MIR17HG,SKP2,SOCS3,TERT	52 (19)
+Doxo21 vs Doxo3	SMAD3	 	transcription regulator	Inhibited	-2.399	bias	1.68E-07	BCL2L11,CCN2,COL4A1,COL4A2,COL6A3,EGR1,FOS,GLI2,NET1,TERT	38 (21)
+Palbo28 vs Palbo3	FOXC1	 	transcription regulator	 	-0.137	bias	2.22E-07	BCL2L11,CXCL12,EGR1,FOS,FOSB,GDNF,OTX1,SOCS3	36 (16)
+Doxo21 vs Doxo3	ELK1	 	transcription regulator	Inhibited	-2.162	bias	3.01E-07	EGR1,FOS,FOSB,MIR17HG,SKP2,TERT	26 (18)
+Doxo21 vs Cycling0	TWIST1	 	transcription regulator	 	-0.690	bias	3.18E-07	ADAMTS1,AXL,BCL2L11,CBX2,COL4A1,CXCL12,FBN2,FOS,FREM2,OLFML3	 
+Doxo3 vs Cycling0	DACH1	 	transcription regulator	 	1.387	bias	3.25E-07	EGR1,FOS,IER2,PAK3,SOCS3	18 (7)
+Doxo21 vs Cycling0	ELK1	 	transcription regulator	Inhibited	-2.363	bias	3.32E-07	EGR1,FOS,FOSB,MIR17HG,SKP2,SOCS3,TERT	68 (21)
+Doxo14 vs Cycling0	CREB1	 	transcription regulator	 	-1.787	bias	4.08E-07	ANGPTL2,ARHGAP33,CAMK4,EDN1,EGR1,FOS,FOSB,IER2,MEST,MIDN,MSMO1,NREP,PER1,SCD,SLC19A1	16 (2)
+Palbo28 vs Palbo3	DACH1	 	transcription regulator	 	1.387	bias	4.46E-07	EGR1,FOS,IER2,PAK3,SOCS3	30 (15)
+Doxo14 vs Cycling0	ARID1A	 	transcription regulator	 	-0.341	 	4.70E-07	COL4A1,EDN1,EGR1,FBN2,FOS,HES1,HTRA3,ITGB4,MEST,NREP,PAK3,TERT,WNT3,WNT5B	40 (10)
+Doxo3 vs Cycling0	ELK1	 	transcription regulator	Inhibited	-2.162	bias	4.82E-07	EGR1,FOS,FOSB,MIR17HG,SOCS3,TERT	44 (25)
+Doxo21 vs Cycling0	CREB1	 	transcription regulator	 	-1.787	bias	5.39E-07	ANGPTL2,ARHGAP33,CAMK4,EDN1,EGR1,FOS,FOSB,IER2,MEST,MIDN,MSMO1,NREP,PER1,SCD,SLC19A1	16 (2)
+Doxo3 vs Cycling0	MRTFB	 	transcription regulator	Inhibited	-2.400	bias	5.41E-07	ADAMTS1,CXCL12,EDN1,EGR1,FADS2,NREP,SLIT2,TPM1	29 (7)
+Palbo28 vs Cycling0	MRTFB	 	transcription regulator	Inhibited	-2.598	bias	6.02E-07	ADAMTS1,COL6A3,CXCL12,EDN1,EGR1,FADS2,NREP,SLIT2,SULT1E1	 
+Doxo21 vs Cycling0	ARID1A	 	transcription regulator	 	-0.341	 	6.11E-07	COL4A1,EDN1,EGR1,FBN2,FOS,HES1,HTRA3,ITGB4,LTBP4,MEST,NREP,TERT,WNT3,WNT5B	42 (11)
+Doxo14 vs Doxo3	TP63	 	transcription regulator	 	0.902	 	6.19E-07	CCN2,COL4A1,COL4A2,COL6A3,FOSB,G6PD,HES1,PHGDH,RASL11A,SLC7A5,TINAGL1	25 (7)
+Doxo21 vs Cycling0	EZH2	 	transcription regulator	 	0.596	 	6.55E-07	AXL,BCL2L11,CGB7,COL4A1,DENND2A,EGR1,FADS2,FOXF2,KLF2,PER1,SLC1A3,SOCS3,TERT,WNT3	50 (15)
+Palbo28 vs Palbo3	JUN	 	transcription regulator	Inhibited	-2.352	bias	6.94E-07	ADAMTS6,ANGPTL2,BCL2L11,EDN1,FOS,FOSB,GDNF,HES1,ITGB4,OXTR,PAK3,SOCS3	42 (20)
+Palbo28 vs Palbo3	ELK1	 	transcription regulator	 	-1.321	bias	7.01E-07	EGR1,FOS,FOSB,MIR17HG,SOCS3,TERT	35 (19)
+Doxo3 vs Cycling0	TCF7	 	transcription regulator	 	0.333	 	8.49E-07	ADAMTS6,CISH,FOS,FOSB,HES1,IL27RA,MSMO1,PTGER2,SOCS3,TNFRSF19	 
+Palbo28 vs Cycling0	SMAD3	 	transcription regulator	Inhibited	-2.312	bias	9.38E-07	ADAMTS1,BCL2L11,COL4A1,COL4A2,COL6A3,EDN1,EGR1,FBN2,FOS,NET1,TERT	52 (18)
+Doxo21 vs Cycling0	RB1	 	transcription regulator	Activated	2.335	 	9.59E-07	BCL2L11,CCN2,COL4A1,COL4A2,EGR1,FOS,FOSB,GLI2,GPR85,HES1,PER1,SKP2,TERT,TPM1	57 (15)
+Palbo28 vs Cycling0	MRTFA	 	transcription regulator	Inhibited	-2.795	bias	1.46E-06	COL6A3,CXCL12,EDN1,EGR1,FADS2,FOS,NREP,SLIT2,SULT1E1	31 (7)
+Palbo28 vs Cycling0	FOXC1	 	transcription regulator	 	0.547	bias	1.62E-06	BCL2L11,CXCL12,EGR1,FOS,FOSB,GDNF,KLF2,SOCS3	40 (12)
+Palbo28 vs Cycling0	DACH1	 	transcription regulator	 	1.387	bias	1.62E-06	EGR1,FOS,IER2,PAK3,SOCS3	42 (15)
+Palbo28 vs Palbo3	TWIST1	 	transcription regulator	 	-0.026	bias	1.71E-06	BCL2L11,CBX2,COL4A1,CXCL12,FBN2,FOS,FREM2,OLFML3	 
+Doxo21 vs Doxo3	GLI1	 	transcription regulator	 	-0.493	 	1.76E-06	BCL2L11,C1QTNF3,EGR1,FOS,GLI2,HES1,IMPA2,MEST,SKP2,SLC1A3,TERT	38 (17)
+Palbo14 vs Cycling0	TP63	 	transcription regulator	 	-1.004	 	1.80E-06	ADAMTS1,AMIGO2,AXL,COL6A3,EDN1,EGR1,FOS,FOSB,HES1,NID1,PHGDH,TINAGL1	34 (20)
+Palbo28 vs Cycling0	JUN	 	transcription regulator	Inhibited	-2.352	bias	1.91E-06	ADAMTS6,ANGPTL2,AXL,BCL2L11,EDN1,FOS,FOSB,GDNF,HES1,ITGB4,PAK3,SLC19A1,SOCS3	49 (17)
+Doxo14 vs Cycling0	CREM	 	transcription regulator	 	-1.820	 	1.92E-06	CAMK4,EGR1,FOS,MEST,MIDN,MSMO1,PER1,TPM1	25 (4)
+Doxo3 vs Cycling0	FOXC1	 	transcription regulator	 	-1.134	bias	2.09E-06	CXCL12,DLX6,EGR1,FOS,FOSB,OTX1,SOCS3	26 (13)
+Doxo21 vs Cycling0	CREM	 	transcription regulator	 	-1.820	 	2.26E-06	CAMK4,EGR1,FOS,MEST,MIDN,MSMO1,PER1,TPM1	25 (4)
+Doxo14 vs Cycling0	MRTFA	 	transcription regulator	Inhibited	-2.755	bias	2.91E-06	CCN2,COL6A3,CXCL12,EDN1,EGR1,FADS2,FOS,NREP,SLIT2	45 (14)
+Doxo14 vs Cycling0	EZH2	 	transcription regulator	 	0.631	 	2.96E-06	AXL,CGB7,COL4A1,DENND2A,EGR1,FADS2,FOXF2,KLF2,OXTR,PER1,SLC1A3,TERT,WNT3	44 (7)
+Doxo14 vs Cycling0	FOXC1	 	transcription regulator	 	-0.707	bias	3.01E-06	CXCL12,DLX6,EGR1,FOS,FOSB,KLF2,LFNG,OTX1	33 (9)
+Doxo14 vs Cycling0	CTNNB1	 	transcription regulator	Inhibited	-2.316	bias	3.19E-06	AQP4,CCN2,COL4A1,COL4A2,CTDSPL,CXCL12,EDN1,EGR1,FOS,GLI2,HES1,LFNG,MIR17HG,SLC7A5,SP5,TERT,TNFRSF19,WNT3,WNT5B	58 (16)
+Doxo14 vs Cycling0	TP53	 	transcription regulator	 	-0.547	 	3.25E-06	CCN2,CGB7,COL4A1,COL4A2,CXCL12,EDN1,EGR1,FOS,G6PD,GLI2,GPR85,HES1,IL27RA,ITGB4,KIF18A,MIR17HG,OTX1,PAK3,PHGDH,PIK3CD,PSRC1,RAB11FIP1,RGS16,SCD,SKP2,SLC19A1,SLC7A5,TERT,TPM1,WNT3,WNT5B	63 (21)
+Doxo21 vs Cycling0	MRTFA	 	transcription regulator	Inhibited	-2.755	bias	3.47E-06	CCN2,COL6A3,CXCL12,EDN1,EGR1,FADS2,FOS,NREP,SLIT2	52 (11)
+Doxo14 vs Cycling0	RB1	 	transcription regulator	Activated	2.132	 	4.20E-06	CCN2,COL4A1,COL4A2,EGR1,FOS,FOSB,GLI2,GPR85,HES1,PER1,SKP2,TERT,TPM1	65 (18)
+Doxo14 vs Doxo3	RB1	 	transcription regulator	 	1.000	 	4.27E-06	CCN2,COL4A1,COL4A2,FOSB,GLI2,GPR85,HES1,RYR3,SKP2	23 (6)
+Doxo21 vs Cycling0	CTNNB1	 	transcription regulator	Inhibited	-2.232	bias	4.40E-06	BCL2L11,CCN2,COL4A1,COL4A2,CTDSPL,CXCL12,EDN1,EGR1,FOS,GLI2,HES1,LFNG,MIR17HG,SLC7A5,SP5,TERT,TNFRSF19,WNT3,WNT5B	69 (22)
+Palbo28 vs Cycling0	CREB1	 	transcription regulator	 	-1.344	bias	4.71E-06	ANGPTL2,ARHGAP33,CAMK4,EDN1,EGR1,FOS,FOSB,IER2,MEST,MSMO1,NREP,SCD,SLC19A1	21 (4)
+Doxo21 vs Doxo3	WBP2	 	transcription regulator	 	-0.896	 	4.96E-06	CDK15,COL4A1,COL6A3,EGR1,LINC00324,SLC1A3	 
+Doxo21 vs Doxo3	RBL1	 	transcription regulator	 	1.970	bias	4.97E-06	BCL2L11,FOS,HES1,SKP2,TERT	39 (18)
+Doxo14 vs Cycling0	ELK1	 	transcription regulator	Inhibited	-2.162	bias	5.18E-06	EGR1,FOS,FOSB,MIR17HG,SKP2,TERT	52 (15)
+Doxo21 vs Cycling0	TP53	 	transcription regulator	 	-0.264	 	5.22E-06	BCL2L11,CCN2,CGB7,COL4A1,COL4A2,CXCL12,EDN1,EGR1,FOS,G6PD,GLI2,GPR85,HES1,IL27RA,ITGB4,KIF18A,MIR17HG,OTX1,PHGDH,PIK3CD,PSRC1,RAB11FIP1,RGS16,SCD,SKP2,SLC19A1,SLC7A5,TERT,TPM1,WNT3,WNT5B	64 (21)
+Doxo14 vs Cycling0	RYBP	 	transcription regulator	 	 	 	5.30E-06	CCN2,FOSB,GLI2,WNT3,WNT5B	 
+Doxo21 vs Cycling0	RYBP	 	transcription regulator	 	 	 	5.89E-06	CCN2,FOSB,GLI2,WNT3,WNT5B	 
+Palbo28 vs Cycling0	TCF7L1	 	transcription regulator	Activated	2.449	 	6.91E-06	COL4A1,COL4A2,KLF2,NID1,SP5,TNFRSF19	43 (7)
+Palbo14 vs Cycling0	ELK1	 	transcription regulator	Inhibited	-2.162	bias	7.16E-06	EGR1,FOS,FOSB,MIR17HG,SKP2	20 (9)
+Doxo21 vs Doxo3	CTNNB1	 	transcription regulator	Inhibited	-2.556	bias	7.67E-06	BCL2L11,CCN2,COL4A1,COL4A2,CTDSPL,CXCL12,EGR1,FOS,GLI2,HES1,MIR17HG,SLC7A5,SP5,TERT	43 (21)
+Doxo3 vs Cycling0	FOSL1	 	transcription regulator	 	0.114	 	8.19E-06	AXL,EDN1,EGR1,FOS,FOSB,ITGB4	23 (7)
+Doxo3 vs Cycling0	MYC	 	transcription regulator	 	-1.767	bias	8.94E-06	ADAMTS1,AXL,DLEU2,DLX6,EDN1,EGR1,FADS2,FBN2,FOS,G6PD,HES1,LHX9,MIR17HG,TERT,TNFRSF19,TPM1,WNT3	42 (23)
+Doxo3 vs Cycling0	TP53	 	transcription regulator	 	-0.811	 	9.14E-06	CGB7,CXCL12,EDN1,EGR1,FOS,G6PD,HES1,IL27RA,ITGB4,KIF18A,MIR17HG,NDUFA4L2,OTX1,PAK3,PIK3CD,PSRC1,RGS16,SCD,SLC19A1,TERT,TPM1,WNT3,WNT5B	42 (19)
+Doxo21 vs Cycling0	HTT	 	transcription regulator	 	-0.547	 	9.47E-06	BCL2L11,C1QTNF3,CAMK4,CBX2,CCN2,COL4A1,COL4A2,COL6A3,EGR1,FOS,GALNT16,NREP,PER1,RGS16,SLC1A3,TM4SF1	59 (20)
+Palbo28 vs Cycling0	YAP1	 	transcription regulator	Inhibited	-3.387	bias	9.67E-06	ADAMTS1,AXL,BCL2L11,COL4A1,COL4A2,CXCL12,EDN1,EGR1,FOS,FOSB,PHGDH,SKP2,TERT	56 (21)
+Doxo14 vs Cycling0	TCF7L1	 	transcription regulator	Activated	2.449	 	1.11E-05	COL4A1,COL4A2,KLF2,NID1,SP5,TNFRSF19	50 (7)
+Doxo21 vs Doxo3	SMAD7	 	transcription regulator	 	0.933	 	1.12E-05	BCL2L11,CCN2,COL6A3,CXCL12,NET1,TERT	36 (18)
+Palbo28 vs Palbo3	SOX4	 	transcription regulator	Inhibited	-2.607	bias	1.23E-05	CXCL12,EVI2A,FOS,H1-10,MEX3A,NREP,TNFRSF19	 
+Palbo28 vs Palbo3	EGR2	 	transcription regulator	 	-1.501	 	1.23E-05	ACAT2,BCL2L11,CAMK4,CISH,EGR1,FOS,MIR17HG,SOCS3	33 (17)
+Doxo3 vs Cycling0	TWIST1	 	transcription regulator	 	-0.823	bias	1.23E-05	ADAMTS1,AXL,CXCL12,FBN2,FOS,FREM2,OLFML3	 
+Doxo21 vs Cycling0	TCF7L1	 	transcription regulator	Activated	2.449	 	1.26E-05	COL4A1,COL4A2,KLF2,NID1,SP5,TNFRSF19	50 (7)
+Palbo3 vs Cycling0	TP63	 	transcription regulator	 	0.518	 	1.32E-05	ADAMTS1,AXL,EGR1,FOSB,HES1,OXTR,RASL11A,SLIT2,WNT5B	 
+Doxo21 vs Doxo3	FOXO1	 	transcription regulator	 	-1.777	bias	1.35E-05	BCL2L11,CCN2,COL4A1,COL4A2,EGR1,FOS,FOSB,KIF18A,KLF2	27 (21)
+Doxo3 vs Cycling0	MRTFA	 	transcription regulator	Inhibited	-2.414	bias	1.38E-05	CXCL12,EDN1,EGR1,FADS2,FOS,NREP,SLIT2	33 (12)
+Doxo21 vs Doxo3	TCF7L1	 	transcription regulator	Activated	2.236	 	1.45E-05	COL4A1,COL4A2,KLF2,NID1,SP5	 
+Palbo28 vs Cycling0	CTNNB1	 	transcription regulator	Inhibited	-2.187	bias	1.51E-05	AQP4,BCL2L11,COL4A1,COL4A2,CTDSPL,CXCL12,EDN1,EGR1,FOS,GDNF,HES1,MIR17HG,SP5,TERT,TNFRSF19,WNT3,WNT5B	58 (21)
+Doxo14 vs Doxo3	YAP1	 	transcription regulator	Inhibited	-2.919	bias	1.58E-05	CCN2,COL4A1,COL4A2,CXCL12,FOSB,GLI2,PHGDH,SKP2,SLC7A5	31 (16)
+Doxo21 vs Doxo3	HNRNPD	 	transcription regulator	 	 	 	1.66E-05	FOS,KLF2,TERT	 
+Doxo3 vs Cycling0	JUN	 	transcription regulator	 	-1.634	bias	1.72E-05	ADAMTS6,AXL,EDN1,FOS,FOSB,HES1,ITGB4,PAK3,SLC19A1,SOCS3	35 (17)
+Doxo21 vs Doxo3	FOXC1	 	transcription regulator	 	0.447	bias	1.76E-05	BCL2L11,CXCL12,EGR1,FOS,FOSB,KLF2	35 (17)
+Doxo14 vs Doxo3	WBP2	 	transcription regulator	 	-1.387	 	1.78E-05	CDK15,COL4A1,COL6A3,LINC00324,SLC1A3	 
+Palbo28 vs Cycling0	MYC	 	transcription regulator	Inhibited	-2.032	bias	1.84E-05	ADAMTS1,AXL,BCL2L11,COL4A1,COL4A2,COL6A3,CTDSPL,DLEU2,EDN1,EGR1,FADS2,FBN2,FOS,G6PD,HES1,MIR17HG,SKP2,TERT,TNFRSF19,WNT3	52 (23)
+Doxo21 vs Cycling0	FOS	-7.182	transcription regulator	 	0.217	bias	1.93E-05	BCL2L11,CCN2,EDN1,EGR1,FOS,FOSB,GPSM2,ITGB4,NET1,RAB11FIP1,SLC19A1,SOCS3,TPM1	63 (21)
+Palbo14 vs Cycling0	FOXQ1	 	transcription regulator	 	 	 	1.95E-05	FOXF2,SP5,WNT3	 
+Palbo28 vs Palbo3	MRTFA	 	transcription regulator	Inhibited	-2.414	bias	2.08E-05	CXCL12,EDN1,EGR1,FADS2,FOS,NREP,SULT1E1	27 (11)
+Doxo21 vs Cycling0	SMAD7	 	transcription regulator	 	1.192	bias	2.09E-05	BCL2L11,CCN2,COL6A3,CXCL12,NET1,SCD,TERT	56 (19)
+Doxo14 vs Cycling0	TWIST1	 	transcription regulator	 	-1.826	bias	2.17E-05	ADAMTS1,AXL,CBX2,COL4A1,CXCL12,FBN2,FOS,OLFML3	 
+Doxo14 vs Cycling0	JUN	 	transcription regulator	Inhibited	-2.136	bias	2.51E-05	ADAMTS6,ANGPTL2,AXL,CCN2,EDN1,FOS,FOSB,HES1,ITGB4,OXTR,PAK3,SLC19A1	67 (23)
+Doxo21 vs Cycling0	EGR2	 	transcription regulator	 	-1.746	bias	2.58E-05	ACAT2,BCL2L11,CAMK4,CISH,EGR1,FOS,MIR17HG,SLC1A3,SOCS3	37 (15)
+Doxo14 vs Cycling0	HMG20A	 	transcription regulator	Inhibited	-2.449	bias	2.66E-05	AXL,CCN2,EDN1,FADS2,PTGER2,RGS16	 
+Palbo28 vs Palbo3	RB1	 	transcription regulator	Activated	2.132	 	2.69E-05	BCL2L11,COL4A1,COL4A2,EGR1,FOS,FOSB,GPR85,HES1,RYR3,TERT	37 (20)
+Doxo21 vs Cycling0	FOXO1	 	transcription regulator	 	-1.986	bias	2.87E-05	BCL2L11,CAMK4,CCN2,COL4A1,COL4A2,EDN1,EGR1,FOS,FOSB,KIF18A,KLF2	55 (24)
+Palbo28 vs Palbo3	TCF7L1	 	transcription regulator	Activated	2.236	 	2.89E-05	COL4A1,COL4A2,NID1,SP5,TNFRSF19	29 (7)
+Doxo14 vs Doxo3	SPDEF	 	transcription regulator	Activated	2.000	bias	2.95E-05	CCN2,COL4A1,COL4A2,COL6A3	 
+Doxo14 vs Cycling0	HTT	 	transcription regulator	 	-0.063	 	2.98E-05	C1QTNF3,CAMK4,CBX2,CCN2,COL4A1,COL4A2,COL6A3,EGR1,FOS,GALNT16,NREP,PER1,RGS16,SLC1A3,TM4SF1	51 (14)
+Doxo21 vs Cycling0	HMG20A	 	transcription regulator	Inhibited	-2.449	bias	3.00E-05	AXL,CCN2,EDN1,FADS2,PTGER2,RGS16	 
+Palbo28 vs Cycling0	PPARGC1A	 	transcription regulator	 	1.488	bias	3.08E-05	ADAMTS1,COL6A3,EDN1,FOS,INPP5J,INSIG1,ITGB4,MSMO1,OLFML3,SLC19A1,SOCS3	56 (14)
+Doxo14 vs Cycling0	SREBF2	 	transcription regulator	Inhibited	-2.401	bias	3.08E-05	CCN2,FADS2,G6PD,GLI2,INSIG1,MSMO1	47 (13)
+Doxo21 vs Cycling0	JUN	 	transcription regulator	Inhibited	-2.137	bias	3.11E-05	ADAMTS6,ANGPTL2,AXL,BCL2L11,CCN2,EDN1,FOS,FOSB,HES1,ITGB4,SLC19A1,SOCS3	43 (15)
+Doxo21 vs Doxo3	FOXO3	 	transcription regulator	 	-0.809	 	3.17E-05	BCL2L11,CCN2,COL4A1,COL4A2,EGR1,FOS,FOSB,SKP2	33 (21)
+Doxo14 vs Cycling0	FOXO3	 	transcription regulator	 	-1.030	 	3.32E-05	AQP4,CCN2,COL4A1,COL4A2,EGR1,FOS,FOSB,GDPD3,SKP2,SLIT2	56 (17)
+Doxo21 vs Cycling0	SREBF2	 	transcription regulator	Inhibited	-2.401	bias	3.48E-05	CCN2,FADS2,G6PD,GLI2,INSIG1,MSMO1	48 (14)
+Palbo28 vs Cycling0	RBL1	 	transcription regulator	 	1.970	bias	3.50E-05	BCL2L11,FOS,HES1,SKP2,TERT	60 (20)
+Palbo28 vs Cycling0	CREBBP	 	transcription regulator	 	-1.287	bias	3.51E-05	AXL,CAMK4,CXCL12,EGR1,EVI2A,FOS,FOSB,KLF2,SOCS3,WNT5B	48 (16)
+Doxo21 vs Doxo3	GLI3	 	transcription regulator	 	-0.655	 	3.58E-05	EGR1,FOSB,GLI2,KLF2,TERT	 
+Palbo28 vs Cycling0	HMGA1	 	transcription regulator	 	-0.310	bias	3.59E-05	COL4A1,COL4A2,EGR1,FOS,IER2,INSIG1,KLF2	44 (12)
+Palbo28 vs Cycling0	EZH2	 	transcription regulator	 	0.899	 	3.74E-05	AXL,BCL2L11,COL4A1,DENND2A,EGR1,FADS2,FOXF2,KLF2,SOCS3,TERT,WNT3	51 (18)
+Doxo21 vs Cycling0	TCF7	 	transcription regulator	 	1.000	 	3.90E-05	ADAMTS6,CISH,FOS,FOSB,HES1,IL27RA,MSMO1,PTGER2,SOCS3,TNFRSF19	 
+Doxo21 vs Doxo3	EZH2	 	transcription regulator	 	1.229	 	3.93E-05	BCL2L11,CGB7,COL4A1,DENND2A,EGR1,FOXF2,KLF2,SLC1A3,TERT	33 (11)
+Palbo28 vs Palbo3	SOX17	 	transcription regulator	 	0.339	 	3.95E-05	COL4A1,COL4A2,FOS,G6PD	 
+Doxo21 vs Cycling0	FOXO3	 	transcription regulator	 	-1.104	 	3.99E-05	BCL2L11,CCN2,COL4A1,COL4A2,EGR1,FOS,FOSB,GDPD3,SKP2,SLIT2	62 (21)
+Doxo21 vs Cycling0	SNAI1	 	transcription regulator	 	-1.400	 	4.02E-05	AXL,CCN2,FOS,GLI2,SOCS3,TPM1,WNT5B	64 (20)
+Doxo14 vs Doxo3	CTNNB1	 	transcription regulator	 	-1.580	bias	4.09E-05	AQP4,CCN2,COL4A1,COL4A2,CXCL12,GLI2,HES1,LFNG,SLC7A5,SP5,TNFRSF19	29 (11)
+Doxo3 vs Cycling0	HMG20A	 	transcription regulator	Inhibited	-2.236	bias	4.43E-05	AXL,EDN1,FADS2,PTGER2,RGS16	 
+Palbo28 vs Palbo3	SMAD3	 	transcription regulator	 	-1.625	bias	4.46E-05	BCL2L11,COL4A1,COL4A2,EDN1,EGR1,FBN2,FOS,TERT	36 (19)
+Doxo14 vs Doxo3	TP53	 	transcription regulator	 	-0.726	 	4.60E-05	CCN2,COL4A1,COL4A2,CXCL12,G6PD,GLI2,GPR85,HES1,KIF18A,NDUFA4L2,PHGDH,PSRC1,RGS16,SKP2,SLC19A1,SLC7A5,TINAGL1	31 (12)
+Doxo21 vs Doxo3	RELA	 	transcription regulator	Inhibited	-2.165	bias	4.69E-05	BCL2L11,CCN2,EGR1,FOS,FOSB,GLI2,HES1,MIR17HG,TERT	37 (21)
+Palbo28 vs Cycling0	FOSL1	 	transcription regulator	 	0.114	 	5.13E-05	AXL,EDN1,EGR1,FOS,FOSB,ITGB4	39 (11)
+Doxo21 vs Doxo3	MYC	 	transcription regulator	 	-1.777	bias	5.20E-05	BCL2L11,COL4A1,COL4A2,COL6A3,CTDSPL,DLEU2,EGR1,FOS,GLI2,HES1,IMPA2,MIR17HG,SKP2,SLC7A5,TERT	37 (16)
+Palbo28 vs Cycling0	HNRNPD	 	transcription regulator	 	 	 	5.53E-05	FOS,KLF2,TERT	 
+Doxo21 vs Cycling0	RBL1	 	transcription regulator	 	1.970	bias	5.77E-05	BCL2L11,FOS,HES1,SKP2,TERT	68 (22)
+Palbo28 vs Palbo3	CREB1	 	transcription regulator	 	-1.354	bias	6.01E-05	ANGPTL2,CAMK4,EDN1,EGR1,FOS,FOSB,IER2,MEST,NREP,SCD	23 (9)
+Doxo14 vs Cycling0	HMGA1	 	transcription regulator	 	-0.310	bias	6.10E-05	COL4A1,COL4A2,EGR1,FOS,IER2,INSIG1,KLF2	60 (13)
+Palbo28 vs Cycling0	FOXO1	 	transcription regulator	 	-1.759	bias	6.10E-05	BCL2L11,CAMK4,COL4A1,COL4A2,EDN1,EGR1,FOS,FOSB,KIF18A,KLF2	50 (21)
+Doxo3 vs Cycling0	YAP1	 	transcription regulator	Inhibited	-2.765	bias	6.11E-05	ADAMTS1,AXL,CGB7,CXCL12,EDN1,EGR1,FOS,FOSB,TERT,TPM1	48 (21)
+Doxo21 vs Cycling0	POU5F1	 	transcription regulator	Inhibited	-2.082	bias	6.20E-05	B3GNT7,BCL2L11,CXCL12,GLI2,KLF2,OTX1,SOCS3,TERT,TNFRSF19,WNT3	56 (10)
+Doxo3 vs Cycling0	PPARGC1A	 	transcription regulator	 	1.845	 	6.25E-05	ADAMTS1,EDN1,FOS,INSIG1,ITGB4,MSMO1,OLFML3,SLC19A1,SOCS3	40 (15)
+Doxo21 vs Cycling0	SNAI2	 	transcription regulator	 	-0.440	 	6.31E-05	AXL,BCL2L11,CCN2,CXCL12,ITGB4,MYO16-AS1	55 (10)
+Doxo14 vs Cycling0	DACH1	 	transcription regulator	 	1.982	bias	6.42E-05	EGR1,FOS,IER2,PAK3	 
+Palbo28 vs Cycling0	SOX4	 	transcription regulator	Inhibited	-2.607	bias	6.54E-05	CXCL12,EVI2A,FOS,H1-10,MEX3A,NREP,TNFRSF19	 
+Palbo28 vs Cycling0	FOXQ1	 	transcription regulator	 	 	 	6.69E-05	FOXF2,SP5,WNT3	 
+Doxo3 vs Cycling0	EGR2	 	transcription regulator	 	-1.231	 	6.80E-05	ACAT2,CAMK4,CISH,EGR1,FOS,MIR17HG,SOCS3	27 (14)
+Doxo21 vs Doxo3	HTT	 	transcription regulator	 	-1.195	 	6.96E-05	BCL2L11,C1QTNF3,CBX2,CCN2,COL4A1,COL4A2,COL6A3,EGR1,FOS,RGS16,SLC1A3	34 (19)
+Doxo21 vs Cycling0	DACH1	 	transcription regulator	 	1.067	bias	6.98E-05	EGR1,FOS,IER2,SOCS3	39 (11)
+Doxo21 vs Cycling0	HMGA1	 	transcription regulator	 	-0.310	bias	6.99E-05	COL4A1,COL4A2,EGR1,FOS,IER2,INSIG1,KLF2	55 (13)
+Doxo14 vs Cycling0	HNRNPD	 	transcription regulator	 	 	 	7.08E-05	FOS,KLF2,TERT	 
+Doxo14 vs Cycling0	FOS	-3.717	transcription regulator	 	0.217	bias	7.10E-05	CCN2,EDN1,EGR1,FOS,FOSB,GPSM2,ITGB4,NET1,OXTR,RAB11FIP1,SLC19A1,TPM1	61 (17)
+Palbo28 vs Palbo3	HMGA1	 	transcription regulator	 	0.000	bias	7.32E-05	COL4A1,COL4A2,EGR1,FOS,IER2,INSIG1	35 (16)
+Doxo3 vs Cycling0	EZH2	 	transcription regulator	 	-0.492	 	7.36E-05	AXL,CGB7,DENND2A,EGR1,FADS2,PER1,SOCS3,TERT,WNT3	32 (13)
+Palbo28 vs Palbo3	FOS	-5.021	transcription regulator	 	0.045	bias	7.40E-05	BCL2L11,EDN1,EGR1,FOS,FOSB,GPSM2,ITGB4,OXTR,RAB11FIP1,SOCS3	36 (20)
+Palbo14 vs Cycling0	FOSL1	 	transcription regulator	 	0.485	 	7.43E-05	AXL,EDN1,EGR1,FOS,FOSB	16 (5)
+Doxo21 vs Cycling0	HNRNPD	 	transcription regulator	 	 	 	7.55E-05	FOS,KLF2,TERT	 
+Doxo14 vs Cycling0	WBP2	 	transcription regulator	 	-0.896	 	7.82E-05	CDK15,COL4A1,COL6A3,EGR1,LINC00324,SLC1A3	 
+Doxo21 vs Doxo3	TWIST1	 	transcription regulator	 	-0.029	bias	7.96E-05	BCL2L11,CBX2,COL4A1,CXCL12,FOS,OLFML3	 
+Palbo28 vs Cycling0	EGR2	 	transcription regulator	 	-1.501	bias	7.97E-05	ACAT2,BCL2L11,CAMK4,CISH,EGR1,FOS,MIR17HG,SOCS3	42 (17)
+Doxo21 vs Cycling0	PPARGC1A	 	transcription regulator	Activated	2.270	bias	8.04E-05	ADAMTS1,CCN2,COL6A3,EDN1,FOS,INSIG1,ITGB4,MSMO1,OLFML3,SLC19A1,SOCS3	65 (23)
+Doxo14 vs Doxo3	TCF7L1	 	transcription regulator	Activated	2.000	 	8.09E-05	COL4A1,COL4A2,SP5,TNFRSF19	16 (6)
+Doxo14 vs Cycling0	FOSL1	 	transcription regulator	 	0.114	 	8.14E-05	AXL,EDN1,EGR1,FOS,FOSB,ITGB4	54 (12)
+Doxo21 vs Cycling0	CREBBP	 	transcription regulator	 	-1.287	bias	8.52E-05	AXL,CAMK4,CXCL12,EGR1,EVI2A,FOS,FOSB,KLF2,SOCS3,WNT5B	61 (19)
+Doxo14 vs Cycling0	FOXQ1	 	transcription regulator	 	 	 	8.57E-05	FOXF2,SP5,WNT3	 
+Doxo21 vs Doxo3	TP53	 	transcription regulator	 	-0.092	 	8.65E-05	BCL2L11,CCN2,CGB7,COL4A1,COL4A2,CXCL12,EGR1,FOS,GLI2,HES1,KIF18A,MIR17HG,NDUFA4L2,PHGDH,PSRC1,RGS16,SKP2,SLC7A5,TERT,TINAGL1	36 (19)
+Doxo21 vs Cycling0	FOXQ1	 	transcription regulator	 	 	 	9.13E-05	FOXF2,SP5,WNT3	 
+Doxo21 vs Cycling0	FOSL1	 	transcription regulator	 	0.114	 	9.17E-05	AXL,EDN1,EGR1,FOS,FOSB,ITGB4	47 (12)
+Palbo28 vs Cycling0	TCF7	 	transcription regulator	 	0.707	 	9.53E-05	ADAMTS6,CISH,FOS,FOSB,HES1,MSMO1,PTGER2,SOCS3,TNFRSF19	31 (7)
+Palbo14 vs Cycling0	CREB1	 	transcription regulator	 	-1.214	bias	9.56E-05	ARHGAP33,CAMK4,EDN1,EGR1,FOS,FOSB,MSMO1,SCD,SLC19A1	22 (11)
+Doxo21 vs Doxo3	SPDEF	 	transcription regulator	Activated	2.000	bias	9.57E-05	CCN2,COL4A1,COL4A2,COL6A3	 
+Palbo14 vs Cycling0	ZNF467	 	transcription regulator	 	 	 	9.61E-05	CISH,FOS	 
+Palbo14 vs Cycling0	KIDINS220	 	transcription regulator	 	 	 	9.61E-05	EGR1,FOS	23 (11)
+Palbo28 vs Cycling0	FOXO3	 	transcription regulator	 	-0.758	 	9.71E-05	AQP4,BCL2L11,COL4A1,COL4A2,EGR1,FOS,FOSB,SKP2,SLIT2	55 (17)
+Doxo21 vs Doxo3	KIDINS220	 	transcription regulator	 	 	 	9.84E-05	EGR1,FOS	25 (11)
+Doxo21 vs Cycling0	VHL	 	transcription regulator	 	0.625	bias	9.92E-05	AXL,BCL2L11,CCN2,CXCL12,NREP,SKP2,SLC1A3	64 (20)
+Palbo14 vs Cycling0	SOX9	 	transcription regulator	 	-0.447	bias	1.00E-04	ADAMTS1,CELSR2,FOS,HES1,WNT3	 
+Doxo21 vs Doxo3	MEF2D	 	transcription regulator	 	-1.715	bias	1.01E-04	CCN2,FOS,FOSB,KLF2	 
+Palbo28 vs Cycling0	TP53	 	transcription regulator	 	0.068	 	1.04E-04	BCL2L11,COL4A1,COL4A2,CXCL12,EDN1,EGR1,FOS,G6PD,GPR85,HES1,ITGB4,KIF18A,MIR17HG,PAK3,PHGDH,PIK3CD,PSRC1,RAB11FIP1,RGS16,SCD,SKP2,SLC19A1,TERT,TINAGL1,WNT3,WNT5B	51 (19)
+Palbo28 vs Palbo3	YAP1	 	transcription regulator	Inhibited	-3.085	bias	1.05E-04	BCL2L11,COL4A1,COL4A2,CXCL12,EDN1,EGR1,FOS,FOSB,PHGDH,TERT	41 (20)
+Doxo3 vs Cycling0	CREBBP	 	transcription regulator	 	-0.927	bias	1.06E-04	AXL,CAMK4,CXCL12,EGR1,FOS,FOSB,SOCS3,WNT5B	41 (17)
+Doxo14 vs Cycling0	SMAD4	 	transcription regulator	 	-0.415	 	1.08E-04	CCN2,COL4A1,COL4A2,EDN1,FOS,PAK3,PTGER2,SCD,TERT,TPM1	62 (19)
+Palbo28 vs Palbo3	MRTFB	 	transcription regulator	Inhibited	-2.186	bias	1.08E-04	CXCL12,EDN1,EGR1,FADS2,NREP,SULT1E1	 
+Palbo28 vs Cycling0	SOX17	 	transcription regulator	 	0.339	 	1.08E-04	COL4A1,COL4A2,FOS,G6PD	 
+Palbo28 vs Cycling0	SMAD7	 	transcription regulator	 	0.808	bias	1.09E-04	BCL2L11,COL6A3,CXCL12,NET1,SCD,TERT	50 (15)
+Doxo14 vs Cycling0	MYCN	 	transcription regulator	 	0.147	 	1.09E-04	ADAMTS1,CCN2,COL4A1,HES1,MIR17HG,OTX1,PHGDH,TERT,TPM1	52 (7)
+Doxo14 vs Cycling0	SOX4	 	transcription regulator	Inhibited	-2.607	bias	1.10E-04	CXCL12,EVI2A,FOS,H1-10,MEX3A,NREP,TNFRSF19	 
+Palbo28 vs Palbo3	VDR	 	transcription regulator	 	-0.816	 	1.15E-04	CISH,COL4A1,COL4A2,EDN1,EGR1,SOCS3,TERT	40 (21)
+Doxo14 vs Cycling0	SOX9	 	transcription regulator	 	0.128	bias	1.15E-04	ADAMTS1,CCN2,CELSR2,FOS,HES1,WNT3	49 (7)
+Doxo3 vs Cycling0	ZNF467	 	transcription regulator	 	 	 	1.15E-04	CISH,FOS	 
+Doxo3 vs Cycling0	KIDINS220	 	transcription regulator	 	 	 	1.15E-04	EGR1,FOS	23 (13)
+Doxo21 vs Cycling0	RELA	 	transcription regulator	Inhibited	-2.372	bias	1.19E-04	BCL2L11,CCN2,EDN1,EGR1,FOS,FOSB,GLI2,HES1,IER2,MIR17HG,TERT	61 (22)
+Doxo14 vs Cycling0	FOXO1	 	transcription regulator	 	-1.717	bias	1.22E-04	CAMK4,CCN2,COL4A1,COL4A2,EDN1,EGR1,FOS,FOSB,KIF18A,KLF2	61 (23)
+Doxo14 vs Cycling0	SP1	 	transcription regulator	 	-1.757	bias	1.26E-04	ADAMTS1,CCN2,CXCL12,EGR1,FADS2,FOS,FOXF2,HES1,MAZ,RAB11FIP1,SLC19A1,TERT	63 (17)
+Doxo21 vs Cycling0	SOX4	 	transcription regulator	Inhibited	-2.607	bias	1.26E-04	CXCL12,EVI2A,FOS,H1-10,MEX3A,NREP,TNFRSF19	 
+Doxo21 vs Cycling0	MYCN	 	transcription regulator	 	0.147	 	1.28E-04	ADAMTS1,CCN2,COL4A1,HES1,MIR17HG,OTX1,PHGDH,TERT,TPM1	45 (7)
+Doxo21 vs Cycling0	SOX9	 	transcription regulator	 	0.128	bias	1.30E-04	ADAMTS1,CCN2,CELSR2,FOS,HES1,WNT3	49 (7)
+Palbo28 vs Palbo3	ZNF467	 	transcription regulator	 	 	 	1.31E-04	CISH,FOS	 
+Palbo28 vs Palbo3	KIDINS220	 	transcription regulator	 	 	 	1.31E-04	EGR1,FOS	23 (11)
+Palbo28 vs Cycling0	EP300	 	transcription regulator	Inhibited	-2.156	bias	1.35E-04	AXL,CAMK4,EDN1,EGR1,EVI2A,FOS,SKP2,SOCS3,TERT,WNT5B	51 (17)
+Doxo21 vs Cycling0	YY1	 	transcription regulator	 	1.000	 	1.42E-04	BCL2L11,CXCL12,EDN1,EGR1,FOS,KLF2,PSRC1,SLC1A3,TPM1	60 (14)
+Palbo28 vs Palbo3	RELA	 	transcription regulator	 	-0.939	bias	1.43E-04	BCL2L11,EDN1,EGR1,FOS,FOSB,HES1,IER2,MIR17HG,TERT	42 (21)
+Palbo28 vs Cycling0	FOS	-5.884	transcription regulator	 	-0.151	bias	1.46E-04	BCL2L11,EDN1,EGR1,FOS,FOSB,GPSM2,ITGB4,NET1,RAB11FIP1,SLC19A1,SOCS3	54 (19)
+Doxo14 vs Cycling0	SOX17	 	transcription regulator	 	0.339	 	1.49E-04	COL4A1,COL4A2,FOS,G6PD	 
+Doxo21 vs Cycling0	SP1	 	transcription regulator	 	-1.757	bias	1.54E-04	ADAMTS1,CCN2,CXCL12,EGR1,FADS2,FOS,FOXF2,HES1,MAZ,RAB11FIP1,SLC19A1,TERT	57 (19)
+Palbo28 vs Palbo3	FOSL1	 	transcription regulator	 	0.640	 	1.54E-04	EDN1,EGR1,FOS,FOSB,ITGB4	28 (12)
+Doxo21 vs Doxo3	BCL3	 	transcription regulator	 	 	 	1.56E-04	CXCL12,EGR1,FOS,SKP2	34 (15)
+Palbo14 vs Cycling0	YAP1	 	transcription regulator	Inhibited	-2.603	bias	1.58E-04	ADAMTS1,AXL,CGB7,EDN1,EGR1,FOS,FOSB,PHGDH,SKP2	35 (20)
+Palbo14 vs Palbo3	JARID2	 	transcription regulator	 	 	 	1.58E-04	FADS2,INSIG1,SCD	 
+Doxo21 vs Cycling0	SOX17	 	transcription regulator	 	0.339	 	1.62E-04	COL4A1,COL4A2,FOS,G6PD	 
+Palbo28 vs Palbo3	CTNNB1	 	transcription regulator	Inhibited	-2.187	bias	1.63E-04	BCL2L11,COL4A1,COL4A2,CXCL12,EDN1,EGR1,FOS,GDNF,HES1,MIR17HG,SP5,TERT,TNFRSF19	41 (19)
+Doxo21 vs Doxo3	YY1	 	transcription regulator	 	1.446	 	1.64E-04	BCL2L11,CXCL12,EGR1,FOS,KLF2,PSRC1,SLC1A3	31 (8)
+Doxo14 vs Cycling0	SMAD7	 	transcription regulator	 	1.744	bias	1.71E-04	CCN2,COL6A3,CXCL12,NET1,SCD,TERT	59 (17)
+Doxo14 vs Cycling0	TCF7	 	transcription regulator	 	0.707	 	1.79E-04	ADAMTS6,CISH,FOS,FOSB,HES1,IL27RA,MSMO1,PTGER2,TNFRSF19	 
+Doxo14 vs Doxo3	TWIST1	 	transcription regulator	 	-1.240	bias	1.83E-04	CBX2,COL4A1,CXCL12,FREM2,OLFML3	 
+Palbo28 vs Palbo3	RBL1	 	transcription regulator	 	 	 	1.93E-04	BCL2L11,FOS,HES1,TERT	40 (19)
+Palbo14 vs Cycling0	Tle1	 	transcription regulator	 	 	 	2.01E-04	EGR1,FOS	14 (6)
+Palbo14 vs Cycling0	ZFX	 	transcription regulator	 	 	 	2.01E-04	SKP2,WNT3	 
+Palbo14 vs Cycling0	FOXC1	 	transcription regulator	 	0.625	bias	2.03E-04	DLX6,EGR1,FOS,FOSB,GDNF	19 (6)
+Palbo28 vs Cycling0	HMG20A	 	transcription regulator	Inhibited	-2.236	bias	2.04E-04	AXL,EDN1,FADS2,PTGER2,RGS16	 
+Doxo21 vs Doxo3	Tle1	 	transcription regulator	 	 	 	2.06E-04	EGR1,FOS	16 (7)
+Doxo3 vs Cycling0	SMAD3	 	transcription regulator	 	-1.392	bias	2.08E-04	ADAMTS1,EDN1,EGR1,FBN2,FOS,TERT,TPM1	33 (21)
+Palbo14 vs Palbo3	AIP	 	transcription regulator	 	 	 	2.08E-04	GDNF,HTR1D,RGS16	 
+Doxo14 vs Doxo3	RYBP	 	transcription regulator	 	 	 	2.10E-04	CCN2,FOSB,GLI2	 
+Palbo14 vs Cycling0	TCF7	 	transcription regulator	 	1.134	 	2.10E-04	CISH,FOS,FOSB,HES1,IL27RA,MSMO1,PTGER2	 
+Palbo14 vs Cycling0	ARID1A	 	transcription regulator	 	-0.113	 	2.14E-04	EDN1,EGR1,FOS,GDNF,HES1,LTBP4,PAK3,WNT3	33 (14)
+Doxo21 vs Cycling0	SRF	 	transcription regulator	Inhibited	-2.378	bias	2.15E-04	BCL2L11,CCN2,EGR1,FOS,FOSB,IER2,LMCD1,NET1,TPM1	63 (17)
+Doxo14 vs Cycling0	NOTCH1	 	transcription regulator	 	0.610	 	2.18E-04	CCN2,FOS,FOSB,GLI2,HES1,ITGB4,LFNG,WNT3	60 (18)
+Palbo28 vs Cycling0	ZNF467	 	transcription regulator	 	 	 	2.20E-04	CISH,FOS	 
+Palbo28 vs Cycling0	KIDINS220	 	transcription regulator	 	 	 	2.20E-04	EGR1,FOS	34 (11)
+Palbo28 vs Palbo3	SMAD4	 	transcription regulator	 	1.432	 	2.32E-04	COL4A1,COL4A2,EDN1,FOS,GDNF,PAK3,SCD,TERT	35 (16)
+Doxo3 vs Cycling0	FOS	-2.851	transcription regulator	 	0.252	bias	2.33E-04	EDN1,EGR1,FOS,FOSB,GPSM2,ITGB4,SLC19A1,SOCS3,TPM1	48 (18)
+Palbo28 vs Palbo3	TP53	 	transcription regulator	 	-0.456	 	2.39E-04	BCL2L11,COL4A1,COL4A2,CXCL12,EDN1,EGR1,FOS,G6PD,GPR85,HES1,ITGB4,MIR17HG,NDUFA4L2,OTX1,PAK3,PHGDH,RAB11FIP1,RGS16,SCD,TERT,TINAGL1	37 (19)
+Palbo28 vs Cycling0	RB1	 	transcription regulator	Activated	2.588	 	2.40E-04	BCL2L11,COL4A1,COL4A2,EGR1,FOS,FOSB,GPR85,HES1,SKP2,TERT	55 (21)
+Doxo14 vs Doxo3	MSGN1	 	transcription regulator	 	 	 	2.41E-04	HES1,LFNG	 
+Doxo3 vs Cycling0	Tle1	 	transcription regulator	 	 	 	2.41E-04	EGR1,FOS	20 (7)
+Palbo28 vs Cycling0	SP1	 	transcription regulator	 	-1.757	bias	2.47E-04	ADAMTS1,CXCL12,EGR1,FADS2,FOS,FOXF2,HES1,MAZ,RAB11FIP1,SLC19A1,TERT	52 (18)
+Doxo14 vs Doxo3	SOX17	 	transcription regulator	 	 	 	2.51E-04	COL4A1,COL4A2,G6PD	 
+Doxo21 vs Cycling0	NOTCH1	 	transcription regulator	 	0.610	 	2.53E-04	CCN2,FOS,FOSB,GLI2,HES1,ITGB4,LFNG,WNT3	50 (18)
+Palbo28 vs Palbo3	FOXO1	 	transcription regulator	 	-1.242	bias	2.58E-04	BCL2L11,CAMK4,COL4A1,COL4A2,EDN1,EGR1,FOS,FOSB	33 (21)
+Doxo14 vs Cycling0	ZNF467	 	transcription regulator	 	 	 	2.60E-04	CISH,FOS	 
+Doxo14 vs Cycling0	KIDINS220	 	transcription regulator	 	 	 	2.60E-04	EGR1,FOS	34 (11)
+Doxo14 vs Cycling0	SOX11	 	transcription regulator	Inhibited	-2.433	bias	2.62E-04	EGR1,IER2,MEX3A,NREP,TMSB15B,VASH2	 
+Doxo21 vs Cycling0	TRIM28	 	transcription regulator	Inhibited	-2.236	bias	2.68E-04	BCL2L11,EGR1,FOS,GDPD3,KLF2,LHX9	50 (19)
+Doxo21 vs Cycling0	ZNF467	 	transcription regulator	 	 	 	2.71E-04	CISH,FOS	 
+Doxo21 vs Cycling0	KIDINS220	 	transcription regulator	 	 	 	2.71E-04	EGR1,FOS	33 (11)
+Palbo28 vs Palbo3	Tle1	 	transcription regulator	 	 	 	2.74E-04	EGR1,FOS	20 (7)
+Doxo3 vs Cycling0	NFAT5	 	transcription regulator	 	1.014	 	2.79E-04	AQP4,CXCL12,EDN1,EGR1,PIK3CD,SLC7A2,SOCS3,WNT5B	 
+Doxo14 vs Cycling0	MTDH	 	transcription regulator	 	 	 	2.79E-04	CCN2,COL4A1,COL4A2,EGR1,FADS2,MSMO1	12 (2)
+Palbo28 vs Cycling0	SMAD4	 	transcription regulator	 	0.970	 	2.79E-04	COL4A1,COL4A2,EDN1,FOS,GDNF,PAK3,PTGER2,SCD,TERT	56 (20)
+Doxo14 vs Doxo3	FOXO3	 	transcription regulator	 	-0.140	 	2.93E-04	AQP4,CCN2,COL4A1,COL4A2,FOSB,SKP2	21 (7)
+Doxo21 vs Cycling0	SOX11	 	transcription regulator	Inhibited	-2.433	bias	2.94E-04	EGR1,IER2,MEX3A,NREP,TMSB15B,VASH2	 
+Doxo14 vs Cycling0	SNAI1	 	transcription regulator	 	-1.964	 	2.97E-04	AXL,CCN2,FOS,GLI2,TPM1,WNT5B	56 (14)
+Palbo14 vs Cycling0	JUN	 	transcription regulator	 	-1.628	bias	3.01E-04	AXL,EDN1,FOS,FOSB,GDNF,HES1,PAK3,SLC19A1	41 (20)
+Doxo14 vs Cycling0	PPARGC1A	 	transcription regulator	Activated	2.087	bias	3.07E-04	ADAMTS1,CCN2,COL6A3,EDN1,FOS,INSIG1,ITGB4,MSMO1,OLFML3,SLC19A1	61 (18)
+Palbo28 vs Palbo3	GLIS1	 	transcription regulator	 	 	 	3.08E-04	COL4A1,COL4A2,FBN2	 
+Palbo14 vs Cycling0	DACH1	 	transcription regulator	 	 	 	3.10E-04	EGR1,FOS,PAK3	 
+Doxo21 vs Cycling0	MTDH	 	transcription regulator	 	 	 	3.13E-04	CCN2,COL4A1,COL4A2,EGR1,FADS2,MSMO1	22 (4)
+Doxo21 vs Cycling0	EP300	 	transcription regulator	Inhibited	-2.156	bias	3.17E-04	AXL,CAMK4,EDN1,EGR1,EVI2A,FOS,SKP2,SOCS3,TERT,WNT5B	64 (19)
+Palbo14 vs Cycling0	EGR2	 	transcription regulator	 	-0.849	bias	3.19E-04	ACAT2,CAMK4,CISH,EGR1,FOS,MIR17HG	 
+Doxo3 vs Cycling0	EP300	 	transcription regulator	 	-1.932	bias	3.19E-04	AXL,CAMK4,EDN1,EGR1,FOS,SOCS3,TERT,WNT5B	43 (16)
+Doxo3 vs Cycling0	MAX	 	transcription regulator	 	 	 	3.24E-04	DLEU2,EDN1,FADS2,TERT	 
+Doxo21 vs Doxo3	EGR2	 	transcription regulator	 	-1.982	 	3.41E-04	ACAT2,BCL2L11,EGR1,FOS,MIR17HG,SLC1A3	35 (18)
+Doxo3 vs Cycling0	SNAI1	 	transcription regulator	 	 	 	3.45E-04	AXL,FOS,SOCS3,TPM1,WNT5B	27 (8)
+Palbo28 vs Palbo3	CEBPA	 	transcription regulator	 	-1.178	bias	3.49E-04	FADS2,FOS,H1-10,OXTR,SCD,SECTM1,SOCS3,TNFRSF19	18 (5)
+Doxo14 vs Cycling0	GLI3	 	transcription regulator	 	-0.655	 	3.52E-04	EGR1,FOSB,GLI2,KLF2,TERT	 
+Doxo21 vs Doxo3	HMGA1	 	transcription regulator	 	-0.371	bias	3.58E-04	COL4A1,COL4A2,EGR1,FOS,KLF2	39 (18)
+Doxo14 vs Cycling0	CREBBP	 	transcription regulator	 	-1.287	bias	3.58E-04	AXL,CAMK4,CXCL12,EGR1,EVI2A,FOS,FOSB,KLF2,WNT5B	57 (17)
+Doxo3 vs Cycling0	SP1	 	transcription regulator	 	-1.763	bias	3.63E-04	ADAMTS1,CXCL12,EGR1,FADS2,FOS,HES1,MAZ,SLC19A1,TERT	40 (18)
+Doxo3 vs Cycling0	ILF3	 	transcription regulator	 	0.463	bias	3.64E-04	ACAT2,FADS2,FOS,SCD	 
+Palbo28 vs Cycling0	NFKBIA	 	transcription regulator	Inhibited	-2.137	bias	3.67E-04	AXL,CXCL12,FOS,FOXF2,HES1,MEX3A,NID1,RGS16,SOCS3	53 (19)
+Palbo28 vs Cycling0	SNAI2	 	transcription regulator	 	-0.068	 	3.77E-04	AXL,BCL2L11,CXCL12,ITGB4,MYO16-AS1	17 (3)
+Doxo3 vs Cycling0	TFAP2B	 	transcription regulator	 	 	 	3.78E-04	EDN1,SLC19A1,TERT	 
+Doxo21 vs Cycling0	GLI3	 	transcription regulator	 	-0.655	 	3.89E-04	EGR1,FOSB,GLI2,KLF2,TERT	 
+Doxo14 vs Cycling0	SOX2	 	transcription regulator	 	0.228	bias	3.97E-04	AQP4,CCN2,CXCL12,FOS,GLI2,OTX1,SKP2,TERT,TNFRSF19,WNT3	57 (11)
+Palbo14 vs Cycling0	GLI1	 	transcription regulator	 	1.414	 	4.01E-04	EGR1,FOS,HES1,IL27RA,INSIG1,SCD,SKP2,TNFAIP8L1	32 (9)
+Doxo21 vs Doxo3	STAT3	 	transcription regulator	Inhibited	-2.706	bias	4.14E-04	ANGPTL2,BCL2L11,CCN2,CXCL12,EGR1,FOS,KLF2,SKP2,SLC1A3,TERT	37 (22)
+Doxo3 vs Cycling0	TP73	 	transcription regulator	Inhibited	-2.498	bias	4.15E-04	AXL,EDN1,EGR1,G6PD,HES1,ITGB4,PSRC1,TERT	43 (17)
+Palbo28 vs Palbo3	SOX11	 	transcription regulator	Inhibited	-2.219	bias	4.16E-04	EGR1,IER2,MEX3A,NREP,VASH2	 
+Doxo14 vs Cycling0	RELA	 	transcription regulator	Inhibited	-2.372	bias	4.34E-04	CCN2,EDN1,EGR1,FOS,FOSB,GLI2,HES1,IER2,MIR17HG,TERT	66 (21)
+Palbo28 vs Cycling0	CEBPA	 	transcription regulator	 	-0.564	bias	4.35E-04	FADS2,FOS,H1-10,KLF2,PIK3CD,SCD,SECTM1,SOCS3,TNFRSF19	21 (4)
+Doxo14 vs Cycling0	HIF1A	 	transcription regulator	Inhibited	-2.902	bias	4.54E-04	ADAMTS1,AQP4,AXL,CCN2,CTDSPL,CXCL12,EDN1,FOS,NUDCD2,PHGDH,TERT	60 (16)
+Palbo28 vs Cycling0	Tle1	 	transcription regulator	 	 	 	4.59E-04	EGR1,FOS	30 (7)
+Palbo28 vs Cycling0	ZFX	 	transcription regulator	 	 	 	4.59E-04	SKP2,WNT3	 
+Doxo14 vs Cycling0	TEAD4	 	transcription regulator	 	-0.577	bias	4.60E-04	CCN2,CGB7,EDN1,GLI2,TPM1	40 (7)
+Doxo21 vs Doxo3	VHL	 	transcription regulator	 	0.625	bias	4.62E-04	BCL2L11,CCN2,CXCL12,SKP2,SLC1A3	35 (19)
+Palbo28 vs Palbo3	ILF3	 	transcription regulator	 	0.463	bias	4.63E-04	ACAT2,FADS2,FOS,SCD	 
+Doxo21 vs Cycling0	SOX2	 	transcription regulator	 	0.228	bias	4.71E-04	CCN2,CXCL12,FOS,GLI2,LMCD1,OTX1,SKP2,TERT,TNFRSF19,WNT3	53 (11)
+Palbo14 vs Palbo3	TP63	 	transcription regulator	 	-0.239	 	4.81E-04	COL6A3,HES1,NID1,OXTR,PHGDH,RASL11A,TINAGL1	 
+Doxo3 vs Cycling0	RELA	 	transcription regulator	Inhibited	-2.165	bias	4.82E-04	EDN1,EGR1,FOS,FOSB,HES1,IER2,MIR17HG,TERT	42 (23)
+Palbo28 vs Cycling0	WBP2	 	transcription regulator	 	-0.555	 	4.96E-04	CDK15,COL4A1,COL6A3,EGR1,LINC00324	 
+Doxo21 vs Cycling0	TEAD4	 	transcription regulator	 	-0.577	bias	5.07E-04	CCN2,CGB7,EDN1,GLI2,TPM1	34 (7)
+Doxo21 vs Doxo3	RYBP	 	transcription regulator	 	 	 	5.08E-04	CCN2,FOSB,GLI2	 
+Doxo21 vs Doxo3	FOXO4	 	transcription regulator	 	-0.218	 	5.11E-04	BCL2L11,CCN2,COL4A1,COL4A2	23 (5)
+Doxo3 vs Cycling0	POU5F1	 	transcription regulator	 	-1.296	bias	5.13E-04	B3GNT7,CXCL12,OTX1,SOCS3,TERT,TNFRSF19,WNT3	9 (2)
+Palbo28 vs Palbo3	TCF7	 	transcription regulator	 	0.816	 	5.41E-04	ADAMTS6,CISH,FOS,FOSB,HES1,SOCS3,TNFRSF19	24 (7)
+Doxo14 vs Cycling0	Tle1	 	transcription regulator	 	 	 	5.41E-04	EGR1,FOS	27 (6)
+Doxo14 vs Cycling0	ZFX	 	transcription regulator	 	 	 	5.41E-04	SKP2,WNT3	 
+Palbo28 vs Cycling0	NFAT5	 	transcription regulator	 	0.695	 	5.44E-04	AQP4,COL4A1,CXCL12,EDN1,EGR1,PIK3CD,SLC7A2,SOCS3,WNT5B	44 (7)
+Doxo21 vs Cycling0	HIF1A	 	transcription regulator	Inhibited	-2.444	bias	5.45E-04	ADAMTS1,AXL,CCN2,CTDSPL,CXCL12,EDN1,FOS,NUDCD2,PHGDH,SOCS3,TERT	46 (16)
+Doxo21 vs Cycling0	Tle1	 	transcription regulator	 	 	 	5.65E-04	EGR1,FOS	28 (7)
+Doxo21 vs Cycling0	ZFX	 	transcription regulator	 	 	 	5.65E-04	SKP2,WNT3	 
+Palbo28 vs Cycling0	VDR	 	transcription regulator	 	-0.816	 	5.66E-04	CISH,COL4A1,COL4A2,EDN1,EGR1,SOCS3,TERT	57 (22)
+Palbo28 vs Cycling0	NFATC2	 	transcription regulator	 	-1.102	bias	5.96E-04	AXL,BCL2L11,CISH,EDN1,SOCS3,TERT	44 (17)
+Doxo3 vs Cycling0	IKZF1	 	transcription regulator	 	0.561	bias	6.00E-04	AXL,CISH,FOS,G6PD,HES1,SLC19A1	30 (7)
+Doxo21 vs Cycling0	SMAD4	 	transcription regulator	 	-0.946	 	6.02E-04	CCN2,COL4A1,COL4A2,EDN1,FOS,PTGER2,SCD,TERT,TPM1	67 (21)
+Doxo21 vs Doxo3	SOX17	 	transcription regulator	 	 	 	6.05E-04	COL4A1,COL4A2,FOS	27 (7)
+Doxo21 vs Doxo3	TFAP4	 	transcription regulator	 	 	 	6.05E-04	EGR1,FOS,GLI2	 
+Doxo21 vs Cycling0	SMAD2	 	transcription regulator	Inhibited	-2.183	bias	6.07E-04	BCL2L11,CCN2,HES1,NET1,TPM1	53 (11)
+Palbo14 vs Cycling0	MYC	 	transcription regulator	Inhibited	-2.038	bias	6.11E-04	ADAMTS1,AXL,COL6A3,DLEU2,DLX6,EDN1,EGR1,FOS,HES1,LHX9,MIR17HG,SKP2,WNT3	31 (21)
+Doxo14 vs Cycling0	SPDEF	 	transcription regulator	Activated	2.000	bias	6.12E-04	CCN2,COL4A1,COL4A2,COL6A3	 
+Doxo14 vs Cycling0	YY1	 	transcription regulator	 	1.000	 	6.30E-04	CXCL12,EDN1,EGR1,FOS,KLF2,PSRC1,SLC1A3,TPM1	58 (14)
+Doxo14 vs Cycling0	ZEB1	 	transcription regulator	 	-1.177	 	6.33E-04	CCN2,EDN1,FADS2,FOSB,ITGB4	40 (12)
+Doxo14 vs Cycling0	VHL	 	transcription regulator	 	 	 	6.35E-04	AXL,CCN2,CXCL12,NREP,SKP2,SLC1A3	44 (12)
+Doxo3 vs Cycling0	RYBP	 	transcription regulator	 	 	 	6.40E-04	FOSB,WNT3,WNT5B	 
+Palbo3 vs Cycling0	MAML1	 	transcription regulator	 	 	 	6.40E-04	EGR1,HES1	 
+Doxo14 vs Cycling0	MEF2D	 	transcription regulator	 	-1.715	bias	6.43E-04	CCN2,FOS,FOSB,KLF2	14 (3)
+Palbo14 vs Cycling0	TP53	 	transcription regulator	 	-0.321	 	6.47E-04	CGB7,EDN1,EGR1,FOS,GPR85,HES1,IL27RA,KIF18A,MIR17HG,PAK3,PHGDH,PIK3CD,PSRC1,SCD,SKP2,SLC19A1,TINAGL1,WNT3	33 (17)
+Palbo28 vs Cycling0	GLIS1	 	transcription regulator	 	 	 	6.58E-04	COL4A1,COL4A2,FBN2	 
+Doxo21 vs Cycling0	SPDEF	 	transcription regulator	Activated	2.000	bias	6.63E-04	CCN2,COL4A1,COL4A2,COL6A3	 
+Palbo28 vs Cycling0	HTT	 	transcription regulator	 	-1.095	 	6.65E-04	BCL2L11,CAMK4,CBX2,COL4A1,COL4A2,COL6A3,EGR1,FOS,GALNT16,NREP,RGS16,TM4SF1	54 (20)
+Doxo21 vs Doxo3	NFKBIA	 	transcription regulator	Inhibited	-2.414	 	6.72E-04	CXCL12,FOS,FOXF2,HES1,MEX3A,NID1,RGS16	36 (14)
+Doxo21 vs Cycling0	STAT3	 	transcription regulator	Inhibited	-3.188	bias	6.77E-04	ANGPTL2,BCL2L11,CCN2,CXCL12,EDN1,EGR1,FOS,KLF2,RAB11FIP1,SKP2,SLC1A3,SOCS3,TERT	47 (17)
+Palbo28 vs Cycling0	SOX9	 	transcription regulator	 	-0.447	bias	6.83E-04	ADAMTS1,CELSR2,FOS,HES1,WNT3	 
+Doxo3 vs Cycling0	SREBF2	 	transcription regulator	 	-1.982	bias	6.89E-04	FADS2,G6PD,INSIG1,MSMO1	20 (9)
+Doxo21 vs Cycling0	MEF2D	 	transcription regulator	 	-1.715	bias	6.97E-04	CCN2,FOS,FOSB,KLF2	14 (3)
+Doxo21 vs Cycling0	ZEB1	 	transcription regulator	 	-1.177	 	6.97E-04	CCN2,EDN1,FADS2,FOSB,ITGB4	37 (12)
+Palbo14 vs Cycling0	TWIST1	 	transcription regulator	 	-1.067	bias	6.98E-04	ADAMTS1,AXL,CBX2,FOS,FREM2	 
+Palbo28 vs Cycling0	SP3	 	transcription regulator	 	 	 	7.04E-04	EGR1,FOS,HES1,RAB11FIP1,SLC19A1,TERT	45 (12)
+Doxo14 vs Cycling0	RBL1	 	transcription regulator	 	1.970	bias	7.09E-04	FOS,HES1,SKP2,TERT	66 (15)
+Palbo28 vs Cycling0	BCL3	 	transcription regulator	 	 	 	7.19E-04	CXCL12,EGR1,FOS,SKP2	59 (21)
+Palbo28 vs Cycling0	MEF2A	 	transcription regulator	 	-0.068	bias	7.19E-04	AQP4,EDN1,FOS,KLF2	22 (6)
+Doxo14 vs Doxo3	FOXQ1	 	transcription regulator	 	 	 	7.20E-04	FOXF2,SP5	 
+Palbo28 vs Cycling0	POU5F1	 	transcription regulator	 	-1.827	bias	7.38E-04	B3GNT7,BCL2L11,CXCL12,KLF2,SOCS3,TERT,TNFRSF19,WNT3	39 (8)
+Palbo28 vs Palbo3	GLIS3	 	transcription regulator	 	-0.655	bias	7.41E-04	BCL2L11,COL4A1,COL4A2,ITGB4	 
+Doxo3 vs Cycling0	HLF	 	transcription regulator	 	 	 	7.49E-04	AQP4,PER1	 
+Palbo28 vs Palbo3	POU5F1	 	transcription regulator	 	-1.285	bias	7.50E-04	B3GNT7,BCL2L11,CXCL12,OTX1,SOCS3,TERT,TNFRSF19	 
+Palbo3 vs Cycling0	ELK1	 	transcription regulator	 	 	 	7.52E-04	EGR1,FOSB,MIR17HG	 
+Doxo3 vs Cycling0	JARID2	 	transcription regulator	 	 	 	7.62E-04	FADS2,INSIG1,SCD	 
+Doxo21 vs Doxo3	SMAD2	 	transcription regulator	 	-1.941	bias	7.62E-04	BCL2L11,CCN2,HES1,NET1	30 (11)
+Doxo21 vs Doxo3	SNAI2	 	transcription regulator	 	 	 	7.62E-04	BCL2L11,CCN2,CXCL12,MYO16-AS1	 
+Doxo14 vs Doxo3	HTT	 	transcription regulator	 	-0.762	 	7.62E-04	CBX2,CCN2,COL4A1,COL4A2,COL6A3,GALNT16,RGS16,SLC1A3	 
+Palbo14 vs Palbo3	MRTFB	 	transcription regulator	 	 	 	7.74E-04	COL6A3,CXCL12,FADS2,SULT1E1	 
+Doxo21 vs Cycling0	NFKBIA	 	transcription regulator	Inhibited	-2.137	bias	7.85E-04	AXL,CXCL12,FOS,FOXF2,HES1,MEX3A,NID1,RGS16,SOCS3	57 (19)
+Doxo3 vs Cycling0	SOX4	 	transcription regulator	Inhibited	-2.200	bias	7.90E-04	CXCL12,FOS,H1-10,NREP,TNFRSF19	 
+Doxo21 vs Cycling0	WBP2	 	transcription regulator	 	-1.387	 	7.97E-04	CDK15,COL4A1,COL6A3,EGR1,SLC1A3	 
+Doxo21 vs Doxo3	MRTFA	 	transcription regulator	Inhibited	-2.169	bias	7.98E-04	CCN2,COL6A3,CXCL12,EGR1,FOS	26 (13)
+Doxo21 vs Doxo3	SMARCB1	 	transcription regulator	 	 	 	7.98E-04	BCL2L11,FOS,FOSB,HES1,SKP2	37 (11)
+Doxo21 vs Cycling0	NFE2L2	 	transcription regulator	 	-1.182	bias	8.11E-04	ADAMTS1,CCN2,COL4A2,EVI2A,G6PD,HES1,MIR17HG,MSMO1,PAFAH1B3,PHGDH,SOCS3,TPM1	32 (5)
+Doxo21 vs Cycling0	PER1	-2.135	transcription regulator	 	 	 	8.20E-04	BCL2L11,PER1,PER3	7 (2)
+Doxo14 vs Cycling0	EGR2	 	transcription regulator	 	-1.172	bias	8.23E-04	ACAT2,CAMK4,CISH,EGR1,FOS,MIR17HG,SLC1A3	36 (10)
+Doxo21 vs Cycling0	RUNX3	 	transcription regulator	 	0.907	bias	8.24E-04	BCL2L11,CCN2,COL4A1,GLI2,SLIT2	46 (7)
+Palbo14 vs Cycling0	SMAD3	 	transcription regulator	Inhibited	-2.176	bias	8.25E-04	ADAMTS1,COL6A3,EDN1,EGR1,FOS,NET1	31 (19)
+Palbo28 vs Cycling0	TP73	 	transcription regulator	 	-1.935	bias	8.30E-04	AXL,BCL2L11,EDN1,EGR1,G6PD,HES1,ITGB4,PSRC1,TERT	53 (16)
+Doxo14 vs Doxo3	NOTCH1	 	transcription regulator	 	-0.049	 	8.31E-04	CCN2,FOSB,GLI2,HES1,LFNG	15 (7)
+Doxo14 vs Cycling0	GLIS1	 	transcription regulator	 	 	 	8.37E-04	COL4A1,COL4A2,FBN2	 
+Doxo3 vs Cycling0	BCOR	 	transcription regulator	 	 	 	8.51E-04	ADAMTS1,DLX6,ZNF503	4 (2)
+Palbo14 vs Cycling0	TLE1	 	transcription regulator	 	 	 	8.59E-04	EGR1,FOS	 
+Palbo28 vs Palbo3	HOXA5	 	transcription regulator	 	 	 	8.64E-04	EGR1,GDNF,IER2	27 (7)
+Doxo3 vs Cycling0	SMAD4	 	transcription regulator	 	-0.762	 	8.66E-04	EDN1,FOS,PAK3,PTGER2,SCD,TERT,TPM1	48 (18)
+Palbo3 vs Cycling0	LMX1A	 	transcription regulator	 	 	 	8.74E-04	HES1,SLIT2	 
+Doxo21 vs Doxo3	TLE1	 	transcription regulator	 	 	 	8.79E-04	EGR1,FOS	 
+Palbo3 vs Cycling0	MRTFB	 	transcription regulator	 	 	 	8.88E-04	ADAMTS1,EGR1,SLIT2,SULT1E1	 
+Doxo14 vs Doxo3	TFAP2C	 	transcription regulator	 	 	 	8.89E-04	CCN2,FREM2,SLC19A1	 
+Doxo21 vs Cycling0	GLIS1	 	transcription regulator	 	 	 	8.91E-04	COL4A1,COL4A2,FBN2	 
+Palbo28 vs Cycling0	HIF1A	 	transcription regulator	Inhibited	-2.231	bias	8.95E-04	ADAMTS1,AQP4,AXL,CTDSPL,CXCL12,EDN1,FOS,PHGDH,SOCS3,TERT	46 (19)
+Palbo28 vs Palbo3	ARID2	 	transcription regulator	 	 	 	9.15E-04	FOS,LTBP4,NREP	 
+Palbo28 vs Palbo3	JARID2	 	transcription regulator	 	 	 	9.15E-04	FADS2,INSIG1,SCD	 
+Doxo3 vs Cycling0	NFATC2	 	transcription regulator	 	-1.102	bias	9.15E-04	AXL,CISH,EDN1,SOCS3,TERT	34 (18)
+Doxo21 vs Cycling0	CEBPA	 	transcription regulator	 	-0.564	bias	9.25E-04	FADS2,FOS,H1-10,KLF2,PIK3CD,SCD,SECTM1,SOCS3,TNFRSF19	41 (11)
+Palbo28 vs Palbo3	CREBBP	 	transcription regulator	 	 	 	9.39E-04	CAMK4,CXCL12,EGR1,EVI2A,FOS,FOSB,SOCS3	26 (16)
+Palbo28 vs Cycling0	TFAP2B	 	transcription regulator	 	 	 	9.66E-04	EDN1,SLC19A1,TERT	 
+Palbo28 vs Cycling0	RELA	 	transcription regulator	Inhibited	-2.165	bias	9.74E-04	BCL2L11,EDN1,EGR1,FOS,FOSB,HES1,IER2,MIR17HG,TERT	55 (21)
+Doxo14 vs Cycling0	BCL3	 	transcription regulator	 	 	 	9.80E-04	CXCL12,EGR1,FOS,SKP2	62 (18)
+Doxo14 vs Cycling0	MEF2A	 	transcription regulator	 	-0.068	bias	9.80E-04	AQP4,EDN1,FOS,KLF2	 
+Doxo21 vs Doxo3	RUNX3	 	transcription regulator	 	0.591	bias	9.80E-04	BCL2L11,CCN2,COL4A1,GLI2	33 (12)
+Doxo21 vs Doxo3	SP1	 	transcription regulator	 	-0.893	bias	9.86E-04	CCN2,CXCL12,EGR1,FOS,FOXF2,HES1,MAZ,TERT	27 (18)
+Palbo28 vs Palbo3	HTT	 	transcription regulator	 	-0.784	 	1.01E-03	BCL2L11,CAMK4,CBX2,COL4A1,COL4A2,EGR1,FOS,GALNT16,NREP,RGS16	34 (17)
+Doxo21 vs Doxo3	MYCN	 	transcription regulator	 	-0.126	 	1.01E-03	CCN2,COL4A1,HES1,MIR17HG,PHGDH,TERT	27 (7)
+Palbo14 vs Palbo3	ILF3	 	transcription regulator	 	 	 	1.02E-03	ACAT2,FADS2,SCD	 
+Doxo3 vs Cycling0	SNAI2	 	transcription regulator	 	-0.068	 	1.02E-03	AXL,CXCL12,ITGB4,MYO16-AS1	 
+Palbo28 vs Cycling0	CREM	 	transcription regulator	 	-1.240	 	1.03E-03	CAMK4,EGR1,FOS,MEST,MSMO1	37 (12)
+Doxo3 vs Cycling0	TLE1	 	transcription regulator	 	 	 	1.03E-03	EGR1,FOS	 
+Doxo3 vs Cycling0	APBB1	 	transcription regulator	 	 	 	1.03E-03	HES1,TPM1	 
+Doxo21 vs Cycling0	NFATC2	 	transcription regulator	 	-1.102	bias	1.03E-03	AXL,BCL2L11,CISH,EDN1,SOCS3,TERT	53 (17)
+Doxo14 vs Cycling0	EPAS1	 	transcription regulator	Inhibited	-2.401	bias	1.04E-03	AXL,CCN2,CXCL12,EDN1,FOS,SLC7A5,TERT	64 (18)
+Doxo21 vs Cycling0	VDR	 	transcription regulator	 	-0.816	 	1.05E-03	CISH,COL4A1,COL4A2,EDN1,EGR1,SOCS3,TERT	59 (23)
+Doxo3 vs Cycling0	SP3	 	transcription regulator	 	 	 	1.05E-03	EGR1,FOS,HES1,SLC19A1,TERT	39 (12)
+Doxo21 vs Cycling0	BCL3	 	transcription regulator	 	 	 	1.06E-03	CXCL12,EGR1,FOS,SKP2	62 (19)
+Doxo14 vs Cycling0	FEV	 	transcription regulator	Inhibited	-2.000	bias	1.07E-03	FOS,SLC1A3,SLIT2,STXBP6	 
+Palbo14 vs Cycling0	PPARGC1A	 	transcription regulator	 	1.276	bias	1.07E-03	ADAMTS1,COL6A3,EDN1,FOS,INSIG1,MSMO1,SLC19A1	28 (6)
+Doxo3 vs Cycling0	NFKBIA	 	transcription regulator	 	-1.671	 	1.08E-03	AXL,CXCL12,FOS,HES1,NID1,RGS16,SOCS3	35 (19)
+Doxo14 vs Cycling0	SP3	 	transcription regulator	 	 	 	1.08E-03	EGR1,FOS,HES1,RAB11FIP1,SLC19A1,TERT	45 (10)
+Palbo28 vs Cycling0	MAX	 	transcription regulator	 	 	 	1.09E-03	DLEU2,EDN1,FADS2,TERT	 
+Doxo14 vs Cycling0	EP300	 	transcription regulator	Inhibited	-2.156	bias	1.14E-03	AXL,CAMK4,EDN1,EGR1,EVI2A,FOS,SKP2,TERT,WNT5B	64 (20)
+Doxo3 vs Cycling0	ZEB1	 	transcription regulator	 	 	 	1.15E-03	EDN1,FADS2,FOSB,ITGB4	20 (7)
+Palbo14 vs Palbo3	MRTFA	 	transcription regulator	 	 	 	1.15E-03	COL6A3,CXCL12,FADS2,SULT1E1	 
+Doxo14 vs Cycling0	MSGN1	 	transcription regulator	 	 	 	1.15E-03	HES1,LFNG	 
+Doxo21 vs Cycling0	FEV	 	transcription regulator	Inhibited	-2.000	bias	1.16E-03	FOS,SLC1A3,SLIT2,STXBP6	 
+Palbo28 vs Palbo3	TLE1	 	transcription regulator	 	 	 	1.17E-03	EGR1,FOS	 
+Doxo21 vs Cycling0	EPAS1	 	transcription regulator	Inhibited	-2.401	bias	1.18E-03	AXL,CCN2,CXCL12,EDN1,FOS,SLC7A5,TERT	65 (17)
+Doxo3 vs Cycling0	TBX1	 	transcription regulator	 	 	 	1.18E-03	MIR17HG,OTX1	 
+Palbo28 vs Palbo3	AIP	 	transcription regulator	 	 	 	1.20E-03	GDNF,HTR1D,RGS16	 
+Doxo21 vs Cycling0	MSGN1	 	transcription regulator	 	 	 	1.20E-03	HES1,LFNG	 
+Doxo21 vs Cycling0	SP3	 	transcription regulator	 	 	 	1.21E-03	EGR1,FOS,HES1,RAB11FIP1,SLC19A1,TERT	49 (12)
+Doxo3 vs Cycling0	ATN1	 	transcription regulator	 	 	 	1.21E-03	CAMK4,NREP,RGS16,TM4SF1	 
+Palbo28 vs Palbo3	NFATC2	 	transcription regulator	 	-0.744	bias	1.22E-03	BCL2L11,CISH,EDN1,SOCS3,TERT	41 (20)
+Palbo28 vs Cycling0	ILF3	 	transcription regulator	 	0.463	bias	1.22E-03	ACAT2,FADS2,FOS,SCD	 
+Doxo14 vs Cycling0	TFAP2B	 	transcription regulator	 	 	 	1.23E-03	EDN1,SLC19A1,TERT	 
+Doxo3 vs Cycling0	CTNNB1	 	transcription regulator	 	-1.837	bias	1.23E-03	AQP4,CXCL12,EDN1,EGR1,FOS,HES1,MIR17HG,TERT,TNFRSF19,WNT3,WNT5B	44 (20)
+Doxo3 vs Cycling0	CEBPA	 	transcription regulator	 	-0.269	bias	1.23E-03	FADS2,FOS,H1-10,PIK3CD,SCD,SOCS3,TNFRSF19	22 (5)
+Palbo3 vs Cycling0	TWIST1	 	transcription regulator	 	-1.067	bias	1.23E-03	ADAMTS1,AXL,CBX2,FREM2	 
+Doxo21 vs Doxo3	SOX9	 	transcription regulator	 	0.152	bias	1.24E-03	CCN2,CELSR2,FOS,HES1	24 (12)
+Doxo21 vs Doxo3	ARID1A	 	transcription regulator	 	0.239	 	1.26E-03	COL4A1,EGR1,FOS,HES1,LTBP4,MEST,TERT	32 (14)
+Doxo14 vs Cycling0	POU5F1	 	transcription regulator	 	-1.627	bias	1.27E-03	B3GNT7,CXCL12,GLI2,KLF2,OTX1,TERT,TNFRSF19,WNT3	39 (4)
+Doxo3 vs Cycling0	MAFB	 	transcription regulator	 	-1.000	 	1.28E-03	AQP4,CXCL12,OLFML2B,OLFML3	 
+Palbo28 vs Palbo3	SNAI2	 	transcription regulator	 	 	 	1.30E-03	BCL2L11,CXCL12,ITGB4,MYO16-AS1	 
+Doxo21 vs Cycling0	TFAP2B	 	transcription regulator	 	 	 	1.31E-03	EDN1,SLC19A1,TERT	 
+Doxo21 vs Doxo3	FOXQ1	 	transcription regulator	 	 	 	1.31E-03	FOXF2,SP5	 
+Doxo14 vs Doxo3	VHL	 	transcription regulator	 	 	 	1.31E-03	CCN2,CXCL12,SKP2,SLC1A3	28 (6)
+Palbo28 vs Palbo3	TBX1	 	transcription regulator	 	 	 	1.34E-03	MIR17HG,OTX1	 
+Palbo28 vs Cycling0	SOX11	 	transcription regulator	Inhibited	-2.219	bias	1.34E-03	EGR1,IER2,MEX3A,NREP,VASH2	 
+Palbo3 vs Cycling0	ADNP	 	transcription regulator	 	 	 	1.34E-03	FOSB,HES1	 
+Doxo3 vs Cycling0	HNRNPD	 	transcription regulator	 	 	 	1.35E-03	FOS,TERT	17 (7)
+Palbo28 vs Palbo3	SP3	 	transcription regulator	 	 	 	1.40E-03	EGR1,FOS,HES1,RAB11FIP1,TERT	30 (12)
+Doxo14 vs Doxo3	SMAD3	 	transcription regulator	Inhibited	-2.173	bias	1.40E-03	CCN2,COL4A1,COL4A2,COL6A3,GLI2	28 (14)
+Palbo28 vs Cycling0	MTDH	 	transcription regulator	 	 	 	1.41E-03	COL4A1,COL4A2,EGR1,FADS2,MSMO1	42 (9)
+Palbo14 vs Cycling0	MAML1	 	transcription regulator	 	 	 	1.43E-03	EGR1,HES1	26 (7)
+Doxo14 vs Doxo3	SOX2	 	transcription regulator	 	-0.169	bias	1.44E-03	AQP4,CCN2,CXCL12,GLI2,SKP2,TNFRSF19	 
+Doxo21 vs Doxo3	SRF	 	transcription regulator	Inhibited	-2.158	bias	1.45E-03	BCL2L11,CCN2,EGR1,FOS,FOSB,NET1	30 (19)
+Palbo14 vs Cycling0	NFATC3	 	transcription regulator	 	 	 	1.45E-03	EDN1,FOS,FOSB	17 (6)
+Palbo28 vs Palbo3	ZEB1	 	transcription regulator	 	 	 	1.45E-03	EDN1,FADS2,FOSB,ITGB4	21 (7)
+Doxo21 vs Doxo3	MAML1	 	transcription regulator	 	 	 	1.47E-03	EGR1,HES1	 
+Doxo21 vs Doxo3	WT1	 	transcription regulator	 	 	 	1.48E-03	CCN2,COL4A1,EGR1,FOSB,TERT	 
+Doxo14 vs Cycling0	MAX	 	transcription regulator	 	 	 	1.48E-03	DLEU2,EDN1,FADS2,TERT	 
+Palbo3 vs Cycling0	ZFHX3	 	transcription regulator	 	 	 	1.50E-03	RGS16,RYR3,SLIT2	 
+Doxo14 vs Doxo3	TAF4	 	transcription regulator	 	 	 	1.51E-03	CCN2,COL6A3,OLFML3	 
+Doxo14 vs Doxo3	SOX4	 	transcription regulator	 	-1.964	bias	1.51E-03	CXCL12,EVI2A,MEX3A,TNFRSF19	 
+Doxo3 vs Cycling0	HIF1A	 	transcription regulator	 	-1.995	bias	1.53E-03	ADAMTS1,AQP4,AXL,CXCL12,EDN1,FOS,SOCS3,TERT	28 (17)
+Doxo3 vs Cycling0	RAX	 	transcription regulator	 	 	 	1.53E-03	HES1,SOCS3	 
+Doxo3 vs Cycling0	MYCN	 	transcription regulator	 	-1.109	 	1.53E-03	ADAMTS1,HES1,MIR17HG,OTX1,TERT,TPM1	34 (11)
+Palbo28 vs Palbo3	HNRNPD	 	transcription regulator	 	 	 	1.53E-03	FOS,TERT	26 (11)
+Palbo14 vs Palbo3	HMG20A	 	transcription regulator	 	 	 	1.54E-03	FADS2,PTGER2,RGS16	 
+Palbo28 vs Palbo3	NFKBIA	 	transcription regulator	Inhibited	-2.414	 	1.56E-03	CXCL12,FOS,HES1,MEX3A,NID1,RGS16,SOCS3	38 (17)
+Palbo14 vs Cycling0	ELK3	 	transcription regulator	 	 	 	1.60E-03	EGR1,FOS	26 (10)
+Doxo21 vs Cycling0	MAX	 	transcription regulator	 	 	 	1.60E-03	DLEU2,EDN1,FADS2,TERT	 
+Palbo28 vs Palbo3	WBP2	 	transcription regulator	 	-0.152	 	1.62E-03	CDK15,COL4A1,EGR1,LINC00324	 
+Palbo28 vs Cycling0	RYBP	 	transcription regulator	 	 	 	1.62E-03	FOSB,WNT3,WNT5B	 
+Doxo21 vs Doxo3	ELK3	 	transcription regulator	 	 	 	1.64E-03	EGR1,FOS	24 (12)
+Doxo3 vs Cycling0	YY1	 	transcription regulator	 	0.218	 	1.64E-03	CXCL12,EDN1,EGR1,FOS,PSRC1,TPM1	44 (16)
+Palbo14 vs Cycling0	CREM	 	transcription regulator	 	 	 	1.65E-03	CAMK4,EGR1,FOS,MSMO1	21 (8)
+Doxo3 vs Cycling0	TFAP2A	 	transcription regulator	 	 	 	1.66E-03	FREM2,SLC19A1,TERT,TPM1	 
+Doxo3 vs Cycling0	SOX9	 	transcription regulator	 	1.000	bias	1.66E-03	ADAMTS1,FOS,HES1,WNT3	35 (7)
+Doxo14 vs Cycling0	ILF3	 	transcription regulator	 	0.463	bias	1.66E-03	ACAT2,FADS2,FOS,SCD	 
+Doxo14 vs Cycling0	HLF	 	transcription regulator	 	 	 	1.67E-03	AQP4,PER1	 
+Doxo14 vs Doxo3	ADNP	 	transcription regulator	 	 	 	1.70E-03	FOSB,HES1	 
+Doxo14 vs Cycling0	MEN1	 	transcription regulator	 	0.152	bias	1.70E-03	AQP4,FOS,SLC1A3,SLIT2,TERT	 
+Palbo3 vs Cycling0	HMG20A	 	transcription regulator	 	 	 	1.71E-03	AXL,PTGER2,RGS16	 
+Doxo3 vs Cycling0	MAML1	 	transcription regulator	 	 	 	1.71E-03	EGR1,HES1	26 (7)
+Doxo21 vs Cycling0	TP73	 	transcription regulator	 	-1.935	bias	1.73E-03	AXL,BCL2L11,EDN1,EGR1,G6PD,HES1,ITGB4,PSRC1,TERT	62 (20)
+Palbo28 vs Palbo3	RAX	 	transcription regulator	 	 	 	1.73E-03	HES1,SOCS3	 
+Doxo14 vs Cycling0	KLF2	-1.919	transcription regulator	 	1.387	bias	1.75E-03	CCN2,COL4A1,EDN1,ITGB4,TERT	55 (14)
+Doxo14 vs Cycling0	TRIM28	 	transcription regulator	Inhibited	-2.236	bias	1.79E-03	EGR1,FOS,GDPD3,KLF2,LHX9	44 (15)
+Doxo21 vs Cycling0	ILF3	 	transcription regulator	 	0.463	bias	1.80E-03	ACAT2,FADS2,FOS,SCD	 
+Doxo21 vs Doxo3	TRRAP	 	transcription regulator	 	 	 	1.81E-03	BCL2L11,TERT	 
+Palbo28 vs Cycling0	YY1	 	transcription regulator	 	0.600	 	1.82E-03	BCL2L11,CXCL12,EDN1,EGR1,FOS,KLF2,PSRC1	53 (15)
+Palbo28 vs Cycling0	HOXA5	 	transcription regulator	 	 	 	1.82E-03	EGR1,GDNF,IER2	23 (6)
+Doxo3 vs Cycling0	NFATC3	 	transcription regulator	 	 	 	1.88E-03	EDN1,FOS,FOSB	19 (7)
+Palbo3 vs Cycling0	CREBBP	 	transcription regulator	 	 	 	1.89E-03	AXL,CAMK4,EGR1,FOSB,WNT5B	6 (2)
+Palbo14 vs Cycling0	RBL1	 	transcription regulator	 	 	 	1.90E-03	FOS,HES1,SKP2	22 (7)
+Doxo3 vs Cycling0	MYT1	 	transcription regulator	 	 	 	1.91E-03	IL27RA,TM4SF1	 
+Doxo3 vs Cycling0	ELK3	 	transcription regulator	 	 	 	1.91E-03	EGR1,FOS	19 (7)
+Doxo21 vs Cycling0	KLF2	-2.248	transcription regulator	 	1.387	bias	1.92E-03	CCN2,COL4A1,EDN1,ITGB4,TERT	50 (15)
+Palbo28 vs Cycling0	ARID2	 	transcription regulator	 	 	 	1.93E-03	FOS,LTBP4,NREP	 
+Palbo28 vs Cycling0	JARID2	 	transcription regulator	 	 	 	1.93E-03	FADS2,INSIG1,SCD	 
+Palbo28 vs Cycling0	GLIS3	 	transcription regulator	 	-0.655	bias	1.93E-03	BCL2L11,COL4A1,COL4A2,ITGB4	 
+Doxo14 vs Cycling0	SKIL	 	transcription regulator	 	 	 	1.94E-03	COL4A1,CXCL12,TPM1	 
+Palbo28 vs Palbo3	MAML1	 	transcription regulator	 	 	 	1.94E-03	EGR1,HES1	 
+Palbo28 vs Cycling0	TLE1	 	transcription regulator	 	 	 	1.95E-03	EGR1,FOS	 
+Palbo14 vs Palbo3	RBPJ	 	transcription regulator	 	0.771	 	1.99E-03	CXCL12,FADS2,GDNF,HES1	 
+Doxo21 vs Doxo3	SP100	 	transcription regulator	 	 	 	2.00E-03	CCN2,FOS	 
+Palbo14 vs Palbo3	FERD3L	 	transcription regulator	 	 	 	2.01E-03	HES1	 
+Doxo21 vs Doxo3	TRIM28	 	transcription regulator	 	 	 	2.02E-03	BCL2L11,EGR1,FOS,KLF2	35 (22)
+Doxo3 vs Cycling0	CLOCK	 	transcription regulator	 	-0.664	 	2.03E-03	MEST,MSMO1,PER1,PER3,SCD	 
+Doxo21 vs Cycling0	SKIL	 	transcription regulator	 	 	 	2.06E-03	COL4A1,CXCL12,TPM1	 
+Palbo3 vs Cycling0	FERD3L	 	transcription regulator	 	 	 	2.09E-03	HES1	 
+Doxo14 vs Cycling0	NPM1	 	transcription regulator	Inhibited	-2.236	bias	2.09E-03	CCN2,COL4A1,COL4A2,EGR1,PIK3CD	56 (12)
+Palbo28 vs Palbo3	MYCN	 	transcription regulator	 	0.070	 	2.11E-03	COL4A1,HES1,MIR17HG,OTX1,PHGDH,TERT	30 (7)
+Doxo3 vs Cycling0	SOX1	 	transcription regulator	 	 	 	2.12E-03	HES1,TNFRSF19,WNT3	 
+Doxo14 vs Doxo3	GLI1	 	transcription regulator	 	-0.655	 	2.12E-03	GLI2,HES1,LFNG,MEST,SKP2,SLC1A3	 
+Doxo14 vs Cycling0	NANOG	 	transcription regulator	 	-1.000	bias	2.14E-03	EGR1,FOS,FOSB,GLI2,OTX1	 
+Doxo21 vs Doxo3	SOX11	 	transcription regulator	Inhibited	-2.000	bias	2.15E-03	EGR1,MEX3A,TMSB15B,VASH2	 
+Palbo3 vs Cycling0	HLX	 	transcription regulator	 	 	 	2.16E-03	EGR1,HES1	 
+Palbo28 vs Palbo3	ELK3	 	transcription regulator	 	 	 	2.16E-03	EGR1,FOS	20 (7)
+Doxo14 vs Doxo3	NFE2L2	 	transcription regulator	 	-1.299	bias	2.19E-03	CCN2,COL4A2,EVI2A,G6PD,HES1,PHGDH,RYR3	 
+Doxo3 vs Cycling0	SOX2	 	transcription regulator	 	0.970	bias	2.20E-03	AQP4,CXCL12,FOS,OTX1,TERT,TNFRSF19,WNT3	9 (2)
+Doxo14 vs Cycling0	NFE2L2	 	transcription regulator	 	-0.931	bias	2.23E-03	ADAMTS1,CCN2,COL4A2,EVI2A,G6PD,HES1,MIR17HG,MSMO1,PAFAH1B3,PHGDH,TPM1	20 (3)
+Doxo21 vs Doxo3	MTDH	 	transcription regulator	 	 	 	2.25E-03	CCN2,COL4A1,COL4A2,EGR1	9 (3)
+Palbo28 vs Palbo3	NFATC3	 	transcription regulator	 	 	 	2.25E-03	EDN1,FOS,FOSB	20 (7)
+Palbo28 vs Cycling0	SREBF2	 	transcription regulator	 	-1.982	bias	2.27E-03	FADS2,G6PD,INSIG1,MSMO1	31 (7)
+Doxo3 vs Cycling0	KCNIP3	 	transcription regulator	 	 	 	2.28E-03	FOS,FOSB,SOCS3	 
+Doxo21 vs Doxo3	CREBBP	 	transcription regulator	 	-1.000	bias	2.29E-03	CXCL12,EGR1,EVI2A,FOS,FOSB,KLF2	37 (20)
+Doxo14 vs Cycling0	TLE1	 	transcription regulator	 	 	 	2.29E-03	EGR1,FOS	 
+Doxo14 vs Cycling0	APBB1	 	transcription regulator	 	 	 	2.29E-03	HES1,TPM1	 
+Doxo21 vs Doxo3	NPM1	 	transcription regulator	Inhibited	-2.000	bias	2.29E-03	CCN2,COL4A1,COL4A2,EGR1	27 (9)
+Doxo21 vs Cycling0	NPM1	 	transcription regulator	Inhibited	-2.236	bias	2.29E-03	CCN2,COL4A1,COL4A2,EGR1,PIK3CD	48 (12)
+Doxo14 vs Cycling0	MEF2C	 	transcription regulator	 	-1.432	bias	2.31E-03	CCBE1,FOS,FOSB,KLF2,TPM1	8 (2)
+Doxo14 vs Cycling0	CLOCK	 	transcription regulator	 	-0.272	 	2.31E-03	CCN2,MEST,MSMO1,PER1,PER3,SCD	 
+Doxo14 vs Cycling0	TEAD2	 	transcription regulator	 	 	 	2.31E-03	CCN2,EDN1,TPM1	34 (7)
+Doxo3 vs Cycling0	LMX1A	 	transcription regulator	 	 	 	2.34E-03	HES1,SLIT2	 
+Doxo3 vs Cycling0	DBP	 	transcription regulator	 	 	 	2.34E-03	AQP4,PER1	 
+Doxo21 vs Doxo3	NANOG	 	transcription regulator	 	-1.000	 	2.34E-03	EGR1,FOS,FOSB,GLI2	29 (5)
+Doxo21 vs Doxo3	SATB1	 	transcription regulator	Inhibited	-2.000	 	2.34E-03	CCN2,EVI2A,FOSB,KLF2	 
+Doxo21 vs Doxo3	NFKB2	 	transcription regulator	 	 	 	2.34E-03	BCL2L11,C1QTNF3,CXCL12,FOS	16 (5)
+Palbo28 vs Cycling0	GLI3	 	transcription regulator	 	 	 	2.34E-03	EGR1,FOSB,KLF2,TERT	36 (7)
+Doxo14 vs Doxo3	FERD3L	 	transcription regulator	 	 	 	2.35E-03	HES1	 
+Doxo21 vs Cycling0	NANOG	 	transcription regulator	 	-1.000	bias	2.35E-03	EGR1,FOS,FOSB,GLI2,OTX1	 
+Doxo21 vs Cycling0	NFKB2	 	transcription regulator	 	-1.412	bias	2.35E-03	BCL2L11,C1QTNF3,CXCL12,FOS,LMCD1	26 (7)
+Palbo14 vs Palbo3	NFKBIA	 	transcription regulator	 	0.000	 	2.35E-03	CXCL12,HES1,MEX3A,NID1,RGS16	 
+Doxo3 vs Cycling0	ZBTB20	 	transcription regulator	 	 	 	2.37E-03	AQP4,CISH,SOCS3	 
+Palbo28 vs Palbo3	EP300	 	transcription regulator	 	 	 	2.37E-03	CAMK4,EDN1,EGR1,EVI2A,FOS,SOCS3,TERT	36 (18)
+Doxo21 vs Cycling0	TLE1	 	transcription regulator	 	 	 	2.39E-03	EGR1,FOS	 
+Doxo21 vs Cycling0	APBB1	 	transcription regulator	 	 	 	2.39E-03	HES1,TPM1	 
+Doxo14 vs Cycling0	WT1	 	transcription regulator	 	 	 	2.40E-03	CCN2,COL4A1,EGR1,FOSB,TERT,TM4SF1	36 (7)
+Palbo28 vs Palbo3	TRRAP	 	transcription regulator	 	 	 	2.40E-03	BCL2L11,TERT	 
+Palbo14 vs Cycling0	BCL3	 	transcription regulator	 	 	 	2.42E-03	EGR1,FOS,SKP2	34 (14)
+Palbo14 vs Cycling0	MEF2A	 	transcription regulator	 	 	 	2.42E-03	AQP4,EDN1,FOS	 
+Doxo3 vs Cycling0	GATA4	 	transcription regulator	 	-0.562	 	2.43E-03	CCBE1,EDN1,FOS,HES1,TPM1	 
+Doxo14 vs Cycling0	TFAP4	 	transcription regulator	 	 	 	2.44E-03	EGR1,FOS,GLI2	 
+Doxo14 vs Cycling0	JARID2	 	transcription regulator	 	 	 	2.44E-03	FADS2,INSIG1,SCD	 
+Doxo21 vs Cycling0	TEAD2	 	transcription regulator	 	 	 	2.45E-03	CCN2,EDN1,TPM1	45 (7)
+Doxo3 vs Cycling0	RBL1	 	transcription regulator	 	 	 	2.46E-03	FOS,HES1,TERT	34 (20)
+Doxo3 vs Cycling0	RB1	 	transcription regulator	 	1.238	 	2.47E-03	EGR1,FOS,FOSB,HES1,PER1,TERT,TPM1	51 (22)
+Palbo28 vs Cycling0	SRF	 	transcription regulator	 	-1.916	bias	2.49E-03	BCL2L11,EGR1,FOS,FOSB,IER2,LMCD1,NET1	48 (14)
+Palbo28 vs Cycling0	AIP	 	transcription regulator	 	 	 	2.51E-03	GDNF,HTR1D,RGS16	 
+Doxo21 vs Doxo3	TCF3	 	transcription regulator	 	0.555	 	2.51E-03	BCL2L11,BTBD18,KLF2,PAFAH1B3,RGS16,SLC7A5	 
+Doxo21 vs Cycling0	MEF2C	 	transcription regulator	 	-1.432	bias	2.53E-03	CCBE1,FOS,FOSB,KLF2,TPM1	8 (2)
+Palbo14 vs Cycling0	IKZF1	 	transcription regulator	 	 	 	2.57E-03	AXL,CISH,FOS,HES1,SLC19A1	19 (4)
+Doxo21 vs Cycling0	CLOCK	 	transcription regulator	 	-0.272	 	2.57E-03	CCN2,MEST,MSMO1,PER1,PER3,SCD	 
+Doxo14 vs Cycling0	TEAD3	 	transcription regulator	 	 	 	2.58E-03	CCN2,EDN1,TPM1	 
+Doxo3 vs Cycling0	MEN1	 	transcription regulator	 	 	 	2.58E-03	AQP4,FOS,SLIT2,TERT	35 (7)
+Doxo14 vs Doxo3	FOXO4	 	transcription regulator	 	 	 	2.58E-03	CCN2,COL4A1,COL4A2	19 (5)
+Doxo14 vs Doxo3	SREBF2	 	transcription regulator	 	 	 	2.58E-03	CCN2,G6PD,GLI2	 
+Palbo28 vs Palbo3	MYC	 	transcription regulator	 	-0.606	bias	2.59E-03	BCL2L11,COL4A1,COL4A2,EDN1,EGR1,FADS2,FBN2,FOS,G6PD,HES1,MIR17HG,TERT,TNFRSF19	39 (19)
+Doxo21 vs Cycling0	ARID2	 	transcription regulator	 	 	 	2.59E-03	FOS,LTBP4,NREP	 
+Doxo21 vs Cycling0	TFAP4	 	transcription regulator	 	 	 	2.59E-03	EGR1,FOS,GLI2	 
+Doxo21 vs Cycling0	JARID2	 	transcription regulator	 	 	 	2.59E-03	FADS2,INSIG1,SCD	 
+Palbo28 vs Palbo3	PPARGC1A	 	transcription regulator	 	0.994	 	2.62E-03	EDN1,FOS,INPP5J,INSIG1,ITGB4,OLFML3,SOCS3	36 (13)
+Doxo14 vs Cycling0	TBX1	 	transcription regulator	 	 	 	2.63E-03	MIR17HG,OTX1	 
+Doxo21 vs Cycling0	WT1	 	transcription regulator	 	 	 	2.67E-03	CCN2,COL4A1,EGR1,FOSB,TERT,TM4SF1	26 (7)
+Doxo3 vs Cycling0	SMARCA4	 	transcription regulator	 	-0.156	bias	2.67E-03	EGR1,FOS,H1-10,MIR503HG,PER3,STXBP6,TPM1,ZNF503	 
+Doxo21 vs Doxo3	FEV	 	transcription regulator	 	 	 	2.68E-03	FOS,SLC1A3,STXBP6	 
+Palbo28 vs Palbo3	SMAD7	 	transcription regulator	 	-0.000	 	2.71E-03	BCL2L11,CXCL12,SCD,TERT	36 (18)
+Doxo14 vs Cycling0	BCOR	 	transcription regulator	 	 	 	2.72E-03	ADAMTS1,DLX6,ZNF503	4 (2)
+Palbo28 vs Palbo3	KCNIP3	 	transcription regulator	 	 	 	2.73E-03	FOS,FOSB,SOCS3	 
+Doxo21 vs Cycling0	TEAD3	 	transcription regulator	 	 	 	2.74E-03	CCN2,EDN1,TPM1	 
+Doxo21 vs Cycling0	TBX1	 	transcription regulator	 	 	 	2.75E-03	MIR17HG,OTX1	 
+Palbo14 vs Cycling0	ELK4	 	transcription regulator	 	 	 	2.77E-03	EGR1,FOS	16 (5)
+Palbo14 vs Cycling0	SMAD4	 	transcription regulator	 	0.283	 	2.77E-03	EDN1,FOS,GDNF,PAK3,PTGER2,SCD	18 (7)
+Doxo21 vs Cycling0	STAT1	 	transcription regulator	 	-1.853	bias	2.78E-03	AXL,BCL2L11,CCN2,EDN1,EGR1,FOS,HES1,SOCS3	56 (18)
+Doxo14 vs Cycling0	NFKBIA	 	transcription regulator	 	-1.915	bias	2.78E-03	AXL,CXCL12,FOS,FOXF2,HES1,MEX3A,NID1,RGS16	61 (16)
+Palbo28 vs Cycling0	VHL	 	transcription regulator	 	 	 	2.78E-03	AXL,BCL2L11,CXCL12,NREP,SKP2	41 (15)
+Doxo21 vs Doxo3	RUNX1	 	transcription regulator	 	-0.714	 	2.78E-03	BCL2L11,COL4A1,HES1,KLF2,MIR17HG	27 (7)
+Palbo28 vs Cycling0	STAT3	 	transcription regulator	Inhibited	-2.859	bias	2.80E-03	ANGPTL2,BCL2L11,CXCL12,EDN1,EGR1,FOS,KLF2,RAB11FIP1,SKP2,SOCS3,TERT	50 (20)
+Doxo3 vs Cycling0	ARNT	 	transcription regulator	 	 	 	2.81E-03	EDN1,G6PD,SOCS3,TNFRSF19	14 (3)
+Doxo21 vs Cycling0	GLIS3	 	transcription regulator	 	-0.655	bias	2.83E-03	BCL2L11,COL4A1,COL4A2,ITGB4	 
+Doxo14 vs Cycling0	GATA4	 	transcription regulator	 	-1.498	 	2.83E-03	CCBE1,CCN2,EDN1,FOS,HES1,TPM1	 
+Doxo21 vs Doxo3	ELK4	 	transcription regulator	 	 	 	2.83E-03	EGR1,FOS	20 (11)
+Palbo3 vs Cycling0	ATN1	 	transcription regulator	 	 	 	2.84E-03	CAMK4,RGS16,TM4SF1	 
+Doxo21 vs Doxo3	EPAS1	 	transcription regulator	 	-1.963	bias	2.86E-03	CCN2,CXCL12,FOS,SLC7A5,TERT	35 (15)
+Doxo3 vs Cycling0	SOX11	 	transcription regulator	 	-1.982	bias	2.87E-03	EGR1,IER2,NREP,VASH2	 
+Palbo28 vs Cycling0	RAX	 	transcription regulator	 	 	 	2.88E-03	HES1,SOCS3	 
+Palbo14 vs Cycling0	FOS	-1.363	transcription regulator	 	0.252	bias	2.89E-03	EDN1,EGR1,FOS,FOSB,GPSM2,NET1,SLC19A1	37 (13)
+Doxo21 vs Cycling0	BCOR	 	transcription regulator	 	 	 	2.89E-03	ADAMTS1,DLX6,ZNF503	4 (2)
+Palbo28 vs Palbo3	RBPJ	 	transcription regulator	 	-0.080	 	2.90E-03	CXCL12,FADS2,FOS,GDNF,HES1	36 (13)
+Palbo28 vs Palbo3	CREM	 	transcription regulator	 	-1.240	 	2.90E-03	CAMK4,EGR1,FOS,MEST	21 (8)
+Doxo21 vs Doxo3	SMAD4	 	transcription regulator	 	-0.625	 	2.94E-03	CCN2,COL4A1,COL4A2,FOS,PTGER2,TERT	38 (22)
+Palbo28 vs Palbo3	TP73	 	transcription regulator	 	-1.405	bias	2.95E-03	BCL2L11,EDN1,EGR1,G6PD,HES1,ITGB4,TERT	36 (17)
+Palbo28 vs Palbo3	EZH2	 	transcription regulator	 	1.262	 	2.95E-03	BCL2L11,COL4A1,EGR1,FADS2,OXTR,SOCS3,TERT	39 (20)
+Palbo28 vs Palbo3	SRF	 	transcription regulator	 	 	 	2.98E-03	BCL2L11,EGR1,FOS,FOSB,IER2,LMCD1	30 (14)
+Palbo28 vs Palbo3	FOXO3	 	transcription regulator	 	-0.980	 	2.98E-03	BCL2L11,COL4A1,COL4A2,EGR1,FOS,FOSB	39 (21)
+Palbo14 vs Cycling0	FOXO1	 	transcription regulator	Inhibited	-2.236	bias	2.99E-03	CAMK4,EDN1,EGR1,FOS,FOSB,KIF18A	31 (21)
+Palbo14 vs Cycling0	ADNP	 	transcription regulator	 	 	 	2.99E-03	FOSB,HES1	 
+Palbo3 vs Cycling0	LMX1B	 	transcription regulator	 	 	 	3.01E-03	HES1,SLIT2	 
+Palbo3 vs Cycling0	FOSL1	 	transcription regulator	 	 	 	3.02E-03	AXL,EGR1,FOSB	 
+Doxo21 vs Doxo3	ADNP	 	transcription regulator	 	 	 	3.06E-03	FOSB,HES1	 
+Doxo21 vs Doxo3	FOS	-4.331	transcription regulator	 	0.893	bias	3.09E-03	BCL2L11,CCN2,EGR1,FOS,FOSB,GPSM2,NET1	34 (17)
+Doxo3 vs Cycling0	NANOG	 	transcription regulator	 	 	 	3.12E-03	EGR1,FOS,FOSB,OTX1	 
+Palbo14 vs Cycling0	FERD3L	 	transcription regulator	 	 	 	3.13E-03	HES1	 
+Palbo14 vs Cycling0	TAX1BP3	 	transcription regulator	 	 	 	3.13E-03	FOS	 
+Doxo3 vs Cycling0	BCL3	 	transcription regulator	 	 	 	3.14E-03	CXCL12,EGR1,FOS	33 (17)
+Doxo3 vs Cycling0	MEF2A	 	transcription regulator	 	 	 	3.14E-03	AQP4,EDN1,FOS	6 (2)
+Doxo21 vs Doxo3	NFE2L2	 	transcription regulator	 	-0.896	bias	3.14E-03	CCN2,COL4A2,EVI2A,HES1,MIR17HG,PAFAH1B3,PHGDH,RYR3	 
+Palbo28 vs Cycling0	IKZF1	 	transcription regulator	 	1.934	bias	3.14E-03	AXL,CISH,FOS,G6PD,HES1,SLC19A1	38 (7)
+Doxo21 vs Cycling0	GATA4	 	transcription regulator	 	-1.498	 	3.15E-03	CCBE1,CCN2,EDN1,FOS,HES1,TPM1	 
+Doxo21 vs Doxo3	NOTCH1	 	transcription regulator	 	-0.049	 	3.15E-03	CCN2,FOS,FOSB,GLI2,HES1	35 (18)
+Doxo21 vs Doxo3	FERD3L	 	transcription regulator	 	 	 	3.17E-03	HES1	 
+Doxo21 vs Doxo3	TAX1BP3	 	transcription regulator	 	 	 	3.17E-03	FOS	 
+Doxo14 vs Cycling0	CEBPA	 	transcription regulator	 	-0.564	bias	3.20E-03	FADS2,FOS,H1-10,KLF2,OXTR,PIK3CD,SCD,TNFRSF19	31 (6)
+Doxo21 vs Doxo3	FOXP3	 	transcription regulator	 	 	 	3.21E-03	BCL2L11,EGR1,FOS,SKP2	35 (16)
+Doxo14 vs Cycling0	SMARCA4	 	transcription regulator	 	-0.894	bias	3.22E-03	ANGPTL2,CCN2,EGR1,FOS,H1-10,MIR503HG,PER3,STXBP6,TPM1,ZNF503	46 (12)
+Palbo28 vs Cycling0	MAML1	 	transcription regulator	 	 	 	3.23E-03	EGR1,HES1	36 (7)
+Doxo14 vs Doxo3	GLIS1	 	transcription regulator	 	 	 	3.24E-03	COL4A1,COL4A2	 
+Palbo28 vs Cycling0	RUNX1	 	transcription regulator	 	-1.016	bias	3.25E-03	BCL2L11,COL4A1,HES1,KLF2,MIR17HG,PIK3CD	47 (11)
+Palbo3 vs Cycling0	EGR2	 	transcription regulator	 	 	 	3.27E-03	ACAT2,CAMK4,EGR1,MIR17HG	 
+Doxo3 vs Cycling0	ELK4	 	transcription regulator	 	 	 	3.31E-03	EGR1,FOS	 
+Doxo21 vs Cycling0	FOXO4	 	transcription regulator	 	-0.218	 	3.31E-03	BCL2L11,CCN2,COL4A1,COL4A2	34 (5)
+Palbo28 vs Palbo3	KLF2	-0.179	transcription regulator	 	1.067	 	3.31E-03	COL4A1,EDN1,ITGB4,TERT	 
+Doxo3 vs Cycling0	MEF2C	 	transcription regulator	 	-1.067	bias	3.31E-03	CCBE1,FOS,FOSB,TPM1	6 (2)
+Palbo14 vs Cycling0	NFKBIA	 	transcription regulator	 	-1.400	bias	3.33E-03	AXL,FOS,FOXF2,HES1,MEX3A,NID1	19 (7)
+Doxo3 vs Cycling0	FEV	 	transcription regulator	 	 	 	3.35E-03	FOS,SLIT2,STXBP6	 
+Doxo3 vs Cycling0	FERD3L	 	transcription regulator	 	 	 	3.43E-03	HES1	 
+Doxo3 vs Cycling0	TAX1BP3	 	transcription regulator	 	 	 	3.43E-03	FOS	 
+Doxo14 vs Doxo3	SNAI2	 	transcription regulator	 	 	 	3.49E-03	CCN2,CXCL12,MYO16-AS1	 
+Palbo28 vs Palbo3	ARNT	 	transcription regulator	 	 	 	3.53E-03	EDN1,G6PD,SOCS3,TNFRSF19	 
+Doxo21 vs Cycling0	RAX	 	transcription regulator	 	 	 	3.54E-03	HES1,SOCS3	 
+Doxo21 vs Doxo3	TAF4	 	transcription regulator	 	 	 	3.54E-03	CCN2,COL6A3,OLFML3	 
+Palbo28 vs Cycling0	SOX2	 	transcription regulator	 	0.216	bias	3.57E-03	AQP4,CXCL12,FOS,LMCD1,SKP2,TERT,TNFRSF19,WNT3	12 (2)
+Doxo3 vs Cycling0	ADNP	 	transcription regulator	 	 	 	3.58E-03	FOSB,HES1	 
+Doxo3 vs Cycling0	E2F5	 	transcription regulator	 	 	 	3.58E-03	DIRAS3,TERT	 
+Palbo28 vs Cycling0	ELK3	 	transcription regulator	 	 	 	3.60E-03	EGR1,FOS	38 (11)
+Palbo14 vs Cycling0	ILF3	 	transcription regulator	 	 	 	3.63E-03	ACAT2,FOS,SCD	 
+Palbo28 vs Palbo3	FERD3L	 	transcription regulator	 	 	 	3.65E-03	HES1	 
+Palbo28 vs Palbo3	TAX1BP3	 	transcription regulator	 	 	 	3.65E-03	FOS	 
+Doxo3 vs Cycling0	SREBF1	 	transcription regulator	Inhibited	-2.160	bias	3.70E-03	FADS2,G6PD,INSIG1,MSMO1,SCD	20 (9)
+Doxo3 vs Cycling0	VDR	 	transcription regulator	 	0.000	 	3.70E-03	CISH,EDN1,EGR1,SOCS3,TERT	36 (19)
+Palbo28 vs Cycling0	ZEB1	 	transcription regulator	 	 	 	3.72E-03	EDN1,FADS2,FOSB,ITGB4	24 (7)
+Palbo14 vs Cycling0	HMGN1	 	transcription regulator	 	 	 	3.72E-03	FOS,FOSB	 
+Palbo28 vs Palbo3	ELK4	 	transcription regulator	 	 	 	3.74E-03	EGR1,FOS	17 (5)
+Palbo28 vs Palbo3	BCL3	 	transcription regulator	 	 	 	3.75E-03	CXCL12,EGR1,FOS	39 (18)
+Palbo28 vs Palbo3	MTDH	 	transcription regulator	 	 	 	3.76E-03	COL4A1,COL4A2,EGR1,FADS2	31 (10)
+Doxo21 vs Cycling0	SMARCA4	 	transcription regulator	 	-0.894	bias	3.76E-03	ANGPTL2,CCN2,EGR1,FOS,H1-10,MIR503HG,PER3,STXBP6,TPM1,ZNF503	36 (6)
+Palbo28 vs Cycling0	NFE2L2	 	transcription regulator	 	-1.299	bias	3.79E-03	ADAMTS1,COL4A2,EVI2A,G6PD,HES1,MIR17HG,MSMO1,PAFAH1B3,PHGDH,SOCS3	30 (7)
+Doxo14 vs Cycling0	MAML1	 	transcription regulator	 	 	 	3.80E-03	EGR1,HES1	40 (7)
+Doxo21 vs Doxo3	HMGN1	 	transcription regulator	 	 	 	3.80E-03	FOS,FOSB	 
+Doxo14 vs Cycling0	NFAT5	 	transcription regulator	 	0.280	 	3.86E-03	AQP4,COL4A1,CXCL12,EDN1,EGR1,PIK3CD,SLC7A2,WNT5B	53 (7)
+Palbo28 vs Palbo3	NANOG	 	transcription regulator	 	 	 	3.91E-03	EGR1,FOS,FOSB,OTX1	 
+Palbo28 vs Palbo3	NFKB2	 	transcription regulator	 	 	 	3.91E-03	BCL2L11,CXCL12,FOS,LMCD1	18 (7)
+Palbo28 vs Cycling0	ATN1	 	transcription regulator	 	 	 	3.92E-03	CAMK4,NREP,RGS16,TM4SF1	 
+Doxo14 vs Doxo3	SP1	 	transcription regulator	 	-0.559	bias	3.94E-03	CCN2,CXCL12,FOXF2,HES1,MAZ,SLC19A1	 
+Doxo14 vs Cycling0	SRF	 	transcription regulator	Inhibited	-2.378	bias	3.95E-03	CCN2,EGR1,FOS,FOSB,IER2,NET1,TPM1	61 (19)
+Palbo14 vs Cycling0	MRTFB	 	transcription regulator	 	 	 	3.95E-03	ADAMTS1,COL6A3,EDN1,EGR1	23 (7)
+Doxo21 vs Cycling0	MAML1	 	transcription regulator	 	 	 	3.96E-03	EGR1,HES1	34 (7)
+Palbo14 vs Palbo3	SMAD7	 	transcription regulator	 	 	 	3.98E-03	COL6A3,CXCL12,SCD	 
+Palbo28 vs Cycling0	TRRAP	 	transcription regulator	 	 	 	3.99E-03	BCL2L11,TERT	 
+Palbo3 vs Cycling0	LEF1	 	transcription regulator	 	 	 	3.99E-03	FOSB,HES1,PTGER2,SP5	 
+Palbo14 vs Palbo3	MAML3	 	transcription regulator	 	 	 	4.02E-03	HES1	 
+Palbo14 vs Palbo3	MAML2	 	transcription regulator	 	 	 	4.02E-03	HES1	 
+Doxo3 vs Cycling0	EPAS1	 	transcription regulator	 	-1.980	bias	4.02E-03	AXL,CXCL12,EDN1,FOS,TERT	46 (23)
+Palbo14 vs Cycling0	SP1	 	transcription regulator	 	-0.922	bias	4.03E-03	ADAMTS1,EGR1,FOS,FOXF2,HES1,MAZ,SLC19A1	31 (14)
+Palbo28 vs Palbo3	ADNP	 	transcription regulator	 	 	 	4.05E-03	FOSB,HES1	 
+Palbo28 vs Palbo3	E2F5	 	transcription regulator	 	 	 	4.05E-03	DIRAS3,TERT	 
+Palbo28 vs Cycling0	NKX2-3	 	transcription regulator	 	-0.343	 	4.07E-03	EDN1,FBN2,KLF2,PHGDH,TNFAIP8L1	 
+Doxo21 vs Doxo3	MRTFB	 	transcription regulator	 	-1.929	bias	4.12E-03	CCN2,COL6A3,CXCL12,EGR1	 
+Doxo14 vs Doxo3	MAFB	 	transcription regulator	 	 	 	4.13E-03	AQP4,CXCL12,OLFML3	 
+Palbo28 vs Cycling0	MAFB	 	transcription regulator	 	-1.000	 	4.13E-03	AQP4,CXCL12,OLFML2B,OLFML3	 
+Palbo28 vs Palbo3	PRDM5	 	transcription regulator	 	 	 	4.13E-03	NREP,SOCS3,TINAGL1	 
+Doxo3 vs Cycling0	MYOCD	 	transcription regulator	 	 	 	4.17E-03	CCBE1,FOS,TPM1	 
+Palbo3 vs Cycling0	MAML3	 	transcription regulator	 	 	 	4.17E-03	HES1	 
+Palbo3 vs Cycling0	MAML2	 	transcription regulator	 	 	 	4.17E-03	HES1	 
+Doxo21 vs Doxo3	ATF2	 	transcription regulator	 	 	 	4.19E-03	ANGPTL2,EGR1,FOS	19 (7)
+Doxo14 vs Doxo3	FOXO1	 	transcription regulator	 	-0.496	bias	4.21E-03	CCN2,COL4A1,COL4A2,FOSB,KIF18A	23 (12)
+Doxo14 vs Doxo3	RUNX3	 	transcription regulator	 	 	 	4.21E-03	CCN2,COL4A1,GLI2	15 (4)
+Doxo14 vs Cycling0	MYT1	 	transcription regulator	 	 	 	4.23E-03	IL27RA,TM4SF1	 
+Doxo14 vs Cycling0	ELK3	 	transcription regulator	 	 	 	4.23E-03	EGR1,FOS	42 (12)
+Doxo3 vs Cycling0	HMGA1	 	transcription regulator	 	-1.000	bias	4.26E-03	EGR1,FOS,IER2,INSIG1	20 (7)
+Palbo28 vs Cycling0	GATA6	 	transcription regulator	 	-1.446	 	4.31E-03	COL4A1,COL4A2,EDN1,HES1,KLF2	 
+Palbo28 vs Cycling0	HOXA11	 	transcription regulator	 	 	 	4.39E-03	GDNF,KLF2	 
+Palbo28 vs Cycling0	LMX1A	 	transcription regulator	 	 	 	4.39E-03	HES1,SLIT2	 
+Doxo21 vs Cycling0	NFAT5	 	transcription regulator	 	1.273	 	4.40E-03	COL4A1,CXCL12,EDN1,EGR1,PIK3CD,SLC7A2,SOCS3,WNT5B	53 (12)
+Doxo21 vs Cycling0	MYT1	 	transcription regulator	 	 	 	4.42E-03	IL27RA,TM4SF1	 
+Doxo21 vs Cycling0	ELK3	 	transcription regulator	 	 	 	4.42E-03	EGR1,FOS	29 (7)
+Doxo21 vs Doxo3	NFKB1	 	transcription regulator	 	 	 	4.42E-03	CCN2,EGR1,FOS,FOSB,TERT	37 (19)
+Doxo3 vs Cycling0	NOTCH1	 	transcription regulator	 	1.901	 	4.43E-03	FOS,FOSB,HES1,ITGB4,WNT3	37 (21)
+Doxo3 vs Cycling0	HMGN1	 	transcription regulator	 	 	 	4.44E-03	FOS,FOSB	 
+Doxo14 vs Cycling0	SMAD2	 	transcription regulator	 	-1.953	bias	4.48E-03	CCN2,HES1,NET1,TPM1	56 (11)
+Doxo14 vs Cycling0	SNAI2	 	transcription regulator	 	-0.882	 	4.48E-03	AXL,CCN2,CXCL12,ITGB4	40 (11)
+Palbo28 vs Palbo3	STAT3	 	transcription regulator	Inhibited	-2.681	bias	4.48E-03	ANGPTL2,BCL2L11,CXCL12,EDN1,EGR1,FOS,RAB11FIP1,SOCS3,TERT	36 (19)
+Doxo21 vs Doxo3	SOX4	 	transcription regulator	 	-1.969	bias	4.49E-03	CXCL12,EVI2A,FOS,MEX3A	 
+Palbo14 vs Palbo3	ARID4B	 	transcription regulator	 	 	 	4.57E-03	CXCL12,TINAGL1	 
+Doxo14 vs Cycling0	SREBF1	 	transcription regulator	Inhibited	-2.378	bias	4.57E-03	FADS2,G6PD,INSIG1,MSMO1,SCD,SLC7A5	39 (11)
+Doxo14 vs Cycling0	VDR	 	transcription regulator	 	-1.342	 	4.57E-03	CISH,COL4A1,COL4A2,EDN1,EGR1,TERT	68 (22)
+Doxo14 vs Cycling0	GABPA	 	transcription regulator	 	 	 	4.60E-03	OXTR,SKP2,TERT	 
+Doxo14 vs Doxo3	NFKBIA	 	transcription regulator	Inhibited	-2.000	 	4.61E-03	CXCL12,FOXF2,HES1,MEX3A,RGS16	 
+Palbo28 vs Cycling0	SMARCB1	 	transcription regulator	 	 	 	4.64E-03	BCL2L11,FOS,FOSB,HES1,SKP2	39 (7)
+Palbo28 vs Cycling0	NFATC3	 	transcription regulator	 	 	 	4.67E-03	EDN1,FOS,FOSB	23 (7)
+Doxo14 vs Doxo3	MAML3	 	transcription regulator	 	 	 	4.69E-03	HES1	 
+Doxo14 vs Doxo3	MAML2	 	transcription regulator	 	 	 	4.69E-03	HES1	 
+Doxo3 vs Cycling0	STAT1	 	transcription regulator	 	-0.968	bias	4.69E-03	AXL,EDN1,EGR1,FOS,HES1,SOCS3	28 (16)
+Doxo3 vs Cycling0	FOXO1	 	transcription regulator	Inhibited	-2.236	bias	4.69E-03	CAMK4,EDN1,EGR1,FOS,FOSB,KIF18A	35 (22)
+Palbo3 vs Cycling0	RYBP	 	transcription regulator	 	 	 	4.72E-03	FOSB,WNT5B	 
+Palbo3 vs Cycling0	TAF7L	 	transcription regulator	 	 	 	4.72E-03	CAMK4,TENT5B	 
+Doxo14 vs Cycling0	IKZF1	 	transcription regulator	 	1.934	bias	4.72E-03	AXL,CISH,FOS,G6PD,HES1,SLC19A1	41 (7)
+Palbo28 vs Cycling0	FERD3L	 	transcription regulator	 	 	 	4.73E-03	HES1	 
+Palbo28 vs Cycling0	TAX1BP3	 	transcription regulator	 	 	 	4.73E-03	FOS	 
+Doxo3 vs Cycling0	OLIG2	 	transcription regulator	 	 	 	4.75E-03	WNT3,WNT5B	 
+Palbo14 vs Cycling0	EP300	 	transcription regulator	 	-1.932	bias	4.79E-03	AXL,CAMK4,EDN1,EGR1,FOS,SKP2	31 (13)
+Palbo14 vs Cycling0	HLX	 	transcription regulator	 	 	 	4.79E-03	EGR1,HES1	14 (6)
+Doxo21 vs Cycling0	TRRAP	 	transcription regulator	 	 	 	4.89E-03	BCL2L11,TERT	 
+Doxo21 vs Doxo3	HLX	 	transcription regulator	 	 	 	4.91E-03	EGR1,HES1	16 (7)
+Palbo28 vs Palbo3	HMGN1	 	transcription regulator	 	 	 	5.02E-03	FOS,FOSB	 
+Doxo14 vs Doxo3	SOX9	 	transcription regulator	 	 	 	5.02E-03	CCN2,CELSR2,HES1	 
+Doxo21 vs Doxo3	NCOR2	 	transcription regulator	 	 	 	5.05E-03	CCN2,FOS,KLF2	13 (4)
+Doxo21 vs Doxo3	KLF15	 	transcription regulator	 	 	 	5.05E-03	CCN2,NET1,PXMP2	12 (3)
+Doxo21 vs Cycling0	SREBF1	 	transcription regulator	Inhibited	-2.378	bias	5.07E-03	FADS2,G6PD,INSIG1,MSMO1,SCD,SLC7A5	40 (12)
+Palbo28 vs Palbo3	MAX	 	transcription regulator	 	 	 	5.12E-03	EDN1,FADS2,TERT	 
+Doxo14 vs Cycling0	FERD3L	 	transcription regulator	 	 	 	5.14E-03	HES1	 
+Doxo14 vs Cycling0	TAX1BP3	 	transcription regulator	 	 	 	5.14E-03	FOS	 
+Doxo14 vs Cycling0	SP100	 	transcription regulator	 	 	 	5.16E-03	CCN2,FOS	12 (3)
+Doxo14 vs Cycling0	LMX1A	 	transcription regulator	 	 	 	5.16E-03	HES1,SLIT2	 
+Doxo14 vs Cycling0	DBP	 	transcription regulator	 	 	 	5.16E-03	AQP4,PER1	 
+Doxo21 vs Cycling0	IKZF1	 	transcription regulator	 	1.934	bias	5.24E-03	AXL,CISH,FOS,G6PD,HES1,SLC19A1	43 (7)
+Palbo28 vs Cycling0	SOX1	 	transcription regulator	 	 	 	5.24E-03	HES1,TNFRSF19,WNT3	 
+Doxo21 vs Cycling0	FERD3L	 	transcription regulator	 	 	 	5.25E-03	HES1	 
+Doxo21 vs Cycling0	TAX1BP3	 	transcription regulator	 	 	 	5.25E-03	FOS	 
+Doxo14 vs Cycling0	ATN1	 	transcription regulator	 	 	 	5.26E-03	CAMK4,NREP,RGS16,TM4SF1	 
+Doxo14 vs Cycling0	STAT3	 	transcription regulator	Inhibited	-3.123	bias	5.28E-03	ANGPTL2,CCN2,CXCL12,EDN1,EGR1,FOS,KLF2,RAB11FIP1,SKP2,SLC1A3,TERT	58 (20)
+Doxo21 vs Doxo3	GLIS3	 	transcription regulator	 	 	 	5.31E-03	BCL2L11,COL4A1,COL4A2	 
+Doxo21 vs Cycling0	SP100	 	transcription regulator	 	 	 	5.38E-03	CCN2,FOS	12 (3)
+Doxo21 vs Cycling0	LMX1A	 	transcription regulator	 	 	 	5.38E-03	HES1,SLIT2	 
+Palbo14 vs Cycling0	HMG20A	 	transcription regulator	 	 	 	5.40E-03	AXL,EDN1,PTGER2	 
+Palbo14 vs Cycling0	SP3	 	transcription regulator	 	 	 	5.40E-03	EGR1,FOS,HES1,SLC19A1	21 (7)
+Doxo21 vs Cycling0	RUNX1	 	transcription regulator	 	-1.016	bias	5.41E-03	BCL2L11,COL4A1,HES1,KLF2,MIR17HG,PIK3CD	50 (11)
+Doxo14 vs Cycling0	LEF1	 	transcription regulator	 	0.000	 	5.44E-03	ADAMTS6,FOSB,HES1,LFNG,PTGER2,SP5	 
+Palbo28 vs Cycling0	SPDEF	 	transcription regulator	 	 	 	5.44E-03	COL4A1,COL4A2,COL6A3	 
+Doxo14 vs Cycling0	TP73	 	transcription regulator	 	-1.744	bias	5.49E-03	AXL,EDN1,EGR1,G6PD,HES1,ITGB4,PSRC1,TERT	64 (18)
+Doxo14 vs Cycling0	MAFB	 	transcription regulator	 	-1.000	 	5.54E-03	AQP4,CXCL12,OLFML2B,OLFML3	 
+Doxo21 vs Doxo3	HMG20A	 	transcription regulator	 	 	 	5.58E-03	CCN2,PTGER2,RGS16	 
+Doxo21 vs Doxo3	SP3	 	transcription regulator	 	 	 	5.63E-03	EGR1,FOS,HES1,TERT	39 (18)
+Doxo21 vs Doxo3	GATA6	 	transcription regulator	 	-1.154	 	5.63E-03	COL4A1,COL4A2,HES1,KLF2	 
+Palbo28 vs Cycling0	KCNIP3	 	transcription regulator	 	 	 	5.65E-03	FOS,FOSB,SOCS3	 
+Palbo28 vs Cycling0	MEF2D	 	transcription regulator	 	 	 	5.65E-03	FOS,FOSB,KLF2	 
+Palbo14 vs Cycling0	EOMES	 	transcription regulator	 	 	 	5.67E-03	COL6A3,LHX9,WNT3	 
+Doxo21 vs Cycling0	ATN1	 	transcription regulator	 	 	 	5.67E-03	CAMK4,NREP,RGS16,TM4SF1	 
+Doxo14 vs Cycling0	RUNX3	 	transcription regulator	 	1.982	bias	5.68E-03	CCN2,COL4A1,GLI2,SLIT2	35 (7)
+Doxo14 vs Doxo3	SKIL	 	transcription regulator	 	 	 	5.70E-03	COL4A1,CXCL12	 
+Doxo3 vs Cycling0	HLX	 	transcription regulator	 	 	 	5.72E-03	EGR1,HES1	20 (7)
+Palbo14 vs Cycling0	MRTFA	 	transcription regulator	 	-1.964	bias	5.75E-03	COL6A3,EDN1,EGR1,FOS	28 (12)
+Palbo14 vs Cycling0	SMARCB1	 	transcription regulator	 	 	 	5.75E-03	FOS,FOSB,HES1,SKP2	 
+Doxo14 vs Cycling0	NKX2-3	 	transcription regulator	 	-0.343	 	5.78E-03	EDN1,FBN2,KLF2,PHGDH,TNFAIP8L1	 
+Palbo14 vs Cycling0	EZH2	 	transcription regulator	 	0.469	 	5.78E-03	AXL,CGB7,DENND2A,EGR1,FOXF2,WNT3	 
+Doxo21 vs Doxo3	GLIS1	 	transcription regulator	 	 	 	5.82E-03	COL4A1,COL4A2	 
+Palbo28 vs Cycling0	ZBTB20	 	transcription regulator	 	 	 	5.86E-03	AQP4,CISH,SOCS3	 
+Palbo28 vs Cycling0	STAT1	 	transcription regulator	 	-1.853	bias	5.86E-03	AXL,BCL2L11,EDN1,EGR1,FOS,HES1,SOCS3	54 (19)
+Doxo14 vs Cycling0	NFATC3	 	transcription regulator	 	 	 	5.88E-03	EDN1,FOS,FOSB	27 (6)
+Doxo14 vs Doxo3	SMAD1	 	transcription regulator	 	 	 	5.93E-03	CCN2,COL4A1	 
+Palbo14 vs Cycling0	FOSB	-1.551	transcription regulator	 	 	 	6.00E-03	FOS,FOSB	 
+Palbo14 vs Palbo3	HES7	 	transcription regulator	 	 	 	6.02E-03	HES1	 
+Doxo21 vs Cycling0	LEF1	 	transcription regulator	 	0.000	 	6.03E-03	ADAMTS6,FOSB,HES1,LFNG,PTGER2,SP5	 
+Palbo28 vs Palbo3	E2F3	 	transcription regulator	 	 	 	6.04E-03	EDN1,MEX3A,MIR17HG,TERT	 
+Doxo14 vs Doxo3	LEF1	 	transcription regulator	 	 	 	6.08E-03	FOSB,HES1,LFNG,SP5	 
+Doxo14 vs Cycling0	GATA6	 	transcription regulator	 	-1.446	 	6.11E-03	COL4A1,COL4A2,EDN1,HES1,KLF2	 
+Doxo14 vs Doxo3	SMAD7	 	transcription regulator	 	 	 	6.13E-03	CCN2,COL6A3,CXCL12	 
+Doxo21 vs Doxo3	FOSB	-3.953	transcription regulator	 	 	 	6.14E-03	FOS,FOSB	 
+Doxo14 vs Doxo3	ARID4B	 	transcription regulator	 	 	 	6.17E-03	CXCL12,TINAGL1	 
+Doxo3 vs Cycling0	STAT5A	 	transcription regulator	 	 	 	6.18E-03	CISH,FOS,FOSB,SOCS3,TM4SF1	42 (24)
+Doxo3 vs Cycling0	NFKB1	 	transcription regulator	 	-1.954	bias	6.18E-03	EGR1,FOS,FOSB,SLC7A2,TERT	39 (22)
+Palbo28 vs Cycling0	ELK4	 	transcription regulator	 	 	 	6.20E-03	EGR1,FOS	34 (10)
+Palbo28 vs Palbo3	ATF2	 	transcription regulator	 	 	 	6.23E-03	ANGPTL2,EGR1,FOS	 
+Doxo21 vs Cycling0	NFATC3	 	transcription regulator	 	 	 	6.24E-03	EDN1,FOS,FOSB	24 (7)
+Palbo3 vs Cycling0	HES7	 	transcription regulator	 	 	 	6.24E-03	HES1	 
+Palbo14 vs Cycling0	MAML3	 	transcription regulator	 	 	 	6.25E-03	HES1	 
+Palbo14 vs Cycling0	POU4F3	 	transcription regulator	 	 	 	6.25E-03	FOS	 
+Palbo14 vs Cycling0	MAML2	 	transcription regulator	 	 	 	6.25E-03	HES1	 
+Doxo21 vs Cycling0	NKX2-3	 	transcription regulator	 	-0.343	 	6.32E-03	EDN1,FBN2,KLF2,PHGDH,TNFAIP8L1	 
+Doxo21 vs Doxo3	MAML3	 	transcription regulator	 	 	 	6.32E-03	HES1	 
+Doxo21 vs Doxo3	POU4F3	 	transcription regulator	 	 	 	6.32E-03	FOS	 
+Doxo21 vs Doxo3	MAML2	 	transcription regulator	 	 	 	6.32E-03	HES1	 
+Doxo3 vs Cycling0	BHLHE40	 	transcription regulator	 	-1.342	bias	6.33E-03	AXL,PER1,RGS16,SLC7A2,SOCS3	 
+Palbo28 vs Palbo3	STAT1	 	transcription regulator	 	-1.596	bias	6.37E-03	BCL2L11,EDN1,EGR1,FOS,HES1,SOCS3	36 (20)
+Doxo3 vs Cycling0	PER1	-1.391	transcription regulator	 	 	 	6.42E-03	PER1,PER3	5 (2)
+Palbo14 vs Cycling0	RELA	 	transcription regulator	 	-1.939	bias	6.44E-03	EDN1,EGR1,FOS,FOSB,HES1,MIR17HG	42 (20)
+Doxo21 vs Doxo3	SOX2	 	transcription regulator	 	-0.169	bias	6.46E-03	CCN2,CXCL12,FOS,GLI2,SKP2,TERT	35 (13)
+Palbo28 vs Palbo3	HLX	 	transcription regulator	 	 	 	6.47E-03	EGR1,HES1	20 (7)
+Doxo14 vs Cycling0	SOX1	 	transcription regulator	 	 	 	6.60E-03	HES1,TNFRSF19,WNT3	 
+Doxo21 vs Cycling0	GATA6	 	transcription regulator	 	-1.446	 	6.68E-03	COL4A1,COL4A2,EDN1,HES1,KLF2	 
+Palbo28 vs Cycling0	ADNP	 	transcription regulator	 	 	 	6.70E-03	FOSB,HES1	 
+Palbo28 vs Cycling0	E2F5	 	transcription regulator	 	 	 	6.70E-03	DIRAS3,TERT	 
+Palbo14 vs Cycling0	RB1	 	transcription regulator	Activated	2.177	 	6.73E-03	EGR1,FOS,FOSB,GPR85,HES1,SKP2	36 (18)
+Doxo21 vs Doxo3	ZBTB7A	 	transcription regulator	 	 	 	6.80E-03	BCL2L11,FOS	 
+Doxo3 vs Cycling0	MAML3	 	transcription regulator	 	 	 	6.84E-03	HES1	 
+Doxo3 vs Cycling0	POU4F3	 	transcription regulator	 	 	 	6.84E-03	FOS	 
+Doxo3 vs Cycling0	MAML2	 	transcription regulator	 	 	 	6.84E-03	HES1	 
+Palbo14 vs Cycling0	CTNNB1	 	transcription regulator	 	-1.548	bias	6.90E-03	AQP4,EDN1,EGR1,FOS,GDNF,HES1,MIR17HG,SP5,WNT3	40 (16)
+Doxo14 vs Doxo3	MAFA	 	transcription regulator	 	 	 	6.91E-03	AQP4,CXCL12,TNFRSF19	 
+Doxo14 vs Doxo3	MYC	 	transcription regulator	 	-1.306	bias	6.98E-03	COL4A1,COL4A2,COL6A3,G6PD,GLI2,HES1,SKP2,SLC7A5,TNFRSF19	25 (12)
+Doxo21 vs Cycling0	SOX1	 	transcription regulator	 	 	 	7.00E-03	HES1,TNFRSF19,WNT3	 
+Doxo14 vs Doxo3	HES7	 	transcription regulator	 	 	 	7.02E-03	HES1	 
+Doxo3 vs Cycling0	TBX3	 	transcription regulator	Inhibited	-2.000	bias	7.09E-03	CDK15,EDN1,EGR1,KIF18A	 
+Doxo3 vs Cycling0	FOSB	-1.740	transcription regulator	 	 	 	7.15E-03	FOS,FOSB	 
+Doxo21 vs Cycling0	SMARCB1	 	transcription regulator	 	 	 	7.18E-03	BCL2L11,FOS,FOSB,HES1,SKP2	47 (7)
+Doxo21 vs Doxo3	TEAD4	 	transcription regulator	 	 	 	7.21E-03	CCN2,CGB7,GLI2	 
+Palbo3 vs Cycling0	CTNNB1	 	transcription regulator	 	 	 	7.22E-03	AQP4,CTDSPL,EGR1,HES1,MIR17HG,SP5,WNT5B	 
+Doxo14 vs Doxo3	ARID1A	 	transcription regulator	 	-1.000	 	7.24E-03	COL4A1,HES1,HTRA3,LTBP4,MEST	 
+Palbo28 vs Palbo3	PER1	-0.271	transcription regulator	 	 	 	7.25E-03	BCL2L11,PER3	 
+Doxo14 vs Cycling0	ELK4	 	transcription regulator	 	 	 	7.28E-03	EGR1,FOS	38 (11)
+Palbo28 vs Palbo3	MAML3	 	transcription regulator	 	 	 	7.29E-03	HES1	 
+Palbo28 vs Palbo3	POU4F3	 	transcription regulator	 	 	 	7.29E-03	FOS	 
+Palbo28 vs Palbo3	MAML2	 	transcription regulator	 	 	 	7.29E-03	HES1	 
+Palbo14 vs Cycling0	IRF2BP1	 	transcription regulator	 	 	 	7.33E-03	ADAMTS1,FOS	 
+Palbo14 vs Cycling0	ZBTB48	 	transcription regulator	 	 	 	7.33E-03	FOSB,PXMP2	 
+Palbo14 vs Cycling0	TFAP2B	 	transcription regulator	 	 	 	7.33E-03	EDN1,SLC19A1	 
+Palbo14 vs Cycling0	FOXO3	 	transcription regulator	 	-1.069	 	7.38E-03	AQP4,EGR1,FOS,FOSB,SKP2	37 (17)
+Doxo3 vs Cycling0	KLF4	 	transcription regulator	Inhibited	-2.202	bias	7.39E-03	ADAMTS1,HES1,TERT,TNFRSF19,WNT3	38 (10)
+Palbo28 vs Palbo3	NFE2L2	 	transcription regulator	 	-1.940	bias	7.42E-03	COL4A2,EVI2A,G6PD,HES1,MIR17HG,PHGDH,RYR3,SOCS3	 
+Doxo21 vs Doxo3	ZBTB48	 	transcription regulator	 	 	 	7.49E-03	FOSB,PXMP2	 
+Palbo28 vs Cycling0	MYCN	 	transcription regulator	 	-0.230	 	7.51E-03	ADAMTS1,COL4A1,HES1,MIR17HG,PHGDH,TERT	42 (7)
+Doxo21 vs Cycling0	KCNIP3	 	transcription regulator	 	 	 	7.53E-03	FOS,FOSB,SOCS3	 
+Palbo14 vs Palbo3	TCF7	 	transcription regulator	 	0.000	 	7.55E-03	CISH,HES1,IL27RA,PTGER2	 
+Doxo21 vs Doxo3	JUN	 	transcription regulator	 	-1.447	bias	7.57E-03	ANGPTL2,BCL2L11,CCN2,FOS,FOSB,HES1	37 (21)
+Doxo21 vs Cycling0	ELK4	 	transcription regulator	 	 	 	7.59E-03	EGR1,FOS	30 (6)
+Doxo14 vs Doxo3	FOXC1	 	transcription regulator	 	 	 	7.62E-03	CXCL12,FOSB,LFNG	 
+Doxo21 vs Cycling0	TFAP2A	 	transcription regulator	 	 	 	7.62E-03	FREM2,SLC19A1,TERT,TPM1	 
+Doxo3 vs Cycling0	GLI3	 	transcription regulator	 	 	 	7.64E-03	EGR1,FOSB,TERT	 
+Palbo28 vs Cycling0	EGR3	 	transcription regulator	 	0.152	bias	7.75E-03	CISH,GDNF,SLIT2,SOCS3	 
+Doxo21 vs Doxo3	DACH1	 	transcription regulator	 	 	 	7.85E-03	EGR1,FOS	18 (6)
+Doxo14 vs Cycling0	ADNP	 	transcription regulator	 	 	 	7.86E-03	FOSB,HES1	 
+Doxo14 vs Cycling0	E2F5	 	transcription regulator	 	 	 	7.86E-03	DIRAS3,TERT	 
+Doxo14 vs Doxo3	MTDH	 	transcription regulator	 	 	 	7.86E-03	CCN2,COL4A1,COL4A2	5 (2)
+Palbo28 vs Cycling0	HOXA9	 	transcription regulator	 	 	 	7.91E-03	BCL2L11,CISH,IER2,PIK3CD	 
+Doxo3 vs Cycling0	LMX1B	 	transcription regulator	 	 	 	7.92E-03	HES1,SLIT2	 
+Doxo3 vs Cycling0	PER2	 	transcription regulator	 	 	 	7.92E-03	PER1,PER3	5 (2)
+Doxo14 vs Doxo3	ZNF281	 	transcription regulator	 	 	 	7.96E-03	CCN2,COL4A1	 
+Doxo21 vs Cycling0	TCF3	 	transcription regulator	 	0.152	bias	7.96E-03	BCL2L11,KLF2,MSMO1,PAFAH1B3,RGS16,SLC7A5,SOCS3	 
+Doxo14 vs Doxo3	NPM1	 	transcription regulator	 	 	 	7.99E-03	CCN2,COL4A1,COL4A2	20 (4)
+Palbo28 vs Cycling0	CLOCK	 	transcription regulator	 	0.000	 	8.00E-03	GDNF,MEST,MSMO1,PER3,SCD	 
+Palbo28 vs Palbo3	NFKB1	 	transcription regulator	 	-1.954	bias	8.03E-03	EGR1,FOS,FOSB,SLC7A2,TERT	34 (18)
+Palbo14 vs Cycling0	ATF1	 	transcription regulator	 	 	 	8.03E-03	EGR1,FOS	 
+Palbo28 vs Palbo3	SS18	 	transcription regulator	 	 	 	8.08E-03	BCL2L11,SOCS3	 
+Palbo28 vs Palbo3	FOSB	-4.096	transcription regulator	 	 	 	8.08E-03	FOS,FOSB	 
+Palbo28 vs Cycling0	MEN1	 	transcription regulator	 	 	 	8.08E-03	AQP4,FOS,SLIT2,TERT	 
+Doxo14 vs Doxo3	SATB1	 	transcription regulator	 	 	 	8.11E-03	CCN2,EVI2A,FOSB	 
+Doxo14 vs Cycling0	NFKB1	 	transcription regulator	 	-1.954	bias	8.17E-03	CCN2,EGR1,FOS,FOSB,SLC7A2,TERT	62 (22)
+Doxo14 vs Cycling0	PRDM16	 	transcription regulator	 	 	 	8.18E-03	CCN2,HES1,SLIT2	 
+Doxo21 vs Cycling0	ADNP	 	transcription regulator	 	 	 	8.19E-03	FOSB,HES1	 
+Doxo21 vs Cycling0	E2F5	 	transcription regulator	 	 	 	8.19E-03	DIRAS3,TERT	 
+Palbo28 vs Cycling0	FEV	 	transcription regulator	 	 	 	8.20E-03	FOS,SLIT2,STXBP6	 
+Doxo21 vs Doxo3	ATF1	 	transcription regulator	 	 	 	8.22E-03	EGR1,FOS	16 (7)
+Palbo28 vs Cycling0	KLF2	-1.002	transcription regulator	 	1.067	bias	8.25E-03	COL4A1,EDN1,ITGB4,TERT	 
+Palbo28 vs Cycling0	WT1	 	transcription regulator	 	 	 	8.25E-03	COL4A1,EGR1,FOSB,TERT,TM4SF1	 
+Palbo28 vs Palbo3	HMG20A	 	transcription regulator	 	 	 	8.26E-03	EDN1,FADS2,RGS16	 
+Palbo28 vs Cycling0	HMGN1	 	transcription regulator	 	 	 	8.29E-03	FOS,FOSB	 
+Palbo28 vs Cycling0	TRIM28	 	transcription regulator	 	 	 	8.42E-03	BCL2L11,EGR1,FOS,KLF2	56 (23)
+Palbo28 vs Cycling0	PRDM5	 	transcription regulator	 	 	 	8.46E-03	NREP,SOCS3,TINAGL1	 
+Palbo28 vs Cycling0	TFE3	 	transcription regulator	 	 	 	8.46E-03	GDNF,INSIG1,KLF2	 
+Palbo3 vs Cycling0	FOS	-0.863	transcription regulator	 	1.910	 	8.48E-03	EGR1,FOSB,GPSM2,NET1,OXTR	 
+Palbo28 vs Cycling0	RBPJ	 	transcription regulator	 	-0.080	bias	8.64E-03	CXCL12,FADS2,FOS,GDNF,HES1	55 (13)
+Palbo3 vs Cycling0	FOXO3	 	transcription regulator	 	 	 	8.65E-03	AQP4,EGR1,FOSB,SLIT2	 
+Doxo21 vs Cycling0	PRDM16	 	transcription regulator	 	 	 	8.67E-03	CCN2,HES1,SLIT2	 
+Doxo21 vs Cycling0	TFAP2C	 	transcription regulator	 	 	 	8.67E-03	CCN2,FREM2,SLC19A1	 
+Doxo3 vs Cycling0	IRF2BP1	 	transcription regulator	 	 	 	8.73E-03	ADAMTS1,FOS	 
+Palbo28 vs Cycling0	ARNT	 	transcription regulator	 	 	 	8.77E-03	EDN1,G6PD,SOCS3,TNFRSF19	20 (3)
+Palbo28 vs Palbo3	NKX2-3	 	transcription regulator	 	-0.854	 	8.83E-03	EDN1,FBN2,PHGDH,TNFAIP8L1	 
+Palbo28 vs Cycling0	OLIG2	 	transcription regulator	 	 	 	8.85E-03	WNT3,WNT5B	 
+Palbo28 vs Palbo3	FOXO4	 	transcription regulator	 	 	 	8.87E-03	BCL2L11,COL4A1,COL4A2	 
+Palbo28 vs Palbo3	SREBF2	 	transcription regulator	 	 	 	8.87E-03	FADS2,G6PD,INSIG1	20 (7)
+Doxo14 vs Doxo3	JUN	 	transcription regulator	 	-1.732	bias	8.91E-03	ANGPTL2,CCN2,FOSB,HES1,SLC19A1	9 (3)
+Palbo28 vs Palbo3	ZBTB7A	 	transcription regulator	 	 	 	8.95E-03	BCL2L11,FOS	 
+Doxo3 vs Cycling0	TEAD4	 	transcription regulator	 	 	 	8.95E-03	CGB7,EDN1,TPM1	 
+Doxo3 vs Cycling0	NUPR1	 	transcription regulator	Activated	2.449	bias	9.00E-03	CDK15,GPSM2,KIF18A,PER3,TERT,TNFAIP8L1	 
+Doxo21 vs Cycling0	STAT5A	 	transcription regulator	 	 	 	9.03E-03	CISH,FOS,FOSB,GDPD3,SOCS3,TM4SF1	58 (21)
+Doxo21 vs Cycling0	NFKB1	 	transcription regulator	 	-1.954	bias	9.03E-03	CCN2,EGR1,FOS,FOSB,SLC7A2,TERT	62 (22)
+Doxo14 vs Doxo3	IRF6	 	transcription regulator	 	 	 	9.07E-03	GLI2,SLC7A2	 
+Palbo28 vs Palbo3	GLI3	 	transcription regulator	 	 	 	9.08E-03	EGR1,FOSB,TERT	 
+Palbo28 vs Palbo3	NFAT5	 	transcription regulator	 	0.641	 	9.11E-03	COL4A1,CXCL12,EDN1,EGR1,SLC7A2,SOCS3	25 (10)
+Palbo28 vs Palbo3	GATA6	 	transcription regulator	 	-1.969	 	9.25E-03	COL4A1,COL4A2,EDN1,HES1	 
+Palbo28 vs Palbo3	SP1	 	transcription regulator	 	-1.513	bias	9.26E-03	CXCL12,EGR1,FADS2,FOS,HES1,RAB11FIP1,TERT	35 (18)
+Doxo21 vs Doxo3	ID1	 	transcription regulator	 	 	 	9.28E-03	CCN2,EGR1,TERT	35 (19)
+Palbo14 vs Cycling0	ELL	 	transcription regulator	 	 	 	9.36E-03	FOS	 
+Palbo14 vs Cycling0	HES7	 	transcription regulator	 	 	 	9.36E-03	HES1	 
+Palbo28 vs Cycling0	MAML3	 	transcription regulator	 	 	 	9.44E-03	HES1	 
+Palbo28 vs Cycling0	POU4F3	 	transcription regulator	 	 	 	9.44E-03	FOS	 
+Palbo28 vs Cycling0	MAML2	 	transcription regulator	 	 	 	9.44E-03	HES1	 
+Doxo21 vs Doxo3	MAFB	 	transcription regulator	 	 	 	9.46E-03	CXCL12,OLFML2B,OLFML3	 
+Doxo21 vs Doxo3	ELL	 	transcription regulator	 	 	 	9.47E-03	FOS	 
+Doxo21 vs Doxo3	HES7	 	transcription regulator	 	 	 	9.47E-03	HES1	 
+Palbo28 vs Cycling0	NPM1	 	transcription regulator	Inhibited	-2.000	bias	9.49E-03	COL4A1,COL4A2,EGR1,PIK3CD	43 (10)
+Doxo3 vs Cycling0	ATF1	 	transcription regulator	 	 	 	9.57E-03	EGR1,FOS	13 (7)
+Doxo21 vs Doxo3	POU5F1	 	transcription regulator	 	-1.304	bias	9.61E-03	BCL2L11,CXCL12,GLI2,KLF2,TERT	35 (11)
+Doxo21 vs Doxo3	FOSL1	 	transcription regulator	 	 	 	9.65E-03	EGR1,FOS,FOSB	23 (11)
+Palbo28 vs Cycling0	NFKB2	 	transcription regulator	 	 	 	9.68E-03	BCL2L11,CXCL12,FOS,LMCD1	23 (7)
+Palbo28 vs Cycling0	SNAI1	 	transcription regulator	 	 	 	9.68E-03	AXL,FOS,SOCS3,WNT5B	34 (8)
+Doxo14 vs Cycling0	HMGN1	 	transcription regulator	 	 	 	9.72E-03	FOS,FOSB	 
+Palbo28 vs Palbo3	SMARCB1	 	transcription regulator	 	 	 	9.82E-03	BCL2L11,FOS,FOSB,HES1	27 (7)
+Palbo28 vs Palbo3	ZBTB48	 	transcription regulator	 	 	 	9.85E-03	FOSB,PXMP2	 
+Palbo28 vs Palbo3	TFAP2B	 	transcription regulator	 	 	 	9.85E-03	EDN1,TERT	21 (6)
+Doxo21 vs Doxo3	E2F1	 	transcription regulator	 	 	 	9.87E-03	BCL2L11,DLEU2,EGR1,FOS,HES1,TERT	37 (18)
+Doxo14 vs Cycling0	KLF4	 	transcription regulator	 	-1.879	bias	9.98E-03	ADAMTS1,GLI2,HES1,TERT,TNFRSF19,WNT3	56 (12)
+Palbo14 vs Palbo3	ZNF467	 	transcription regulator	 	 	 	1.00E-02	CISH	 
+Palbo14 vs Palbo3	CBFA2T2	 	transcription regulator	 	 	 	1.00E-02	HES1	 
+Palbo14 vs Palbo3	HOXD11	 	transcription regulator	 	 	 	1.00E-02	GDNF	 
+Doxo21 vs Cycling0	HMGN1	 	transcription regulator	 	 	 	1.01E-02	FOS,FOSB	 
+Doxo21 vs Doxo3	SKIL	 	transcription regulator	 	 	 	1.02E-02	COL4A1,CXCL12	 
+Doxo21 vs Cycling0	MEF2A	 	transcription regulator	 	 	 	1.02E-02	EDN1,FOS,KLF2	 
+Palbo14 vs Palbo3	TP53	 	transcription regulator	 	0.299	 	1.02E-02	CGB7,CXCL12,HES1,IL27RA,MIR17HG,NDUFA4L2,PAK3,PHGDH,RGS16,SCD,TINAGL1	 
+Doxo3 vs Cycling0	ELL	 	transcription regulator	 	 	 	1.02E-02	FOS	 
+Doxo3 vs Cycling0	HES7	 	transcription regulator	 	 	 	1.02E-02	HES1	 
+Doxo14 vs Cycling0	MAML3	 	transcription regulator	 	 	 	1.03E-02	HES1	 
+Doxo14 vs Cycling0	POU4F3	 	transcription regulator	 	 	 	1.03E-02	FOS	 
+Doxo14 vs Cycling0	MAML2	 	transcription regulator	 	 	 	1.03E-02	HES1	 
+Palbo28 vs Cycling0	MEF2C	 	transcription regulator	 	-1.067	bias	1.03E-02	CCBE1,FOS,FOSB,KLF2	 
+Doxo14 vs Doxo3	MYCN	 	transcription regulator	 	1.000	 	1.03E-02	CCN2,COL4A1,HES1,PHGDH	 
+Palbo14 vs Cycling0	RYBP	 	transcription regulator	 	 	 	1.03E-02	FOSB,WNT3	 
+Palbo14 vs Cycling0	TAF7L	 	transcription regulator	 	 	 	1.03E-02	CAMK4,TENT5B	 
+Doxo14 vs Cycling0	OLIG2	 	transcription regulator	 	 	 	1.04E-02	WNT3,WNT5B	 
+Palbo3 vs Cycling0	CBFA2T2	 	transcription regulator	 	 	 	1.04E-02	HES1	 
+Palbo3 vs Cycling0	KIDINS220	 	transcription regulator	 	 	 	1.04E-02	EGR1	 
+Palbo14 vs Cycling0	GATA4	 	transcription regulator	 	-1.165	 	1.04E-02	CCBE1,EDN1,FOS,HES1	 
+Doxo21 vs Cycling0	MAML3	 	transcription regulator	 	 	 	1.05E-02	HES1	 
+Doxo21 vs Cycling0	POU4F3	 	transcription regulator	 	 	 	1.05E-02	FOS	 
+Doxo21 vs Cycling0	MAML2	 	transcription regulator	 	 	 	1.05E-02	HES1	 
+Doxo14 vs Cycling0	MAFA	 	transcription regulator	 	 	 	1.05E-02	AQP4,CXCL12,OXTR,TNFRSF19	 
+Doxo21 vs Doxo3	SMAD1	 	transcription regulator	 	 	 	1.06E-02	CCN2,COL4A1	 
+Palbo28 vs Cycling0	HLX	 	transcription regulator	 	 	 	1.06E-02	EGR1,HES1	 
+Palbo14 vs Cycling0	CREBBP	 	transcription regulator	 	 	 	1.07E-02	AXL,CAMK4,EGR1,FOS,FOSB	 
+Palbo3 vs Cycling0	MYC	 	transcription regulator	Inhibited	-2.404	bias	1.07E-02	ADAMTS1,AXL,CTDSPL,DLEU2,EGR1,HES1,LHX9,MIR17HG	 
+Doxo3 vs Cycling0	SRF	 	transcription regulator	 	-1.951	bias	1.07E-02	EGR1,FOS,FOSB,IER2,TPM1	 
+Doxo3 vs Cycling0	FOXO3	 	transcription regulator	 	-1.982	 	1.07E-02	AQP4,EGR1,FOS,FOSB,SLIT2	 
+Palbo28 vs Palbo3	ATF1	 	transcription regulator	 	 	 	1.08E-02	EGR1,FOS	 
+Doxo21 vs Cycling0	OLIG2	 	transcription regulator	 	 	 	1.08E-02	WNT3,WNT5B	 
+Palbo28 vs Palbo3	ELL	 	transcription regulator	 	 	 	1.09E-02	FOS	 
+Palbo28 vs Palbo3	HES7	 	transcription regulator	 	 	 	1.09E-02	HES1	 
+Doxo21 vs Doxo3	HOXA3	 	transcription regulator	 	 	 	1.10E-02	EVI2A,KLF2	 
+Doxo21 vs Doxo3	ARID4B	 	transcription regulator	 	 	 	1.10E-02	CXCL12,TINAGL1	 
+Doxo21 vs Doxo3	TFEB	 	transcription regulator	 	 	 	1.10E-02	BORA,CCN2,FOS,PTGER2,SLC1A3	 
+Doxo21 vs Cycling0	KLF4	 	transcription regulator	 	-1.879	bias	1.10E-02	ADAMTS1,GLI2,HES1,TERT,TNFRSF19,WNT3	 
+Palbo28 vs Cycling0	POU2F2	 	transcription regulator	 	 	 	1.10E-02	SCD,SKP2,TERT	 
+Palbo28 vs Palbo3	YY1	 	transcription regulator	 	0.218	 	1.11E-02	BCL2L11,CXCL12,EDN1,EGR1,FOS	 
+Doxo21 vs Doxo3	CREB1	 	transcription regulator	 	-1.492	bias	1.11E-02	ANGPTL2,ARHGAP33,EGR1,FOS,FOSB,MEST	 
+Palbo14 vs Cycling0	HOXA5	 	transcription regulator	 	 	 	1.12E-02	EGR1,GDNF	 
+Doxo21 vs Cycling0	HOXA9	 	transcription regulator	 	 	 	1.13E-02	BCL2L11,CISH,IER2,PIK3CD	 
+Doxo14 vs Doxo3	SOX7	 	transcription regulator	 	 	 	1.15E-02	COL4A1,COL4A2	 
+Doxo3 vs Cycling0	NFIC	 	transcription regulator	 	 	 	1.15E-02	RGS16,SLC7A2,STXBP6	 
+Doxo21 vs Cycling0	MEN1	 	transcription regulator	 	 	 	1.15E-02	FOS,SLC1A3,SLIT2,TERT	 
+Palbo14 vs Cycling0	ARID2	 	transcription regulator	 	 	 	1.16E-02	FOS,LTBP4	 
+Palbo14 vs Cycling0	TFAP4	 	transcription regulator	 	 	 	1.16E-02	EGR1,FOS	 
+Palbo14 vs Cycling0	JARID2	 	transcription regulator	 	 	 	1.16E-02	INSIG1,SCD	 
+Doxo14 vs Doxo3	PAX3	 	transcription regulator	 	 	 	1.16E-02	G6PD,MEST,PHGDH	 
+Doxo14 vs Doxo3	CBFA2T2	 	transcription regulator	 	 	 	1.17E-02	HES1	 
+Doxo3 vs Cycling0	SKIL	 	transcription regulator	 	 	 	1.18E-02	CXCL12,TPM1	 
+Doxo21 vs Doxo3	ARID2	 	transcription regulator	 	 	 	1.19E-02	FOS,LTBP4	 
+Palbo28 vs Cycling0	PER1	-0.976	transcription regulator	 	 	 	1.19E-02	BCL2L11,PER3	 
+Palbo28 vs Cycling0	NUPR1	 	transcription regulator	Activated	2.646	bias	1.20E-02	CDK15,GPSM2,KIF18A,PER3,SKP2,TERT,TNFAIP8L1	 
+Palbo14 vs Palbo3	ZMIZ1	 	transcription regulator	 	 	 	1.20E-02	HES1	 
+Palbo14 vs Palbo3	RNF4	 	transcription regulator	 	 	 	1.20E-02	HES1	 
+Palbo3 vs Cycling0	MRTFA	 	transcription regulator	 	 	 	1.20E-02	EGR1,SLIT2,SULT1E1	 
+Doxo14 vs Cycling0	RBPJ	 	transcription regulator	 	-0.488	bias	1.21E-02	CXCL12,FADS2,FOS,HES1,LFNG	 
+Palbo3 vs Cycling0	PRDM16	 	transcription regulator	 	 	 	1.22E-02	HES1,SLIT2	 
+Doxo3 vs Cycling0	TAF7L	 	transcription regulator	 	 	 	1.23E-02	CAMK4,TENT5B	 
+Palbo14 vs Palbo3	SMAD4	 	transcription regulator	 	 	 	1.24E-02	GDNF,PAK3,PTGER2,SCD	 
+Doxo14 vs Doxo3	MRTFB	 	transcription regulator	 	 	 	1.24E-02	CCN2,COL6A3,CXCL12	 
+Palbo3 vs Cycling0	ZMIZ1	 	transcription regulator	 	 	 	1.24E-02	HES1	 
+Palbo3 vs Cycling0	RNF4	 	transcription regulator	 	 	 	1.24E-02	HES1	 
+Palbo14 vs Cycling0	BCOR	 	transcription regulator	 	 	 	1.25E-02	ADAMTS1,DLX6	 
+Palbo14 vs Cycling0	TBPL1	 	transcription regulator	 	 	 	1.25E-02	FOS	 
+Palbo14 vs Cycling0	ARID1B	 	transcription regulator	 	 	 	1.25E-02	FOS	 
+Palbo14 vs Cycling0	VEZF1	 	transcription regulator	 	 	 	1.25E-02	EDN1	 
+Palbo14 vs Cycling0	RING1	 	transcription regulator	 	 	 	1.25E-02	FOS	 
+Doxo14 vs Cycling0	HLX	 	transcription regulator	 	 	 	1.25E-02	EGR1,HES1	 
+Doxo21 vs Cycling0	ARNT	 	transcription regulator	 	 	 	1.25E-02	EDN1,G6PD,SOCS3,TNFRSF19	 
+Palbo28 vs Palbo3	SOX2	 	transcription regulator	 	0.555	bias	1.26E-02	CXCL12,FOS,LMCD1,OTX1,TERT,TNFRSF19	 
+Doxo21 vs Doxo3	TBPL1	 	transcription regulator	 	 	 	1.26E-02	FOS	 
+Doxo21 vs Doxo3	NFX1	 	transcription regulator	 	 	 	1.26E-02	TERT	 
+Doxo21 vs Doxo3	ARID1B	 	transcription regulator	 	 	 	1.26E-02	FOS	 
+Doxo21 vs Doxo3	NMI	 	transcription regulator	 	 	 	1.26E-02	TERT	 
+Doxo21 vs Doxo3	RING1	 	transcription regulator	 	 	 	1.26E-02	FOS	 
+Palbo28 vs Cycling0	ATF2	 	transcription regulator	 	 	 	1.26E-02	ANGPTL2,EGR1,FOS	 
+Doxo3 vs Cycling0	WT1	 	transcription regulator	 	 	 	1.27E-02	EGR1,FOSB,TERT,TM4SF1	 
+Doxo14 vs Cycling0	MYOCD	 	transcription regulator	 	 	 	1.27E-02	CCBE1,FOS,TPM1	 
+Doxo21 vs Doxo3	NFKBIB	 	transcription regulator	 	 	 	1.27E-02	BCL2L11,EGR1	 
+Doxo14 vs Cycling0	SATB1	 	transcription regulator	Inhibited	-2.000	 	1.28E-02	CCN2,EVI2A,FOSB,KLF2	 
+Doxo3 vs Cycling0	RUNX2	 	transcription regulator	 	 	 	1.29E-02	EDN1,ITGB4,TPM1	 
+Doxo21 vs Cycling0	HLX	 	transcription regulator	 	 	 	1.30E-02	EGR1,HES1	 
+Palbo28 vs Cycling0	FOXP3	 	transcription regulator	 	 	 	1.30E-02	BCL2L11,EGR1,FOS,SKP2	 
+Doxo21 vs Cycling0	TARDBP	 	transcription regulator	 	 	 	1.30E-02	BCL2L11,INSIG1,LFNG,TSPOAP1	 
+Palbo3 vs Cycling0	ZBTB17	 	transcription regulator	 	 	 	1.30E-02	EGR1,PSRC1	 
+Doxo14 vs Doxo3	SOX1	 	transcription regulator	 	 	 	1.31E-02	HES1,TNFRSF19	 
+Doxo3 vs Cycling0	RBPJ	 	transcription regulator	 	0.890	 	1.32E-02	CXCL12,FADS2,FOS,HES1	 
+Doxo21 vs Cycling0	RBPJ	 	transcription regulator	 	-0.488	bias	1.32E-02	CXCL12,FADS2,FOS,HES1,LFNG	 
+Palbo28 vs Cycling0	SS18	 	transcription regulator	 	 	 	1.33E-02	BCL2L11,SOCS3	 
+Palbo28 vs Cycling0	FOSB	-5.289	transcription regulator	 	 	 	1.33E-02	FOS,FOSB	 
+Doxo3 vs Cycling0	HOXA5	 	transcription regulator	 	 	 	1.33E-02	EGR1,IER2	 
+Doxo3 vs Cycling0	TEAD2	 	transcription regulator	 	 	 	1.33E-02	EDN1,TPM1	 
+Palbo28 vs Palbo3	SKIL	 	transcription regulator	 	 	 	1.33E-02	COL4A1,CXCL12	 
+Palbo28 vs Palbo3	ATN1	 	transcription regulator	 	 	 	1.34E-02	CAMK4,NREP,RGS16	 
+Doxo14 vs Cycling0	TAF4	 	transcription regulator	 	 	 	1.34E-02	CCN2,COL6A3,OLFML3	 
+Doxo14 vs Cycling0	FOXC2	 	transcription regulator	 	 	 	1.34E-02	CXCL12,DLX6,LFNG	 
+Doxo21 vs Cycling0	MYOCD	 	transcription regulator	 	 	 	1.34E-02	CCBE1,FOS,TPM1	 
+Palbo14 vs Cycling0	SMAD7	 	transcription regulator	 	 	 	1.35E-02	COL6A3,NET1,SCD	 
+Palbo14 vs Palbo3	TFE3	 	transcription regulator	 	 	 	1.36E-02	GDNF,INSIG1	 
+Doxo3 vs Cycling0	TBPL1	 	transcription regulator	 	 	 	1.36E-02	FOS	 
+Doxo3 vs Cycling0	NFX1	 	transcription regulator	 	 	 	1.36E-02	TERT	 
+Doxo3 vs Cycling0	ARID1B	 	transcription regulator	 	 	 	1.36E-02	FOS	 
+Doxo3 vs Cycling0	NMI	 	transcription regulator	 	 	 	1.36E-02	TERT	 
+Doxo3 vs Cycling0	VEZF1	 	transcription regulator	 	 	 	1.36E-02	EDN1	 
+Doxo3 vs Cycling0	RING1	 	transcription regulator	 	 	 	1.36E-02	FOS	 
+Doxo21 vs Doxo3	HDAC4	 	transcription regulator	 	 	 	1.37E-02	FOS,KLF2,TERT	 
+Doxo21 vs Doxo3	GATA2	 	transcription regulator	 	 	 	1.37E-02	ANGPTL2,CXCL12,DENND2A,KLF2,SKP2	 
+Doxo3 vs Cycling0	SOX17	 	transcription regulator	 	 	 	1.38E-02	FOS,G6PD	 
+Doxo3 vs Cycling0	ARID2	 	transcription regulator	 	 	 	1.38E-02	FOS,NREP	 
+Doxo3 vs Cycling0	TFAP4	 	transcription regulator	 	 	 	1.38E-02	EGR1,FOS	 
+Doxo14 vs Cycling0	POU2F2	 	transcription regulator	 	 	 	1.38E-02	SCD,SKP2,TERT	 
+Doxo21 vs Cycling0	SATB1	 	transcription regulator	Inhibited	-2.000	 	1.38E-02	CCN2,EVI2A,FOSB,KLF2	 
+Palbo14 vs Cycling0	NKX3-1	 	transcription regulator	 	 	 	1.38E-02	FOS,MIR17HG	 
+Palbo14 vs Cycling0	AIP	 	transcription regulator	 	 	 	1.38E-02	GDNF,HTR1D	 
+Doxo14 vs Doxo3	MEF2D	 	transcription regulator	 	 	 	1.38E-02	CCN2,FOSB	 
+Doxo3 vs Cycling0	MITF	 	transcription regulator	 	 	 	1.38E-02	FOS,HES1,SCD,TERT	 
+Palbo28 vs Palbo3	SMAD1	 	transcription regulator	 	 	 	1.39E-02	COL4A1,GDNF	 
+Palbo28 vs Palbo3	MAFB	 	transcription regulator	 	 	 	1.39E-02	CXCL12,OLFML2B,OLFML3	 
+Palbo14 vs Cycling0	STAT1	 	transcription regulator	 	-1.231	bias	1.39E-02	AXL,EDN1,EGR1,FOS,HES1	 
+Doxo14 vs Cycling0	PER1	-2.334	transcription regulator	 	 	 	1.40E-02	PER1,PER3	 
+Palbo14 vs Palbo3	ZNF512B	 	transcription regulator	 	 	 	1.40E-02	MIR17HG	 
+Palbo14 vs Palbo3	ZFP36L1	 	transcription regulator	 	 	 	1.40E-02	COL6A3	 
+Palbo14 vs Palbo3	HOXC11	 	transcription regulator	 	 	 	1.40E-02	GDNF	 
+Palbo28 vs Cycling0	SREBF1	 	transcription regulator	Inhibited	-2.160	bias	1.40E-02	FADS2,G6PD,INSIG1,MSMO1,SCD	 
+Doxo14 vs Doxo3	ZMIZ1	 	transcription regulator	 	 	 	1.40E-02	HES1	 
+Doxo14 vs Doxo3	RNF4	 	transcription regulator	 	 	 	1.40E-02	HES1	 
+Doxo21 vs Doxo3	ZNF281	 	transcription regulator	 	 	 	1.41E-02	CCN2,COL4A1	 
+Doxo21 vs Doxo3	NKX3-1	 	transcription regulator	 	 	 	1.41E-02	FOS,MIR17HG	 
+Doxo21 vs Doxo3	AIP	 	transcription regulator	 	 	 	1.41E-02	HTR1D,RGS16	 
+Palbo28 vs Cycling0	ELL	 	transcription regulator	 	 	 	1.41E-02	FOS	 
+Palbo28 vs Cycling0	HES7	 	transcription regulator	 	 	 	1.41E-02	HES1	 
+Doxo21 vs Cycling0	TAF4	 	transcription regulator	 	 	 	1.42E-02	CCN2,COL6A3,OLFML3	 
+Doxo21 vs Cycling0	FOXC2	 	transcription regulator	 	 	 	1.42E-02	CXCL12,DLX6,LFNG	 
+Doxo3 vs Cycling0	E2F1	 	transcription regulator	 	 	 	1.42E-02	DIRAS3,DLEU2,EGR1,FOS,HES1,TERT	 
+Palbo3 vs Cycling0	FEV	 	transcription regulator	 	 	 	1.43E-02	SLIT2,STXBP6	 
+Doxo3 vs Cycling0	TEAD3	 	transcription regulator	 	 	 	1.43E-02	EDN1,TPM1	 
+Palbo28 vs Palbo3	ARID4B	 	transcription regulator	 	 	 	1.44E-02	CXCL12,TINAGL1	 
+Doxo14 vs Doxo3	RBL1	 	transcription regulator	 	 	 	1.45E-02	HES1,SKP2	 
+Palbo3 vs Cycling0	Tle1	 	transcription regulator	 	 	 	1.45E-02	EGR1	 
+Palbo3 vs Cycling0	IRX2	 	transcription regulator	 	 	 	1.45E-02	EGR1	 
+Palbo3 vs Cycling0	ZNF512B	 	transcription regulator	 	 	 	1.45E-02	MIR17HG	 
+Palbo28 vs Palbo3	TBPL1	 	transcription regulator	 	 	 	1.45E-02	FOS	 
+Palbo28 vs Palbo3	NFX1	 	transcription regulator	 	 	 	1.45E-02	TERT	 
+Palbo28 vs Palbo3	ARID1B	 	transcription regulator	 	 	 	1.45E-02	FOS	 
+Palbo28 vs Palbo3	NMI	 	transcription regulator	 	 	 	1.45E-02	TERT	 
+Palbo28 vs Palbo3	VEZF1	 	transcription regulator	 	 	 	1.45E-02	EDN1	 
+Palbo28 vs Palbo3	RING1	 	transcription regulator	 	 	 	1.45E-02	FOS	 
+Doxo21 vs Doxo3	STAT1	 	transcription regulator	 	-0.958	bias	1.46E-02	BCL2L11,CCN2,EGR1,FOS,HES1	 
+Doxo21 vs Doxo3	TCF7L2	 	transcription regulator	 	-1.964	bias	1.46E-02	CCN2,EVI2A,FOS,SP5,TERT	 
+Doxo21 vs Doxo3	PRDM1	 	transcription regulator	 	0.152	 	1.46E-02	BCL2L11,FOS,NPAS1,RGS16	 
+Doxo21 vs Cycling0	POU2F2	 	transcription regulator	 	 	 	1.46E-02	SCD,SKP2,TERT	 
+Doxo21 vs Doxo3	CREM	 	transcription regulator	 	 	 	1.46E-02	EGR1,FOS,MEST	 
+Palbo14 vs Cycling0	HIF1A	 	transcription regulator	Inhibited	-2.144	bias	1.47E-02	ADAMTS1,AQP4,AXL,EDN1,FOS,PHGDH	 
+Palbo28 vs Cycling0	LMX1B	 	transcription regulator	 	 	 	1.47E-02	HES1,SLIT2	 
+Palbo28 vs Cycling0	ZBTB7A	 	transcription regulator	 	 	 	1.47E-02	BCL2L11,FOS	 
+Palbo28 vs Cycling0	E2F3	 	transcription regulator	 	 	 	1.47E-02	EDN1,MEX3A,MIR17HG,TERT	 
+Palbo3 vs Cycling0	FOXO1	 	transcription regulator	Inhibited	-2.000	bias	1.47E-02	CAMK4,EGR1,FOSB,KIF18A	 
+Doxo21 vs Doxo3	VDR	 	transcription regulator	 	 	 	1.51E-02	COL4A1,COL4A2,EGR1,TERT	 
+Palbo28 vs Cycling0	EPAS1	 	transcription regulator	 	-1.980	bias	1.51E-02	AXL,CXCL12,EDN1,FOS,TERT	 
+Doxo14 vs Doxo3	PRDM16	 	transcription regulator	 	 	 	1.52E-02	CCN2,HES1	 
+Palbo28 vs Palbo3	CLOCK	 	transcription regulator	 	 	 	1.53E-02	GDNF,MEST,PER3,SCD	 
+Doxo3 vs Cycling0	TSHZ3	 	transcription regulator	 	 	 	1.53E-02	FOSB,IER2	 
+Doxo14 vs Cycling0	ELL	 	transcription regulator	 	 	 	1.53E-02	FOS	 
+Doxo14 vs Cycling0	HES7	 	transcription regulator	 	 	 	1.53E-02	HES1	 
+Doxo21 vs Doxo3	HIF1A	 	transcription regulator	Inhibited	-2.201	bias	1.55E-02	CCN2,CTDSPL,CXCL12,FOS,PHGDH,TERT	 
+Doxo14 vs Cycling0	FOSB	-3.267	transcription regulator	 	 	 	1.55E-02	FOS,FOSB	 
+Palbo28 vs Palbo3	TFAP4	 	transcription regulator	 	 	 	1.55E-02	EGR1,FOS	 
+Palbo14 vs Cycling0	CBFA2T2	 	transcription regulator	 	 	 	1.55E-02	HES1	 
+Palbo14 vs Cycling0	HOXD11	 	transcription regulator	 	 	 	1.55E-02	GDNF	 
+Doxo14 vs Doxo3	BCL11B	 	transcription regulator	 	 	 	1.56E-02	SP5,TNFRSF19	 
+Palbo28 vs Palbo3	WT1	 	transcription regulator	 	 	 	1.57E-02	COL4A1,EGR1,FOSB,TERT	 
+Doxo21 vs Cycling0	ELL	 	transcription regulator	 	 	 	1.57E-02	FOS	 
+Doxo21 vs Cycling0	HES7	 	transcription regulator	 	 	 	1.57E-02	HES1	 
+Doxo21 vs Doxo3	ZNF467	 	transcription regulator	 	 	 	1.57E-02	FOS	 
+Doxo21 vs Doxo3	CBFA2T2	 	transcription regulator	 	 	 	1.57E-02	HES1	 
+Doxo21 vs Doxo3	GTF2H4	 	transcription regulator	 	 	 	1.57E-02	TERT	 
+Doxo14 vs Cycling0	ATF2	 	transcription regulator	 	 	 	1.58E-02	ANGPTL2,EGR1,FOS	 
+Doxo14 vs Doxo3	GATA6	 	transcription regulator	 	 	 	1.58E-02	COL4A1,COL4A2,HES1	 
+Doxo21 vs Doxo3	MEN1	 	transcription regulator	 	 	 	1.58E-02	FOS,SLC1A3,TERT	 
+Palbo14 vs Cycling0	TRIM28	 	transcription regulator	 	 	 	1.58E-02	EGR1,FOS,LHX9	 
+Palbo14 vs Palbo3	ARB2A	 	transcription regulator	 	 	 	1.60E-02	GDNF	 
+Palbo14 vs Palbo3	GRIP1	 	transcription regulator	 	 	 	1.60E-02	FREM2	 
+Palbo14 vs Palbo3	HESX1	 	transcription regulator	 	 	 	1.60E-02	SP5	 
+Palbo14 vs Palbo3	FOXC2	 	transcription regulator	 	 	 	1.60E-02	CXCL12,GDNF	 
+Doxo21 vs Doxo3	KLF2	-1.320	transcription regulator	 	 	 	1.61E-02	CCN2,COL4A1,TERT	 
+Palbo28 vs Cycling0	LEF1	 	transcription regulator	 	0.000	 	1.61E-02	ADAMTS6,FOSB,HES1,PTGER2,SP5	 
+Palbo28 vs Cycling0	IRF2BP1	 	transcription regulator	 	 	 	1.61E-02	ADAMTS1,FOS	 
+Palbo28 vs Cycling0	ZBTB48	 	transcription regulator	 	 	 	1.61E-02	FOSB,PXMP2	 
+Doxo21 vs Cycling0	SS18	 	transcription regulator	 	 	 	1.62E-02	BCL2L11,SOCS3	 
+Doxo21 vs Cycling0	FOSB	-5.693	transcription regulator	 	 	 	1.62E-02	FOS,FOSB	 
+Doxo14 vs Doxo3	NUCKS1	 	transcription regulator	 	 	 	1.63E-02	SKP2	 
+Doxo14 vs Doxo3	DNMT3L	 	transcription regulator	 	 	 	1.63E-02	MEST	 
+Doxo14 vs Doxo3	ZFP36L1	 	transcription regulator	 	 	 	1.63E-02	COL6A3	 
+Doxo14 vs Doxo3	SOX15	 	transcription regulator	 	 	 	1.63E-02	CCN2	 
+Doxo14 vs Doxo3	ZFX	 	transcription regulator	 	 	 	1.63E-02	SKP2	 
+Doxo14 vs Doxo3	FOXL1	 	transcription regulator	 	 	 	1.63E-02	CCN2	 
+Doxo14 vs Doxo3	ATF4	 	transcription regulator	 	 	 	1.63E-02	COL4A2,PHGDH,SLC7A5	 
+Palbo14 vs Cycling0	LEF1	 	transcription regulator	 	 	 	1.63E-02	FOSB,HES1,PTGER2,SP5	 
+Palbo14 vs Palbo3	TCF7L1	 	transcription regulator	 	 	 	1.64E-02	NID1,SP5	 
+Doxo3 vs Cycling0	NKX3-1	 	transcription regulator	 	 	 	1.64E-02	FOS,MIR17HG	 
+Doxo14 vs Doxo3	MRTFA	 	transcription regulator	 	 	 	1.65E-02	CCN2,COL6A3,CXCL12	 
+Doxo14 vs Doxo3	SMARCB1	 	transcription regulator	 	 	 	1.65E-02	FOSB,HES1,SKP2	 
+Palbo28 vs Cycling0	NOTCH1	 	transcription regulator	 	0.411	 	1.65E-02	FOS,FOSB,HES1,ITGB4,WNT3	 
+Palbo3 vs Cycling0	EGR4	 	transcription regulator	 	 	 	1.66E-02	EGR1	 
+Palbo3 vs Cycling0	GRIP1	 	transcription regulator	 	 	 	1.66E-02	FREM2	 
+Palbo3 vs Cycling0	HESX1	 	transcription regulator	 	 	 	1.66E-02	SP5	 
+Palbo14 vs Cycling0	SOX11	 	transcription regulator	 	 	 	1.66E-02	EGR1,MEX3A,VASH2	 
+Doxo21 vs Cycling0	ATF2	 	transcription regulator	 	 	 	1.67E-02	ANGPTL2,EGR1,FOS	 
+Palbo28 vs Palbo3	NFKBIB	 	transcription regulator	 	 	 	1.67E-02	BCL2L11,EGR1	 
+Palbo14 vs Cycling0	NOTCH1	 	transcription regulator	 	 	 	1.67E-02	FOS,FOSB,HES1,WNT3	 
+Palbo28 vs Palbo3	SOX9	 	transcription regulator	 	 	 	1.67E-02	CELSR2,FOS,HES1	 
+Doxo3 vs Cycling0	MNT	 	transcription regulator	 	 	 	1.69E-02	AXL,TERT	 
+Doxo21 vs Doxo3	LEF1	 	transcription regulator	 	 	 	1.70E-02	FOSB,HES1,PTGER2,SP5	 
+Palbo28 vs Cycling0	TCF3	 	transcription regulator	 	 	 	1.70E-02	BCL2L11,KLF2,MSMO1,PAFAH1B3,RGS16,SOCS3	 
+Doxo3 vs Cycling0	CBFA2T2	 	transcription regulator	 	 	 	1.70E-02	HES1	 
+Doxo3 vs Cycling0	GTF2H4	 	transcription regulator	 	 	 	1.70E-02	TERT	 
+Doxo3 vs Cycling0	NFE2L2	 	transcription regulator	 	-0.651	bias	1.71E-02	ADAMTS1,G6PD,HES1,MIR17HG,MSMO1,SOCS3,TPM1	 
+Doxo14 vs Doxo3	BCL3	 	transcription regulator	 	 	 	1.71E-02	CXCL12,SKP2	 
+Doxo14 vs Doxo3	ELK1	 	transcription regulator	 	 	 	1.71E-02	FOSB,SKP2	 
+Palbo28 vs Palbo3	MITF	 	transcription regulator	 	 	 	1.71E-02	FOS,HES1,SCD,TERT	 
+Doxo3 vs Cycling0	SMAD7	 	transcription regulator	 	 	 	1.71E-02	CXCL12,SCD,TERT	 
+Doxo14 vs Cycling0	LMX1B	 	transcription regulator	 	 	 	1.72E-02	HES1,SLIT2	 
+Doxo14 vs Cycling0	PER2	 	transcription regulator	 	 	 	1.72E-02	PER1,PER3	 
+Palbo28 vs Palbo3	TSHZ3	 	transcription regulator	 	 	 	1.73E-02	FOSB,IER2	 
+Palbo3 vs Cycling0	WT1	 	transcription regulator	 	 	 	1.74E-02	EGR1,FOSB,TM4SF1	 
+Palbo14 vs Cycling0	NANOG	 	transcription regulator	 	 	 	1.76E-02	EGR1,FOS,FOSB	 
+Palbo28 vs Cycling0	ATF1	 	transcription regulator	 	 	 	1.77E-02	EGR1,FOS	 
+Palbo28 vs Cycling0	FOXO4	 	transcription regulator	 	 	 	1.78E-02	BCL2L11,COL4A1,COL4A2	 
+Doxo21 vs Cycling0	LMX1B	 	transcription regulator	 	 	 	1.79E-02	HES1,SLIT2	 
+Doxo21 vs Cycling0	PER2	 	transcription regulator	 	 	 	1.79E-02	PER1,PER3	 
+Doxo21 vs Cycling0	ZBTB7A	 	transcription regulator	 	 	 	1.79E-02	BCL2L11,FOS	 
+Palbo14 vs Palbo3	PITX3	 	transcription regulator	 	 	 	1.80E-02	GDNF	 
+Doxo14 vs Cycling0	HHEX	 	transcription regulator	 	 	 	1.80E-02	AXL,CCN2	 
+Doxo21 vs Doxo3	NEUROG1	 	transcription regulator	 	 	 	1.81E-02	AMIGO2,MEST	 
+Doxo21 vs Doxo3	GABPA	 	transcription regulator	 	 	 	1.81E-02	SKP2,TERT	 
+Palbo28 vs Palbo3	CBFA2T2	 	transcription regulator	 	 	 	1.81E-02	HES1	 
+Palbo28 vs Palbo3	GTF2H4	 	transcription regulator	 	 	 	1.81E-02	TERT	 
+Palbo28 vs Palbo3	HOXD11	 	transcription regulator	 	 	 	1.81E-02	GDNF	 
+Doxo14 vs Cycling0	NUPR1	 	transcription regulator	Activated	2.646	bias	1.82E-02	CDK15,GPSM2,KIF18A,PER3,SKP2,TERT,TNFAIP8L1	 
+Doxo21 vs Doxo3	SNAI1	 	transcription regulator	 	 	 	1.82E-02	CCN2,FOS,GLI2	 
+Doxo21 vs Cycling0	FOXP3	 	transcription regulator	 	 	 	1.84E-02	BCL2L11,EGR1,FOS,SKP2	 
+Palbo14 vs Cycling0	MEF2C	 	transcription regulator	 	 	 	1.84E-02	CCBE1,FOS,FOSB	 
+Palbo28 vs Palbo3	NKX3-1	 	transcription regulator	 	 	 	1.85E-02	FOS,MIR17HG	 
+Palbo3 vs Cycling0	SPIB	 	transcription regulator	 	 	 	1.86E-02	EGR1,NET1	 
+Palbo3 vs Cycling0	ASCL2	 	transcription regulator	 	 	 	1.86E-02	EGR1	 
+Doxo14 vs Doxo3	TAF1C	 	transcription regulator	 	 	 	1.86E-02	GLI2	 
+Doxo14 vs Doxo3	RNF112	 	transcription regulator	 	 	 	1.86E-02	SKP2	 
+Doxo14 vs Doxo3	GRIP1	 	transcription regulator	 	 	 	1.86E-02	FREM2	 
+Doxo14 vs Doxo3	HESX1	 	transcription regulator	 	 	 	1.86E-02	SP5	 
+Palbo14 vs Cycling0	ZMIZ1	 	transcription regulator	 	 	 	1.86E-02	HES1	 
+Palbo14 vs Cycling0	RNF4	 	transcription regulator	 	 	 	1.86E-02	HES1	 
+Palbo14 vs Cycling0	HIVEP2	 	transcription regulator	 	 	 	1.86E-02	FOS	 
+Palbo14 vs Cycling0	NFAT5	 	transcription regulator	 	0.311	 	1.87E-02	AQP4,EDN1,EGR1,PIK3CD,SLC7A2	 
+Doxo21 vs Cycling0	HHEX	 	transcription regulator	 	 	 	1.87E-02	AXL,CCN2	 
+Doxo3 vs Cycling0	GATA1	 	transcription regulator	 	 	 	1.88E-02	EGR1,FOSB,SLC19A1,TPM1	 
+Doxo14 vs Cycling0	NCOR2	 	transcription regulator	 	 	 	1.88E-02	CCN2,FOS,KLF2	 
+Doxo14 vs Cycling0	KLF15	 	transcription regulator	 	 	 	1.88E-02	CCN2,NET1,PXMP2	 
+Palbo28 vs Cycling0	TBPL1	 	transcription regulator	 	 	 	1.88E-02	FOS	 
+Palbo28 vs Cycling0	NFX1	 	transcription regulator	 	 	 	1.88E-02	TERT	 
+Palbo28 vs Cycling0	ARID1B	 	transcription regulator	 	 	 	1.88E-02	FOS	 
+Palbo28 vs Cycling0	NMI	 	transcription regulator	 	 	 	1.88E-02	TERT	 
+Palbo28 vs Cycling0	VEZF1	 	transcription regulator	 	 	 	1.88E-02	EDN1	 
+Palbo28 vs Cycling0	RING1	 	transcription regulator	 	 	 	1.88E-02	FOS	 
+Doxo21 vs Doxo3	ZMIZ1	 	transcription regulator	 	 	 	1.88E-02	HES1	 
+Doxo21 vs Doxo3	RNF4	 	transcription regulator	 	 	 	1.88E-02	HES1	 
+Doxo21 vs Doxo3	HIVEP2	 	transcription regulator	 	 	 	1.88E-02	FOS	 
+Doxo14 vs Cycling0	IRF2BP1	 	transcription regulator	 	 	 	1.89E-02	ADAMTS1,FOS	 
+Doxo14 vs Cycling0	ZBTB48	 	transcription regulator	 	 	 	1.89E-02	FOSB,PXMP2	 
+Palbo28 vs Palbo3	E2F1	 	transcription regulator	 	-0.539	bias	1.89E-02	BCL2L11,DIRAS3,EGR1,FOS,HES1,TERT	 
+Doxo3 vs Cycling0	EGR3	 	transcription regulator	 	 	 	1.89E-02	CISH,SLIT2,SOCS3	 
+Doxo21 vs Doxo3	MEF2C	 	transcription regulator	 	 	 	1.90E-02	FOS,FOSB,KLF2	 
+Doxo21 vs Doxo3	TOX	 	transcription regulator	 	 	 	1.92E-02	BCL2L11,KLF2	 
+Doxo3 vs Cycling0	HOXA9	 	transcription regulator	 	 	 	1.92E-02	CISH,IER2,PIK3CD	 
+Doxo3 vs Cycling0	MAFA	 	transcription regulator	 	 	 	1.92E-02	AQP4,CXCL12,TNFRSF19	 
+Doxo14 vs Cycling0	E2F3	 	transcription regulator	 	 	 	1.93E-02	EDN1,MEX3A,MIR17HG,TERT	 
+Palbo14 vs Palbo3	HUWE1	 	transcription regulator	 	 	 	1.93E-02	FADS2,INSIG1	 
+Doxo3 vs Cycling0	JUNB	 	transcription regulator	 	 	 	1.95E-02	HES1,ITGB4,PAK3	 
+Doxo3 vs Cycling0	NOTCH3	 	transcription regulator	 	 	 	1.95E-02	HES1,NDUFA4L2,SOCS3	 
+Palbo28 vs Cycling0	GATA2	 	transcription regulator	 	-1.413	bias	1.95E-02	ANGPTL2,CXCL12,DENND2A,EDN1,KLF2,SKP2	 
+Doxo21 vs Cycling0	IRF2BP1	 	transcription regulator	 	 	 	1.96E-02	ADAMTS1,FOS	 
+Doxo21 vs Cycling0	ZBTB48	 	transcription regulator	 	 	 	1.96E-02	FOSB,PXMP2	 
+Doxo14 vs Cycling0	GLIS3	 	transcription regulator	 	 	 	1.97E-02	COL4A1,COL4A2,ITGB4	 
+Palbo28 vs Cycling0	E2F1	 	transcription regulator	 	-0.539	bias	1.97E-02	BCL2L11,DIRAS3,DLEU2,EGR1,FOS,HES1,TERT	 
+Doxo3 vs Cycling0	KLF2	-0.928	transcription regulator	 	 	 	1.98E-02	EDN1,ITGB4,TERT	 
+Doxo3 vs Cycling0	HDAC2	 	transcription regulator	 	 	 	1.98E-02	EGR1,TERT,TNFRSF19	 
+Doxo21 vs Cycling0	NCOR2	 	transcription regulator	 	 	 	1.99E-02	CCN2,FOS,KLF2	 
+Doxo21 vs Cycling0	KLF15	 	transcription regulator	 	 	 	1.99E-02	CCN2,NET1,PXMP2	 
+Palbo14 vs Palbo3	MSGN1	 	transcription regulator	 	 	 	1.99E-02	HES1	 
+Palbo14 vs Palbo3	RBPJL	 	transcription regulator	 	 	 	1.99E-02	HES1	 
+Doxo21 vs Cycling0	GATA1	 	transcription regulator	 	 	 	2.00E-02	BCL2L11,EGR1,FOSB,SLC19A1,TPM1	 
+Palbo14 vs Palbo3	ARID1A	 	transcription regulator	Activated	2.000	 	2.00E-02	GDNF,HES1,LTBP4,PAK3	 
+Palbo14 vs Palbo3	ZFHX3	 	transcription regulator	 	 	 	2.00E-02	RGS16,RYR3	 
+Doxo3 vs Cycling0	TRIM28	 	transcription regulator	 	 	 	2.01E-02	EGR1,FOS,LHX9	 
+Doxo21 vs Cycling0	NUPR1	 	transcription regulator	Activated	2.646	bias	2.02E-02	CDK15,GPSM2,KIF18A,PER3,SKP2,TERT,TNFAIP8L1	 
+Palbo3 vs Cycling0	EP300	 	transcription regulator	 	 	 	2.02E-02	AXL,CAMK4,EGR1,WNT5B	 
+Doxo21 vs Doxo3	SOX7	 	transcription regulator	 	 	 	2.03E-02	COL4A1,COL4A2	 
+Doxo21 vs Doxo3	MYRF	 	transcription regulator	 	 	 	2.03E-02	BCL2L11,CCN2	 
+Doxo14 vs Cycling0	RUNX1	 	transcription regulator	 	-0.625	bias	2.04E-02	COL4A1,HES1,KLF2,MIR17HG,PIK3CD	 
+Doxo3 vs Cycling0	ZMIZ1	 	transcription regulator	 	 	 	2.04E-02	HES1	 
+Doxo3 vs Cycling0	RNF4	 	transcription regulator	 	 	 	2.04E-02	HES1	 
+Doxo3 vs Cycling0	HIVEP2	 	transcription regulator	 	 	 	2.04E-02	FOS	 
+Doxo14 vs Cycling0	TBPL1	 	transcription regulator	 	 	 	2.04E-02	FOS	 
+Doxo14 vs Cycling0	NFX1	 	transcription regulator	 	 	 	2.04E-02	TERT	 
+Doxo14 vs Cycling0	ARID1B	 	transcription regulator	 	 	 	2.04E-02	FOS	 
+Doxo14 vs Cycling0	NMI	 	transcription regulator	 	 	 	2.04E-02	TERT	 
+Doxo14 vs Cycling0	VEZF1	 	transcription regulator	 	 	 	2.04E-02	EDN1	 
+Doxo14 vs Cycling0	RING1	 	transcription regulator	 	 	 	2.04E-02	FOS	 
+Doxo14 vs Cycling0	ATF1	 	transcription regulator	 	 	 	2.06E-02	EGR1,FOS	 
+Palbo3 vs Cycling0	MSGN1	 	transcription regulator	 	 	 	2.07E-02	HES1	 
+Palbo3 vs Cycling0	RBPJL	 	transcription regulator	 	 	 	2.07E-02	HES1	 
+Palbo3 vs Cycling0	TEF	 	transcription regulator	 	 	 	2.07E-02	AQP4	 
+Doxo21 vs Cycling0	E2F3	 	transcription regulator	 	 	 	2.07E-02	EDN1,MEX3A,MIR17HG,TERT	 
+Doxo14 vs Doxo3	GATA2	 	transcription regulator	 	 	 	2.07E-02	ANGPTL2,CXCL12,DENND2A,SKP2	 
+Doxo21 vs Cycling0	TBPL1	 	transcription regulator	 	 	 	2.08E-02	FOS	 
+Doxo21 vs Cycling0	NFX1	 	transcription regulator	 	 	 	2.08E-02	TERT	 
+Doxo21 vs Cycling0	ARID1B	 	transcription regulator	 	 	 	2.08E-02	FOS	 
+Doxo21 vs Cycling0	NMI	 	transcription regulator	 	 	 	2.08E-02	TERT	 
+Doxo21 vs Cycling0	VEZF1	 	transcription regulator	 	 	 	2.08E-02	EDN1	 
+Doxo21 vs Cycling0	RING1	 	transcription regulator	 	 	 	2.08E-02	FOS	 
+Doxo14 vs Doxo3	NOLC1	 	transcription regulator	 	 	 	2.09E-02	G6PD	 
+Palbo28 vs Palbo3	MGA	 	transcription regulator	 	 	 	2.10E-02	LTBP4,NREP	 
+Palbo28 vs Cycling0	TBX3	 	transcription regulator	Inhibited	-2.000	bias	2.10E-02	CDK15,EDN1,EGR1,KIF18A	 
+Doxo21 vs Doxo3	EP300	 	transcription regulator	 	 	 	2.12E-02	EGR1,EVI2A,FOS,SKP2,TERT	 
+Palbo14 vs Palbo3	EGR2	 	transcription regulator	 	 	 	2.12E-02	ACAT2,CISH,MIR17HG	 
+Doxo21 vs Doxo3	NFATC3	 	transcription regulator	 	 	 	2.14E-02	FOS,FOSB	 
+Doxo3 vs Cycling0	EBF1	 	transcription regulator	 	 	 	2.14E-02	CXCL12,PIK3CD,SOCS3	 
+Doxo14 vs Doxo3	FOXC2	 	transcription regulator	 	 	 	2.14E-02	CXCL12,LFNG	 
+Doxo21 vs Cycling0	ATF1	 	transcription regulator	 	 	 	2.15E-02	EGR1,FOS	 
+Doxo14 vs Cycling0	EOMES	 	transcription regulator	 	 	 	2.16E-02	COL6A3,LHX9,WNT3	 
+Palbo14 vs Cycling0	NFKB1	 	transcription regulator	 	 	 	2.17E-02	EGR1,FOS,FOSB,SLC7A2	 
+Palbo14 vs Cycling0	NUCKS1	 	transcription regulator	 	 	 	2.17E-02	SKP2	 
+Palbo14 vs Cycling0	IRX2	 	transcription regulator	 	 	 	2.17E-02	EGR1	 
+Palbo14 vs Cycling0	ZNF512B	 	transcription regulator	 	 	 	2.17E-02	MIR17HG	 
+Palbo14 vs Cycling0	ZFP36L1	 	transcription regulator	 	 	 	2.17E-02	COL6A3	 
+Palbo14 vs Cycling0	HOXC11	 	transcription regulator	 	 	 	2.17E-02	GDNF	 
+Palbo28 vs Palbo3	ZMIZ1	 	transcription regulator	 	 	 	2.17E-02	HES1	 
+Palbo28 vs Palbo3	RNF4	 	transcription regulator	 	 	 	2.17E-02	HES1	 
+Palbo28 vs Palbo3	HIVEP2	 	transcription regulator	 	 	 	2.17E-02	FOS	 
+Palbo28 vs Cycling0	SKIL	 	transcription regulator	 	 	 	2.17E-02	COL4A1,CXCL12	 
+Doxo3 vs Cycling0	MTDH	 	transcription regulator	 	 	 	2.17E-02	EGR1,FADS2,MSMO1	 
+Palbo14 vs Palbo3	TFCP2L1	 	transcription regulator	 	 	 	2.19E-02	B3GNT7	 
+Doxo21 vs Doxo3	FOXM1	 	transcription regulator	 	 	 	2.19E-02	CXCL12,FOS,SKP2	 
+Doxo21 vs Doxo3	NUCKS1	 	transcription regulator	 	 	 	2.20E-02	SKP2	 
+Doxo21 vs Doxo3	IRX2	 	transcription regulator	 	 	 	2.20E-02	EGR1	 
+Doxo21 vs Doxo3	ZNF512B	 	transcription regulator	 	 	 	2.20E-02	MIR17HG	 
+Doxo21 vs Doxo3	DNMT3L	 	transcription regulator	 	 	 	2.20E-02	MEST	 
+Doxo21 vs Doxo3	FOXE1	 	transcription regulator	 	 	 	2.20E-02	TERT	 
+Doxo21 vs Doxo3	ZFP36L1	 	transcription regulator	 	 	 	2.20E-02	COL6A3	 
+Doxo21 vs Doxo3	SOX15	 	transcription regulator	 	 	 	2.20E-02	CCN2	 
+Doxo21 vs Doxo3	THOC1	 	transcription regulator	 	 	 	2.20E-02	BCL2L11	 
+Doxo21 vs Doxo3	ZFX	 	transcription regulator	 	 	 	2.20E-02	SKP2	 
+Doxo21 vs Doxo3	FOXL1	 	transcription regulator	 	 	 	2.20E-02	CCN2	 
+Doxo3 vs Cycling0	LEF1	 	transcription regulator	 	-1.000	 	2.20E-02	ADAMTS6,FOSB,HES1,PTGER2	 
+Doxo14 vs Cycling0	FOXO4	 	transcription regulator	 	 	 	2.21E-02	CCN2,COL4A1,COL4A2	 
+Doxo14 vs Cycling0	TFEB	 	transcription regulator	 	 	 	2.21E-02	ADAMTS6,BORA,CCN2,FOS,PTGER2,SLC1A3	 
+Palbo14 vs Cycling0	HMGA1	 	transcription regulator	 	 	 	2.22E-02	EGR1,FOS,INSIG1	 
+Palbo14 vs Cycling0	FOXP3	 	transcription regulator	 	 	 	2.22E-02	EGR1,FOS,SKP2	 
+Palbo28 vs Palbo3	FOSL2	 	transcription regulator	 	 	 	2.23E-02	COL4A1,ITGB4	 
+Palbo28 vs Palbo3	EGR3	 	transcription regulator	 	 	 	2.23E-02	CISH,GDNF,SOCS3	 
+Palbo14 vs Palbo3	SREBF1	 	transcription regulator	 	 	 	2.23E-02	FADS2,INSIG1,SCD	 
+Palbo3 vs Cycling0	NFE2L2	 	transcription regulator	 	 	 	2.24E-02	ADAMTS1,HES1,MIR17HG,PAFAH1B3,RYR3	 
+Palbo28 vs Cycling0	STAT5A	 	transcription regulator	 	 	 	2.25E-02	CISH,FOS,FOSB,SOCS3,TM4SF1	 
+Palbo28 vs Cycling0	NFKB1	 	transcription regulator	 	-1.954	bias	2.25E-02	EGR1,FOS,FOSB,SLC7A2,TERT	 
+Palbo3 vs Cycling0	ARID1A	 	transcription regulator	 	-0.762	 	2.26E-02	EGR1,HES1,HTRA3,WNT5B	 
+Palbo28 vs Cycling0	SMAD1	 	transcription regulator	 	 	 	2.26E-02	COL4A1,GDNF	 
+Palbo28 vs Cycling0	TAF7L	 	transcription regulator	 	 	 	2.26E-02	CAMK4,TENT5B	 
+Palbo14 vs Cycling0	SOX1	 	transcription regulator	 	 	 	2.26E-02	HES1,WNT3	 
+Palbo28 vs Palbo3	HOXA9	 	transcription regulator	 	 	 	2.27E-02	BCL2L11,CISH,IER2	 
+Palbo28 vs Palbo3	MAFA	 	transcription regulator	 	 	 	2.27E-02	CXCL12,OXTR,TNFRSF19	 
+Palbo3 vs Cycling0	TFCP2L1	 	transcription regulator	 	 	 	2.27E-02	B3GNT7	 
+Doxo21 vs Cycling0	EOMES	 	transcription regulator	 	 	 	2.28E-02	COL6A3,LHX9,WNT3	 
+Doxo3 vs Cycling0	HAND2	 	transcription regulator	 	 	 	2.28E-02	CCBE1,TPM1	 
+Palbo14 vs Palbo3	SREBF2	 	transcription regulator	 	 	 	2.29E-02	FADS2,INSIG1	 
+Palbo28 vs Cycling0	ID2	 	transcription regulator	 	1.732	 	2.29E-02	BCL2L11,SOCS3,TNFRSF19,WNT3	 
+Palbo3 vs Cycling0	TP73	 	transcription regulator	 	-0.974	bias	2.30E-02	AXL,EGR1,HES1,PSRC1	 
+Palbo3 vs Cycling0	EZH2	 	transcription regulator	 	-0.633	 	2.30E-02	AXL,DENND2A,EGR1,OXTR	 
+Palbo28 vs Palbo3	JUNB	 	transcription regulator	 	 	 	2.30E-02	HES1,ITGB4,PAK3	 
+Palbo28 vs Palbo3	NOTCH3	 	transcription regulator	 	 	 	2.30E-02	HES1,NDUFA4L2,SOCS3	 
+Palbo14 vs Cycling0	PDX1	 	transcription regulator	 	 	 	2.31E-02	EGR1,INSIG1,PHGDH	 
+Doxo21 vs Doxo3	PAX7	 	transcription regulator	 	 	 	2.31E-02	C1QTNF3,MEST	 
+Palbo14 vs Cycling0	TBP	 	transcription regulator	 	 	 	2.32E-02	FOS,MIR17HG	 
+Doxo14 vs Doxo3	MIB2	 	transcription regulator	 	 	 	2.32E-02	CCN2	 
+Doxo14 vs Doxo3	RBPJL	 	transcription regulator	 	 	 	2.32E-02	HES1	 
+Doxo14 vs Doxo3	TEF	 	transcription regulator	 	 	 	2.32E-02	AQP4	 
+Palbo28 vs Palbo3	PRDM1	 	transcription regulator	 	0.152	 	2.33E-02	BCL2L11,FOS,NPAS1,RGS16	 
+Palbo28 vs Palbo3	HDAC2	 	transcription regulator	 	 	 	2.34E-02	EGR1,TERT,TNFRSF19	 
+Palbo28 vs Cycling0	CBFA2T2	 	transcription regulator	 	 	 	2.34E-02	HES1	 
+Palbo28 vs Cycling0	GTF2H4	 	transcription regulator	 	 	 	2.34E-02	TERT	 
+Palbo28 vs Cycling0	HOXD11	 	transcription regulator	 	 	 	2.34E-02	GDNF	 
+Palbo28 vs Cycling0	HOXA3	 	transcription regulator	 	 	 	2.34E-02	EVI2A,KLF2	 
+Palbo28 vs Cycling0	ARID4B	 	transcription regulator	 	 	 	2.34E-02	CXCL12,TINAGL1	 
+Palbo28 vs Cycling0	SMAD2	 	transcription regulator	 	 	 	2.35E-02	BCL2L11,HES1,NET1	 
+Doxo3 vs Cycling0	DLX1	 	transcription regulator	 	 	 	2.35E-02	DLX6,TERT	 
+Palbo14 vs Cycling0	TP73	 	transcription regulator	 	-1.333	bias	2.35E-02	AXL,EDN1,EGR1,HES1,PSRC1	 
+Palbo14 vs Palbo3	JUN	 	transcription regulator	 	 	 	2.36E-02	GDNF,HES1,OXTR,PAK3	 
+Palbo28 vs Palbo3	MLX	 	transcription regulator	 	 	 	2.36E-02	BCL2L11,FADS2	 
+Palbo28 vs Palbo3	GABPA	 	transcription regulator	 	 	 	2.36E-02	OXTR,TERT	 
+Palbo14 vs Cycling0	NUPR1	 	transcription regulator	Activated	2.236	bias	2.37E-02	GPSM2,KIF18A,RNFT2,SKP2,TNFAIP8L1	 
+Doxo21 vs Doxo3	FLI1	 	transcription regulator	 	 	 	2.37E-02	CCN2,EGR1	 
+Doxo21 vs Doxo3	TBP	 	transcription regulator	 	 	 	2.37E-02	FOS,MIR17HG	 
+Palbo14 vs Cycling0	KCNIP3	 	transcription regulator	 	 	 	2.37E-02	FOS,FOSB	 
+Palbo14 vs Cycling0	MEF2D	 	transcription regulator	 	 	 	2.37E-02	FOS,FOSB	 
+Palbo28 vs Palbo3	TRIM28	 	transcription regulator	 	 	 	2.37E-02	BCL2L11,EGR1,FOS	 
+Doxo14 vs Doxo3	WT1	 	transcription regulator	 	 	 	2.37E-02	CCN2,COL4A1,FOSB	 
+Doxo3 vs Cycling0	IRX2	 	transcription regulator	 	 	 	2.37E-02	EGR1	 
+Doxo3 vs Cycling0	ZNF512B	 	transcription regulator	 	 	 	2.37E-02	MIR17HG	 
+Doxo3 vs Cycling0	DNMT3L	 	transcription regulator	 	 	 	2.37E-02	MEST	 
+Doxo3 vs Cycling0	FOXE1	 	transcription regulator	 	 	 	2.37E-02	TERT	 
+Doxo3 vs Cycling0	ZFX	 	transcription regulator	 	 	 	2.37E-02	WNT3	 
+Palbo28 vs Palbo3	SREBF1	 	transcription regulator	 	-1.950	bias	2.41E-02	FADS2,G6PD,INSIG1,SCD	 
+Doxo21 vs Doxo3	KCNIP3	 	transcription regulator	 	 	 	2.43E-02	FOS,FOSB	 
+Doxo21 vs Cycling0	TFEB	 	transcription regulator	 	 	 	2.43E-02	ADAMTS6,BORA,CCN2,FOS,PTGER2,SLC1A3	 
+Palbo14 vs Cycling0	ZBTB20	 	transcription regulator	 	 	 	2.43E-02	AQP4,CISH	 
+Palbo14 vs Cycling0	E2F3	 	transcription regulator	 	 	 	2.43E-02	EDN1,MEX3A,MIR17HG	 
+Doxo14 vs Doxo3	RBPJ	 	transcription regulator	 	 	 	2.44E-02	CXCL12,HES1,LFNG	 
+Palbo14 vs Palbo3	LEF1	 	transcription regulator	 	 	 	2.45E-02	HES1,PTGER2,SP5	 
+Doxo21 vs Doxo3	TP73	 	transcription regulator	 	-0.761	bias	2.46E-02	BCL2L11,EGR1,HES1,PSRC1,TERT	 
+Palbo28 vs Palbo3	IKZF1	 	transcription regulator	 	 	 	2.46E-02	CISH,FOS,G6PD,HES1	 
+Palbo3 vs Cycling0	RELA	 	transcription regulator	 	 	 	2.47E-02	EGR1,FOSB,HES1,MIR17HG	 
+Doxo21 vs Doxo3	NUPR1	 	transcription regulator	Activated	2.236	bias	2.47E-02	CDK15,GPSM2,KIF18A,SKP2,TERT	 
+Palbo3 vs Cycling0	HLF	 	transcription regulator	 	 	 	2.47E-02	AQP4	 
+Palbo14 vs Cycling0	ARB2A	 	transcription regulator	 	 	 	2.48E-02	GDNF	 
+Palbo14 vs Cycling0	RNF112	 	transcription regulator	 	 	 	2.48E-02	SKP2	 
+Palbo14 vs Cycling0	EGR4	 	transcription regulator	 	 	 	2.48E-02	EGR1	 
+Palbo14 vs Cycling0	GRIP1	 	transcription regulator	 	 	 	2.48E-02	FREM2	 
+Palbo14 vs Cycling0	HESX1	 	transcription regulator	 	 	 	2.48E-02	SP5	 
+Palbo14 vs Cycling0	PBX2	 	transcription regulator	 	 	 	2.48E-02	FOS	 
+Palbo3 vs Cycling0	GLI3	 	transcription regulator	 	 	 	2.49E-02	EGR1,FOSB	 
+Doxo21 vs Doxo3	ARID3B	 	transcription regulator	 	 	 	2.50E-02	BCL2L11	 
+Doxo21 vs Doxo3	TAF1C	 	transcription regulator	 	 	 	2.50E-02	GLI2	 
+Doxo21 vs Doxo3	RNF112	 	transcription regulator	 	 	 	2.50E-02	SKP2	 
+Doxo21 vs Doxo3	EGR4	 	transcription regulator	 	 	 	2.50E-02	EGR1	 
+Doxo21 vs Doxo3	HESX1	 	transcription regulator	 	 	 	2.50E-02	SP5	 
+Doxo21 vs Doxo3	PBX2	 	transcription regulator	 	 	 	2.50E-02	FOS	 
+Doxo21 vs Doxo3	E2F3	 	transcription regulator	 	 	 	2.51E-02	MEX3A,MIR17HG,TERT	 
+Palbo28 vs Palbo3	RUNX1	 	transcription regulator	 	-1.960	 	2.51E-02	BCL2L11,COL4A1,HES1,MIR17HG	 
+Palbo28 vs Palbo3	TARDBP	 	transcription regulator	 	 	 	2.52E-02	BCL2L11,INSIG1,TSPOAP1	 
+Palbo28 vs Cycling0	TFAP4	 	transcription regulator	 	 	 	2.52E-02	EGR1,FOS	 
+Palbo28 vs Palbo3	IRX2	 	transcription regulator	 	 	 	2.53E-02	EGR1	 
+Palbo28 vs Palbo3	ZNF512B	 	transcription regulator	 	 	 	2.53E-02	MIR17HG	 
+Palbo28 vs Palbo3	DNMT3L	 	transcription regulator	 	 	 	2.53E-02	MEST	 
+Palbo28 vs Palbo3	FOXE1	 	transcription regulator	 	 	 	2.53E-02	TERT	 
+Palbo28 vs Palbo3	THOC1	 	transcription regulator	 	 	 	2.53E-02	BCL2L11	 
+Palbo28 vs Palbo3	HOXC11	 	transcription regulator	 	 	 	2.53E-02	GDNF	 
+Palbo28 vs Palbo3	TCF7L2	 	transcription regulator	Inhibited	-2.191	bias	2.53E-02	EDN1,EVI2A,FOS,SP5,TERT	 
+Doxo14 vs Doxo3	NCOA3	 	transcription regulator	 	 	 	2.53E-02	CCN2,HES1	 
+Doxo14 vs Cycling0	KDM3A	 	transcription regulator	 	 	 	2.53E-02	CCN2,EDN1	 
+Doxo21 vs Cycling0	RUVBL1	 	transcription regulator	 	 	 	2.54E-02	NUDCD2,SOCS3	 
+Doxo21 vs Cycling0	MECP2	 	transcription regulator	 	 	 	2.54E-02	DLX6,EGR1,LFNG,SOCS3	 
+Doxo21 vs Doxo3	IRF8	 	transcription regulator	 	 	 	2.54E-02	EGR1,FOS,TERT	 
+Doxo14 vs Cycling0	CBFA2T2	 	transcription regulator	 	 	 	2.54E-02	HES1	 
+Doxo14 vs Cycling0	GTF2H4	 	transcription regulator	 	 	 	2.54E-02	TERT	 
+Doxo21 vs Doxo3	ETS2	 	transcription regulator	 	 	 	2.55E-02	FOS,TERT	 
+Palbo3 vs Cycling0	RB1	 	transcription regulator	Activated	2.000	 	2.55E-02	EGR1,FOSB,HES1,RYR3	 
+Doxo14 vs Doxo3	RBM14	 	transcription regulator	 	 	 	2.55E-02	SKP2	 
+Doxo14 vs Doxo3	MEOX1	 	transcription regulator	 	 	 	2.55E-02	GLI2	 
+Doxo3 vs Cycling0	HTT	 	transcription regulator	 	 	 	2.56E-02	CAMK4,EGR1,FOS,NREP,PER1,RGS16,TM4SF1	 
+Palbo28 vs Palbo3	EPAS1	 	transcription regulator	 	 	 	2.57E-02	CXCL12,EDN1,FOS,TERT	 
+Palbo14 vs Palbo3	LHX1	 	transcription regulator	 	 	 	2.59E-02	CXCL12,SLC16A13	 
+Palbo14 vs Palbo3	ETV5	 	transcription regulator	 	 	 	2.59E-02	CXCL12,TINAGL1	 
+Doxo14 vs Cycling0	NFATC2	 	transcription regulator	 	-0.823	bias	2.59E-02	AXL,CISH,EDN1,TERT	 
+Palbo28 vs Palbo3	NPM1	 	transcription regulator	 	 	 	2.60E-02	COL4A1,COL4A2,EGR1	 
+Doxo21 vs Cycling0	CBFA2T2	 	transcription regulator	 	 	 	2.60E-02	HES1	 
+Doxo21 vs Cycling0	GTF2H4	 	transcription regulator	 	 	 	2.60E-02	TERT	 
+Palbo14 vs Cycling0	TFAP2C	 	transcription regulator	 	 	 	2.61E-02	FREM2,SLC19A1	 
+Doxo14 vs Cycling0	SMAD1	 	transcription regulator	 	 	 	2.63E-02	CCN2,COL4A1	 
+Doxo14 vs Cycling0	TAF7L	 	transcription regulator	 	 	 	2.63E-02	CAMK4,TENT5B	 
+Doxo21 vs Cycling0	KDM3A	 	transcription regulator	 	 	 	2.64E-02	CCN2,EDN1	 
+Palbo28 vs Palbo3	SOX7	 	transcription regulator	 	 	 	2.64E-02	COL4A1,COL4A2	 
+Palbo28 vs Cycling0	KLF4	 	transcription regulator	 	-1.594	bias	2.64E-02	ADAMTS1,HES1,TERT,TNFRSF19,WNT3	 
+Palbo3 vs Cycling0	JUN	 	transcription regulator	 	 	 	2.66E-02	AXL,FOSB,HES1,OXTR	 
+Doxo21 vs Doxo3	PRDM16	 	transcription regulator	 	 	 	2.67E-02	CCN2,HES1	 
+Doxo14 vs Doxo3	ZFHX3	 	transcription regulator	 	 	 	2.67E-02	RGS16,RYR3	 
+Palbo14 vs Cycling0	MYCN	 	transcription regulator	 	-0.192	 	2.68E-02	ADAMTS1,HES1,MIR17HG,PHGDH	 
+Palbo3 vs Cycling0	HINFP	 	transcription regulator	 	 	 	2.68E-02	H1-10	 
+Palbo28 vs Cycling0	NFIC	 	transcription regulator	 	 	 	2.69E-02	RGS16,SLC7A2,STXBP6	 
+Palbo28 vs Palbo3	LEF1	 	transcription regulator	 	 	 	2.70E-02	ADAMTS6,FOSB,HES1,SP5	 
+Palbo28 vs Cycling0	NFKBIB	 	transcription regulator	 	 	 	2.71E-02	BCL2L11,EGR1	 
+Doxo3 vs Cycling0	ZKSCAN3	 	transcription regulator	 	 	 	2.71E-02	ITGB4	 
+Doxo3 vs Cycling0	EGR4	 	transcription regulator	 	 	 	2.71E-02	EGR1	 
+Doxo3 vs Cycling0	GRIP1	 	transcription regulator	 	 	 	2.71E-02	FREM2	 
+Doxo3 vs Cycling0	PBX2	 	transcription regulator	 	 	 	2.71E-02	FOS	 
+Palbo14 vs Palbo3	GLI1	 	transcription regulator	 	0.000	 	2.71E-02	HES1,IL27RA,INSIG1,SCD	 
+Palbo14 vs Cycling0	ARNT2	 	transcription regulator	 	 	 	2.73E-02	AQP4,EGR1,GDNF	 
+Doxo14 vs Cycling0	HOXA3	 	transcription regulator	 	 	 	2.73E-02	EVI2A,KLF2	 
+Doxo3 vs Cycling0	TBP	 	transcription regulator	 	 	 	2.74E-02	FOS,MIR17HG	 
+Doxo21 vs Cycling0	SMAD1	 	transcription regulator	 	 	 	2.74E-02	CCN2,COL4A1	 
+Doxo21 vs Cycling0	TAF7L	 	transcription regulator	 	 	 	2.74E-02	CAMK4,TENT5B	 
+Doxo14 vs Cycling0	TBX3	 	transcription regulator	Inhibited	-2.000	bias	2.75E-02	CDK15,EDN1,EGR1,KIF18A	 
+Palbo28 vs Palbo3	NOTCH1	 	transcription regulator	 	0.411	 	2.76E-02	FOS,FOSB,HES1,ITGB4	 
+Palbo14 vs Palbo3	APBB1	 	transcription regulator	 	 	 	2.78E-02	HES1	 
+Doxo14 vs Doxo3	ATOH8	 	transcription regulator	 	 	 	2.78E-02	CCN2	 
+Doxo14 vs Doxo3	OVOL1	 	transcription regulator	 	 	 	2.78E-02	GLI2	 
+Doxo14 vs Doxo3	HLF	 	transcription regulator	 	 	 	2.78E-02	AQP4	 
+Palbo14 vs Cycling0	ASCL2	 	transcription regulator	 	 	 	2.78E-02	EGR1	 
+Palbo14 vs Cycling0	PITX3	 	transcription regulator	 	 	 	2.78E-02	GDNF	 
+Doxo14 vs Doxo3	NFAT5	 	transcription regulator	 	-1.686	 	2.78E-02	AQP4,COL4A1,CXCL12,SLC7A2	 
+Palbo14 vs Palbo3	SNAI2	 	transcription regulator	 	 	 	2.79E-02	CXCL12,MYO16-AS1	 
+Palbo28 vs Cycling0	RUNX3	 	transcription regulator	 	 	 	2.79E-02	BCL2L11,COL4A1,SLIT2	 
+Palbo14 vs Cycling0	ZBTB17	 	transcription regulator	 	 	 	2.79E-02	EGR1,PSRC1	 
+Palbo14 vs Cycling0	YY1	 	transcription regulator	 	 	 	2.79E-02	EDN1,EGR1,FOS,PSRC1	 
+Doxo14 vs Cycling0	GATA2	 	transcription regulator	 	-1.413	bias	2.80E-02	ANGPTL2,CXCL12,DENND2A,EDN1,KLF2,SKP2	 
+Palbo28 vs Cycling0	TSHZ3	 	transcription regulator	 	 	 	2.80E-02	FOSB,IER2	 
+Palbo28 vs Cycling0	ZMIZ1	 	transcription regulator	 	 	 	2.80E-02	HES1	 
+Palbo28 vs Cycling0	RNF4	 	transcription regulator	 	 	 	2.80E-02	HES1	 
+Palbo28 vs Cycling0	HIVEP2	 	transcription regulator	 	 	 	2.80E-02	FOS	 
+Doxo14 vs Doxo3	GLIS3	 	transcription regulator	 	 	 	2.81E-02	COL4A1,COL4A2	 
+Doxo3 vs Cycling0	IFI16	 	transcription regulator	 	 	 	2.81E-02	EDN1,TERT	 
+Doxo3 vs Cycling0	MEF2D	 	transcription regulator	 	 	 	2.81E-02	FOS,FOSB	 
+Doxo21 vs Doxo3	ASCL2	 	transcription regulator	 	 	 	2.81E-02	EGR1	 
+Palbo14 vs Cycling0	SOX4	 	transcription regulator	 	 	 	2.83E-02	FOS,H1-10,MEX3A	 
+Doxo14 vs Cycling0	HOXA5	 	transcription regulator	 	 	 	2.84E-02	EGR1,IER2	 
+Doxo21 vs Cycling0	HOXA3	 	transcription regulator	 	 	 	2.85E-02	EVI2A,KLF2	 
+Doxo21 vs Doxo3	ZBTB17	 	transcription regulator	 	 	 	2.86E-02	EGR1,PSRC1	 
+Doxo3 vs Cycling0	ZNF217	 	transcription regulator	 	 	 	2.88E-02	PAK3,WNT5B	 
+Palbo3 vs Cycling0	TLE1	 	transcription regulator	 	 	 	2.88E-02	EGR1	 
+Palbo3 vs Cycling0	APBB1	 	transcription regulator	 	 	 	2.88E-02	HES1	 
+Palbo28 vs Palbo3	ARB2A	 	transcription regulator	 	 	 	2.88E-02	GDNF	 
+Palbo28 vs Palbo3	ZKSCAN3	 	transcription regulator	 	 	 	2.88E-02	ITGB4	 
+Palbo28 vs Palbo3	ARID3B	 	transcription regulator	 	 	 	2.88E-02	BCL2L11	 
+Palbo28 vs Palbo3	EGR4	 	transcription regulator	 	 	 	2.88E-02	EGR1	 
+Palbo28 vs Palbo3	GRIP1	 	transcription regulator	 	 	 	2.88E-02	FREM2	 
+Palbo28 vs Palbo3	HESX1	 	transcription regulator	 	 	 	2.88E-02	SP5	 
+Palbo28 vs Palbo3	PBX2	 	transcription regulator	 	 	 	2.88E-02	FOS	 
+Palbo28 vs Palbo3	HIF1A	 	transcription regulator	 	-1.853	bias	2.89E-02	CXCL12,EDN1,FOS,PHGDH,SOCS3,TERT	 
+Palbo3 vs Cycling0	SUPT16H	 	transcription regulator	 	 	 	2.89E-02	AXL,EGR1	 
+Doxo14 vs Doxo3	HMG20A	 	transcription regulator	 	 	 	2.90E-02	CCN2,RGS16	 
+Doxo14 vs Cycling0	SMARCA5	 	transcription regulator	 	 	 	2.90E-02	CAMK4,HES1,LFNG	 
+Doxo14 vs Cycling0	ARID2	 	transcription regulator	 	 	 	2.94E-02	FOS,NREP	 
+Doxo21 vs Cycling0	TBX3	 	transcription regulator	Inhibited	-2.000	bias	2.94E-02	CDK15,EDN1,EGR1,KIF18A	 
+Doxo3 vs Cycling0	ETS2	 	transcription regulator	 	 	 	2.95E-02	FOS,TERT	 
+Doxo21 vs Cycling0	HOXA5	 	transcription regulator	 	 	 	2.95E-02	EGR1,IER2	 
+Palbo14 vs Palbo3	TIAL1	 	transcription regulator	 	 	 	2.98E-02	INSIG1	 
+Palbo14 vs Palbo3	TBX1	 	transcription regulator	 	 	 	2.98E-02	MIR17HG	 
+Palbo3 vs Cycling0	SMAD2	 	transcription regulator	 	 	 	2.98E-02	HES1,NET1	 
+Palbo3 vs Cycling0	SMARCA5	 	transcription regulator	 	 	 	2.98E-02	CAMK4,HES1	 
+Palbo3 vs Cycling0	SNAI2	 	transcription regulator	 	 	 	2.98E-02	AXL,MYO16-AS1	 
+Doxo21 vs Doxo3	MEF2A	 	transcription regulator	 	 	 	2.98E-02	FOS,KLF2	 
+Doxo14 vs Cycling0	STAT1	 	transcription regulator	 	-1.231	bias	2.99E-02	AXL,CCN2,EDN1,EGR1,FOS,HES1	 
+Doxo14 vs Cycling0	TCF7L2	 	transcription regulator	Inhibited	-2.191	bias	2.99E-02	CCN2,EDN1,EVI2A,FOS,SP5,TERT	 
+Palbo28 vs Cycling0	NKX3-1	 	transcription regulator	 	 	 	2.99E-02	FOS,MIR17HG	 
+Palbo28 vs Palbo3	SOX1	 	transcription regulator	 	 	 	3.00E-02	HES1,TNFRSF19	 
+Doxo14 vs Doxo3	TCF21	 	transcription regulator	 	 	 	3.01E-02	COL4A1	 
+Doxo14 vs Doxo3	MED16	 	transcription regulator	 	 	 	3.01E-02	CCN2	 
+Doxo14 vs Cycling0	SMARCB1	 	transcription regulator	 	 	 	3.03E-02	FOS,FOSB,HES1,SKP2	 
+Palbo14 vs Cycling0	SIM1	 	transcription regulator	 	 	 	3.04E-02	AQP4,EGR1,GDNF	 
+Doxo3 vs Cycling0	ASCL2	 	transcription regulator	 	 	 	3.04E-02	EGR1	 
+Doxo3 vs Cycling0	NOLC1	 	transcription regulator	 	 	 	3.04E-02	G6PD	 
+Doxo14 vs Cycling0	ZMIZ1	 	transcription regulator	 	 	 	3.04E-02	HES1	 
+Doxo14 vs Cycling0	RNF4	 	transcription regulator	 	 	 	3.04E-02	HES1	 
+Doxo14 vs Cycling0	HIVEP2	 	transcription regulator	 	 	 	3.04E-02	FOS	 
+Palbo14 vs Cycling0	FOXL2	 	transcription regulator	 	 	 	3.05E-02	FOS,PTGER2	 
+Palbo14 vs Cycling0	FEV	 	transcription regulator	 	 	 	3.05E-02	FOS,STXBP6	 
+Doxo21 vs Doxo3	MYCL	 	transcription regulator	 	 	 	3.05E-02	BCL2L11,TERT	 
+Doxo21 vs Cycling0	GATA2	 	transcription regulator	 	-1.413	bias	3.06E-02	ANGPTL2,CXCL12,DENND2A,EDN1,KLF2,SKP2	 
+Doxo21 vs Cycling0	SMARCA5	 	transcription regulator	 	 	 	3.07E-02	CAMK4,HES1,LFNG	 
+Doxo14 vs Cycling0	STAT5A	 	transcription regulator	 	 	 	3.07E-02	CISH,FOS,FOSB,GDPD3,TM4SF1	 
+Palbo3 vs Cycling0	HTT	 	transcription regulator	 	 	 	3.07E-02	CAMK4,CBX2,EGR1,RGS16,TM4SF1	 
+Doxo3 vs Cycling0	E2F3	 	transcription regulator	 	 	 	3.07E-02	EDN1,MIR17HG,TERT	 
+Palbo14 vs Cycling0	NFATC2	 	transcription regulator	 	 	 	3.07E-02	AXL,CISH,EDN1	 
+Palbo28 vs Palbo3	SPDEF	 	transcription regulator	 	 	 	3.08E-02	COL4A1,COL4A2	 
+Palbo28 vs Palbo3	TBP	 	transcription regulator	 	 	 	3.08E-02	FOS,MIR17HG	 
+Palbo3 vs Cycling0	CBX2	-1.042	transcription regulator	 	 	 	3.08E-02	LHX9	 
+Palbo3 vs Cycling0	TBX1	 	transcription regulator	 	 	 	3.08E-02	MIR17HG	 
+Palbo3 vs Cycling0	MZF1	 	transcription regulator	 	 	 	3.08E-02	AXL	 
+Palbo14 vs Cycling0	MSGN1	 	transcription regulator	 	 	 	3.08E-02	HES1	 
+Palbo14 vs Cycling0	RBPJL	 	transcription regulator	 	 	 	3.08E-02	HES1	 
+Palbo14 vs Cycling0	TEF	 	transcription regulator	 	 	 	3.08E-02	AQP4	 
+Palbo14 vs Cycling0	MLLT3	 	transcription regulator	 	 	 	3.08E-02	EDN1	 
+Doxo3 vs Cycling0	PRDM16	 	transcription regulator	 	 	 	3.09E-02	HES1,SLIT2	 
+Doxo3 vs Cycling0	SOX3	 	transcription regulator	 	 	 	3.09E-02	TNFRSF19,WNT3	 
+Doxo3 vs Cycling0	TFAP2C	 	transcription regulator	 	 	 	3.09E-02	FREM2,SLC19A1	 
+Palbo28 vs Cycling0	MNT	 	transcription regulator	 	 	 	3.09E-02	AXL,TERT	 
+Doxo14 vs Doxo3	GLI3	 	transcription regulator	 	 	 	3.09E-02	FOSB,GLI2	 
+Doxo21 vs Cycling0	ZMIZ1	 	transcription regulator	 	 	 	3.11E-02	HES1	 
+Doxo21 vs Cycling0	RNF4	 	transcription regulator	 	 	 	3.11E-02	HES1	 
+Doxo21 vs Cycling0	HIVEP2	 	transcription regulator	 	 	 	3.11E-02	FOS	 
+Palbo14 vs Palbo3	WBP2	 	transcription regulator	 	 	 	3.11E-02	COL6A3,LINC00324	 
+Palbo14 vs Cycling0	TFE3	 	transcription regulator	 	 	 	3.11E-02	GDNF,INSIG1	 
+Doxo3 vs Cycling0	IRF8	 	transcription regulator	 	 	 	3.11E-02	EGR1,FOS,TERT	 
+Doxo21 vs Doxo3	FOXL2	 	transcription regulator	 	 	 	3.11E-02	FOS,PTGER2	 
+Doxo21 vs Doxo3	MSGN1	 	transcription regulator	 	 	 	3.12E-02	HES1	 
+Doxo21 vs Doxo3	MIB2	 	transcription regulator	 	 	 	3.12E-02	CCN2	 
+Doxo21 vs Doxo3	RBPJL	 	transcription regulator	 	 	 	3.12E-02	HES1	 
+Doxo14 vs Doxo3	PPARGC1A	 	transcription regulator	 	1.177	 	3.14E-02	CCN2,COL6A3,OLFML3,SLC19A1	 
+Palbo28 vs Palbo3	IFI16	 	transcription regulator	 	 	 	3.15E-02	EDN1,TERT	 
+Palbo28 vs Palbo3	MEF2D	 	transcription regulator	 	 	 	3.15E-02	FOS,FOSB	 
+Palbo14 vs Palbo3	ZFP91	 	transcription regulator	 	 	 	3.17E-02	FADS2	 
+Palbo3 vs Cycling0	E2F1	 	transcription regulator	 	 	 	3.18E-02	DIRAS3,DLEU2,EGR1,HES1	 
+Doxo21 vs Cycling0	ID2	 	transcription regulator	 	1.732	 	3.20E-02	BCL2L11,SOCS3,TNFRSF19,WNT3	 
+Palbo14 vs Cycling0	TBX3	 	transcription regulator	 	 	 	3.22E-02	EDN1,EGR1,KIF18A	 
+Palbo14 vs Cycling0	NKX2-3	 	transcription regulator	 	 	 	3.22E-02	EDN1,PHGDH,TNFAIP8L1	 
+Doxo3 vs Cycling0	MXD1	 	transcription regulator	 	 	 	3.23E-02	EDN1,TERT	 
+Doxo3 vs Cycling0	ZEB2	 	transcription regulator	 	 	 	3.23E-02	AXL,TERT	 
+Doxo3 vs Cycling0	TBX5	 	transcription regulator	 	 	 	3.23E-02	CCBE1,TPM1	 
+Palbo28 vs Palbo3	ZBTB20	 	transcription regulator	 	 	 	3.23E-02	CISH,SOCS3	 
+Doxo3 vs Cycling0	VHL	 	transcription regulator	 	 	 	3.23E-02	AXL,CXCL12,NREP	 
+Doxo14 vs Doxo3	GON4L	 	transcription regulator	 	 	 	3.24E-02	SKP2	 
+Doxo14 vs Doxo3	APBB1	 	transcription regulator	 	 	 	3.24E-02	HES1	 
+Doxo14 vs Doxo3	FOXD3	 	transcription regulator	 	 	 	3.24E-02	SKP2	 
+Palbo28 vs Palbo3	ASCL2	 	transcription regulator	 	 	 	3.24E-02	EGR1	 
+Palbo28 vs Palbo3	PITX3	 	transcription regulator	 	 	 	3.24E-02	GDNF	 
+Palbo28 vs Palbo3	NOLC1	 	transcription regulator	 	 	 	3.24E-02	G6PD	 
+Doxo21 vs Cycling0	E2F1	 	transcription regulator	 	-0.539	bias	3.24E-02	BCL2L11,DIRAS3,DLEU2,EGR1,FOS,HES1,TERT	 
+Doxo14 vs Cycling0	TSHZ3	 	transcription regulator	 	 	 	3.26E-02	FOSB,IER2	 
+Palbo28 vs Cycling0	NUCKS1	 	transcription regulator	 	 	 	3.26E-02	SKP2	 
+Palbo28 vs Cycling0	IRX2	 	transcription regulator	 	 	 	3.26E-02	EGR1	 
+Palbo28 vs Cycling0	ZNF512B	 	transcription regulator	 	 	 	3.26E-02	MIR17HG	 
+Palbo28 vs Cycling0	DNMT3L	 	transcription regulator	 	 	 	3.26E-02	MEST	 
+Palbo28 vs Cycling0	FOXE1	 	transcription regulator	 	 	 	3.26E-02	TERT	 
+Palbo28 vs Cycling0	ZFP36L1	 	transcription regulator	 	 	 	3.26E-02	COL6A3	 
+Palbo28 vs Cycling0	THOC1	 	transcription regulator	 	 	 	3.26E-02	BCL2L11	 
+Palbo28 vs Cycling0	HOXC11	 	transcription regulator	 	 	 	3.26E-02	GDNF	 
+Doxo21 vs Cycling0	TCF7L2	 	transcription regulator	Inhibited	-2.191	bias	3.27E-02	CCN2,EDN1,EVI2A,FOS,SP5,TERT	 
+Palbo28 vs Cycling0	TFAP2A	 	transcription regulator	 	 	 	3.28E-02	FREM2,SLC19A1,TERT	 
+Doxo21 vs Cycling0	NFKBIB	 	transcription regulator	 	 	 	3.28E-02	BCL2L11,EGR1	 
+Palbo3 vs Cycling0	NFIC	 	transcription regulator	 	 	 	3.28E-02	RGS16,STXBP6	 
+Palbo28 vs Palbo3	FOXP3	 	transcription regulator	 	 	 	3.29E-02	BCL2L11,EGR1,FOS	 
+Doxo3 vs Cycling0	GMNN	 	transcription regulator	 	 	 	3.30E-02	TNFRSF19,WNT3	 
+Doxo3 vs Cycling0	BMAL1	 	transcription regulator	 	 	 	3.30E-02	PER1,PER3	 
+Doxo3 vs Cycling0	ZBTB17	 	transcription regulator	 	 	 	3.30E-02	EGR1,PSRC1	 
+Palbo28 vs Palbo3	ETS2	 	transcription regulator	 	 	 	3.31E-02	FOS,TERT	 
+Doxo21 vs Doxo3	HDAC5	 	transcription regulator	 	 	 	3.31E-02	HES1,KLF2	 
+Doxo21 vs Cycling0	DDIT3	 	transcription regulator	 	 	 	3.31E-02	BCL2L11,PER1,SKP2	 
+Doxo21 vs Doxo3	TBX3	 	transcription regulator	 	 	 	3.32E-02	CDK15,EGR1,KIF18A	 
+Doxo14 vs Cycling0	ID1	 	transcription regulator	 	 	 	3.32E-02	CCN2,EGR1,TERT	 
+Doxo14 vs Cycling0	SIX1	 	transcription regulator	 	 	 	3.32E-02	COL6A3,LFNG,OTX1	 
+Doxo14 vs Cycling0	NFIC	 	transcription regulator	 	 	 	3.32E-02	RGS16,SLC7A2,STXBP6	 
+Palbo3 vs Cycling0	MAFB	 	transcription regulator	 	 	 	3.33E-02	AQP4,OLFML2B	 
+Palbo14 vs Cycling0	SRF	 	transcription regulator	 	-1.916	bias	3.33E-02	EGR1,FOS,FOSB,NET1	 
+Doxo14 vs Doxo3	EZH2	 	transcription regulator	 	 	 	3.36E-02	COL4A1,DENND2A,FOXF2,SLC1A3	 
+Palbo14 vs Palbo3	FOXQ1	 	transcription regulator	 	 	 	3.37E-02	SP5	 
+Palbo14 vs Palbo3	RAX	 	transcription regulator	 	 	 	3.37E-02	HES1	 
+Doxo3 vs Cycling0	MSGN1	 	transcription regulator	 	 	 	3.37E-02	HES1	 
+Doxo3 vs Cycling0	RBPJL	 	transcription regulator	 	 	 	3.37E-02	HES1	 
+Doxo3 vs Cycling0	TEF	 	transcription regulator	 	 	 	3.37E-02	AQP4	 
+Doxo3 vs Cycling0	MLLT3	 	transcription regulator	 	 	 	3.37E-02	EDN1	 
+Doxo21 vs Cycling0	STAT4	 	transcription regulator	 	-1.981	bias	3.38E-02	BCL2L11,PER1,RGS16,SOCS3	 
+Doxo14 vs Doxo3	IKZF1	 	transcription regulator	 	 	 	3.38E-02	G6PD,HES1,SLC19A1	 
+Palbo28 vs Cycling0	MGA	 	transcription regulator	 	 	 	3.39E-02	LTBP4,NREP	 
+Palbo14 vs Cycling0	RBM14	 	transcription regulator	 	 	 	3.39E-02	SKP2	 
+Doxo21 vs Cycling0	TSHZ3	 	transcription regulator	 	 	 	3.39E-02	FOSB,IER2	 
+Doxo21 vs Cycling0	BHLHE40	 	transcription regulator	 	-1.342	bias	3.39E-02	AXL,PER1,RGS16,SLC7A2,SOCS3	 
+Palbo28 vs Palbo3	PDX1	 	transcription regulator	 	 	 	3.43E-02	EGR1,INSIG1,PHGDH	 
+Doxo21 vs Doxo3	RBM14	 	transcription regulator	 	 	 	3.43E-02	SKP2	 
+Doxo21 vs Doxo3	MEOX1	 	transcription regulator	 	 	 	3.43E-02	GLI2	 
+Doxo21 vs Doxo3	AFF1	 	transcription regulator	 	 	 	3.43E-02	TERT	 
+Doxo21 vs Doxo3	TCF7	 	transcription regulator	 	0.000	 	3.43E-02	FOS,FOSB,HES1,PTGER2	 
+Doxo14 vs Doxo3	TEAD4	 	transcription regulator	 	 	 	3.44E-02	CCN2,GLI2	 
+Doxo14 vs Doxo3	ETV5	 	transcription regulator	 	 	 	3.44E-02	CXCL12,TINAGL1	 
+Palbo14 vs Cycling0	NFE2L2	 	transcription regulator	 	 	 	3.44E-02	ADAMTS1,HES1,MIR17HG,MSMO1,PAFAH1B3,PHGDH	 
+Palbo3 vs Cycling0	CREB1	 	transcription regulator	 	-0.293	 	3.45E-02	ARHGAP33,CAMK4,EGR1,FOSB	 
+Doxo14 vs Doxo3	WWC1	 	transcription regulator	 	 	 	3.46E-02	CCN2	 
+Doxo14 vs Doxo3	HOXA4	 	transcription regulator	 	 	 	3.46E-02	CCN2	 
+Doxo14 vs Cycling0	ZNF281	 	transcription regulator	 	 	 	3.48E-02	CCN2,COL4A1	 
+Doxo14 vs Cycling0	NKX3-1	 	transcription regulator	 	 	 	3.48E-02	FOS,MIR17HG	 
+Doxo14 vs Cycling0	AIP	 	transcription regulator	 	 	 	3.48E-02	HTR1D,RGS16	 
+Palbo3 vs Cycling0	FOXQ1	 	transcription regulator	 	 	 	3.49E-02	SP5	 
+Palbo3 vs Cycling0	RAX	 	transcription regulator	 	 	 	3.49E-02	HES1	 
+Doxo14 vs Doxo3	EPAS1	 	transcription regulator	 	 	 	3.50E-02	CCN2,CXCL12,SLC7A5	 
+Doxo21 vs Cycling0	ID1	 	transcription regulator	 	 	 	3.51E-02	CCN2,EGR1,TERT	 
+Doxo21 vs Cycling0	SIX1	 	transcription regulator	 	 	 	3.51E-02	COL6A3,LFNG,OTX1	 
+Doxo21 vs Cycling0	NFIC	 	transcription regulator	 	 	 	3.51E-02	RGS16,SLC7A2,STXBP6	 
+Doxo14 vs Cycling0	KLF11	 	transcription regulator	 	 	 	3.51E-02	ADAMTS1,CCN2,EDN1	 
+Palbo14 vs Cycling0	MYOCD	 	transcription regulator	 	 	 	3.51E-02	CCBE1,FOS	 
+Palbo14 vs Palbo3	SOX9	 	transcription regulator	 	 	 	3.54E-02	CELSR2,HES1	 
+Doxo14 vs Doxo3	KLF5	 	transcription regulator	 	 	 	3.54E-02	CXCL12,SLC7A5	 
+Doxo14 vs Cycling0	NUCKS1	 	transcription regulator	 	 	 	3.54E-02	SKP2	 
+Doxo14 vs Cycling0	IRX2	 	transcription regulator	 	 	 	3.54E-02	EGR1	 
+Doxo14 vs Cycling0	ZNF512B	 	transcription regulator	 	 	 	3.54E-02	MIR17HG	 
+Doxo14 vs Cycling0	DNMT3L	 	transcription regulator	 	 	 	3.54E-02	MEST	 
+Doxo14 vs Cycling0	FOXE1	 	transcription regulator	 	 	 	3.54E-02	TERT	 
+Doxo14 vs Cycling0	ZFP36L1	 	transcription regulator	 	 	 	3.54E-02	COL6A3	 
+Doxo14 vs Cycling0	SOX15	 	transcription regulator	 	 	 	3.54E-02	CCN2	 
+Doxo14 vs Cycling0	FOXL1	 	transcription regulator	 	 	 	3.54E-02	CCN2	 
+Palbo28 vs Palbo3	STAT5A	 	transcription regulator	 	 	 	3.54E-02	CISH,FOS,FOSB,SOCS3	 
+Palbo28 vs Palbo3	BCL11B	 	transcription regulator	 	 	 	3.54E-02	SP5,TNFRSF19	 
+Doxo21 vs Doxo3	ATF4	 	transcription regulator	 	 	 	3.55E-02	COL4A2,PHGDH,SLC7A5	 
+Palbo14 vs Palbo3	CREB3	 	transcription regulator	 	 	 	3.56E-02	INSIG1	 
+Palbo14 vs Palbo3	MAML1	 	transcription regulator	 	 	 	3.56E-02	HES1	 
+Doxo21 vs Cycling0	MAFB	 	transcription regulator	 	 	 	3.57E-02	CXCL12,OLFML2B,OLFML3	 
+Palbo14 vs Cycling0	MAX	 	transcription regulator	 	 	 	3.58E-02	DLEU2,EDN1	 
+Palbo28 vs Palbo3	MSGN1	 	transcription regulator	 	 	 	3.59E-02	HES1	 
+Palbo28 vs Palbo3	RBPJL	 	transcription regulator	 	 	 	3.59E-02	HES1	 
+Palbo28 vs Palbo3	MLLT3	 	transcription regulator	 	 	 	3.59E-02	EDN1	 
+Palbo28 vs Cycling0	FOSL2	 	transcription regulator	 	 	 	3.59E-02	COL4A1,ITGB4	 
+Doxo14 vs Cycling0	MNT	 	transcription regulator	 	 	 	3.59E-02	AXL,TERT	 
+Doxo3 vs Cycling0	FOXL2	 	transcription regulator	 	 	 	3.60E-02	FOS,PTGER2	 
+Doxo14 vs Doxo3	RELA	 	transcription regulator	 	 	 	3.61E-02	CCN2,FOSB,GLI2,HES1	 
+Doxo3 vs Cycling0	MECP2	 	transcription regulator	 	 	 	3.61E-02	DLX6,EGR1,SOCS3	 
+Palbo14 vs Palbo3	MYCN	 	transcription regulator	 	 	 	3.61E-02	HES1,MIR17HG,PHGDH	 
+Doxo21 vs Cycling0	NUCKS1	 	transcription regulator	 	 	 	3.62E-02	SKP2	 
+Doxo21 vs Cycling0	IRX2	 	transcription regulator	 	 	 	3.62E-02	EGR1	 
+Doxo21 vs Cycling0	ZNF512B	 	transcription regulator	 	 	 	3.62E-02	MIR17HG	 
+Doxo21 vs Cycling0	DNMT3L	 	transcription regulator	 	 	 	3.62E-02	MEST	 
+Doxo21 vs Cycling0	FOXE1	 	transcription regulator	 	 	 	3.62E-02	TERT	 
+Doxo21 vs Cycling0	ZFP36L1	 	transcription regulator	 	 	 	3.62E-02	COL6A3	 
+Doxo21 vs Cycling0	SOX15	 	transcription regulator	 	 	 	3.62E-02	CCN2	 
+Doxo21 vs Cycling0	THOC1	 	transcription regulator	 	 	 	3.62E-02	BCL2L11	 
+Doxo21 vs Cycling0	FOXL1	 	transcription regulator	 	 	 	3.62E-02	CCN2	 
+Doxo21 vs Cycling0	ZNF281	 	transcription regulator	 	 	 	3.62E-02	CCN2,COL4A1	 
+Doxo21 vs Cycling0	NKX3-1	 	transcription regulator	 	 	 	3.62E-02	FOS,MIR17HG	 
+Doxo21 vs Cycling0	AIP	 	transcription regulator	 	 	 	3.62E-02	HTR1D,RGS16	 
+Palbo28 vs Palbo3	MXD1	 	transcription regulator	 	 	 	3.62E-02	EDN1,TERT	 
+Palbo14 vs Cycling0	FOXC2	 	transcription regulator	 	 	 	3.65E-02	DLX6,GDNF	 
+Palbo28 vs Palbo3	IRF8	 	transcription regulator	 	 	 	3.65E-02	EGR1,FOS,TERT	 
+Doxo21 vs Doxo3	MAX	 	transcription regulator	 	 	 	3.66E-02	DLEU2,TERT	 
+Doxo3 vs Cycling0	PRDM5	 	transcription regulator	 	 	 	3.67E-02	NREP,SOCS3	 
+Palbo3 vs Cycling0	SMAD3	 	transcription regulator	 	 	 	3.69E-02	ADAMTS1,EGR1,NET1	 
+Palbo14 vs Cycling0	PIAS2	 	transcription regulator	 	 	 	3.69E-02	FOS	 
+Palbo14 vs Cycling0	HLF	 	transcription regulator	 	 	 	3.69E-02	AQP4	 
+Doxo14 vs Doxo3	SMAD2	 	transcription regulator	 	 	 	3.70E-02	CCN2,HES1	 
+Doxo14 vs Doxo3	SMARCA5	 	transcription regulator	 	 	 	3.70E-02	HES1,LFNG	 
+Palbo28 vs Palbo3	PAX3	 	transcription regulator	 	 	 	3.70E-02	G6PD,MEST,PHGDH	 
+Doxo14 vs Cycling0	RUNX2	 	transcription regulator	 	 	 	3.70E-02	EDN1,ITGB4,TPM1	 
+Doxo21 vs Cycling0	KLF11	 	transcription regulator	 	 	 	3.70E-02	ADAMTS1,CCN2,EDN1	 
+Doxo3 vs Cycling0	TFCP2L1	 	transcription regulator	 	 	 	3.71E-02	B3GNT7	 
+Doxo3 vs Cycling0	AFF1	 	transcription regulator	 	 	 	3.71E-02	TERT	 
+Palbo14 vs Cycling0	TCF7L1	 	transcription regulator	 	 	 	3.72E-02	NID1,SP5	 
+Palbo14 vs Cycling0	POU2F2	 	transcription regulator	 	 	 	3.72E-02	SCD,SKP2	 
+Palbo28 vs Cycling0	ARB2A	 	transcription regulator	 	 	 	3.72E-02	GDNF	 
+Palbo28 vs Cycling0	ZKSCAN3	 	transcription regulator	 	 	 	3.72E-02	ITGB4	 
+Palbo28 vs Cycling0	ARID3B	 	transcription regulator	 	 	 	3.72E-02	BCL2L11	 
+Palbo28 vs Cycling0	RNF112	 	transcription regulator	 	 	 	3.72E-02	SKP2	 
+Palbo28 vs Cycling0	EGR4	 	transcription regulator	 	 	 	3.72E-02	EGR1	 
+Palbo28 vs Cycling0	GRIP1	 	transcription regulator	 	 	 	3.72E-02	FREM2	 
+Palbo28 vs Cycling0	HESX1	 	transcription regulator	 	 	 	3.72E-02	SP5	 
+Palbo28 vs Cycling0	PBX2	 	transcription regulator	 	 	 	3.72E-02	FOS	 
+Doxo21 vs Doxo3	ATOH8	 	transcription regulator	 	 	 	3.73E-02	CCN2	 
+Doxo21 vs Doxo3	OVOL1	 	transcription regulator	 	 	 	3.73E-02	GLI2	 
+Doxo21 vs Doxo3	PIAS2	 	transcription regulator	 	 	 	3.73E-02	FOS	 
+Doxo21 vs Doxo3	TERF2	 	transcription regulator	 	 	 	3.73E-02	TERT	 
+Doxo21 vs Cycling0	MNT	 	transcription regulator	 	 	 	3.74E-02	AXL,TERT	 
+Palbo14 vs Palbo3	TFEC	 	transcription regulator	 	 	 	3.75E-02	COL6A3	 
+Palbo14 vs Palbo3	MYT1	 	transcription regulator	 	 	 	3.75E-02	IL27RA	 
+Palbo3 vs Cycling0	SOX9	 	transcription regulator	 	 	 	3.78E-02	ADAMTS1,HES1	 
+Palbo28 vs Palbo3	VHL	 	transcription regulator	 	 	 	3.79E-02	BCL2L11,CXCL12,NREP	 
+Doxo21 vs Doxo3	POU2F2	 	transcription regulator	 	 	 	3.80E-02	SKP2,TERT	 
+Palbo28 vs Cycling0	NEUROG1	 	transcription regulator	 	 	 	3.80E-02	AMIGO2,MEST	 
+Palbo28 vs Cycling0	MLX	 	transcription regulator	 	 	 	3.80E-02	BCL2L11,FADS2	 
+Palbo28 vs Cycling0	GABPA	 	transcription regulator	 	 	 	3.80E-02	SKP2,TERT	 
+Palbo28 vs Cycling0	HDAC4	 	transcription regulator	 	 	 	3.86E-02	FOS,KLF2,TERT	 
+Doxo21 vs Doxo3	ILF3	 	transcription regulator	 	 	 	3.87E-02	ACAT2,FOS	 
+Palbo28 vs Palbo3	MEF2A	 	transcription regulator	 	 	 	3.87E-02	EDN1,FOS	 
+Palbo3 vs Cycling0	MYT1	 	transcription regulator	 	 	 	3.89E-02	TM4SF1	 
+Palbo3 vs Cycling0	ELK3	 	transcription regulator	 	 	 	3.89E-02	EGR1	 
+Doxo14 vs Cycling0	ETS1	 	transcription regulator	 	 	 	3.89E-02	CCN2,EGR1,INSIG1,SCD	 
+Doxo3 vs Cycling0	HNF1A	 	transcription regulator	 	 	 	3.90E-02	ACAT2,MIR503HG,SLC7A2,SOCS3,TMEM37	 
+Doxo21 vs Cycling0	RUNX2	 	transcription regulator	 	 	 	3.91E-02	EDN1,ITGB4,TPM1	 
+Doxo14 vs Doxo3	ZEB1	 	transcription regulator	 	 	 	3.91E-02	CCN2,FOSB	 
+Palbo28 vs Cycling0	MITF	 	transcription regulator	 	 	 	3.91E-02	FOS,HES1,SCD,TERT	 
+Doxo3 vs Cycling0	TCF4	 	transcription regulator	 	-1.000	 	3.91E-02	HES1,PIK3CD,SOCS3,VASH2	 
+Doxo14 vs Doxo3	RAX	 	transcription regulator	 	 	 	3.92E-02	HES1	 
+Palbo14 vs Cycling0	SPIB	 	transcription regulator	 	 	 	3.93E-02	EGR1,NET1	 
+Palbo28 vs Palbo3	EGR1	-3.062	transcription regulator	 	 	 	3.93E-02	BCL2L11,EGR1,GDNF	 
+Doxo14 vs Cycling0	IRF6	 	transcription regulator	 	 	 	3.94E-02	GLI2,SLC7A2	 
+Palbo28 vs Palbo3	TFCP2L1	 	transcription regulator	 	 	 	3.94E-02	B3GNT7	 
+Palbo28 vs Palbo3	AFF1	 	transcription regulator	 	 	 	3.94E-02	TERT	 
+Palbo28 vs Palbo3	MYCL	 	transcription regulator	 	 	 	3.95E-02	BCL2L11,TERT	 
+Palbo3 vs Cycling0	MYCN	 	transcription regulator	 	 	 	3.96E-02	ADAMTS1,HES1,MIR17HG	 
+Palbo14 vs Cycling0	HINFP	 	transcription regulator	 	 	 	3.99E-02	H1-10	 
+Palbo14 vs Cycling0	ILF2	 	transcription regulator	 	 	 	3.99E-02	FOS	 
+Palbo28 vs Cycling0	GATA4	 	transcription regulator	 	-1.165	 	4.00E-02	CCBE1,EDN1,FOS,HES1	 
+Doxo21 vs Doxo3	SPIB	 	transcription regulator	 	 	 	4.01E-02	EGR1,NET1	 
+Palbo28 vs Cycling0	TOX	 	transcription regulator	 	 	 	4.02E-02	BCL2L11,KLF2	 
+Doxo14 vs Cycling0	TFAP2A	 	transcription regulator	 	 	 	4.03E-02	SLC19A1,TERT,TPM1	 
+Doxo3 vs Cycling0	PIAS2	 	transcription regulator	 	 	 	4.04E-02	FOS	 
+Doxo3 vs Cycling0	TERF2	 	transcription regulator	 	 	 	4.04E-02	TERT	 
+Doxo14 vs Cycling0	ZKSCAN3	 	transcription regulator	 	 	 	4.04E-02	ITGB4	 
+Doxo14 vs Cycling0	TAF1C	 	transcription regulator	 	 	 	4.04E-02	GLI2	 
+Doxo14 vs Cycling0	RNF112	 	transcription regulator	 	 	 	4.04E-02	SKP2	 
+Doxo14 vs Cycling0	EGR4	 	transcription regulator	 	 	 	4.04E-02	EGR1	 
+Doxo14 vs Cycling0	HESX1	 	transcription regulator	 	 	 	4.04E-02	SP5	 
+Doxo14 vs Cycling0	PBX2	 	transcription regulator	 	 	 	4.04E-02	FOS	 
+Doxo21 vs Doxo3	TCF21	 	transcription regulator	 	 	 	4.04E-02	COL4A1	 
+Doxo21 vs Doxo3	MED16	 	transcription regulator	 	 	 	4.04E-02	CCN2	 
+Doxo21 vs Doxo3	ILF2	 	transcription regulator	 	 	 	4.04E-02	FOS	 
+Doxo21 vs Doxo3	ESRRA	 	transcription regulator	Inhibited	-2.000	bias	4.04E-02	COL4A1,COL4A2,CXCL12,VASH2	 
+Doxo3 vs Cycling0	NKX2-3	 	transcription regulator	 	 	 	4.05E-02	EDN1,FBN2,TNFAIP8L1	 
+Doxo14 vs Doxo3	SIX1	 	transcription regulator	 	 	 	4.07E-02	COL6A3,LFNG	 
+Doxo14 vs Doxo3	NFIC	 	transcription regulator	 	 	 	4.07E-02	RGS16,SLC7A2	 
+Palbo14 vs Cycling0	ATF2	 	transcription regulator	 	 	 	4.07E-02	EGR1,FOS	 
+Palbo3 vs Cycling0	PKNOX2	 	transcription regulator	 	 	 	4.09E-02	EGR1	 
+Doxo21 vs Cycling0	MGA	 	transcription regulator	 	 	 	4.10E-02	LTBP4,NREP	 
+Doxo21 vs Cycling0	IRF6	 	transcription regulator	 	 	 	4.10E-02	GLI2,SLC7A2	 
+Palbo28 vs Palbo3	TFE3	 	transcription regulator	 	 	 	4.12E-02	GDNF,INSIG1	 
+Doxo14 vs Doxo3	TFAM	 	transcription regulator	 	 	 	4.12E-02	PHGDH,SLC7A5	 
+Doxo21 vs Cycling0	ZKSCAN3	 	transcription regulator	 	 	 	4.12E-02	ITGB4	 
+Doxo21 vs Cycling0	ARID3B	 	transcription regulator	 	 	 	4.12E-02	BCL2L11	 
+Doxo21 vs Cycling0	TAF1C	 	transcription regulator	 	 	 	4.12E-02	GLI2	 
+Doxo21 vs Cycling0	RNF112	 	transcription regulator	 	 	 	4.12E-02	SKP2	 
+Doxo21 vs Cycling0	EGR4	 	transcription regulator	 	 	 	4.12E-02	EGR1	 
+Doxo21 vs Cycling0	GRIP1	 	transcription regulator	 	 	 	4.12E-02	FREM2	 
+Doxo21 vs Cycling0	HESX1	 	transcription regulator	 	 	 	4.12E-02	SP5	 
+Doxo21 vs Cycling0	PBX2	 	transcription regulator	 	 	 	4.12E-02	FOS	 
+Palbo14 vs Palbo3	SRA1	 	transcription regulator	 	 	 	4.14E-02	HES1	 
+Palbo14 vs Palbo3	HOXA11	 	transcription regulator	 	 	 	4.14E-02	GDNF	 
+Palbo14 vs Palbo3	LMX1A	 	transcription regulator	 	 	 	4.14E-02	HES1	 
+Doxo3 vs Cycling0	USF1	 	transcription regulator	 	 	 	4.14E-02	SLC19A1,TERT	 
+Doxo14 vs Doxo3	MAML1	 	transcription regulator	 	 	 	4.14E-02	HES1	 
+Doxo21 vs Cycling0	ETS1	 	transcription regulator	 	 	 	4.16E-02	CCN2,EGR1,INSIG1,SCD	 
+Doxo14 vs Cycling0	FOSL2	 	transcription regulator	 	 	 	4.18E-02	COL4A1,ITGB4	 
+Palbo28 vs Cycling0	ASCL2	 	transcription regulator	 	 	 	4.18E-02	EGR1	 
+Palbo28 vs Cycling0	PITX3	 	transcription regulator	 	 	 	4.18E-02	GDNF	 
+Palbo28 vs Cycling0	NOLC1	 	transcription regulator	 	 	 	4.18E-02	G6PD	 
+Palbo28 vs Palbo3	NUPR1	 	transcription regulator	Activated	2.236	bias	4.19E-02	CDK15,GPSM2,PER3,TERT,TNFAIP8L1	 
+Palbo28 vs Cycling0	SOX7	 	transcription regulator	 	 	 	4.24E-02	COL4A1,COL4A2	 
+Palbo3 vs Cycling0	YAP1	 	transcription regulator	 	 	 	4.25E-02	ADAMTS1,AXL,EGR1,FOSB	 
+Palbo14 vs Cycling0	ETS1	 	transcription regulator	 	 	 	4.25E-02	EGR1,INSIG1,SCD	 
+Palbo3 vs Cycling0	SRA1	 	transcription regulator	 	 	 	4.29E-02	HES1	 
+Palbo3 vs Cycling0	DBP	 	transcription regulator	 	 	 	4.29E-02	AQP4	 
+Palbo14 vs Cycling0	GON4L	 	transcription regulator	 	 	 	4.29E-02	SKP2	 
+Palbo14 vs Cycling0	APBB1	 	transcription regulator	 	 	 	4.29E-02	HES1	 
+Palbo14 vs Cycling0	FOXD3	 	transcription regulator	 	 	 	4.29E-02	SKP2	 
+Palbo14 vs Cycling0	GATA5	 	transcription regulator	 	 	 	4.29E-02	EDN1	 
+Palbo28 vs Palbo3	PIAS2	 	transcription regulator	 	 	 	4.29E-02	FOS	 
+Palbo28 vs Palbo3	TERF2	 	transcription regulator	 	 	 	4.29E-02	TERT	 
+Doxo3 vs Cycling0	FOXC2	 	transcription regulator	 	 	 	4.30E-02	CXCL12,DLX6	 
+Palbo14 vs Palbo3	EGR3	 	transcription regulator	 	 	 	4.31E-02	CISH,GDNF	 
+Doxo3 vs Cycling0	ID2	 	transcription regulator	 	 	 	4.33E-02	SOCS3,TNFRSF19,WNT3	 
+Palbo3 vs Cycling0	HIF1A	 	transcription regulator	 	 	 	4.33E-02	ADAMTS1,AQP4,AXL,CTDSPL	 
+Palbo14 vs Palbo3	SIN3B	 	transcription regulator	 	 	 	4.33E-02	HES1	 
+Doxo21 vs Cycling0	FOSL2	 	transcription regulator	 	 	 	4.34E-02	COL4A1,ITGB4	 
+Doxo21 vs Doxo3	GON4L	 	transcription regulator	 	 	 	4.34E-02	SKP2	 
+Doxo21 vs Doxo3	APBB1	 	transcription regulator	 	 	 	4.34E-02	HES1	 
+Doxo21 vs Doxo3	FOXD3	 	transcription regulator	 	 	 	4.34E-02	SKP2	 
+Palbo14 vs Cycling0	TFEB	 	transcription regulator	 	 	 	4.35E-02	BORA,FOS,GDNF,PTGER2	 
+Palbo14 vs Palbo3	MAFA	 	transcription regulator	 	 	 	4.36E-02	CXCL12,OXTR	 
+Doxo3 vs Cycling0	HINFP	 	transcription regulator	 	 	 	4.36E-02	H1-10	 
+Doxo3 vs Cycling0	NPAS2	 	transcription regulator	 	 	 	4.36E-02	PER1	 
+Doxo3 vs Cycling0	ILF2	 	transcription regulator	 	 	 	4.36E-02	FOS	 
+Doxo14 vs Doxo3	TFEC	 	transcription regulator	 	 	 	4.37E-02	COL6A3	 
+Palbo28 vs Cycling0	MAFA	 	transcription regulator	 	 	 	4.37E-02	AQP4,CXCL12,TNFRSF19	 
+Doxo3 vs Cycling0	SMARCB1	 	transcription regulator	 	 	 	4.37E-02	FOS,FOSB,HES1	 
+Doxo3 vs Cycling0	TCF7L1	 	transcription regulator	 	 	 	4.38E-02	NID1,TNFRSF19	 
+Doxo3 vs Cycling0	POU2F2	 	transcription regulator	 	 	 	4.38E-02	SCD,TERT	 
+Doxo21 vs Doxo3	NCOA3	 	transcription regulator	 	 	 	4.38E-02	CCN2,HES1	 
+Palbo14 vs Palbo3	JUNB	 	transcription regulator	 	 	 	4.41E-02	HES1,PAK3	 
+Palbo14 vs Palbo3	NOTCH3	 	transcription regulator	 	 	 	4.41E-02	HES1,NDUFA4L2	 
+Doxo14 vs Cycling0	NEUROG1	 	transcription regulator	 	 	 	4.42E-02	AMIGO2,MEST	 
+Palbo28 vs Cycling0	JUNB	 	transcription regulator	 	 	 	4.44E-02	HES1,ITGB4,PAK3	 
+Palbo28 vs Cycling0	HNF1A	 	transcription regulator	 	 	 	4.46E-02	ACAT2,MIR503HG,SLC7A2,SOCS3,SULT1E1,TMEM37	 
+Palbo3 vs Cycling0	CREM	 	transcription regulator	 	 	 	4.46E-02	CAMK4,EGR1	 
+Palbo3 vs Cycling0	SIN3B	 	transcription regulator	 	 	 	4.49E-02	HES1	 
+Palbo28 vs Cycling0	HDAC2	 	transcription regulator	 	 	 	4.50E-02	EGR1,TERT,TNFRSF19	 
+Doxo14 vs Doxo3	NFKB1	 	transcription regulator	 	 	 	4.51E-02	CCN2,FOSB,SLC7A2	 
+Palbo14 vs Cycling0	ZFP36	 	transcription regulator	 	 	 	4.51E-02	FOS,KIF18A	 
+Doxo3 vs Cycling0	STAT4	 	transcription regulator	 	 	 	4.52E-02	PER1,RGS16,SOCS3	 
+Palbo28 vs Palbo3	ID3	 	transcription regulator	 	 	 	4.53E-02	BCL2L11,HES1,SOCS3	 
+Doxo14 vs Cycling0	ASCL2	 	transcription regulator	 	 	 	4.53E-02	EGR1	 
+Doxo14 vs Cycling0	NOLC1	 	transcription regulator	 	 	 	4.53E-02	G6PD	 
+Doxo21 vs Doxo3	BMI1	 	transcription regulator	 	 	 	4.53E-02	NID1,TERT	 
+Palbo14 vs Cycling0	KLF15	 	transcription regulator	 	 	 	4.59E-02	NET1,PXMP2	 
+Doxo14 vs Doxo3	HOXB9	 	transcription regulator	 	 	 	4.59E-02	ANGPTL2	 
+Palbo14 vs Cycling0	CBX2	-2.017	transcription regulator	 	 	 	4.59E-02	LHX9	 
+Palbo14 vs Cycling0	HIF3A	 	transcription regulator	 	 	 	4.59E-02	EDN1	 
+Palbo14 vs Cycling0	TIAL1	 	transcription regulator	 	 	 	4.59E-02	INSIG1	 
+Palbo14 vs Cycling0	TBX1	 	transcription regulator	 	 	 	4.59E-02	MIR17HG	 
+Palbo14 vs Cycling0	MZF1	 	transcription regulator	 	 	 	4.59E-02	AXL	 
+Palbo14 vs Cycling0	GTF2I	 	transcription regulator	 	 	 	4.59E-02	FOS	 
+Doxo21 vs Cycling0	NEUROG1	 	transcription regulator	 	 	 	4.59E-02	AMIGO2,MEST	 
+Doxo21 vs Cycling0	MLX	 	transcription regulator	 	 	 	4.59E-02	BCL2L11,FADS2	 
+Doxo21 vs Cycling0	GABPA	 	transcription regulator	 	 	 	4.59E-02	SKP2,TERT	 
+Doxo21 vs Doxo3	ZFHX3	 	transcription regulator	 	 	 	4.61E-02	RGS16,RYR3	 
+Doxo21 vs Doxo3	ZFP36	 	transcription regulator	 	 	 	4.61E-02	FOS,KIF18A	 
+Doxo21 vs Cycling0	ASCL2	 	transcription regulator	 	 	 	4.63E-02	EGR1	 
+Doxo21 vs Cycling0	NOLC1	 	transcription regulator	 	 	 	4.63E-02	G6PD	 
+Palbo28 vs Cycling0	MSGN1	 	transcription regulator	 	 	 	4.63E-02	HES1	 
+Palbo28 vs Cycling0	RBPJL	 	transcription regulator	 	 	 	4.63E-02	HES1	 
+Palbo28 vs Cycling0	TEF	 	transcription regulator	 	 	 	4.63E-02	AQP4	 
+Palbo28 vs Cycling0	MLLT3	 	transcription regulator	 	 	 	4.63E-02	EDN1	 
+Palbo28 vs Palbo3	TCF21	 	transcription regulator	 	 	 	4.64E-02	COL4A1	 
+Palbo28 vs Palbo3	HINFP	 	transcription regulator	 	 	 	4.64E-02	H1-10	 
+Palbo28 vs Palbo3	ILF2	 	transcription regulator	 	 	 	4.64E-02	FOS	 
+Doxo21 vs Doxo3	WWC1	 	transcription regulator	 	 	 	4.65E-02	CCN2	 
+Doxo21 vs Doxo3	FOXG1	 	transcription regulator	 	 	 	4.65E-02	BCL2L11	 
+Doxo21 vs Doxo3	DDB2	 	transcription regulator	 	 	 	4.65E-02	TERT	 
+Doxo21 vs Doxo3	TBX1	 	transcription regulator	 	 	 	4.65E-02	MIR17HG	 
+Doxo21 vs Doxo3	HOXA4	 	transcription regulator	 	 	 	4.65E-02	CCN2	 
+Doxo21 vs Doxo3	GTF2I	 	transcription regulator	 	 	 	4.65E-02	FOS	 
+Palbo14 vs Palbo3	FOXC1	 	transcription regulator	 	 	 	4.65E-02	CXCL12,GDNF	 
+Palbo3 vs Cycling0	MAFA	 	transcription regulator	 	 	 	4.66E-02	AQP4,OXTR	 
+Palbo3 vs Cycling0	TCF7	 	transcription regulator	 	 	 	4.67E-02	FOSB,HES1,PTGER2	 
+Doxo14 vs Doxo3	TFAP2A	 	transcription regulator	 	 	 	4.68E-02	FREM2,SLC19A1	 
+Doxo21 vs Doxo3	FHL2	 	transcription regulator	 	 	 	4.69E-02	BCL2L11,CXCL12	 
+Doxo3 vs Cycling0	GATA5	 	transcription regulator	 	 	 	4.69E-02	EDN1	 
+Palbo14 vs Palbo3	TARDBP	 	transcription regulator	 	 	 	4.70E-02	INSIG1,TSPOAP1	 
+Palbo3 vs Cycling0	SRF	 	transcription regulator	 	 	 	4.70E-02	EGR1,FOSB,NET1	 
+Palbo3 vs Cycling0	MEN1	 	transcription regulator	 	 	 	4.71E-02	AQP4,SLIT2	 
+Palbo3 vs Cycling0	NOTCH3	 	transcription regulator	 	 	 	4.71E-02	HES1,NDUFA4L2	 
+Palbo28 vs Palbo3	TBX3	 	transcription regulator	 	 	 	4.73E-02	CDK15,EDN1,EGR1	 
+Palbo28 vs Cycling0	SMARCA4	 	transcription regulator	 	-0.156	bias	4.74E-02	ANGPTL2,EGR1,FOS,H1-10,MIR503HG,PER3,STXBP6	 
+Doxo14 vs Cycling0	HDAC4	 	transcription regulator	 	 	 	4.75E-02	FOS,KLF2,TERT	 
+Doxo14 vs Cycling0	HAND2	 	transcription regulator	 	 	 	4.79E-02	CCBE1,TPM1	 
+Doxo3 vs Cycling0	ATF2	 	transcription regulator	 	 	 	4.80E-02	EGR1,FOS	 
+Palbo3 vs Cycling0	TRIM28	 	transcription regulator	 	 	 	4.81E-02	EGR1,LHX9	 
+Doxo14 vs Doxo3	ZNFX1	 	transcription regulator	 	 	 	4.81E-02	TNFRSF19	 
+Doxo14 vs Doxo3	SRA1	 	transcription regulator	 	 	 	4.81E-02	HES1	 
+Doxo14 vs Doxo3	SP100	 	transcription regulator	 	 	 	4.81E-02	CCN2	 
+Doxo14 vs Doxo3	LMX1A	 	transcription regulator	 	 	 	4.81E-02	HES1	 
+Doxo14 vs Doxo3	DBP	 	transcription regulator	 	 	 	4.81E-02	AQP4	 
+Palbo28 vs Palbo3	FOXC2	 	transcription regulator	 	 	 	4.82E-02	CXCL12,GDNF	 
+Palbo14 vs Cycling0	CLOCK	 	transcription regulator	 	 	 	4.82E-02	GDNF,MSMO1,SCD	 
+Palbo28 vs Cycling0	TARDBP	 	transcription regulator	 	 	 	4.84E-02	BCL2L11,INSIG1,TSPOAP1	 
+Palbo28 vs Cycling0	EBF1	 	transcription regulator	 	 	 	4.84E-02	CXCL12,PIK3CD,SOCS3	 
+Doxo21 vs Cycling0	TOX	 	transcription regulator	 	 	 	4.85E-02	BCL2L11,KLF2	 
+Doxo3 vs Cycling0	PAX5	 	transcription regulator	 	 	 	4.88E-02	DLEU2,G6PD	 
+Palbo28 vs Palbo3	HNF1A	 	transcription regulator	 	 	 	4.89E-02	ACAT2,SLC7A2,SOCS3,SULT1E1,TMEM37	 
+Palbo3 vs Cycling0	LYL1	 	transcription regulator	 	 	 	4.89E-02	EGR1	 
+Palbo14 vs Cycling0	SP2	 	transcription regulator	 	 	 	4.89E-02	FOS	 
+Palbo14 vs Cycling0	HNRNPD	 	transcription regulator	 	 	 	4.89E-02	FOS	 
+Palbo28 vs Palbo3	POU2F2	 	transcription regulator	 	 	 	4.91E-02	SCD,TERT	 
+Palbo14 vs Palbo3	EBF2	 	transcription regulator	 	 	 	4.91E-02	ADAMTS15	 
+Doxo14 vs Cycling0	SOX7	 	transcription regulator	 	 	 	4.92E-02	COL4A1,COL4A2	 
+Doxo14 vs Cycling0	DLX1	 	transcription regulator	 	 	 	4.92E-02	DLX6,TERT	 
+Palbo28 vs Cycling0	TBP	 	transcription regulator	 	 	 	4.92E-02	FOS,MIR17HG	 
+Doxo21 vs Doxo3	SP2	 	transcription regulator	 	 	 	4.95E-02	FOS	 
+Palbo3 vs Cycling0	FOXC1	 	transcription regulator	 	 	 	4.96E-02	EGR1,FOSB	 
+Doxo14 vs Doxo3	CREB1	 	transcription regulator	 	 	 	4.98E-02	ANGPTL2,FOSB,MEST,SLC19A1	 
+Doxo21 vs Cycling0	HAND2	 	transcription regulator	 	 	 	4.98E-02	CCBE1,TPM1	 
+Palbo28 vs Palbo3	APBB1	 	transcription regulator	 	 	 	4.99E-02	HES1	 
+Palbo28 vs Palbo3	GATA5	 	transcription regulator	 	 	 	4.99E-02	EDN1	 
+Doxo21 vs Doxo3	PPARGC1A	 	transcription regulator	 	1.961	 	7.78E-02	CCN2,COL6A3,FOS,OLFML3	 

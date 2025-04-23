@@ -1,0 +1,654 @@
+© 2000-2025 QIAGEN. All rights reserved.
+
+Ingenuity Canonical Pathways	 -log(p-value)	Ratio	z-score	Molecules	
+Cell Cycle Checkpoints	6.65E01	2.76E-01	NaN	AURKB,BARD1,BIRC5,BLM,BRCA1,BRIP1,BUB1,BUB1B,CCNA2,CCNB1,CCNB2,CCNE2,CDC20,CDC25A,CDC25C,CDC45,CDC6,CDC7,CDCA8,CDK1,CDK2,CENPA,CENPE,CENPF,CENPH,CENPI,CENPK,CENPM,CENPN,CENPO,CENPU,CLSPN,DBF4,DNA2,DSN1,ERCC6L,EXO1,GTSE1,H2AX,H2BC17,INCENP,ITGB3BP,KIF2C,KNL1,KNTC1,MAD2L1,MCM10,MCM2,MCM3,MCM4,MCM5,MCM6,MCM7,MCM8,NDC80,NDE1,NSD2,NUF2,ORC1,PKMYT1,PLK1,RFC2,RFC3,RFC4,RMI1,RMI2,SGO1,SGO2,SKA1,SPC24,SPC25,SPDL1,UBE2C,UBE2S,ZWINT	
+Kinetochore Metaphase Signaling Pathway	4.38E01	3.98E-01	NaN	AURKB,BIRC5,BUB1,BUB1B,CCNB1,CDC20,CDCA8,CDK1,CENPA,CENPE,CENPH,CENPK,CENPN,CENPO,CENPU,CENPW,DSN1,ESPL1,H2AX,H2AZ1,H2AZ2,INCENP,KIF2C,KNL1,KNTC1,MAD2L1,MAD2L2,MASTL,MXD3,NDC80,NEK2,NUF2,PLK1,PTTG1,SKA1,SKA3,SPC24,SPC25,SPDL1,TTK,ZWINT	
+Mitotic Prometaphase	4.25E01	2.49E-01	NaN	AURKB,BIRC5,BUB1,BUB1B,CCNB1,CCNB2,CDC20,CDCA5,CDCA8,CDK1,CENPA,CENPE,CENPF,CENPH,CENPI,CENPK,CENPM,CENPN,CENPO,CENPU,CNTRL,DSN1,ERCC6L,FIRRM,HAUS7,HAUS8,INCENP,ITGB3BP,KIF2C,KNL1,KNTC1,MAD2L1,NCAPD2,NCAPG,NCAPH,NDC80,NDE1,NEK2,NUF2,PLK1,PLK4,SGO1,SGO2,SKA1,SMC2,SMC4,SPC24,SPC25,SPDL1,TUBA3C,ZWINT	
+Mitotic Metaphase and Anaphase	3.56E01	2.03E-01	NaN	AURKB,BIRC5,BUB1,BUB1B,CCNB1,CCNB2,CDC20,CDCA5,CDCA8,CDK1,CENPA,CENPE,CENPF,CENPH,CENPI,CENPK,CENPM,CENPN,CENPO,CENPU,DSN1,ERCC6L,ESPL1,FBXO5,INCENP,ITGB3BP,KIF2C,KNL1,KNTC1,LBR,LMNB1,MAD2L1,NDC80,NDE1,NUF2,PLK1,PTTG1,SGO1,SGO2,SKA1,SPC24,SPC25,SPDL1,TMPO,TUBA3C,UBE2C,UBE2S,ZWINT	
+RHO GTPases Activate Formins	3.19E01	2.64E-01	NaN	AURKB,BIRC5,BUB1,BUB1B,CDC20,CDCA8,CENPA,CENPE,CENPF,CENPH,CENPI,CENPK,CENPM,CENPN,CENPO,CENPU,DIAPH3,DSN1,ERCC6L,INCENP,ITGB3BP,KIF2C,KNL1,KNTC1,MAD2L1,NDC80,NDE1,NUF2,PLK1,SGO1,SGO2,SKA1,SPC24,SPC25,SPDL1,TUBA3C,ZWINT	
+Synthesis of DNA	2.62E01	2.54E-01	NaN	CCNA2,CCNE2,CDC45,CDC6,CDK2,CDT1,DNA2,FEN1,GINS1,GINS2,GINS4,GMNN,LIG1,MCM2,MCM3,MCM4,MCM5,MCM6,MCM7,MCM8,ORC1,PCNA,POLA1,POLA2,POLE2,PRIM1,RFC2,RFC3,RFC4,UBE2C,UBE2S	
+Activation of the pre-replicative complex	2.57E01	5.71E-01	NaN	CDC45,CDC6,CDC7,CDK2,CDT1,DBF4,GMNN,MCM10,MCM2,MCM3,MCM4,MCM5,MCM6,MCM7,MCM8,ORC1,POLA1,POLA2,POLE2,PRIM1	
+Cell Cycle Control of Chromosomal Replication	2.33E01	3.86E-01	NaN	CDC45,CDC6,CDC7,CDK1,CDK2,CDT1,DBF4,DNA2,LIG1,MCM2,MCM3,MCM4,MCM5,MCM6,MCM7,MCM8,ORC1,PCNA,POLA1,POLA2,PRIM1,TOP2A	
+HDR through Homologous Recombination (HRR) or Single Strand Annealing (SSA)	2.2E01	2.37E-01	NaN	BARD1,BLM,BRCA1,BRCA2,BRIP1,CCNA2,CDK2,CLSPN,DNA2,EXO1,FIRRM,GEN1,H2AX,H2BC17,NSD2,PCNA,POLE2,RAD51,RAD51AP1,RFC2,RFC3,RFC4,RMI1,RMI2,TIMELESS,XRCC2,XRCC3	
+Mitotic G1 phase and G1/S transition	2.14E01	2.12E-01	NaN	CCNA2,CCNB1,CCNE2,CDC25A,CDC45,CDC6,CDK1,CDK2,CDKN2C,CDKN2D,CDT1,CKS1B,DHFR,E2F1,E2F2,FBXO5,MCM8,MYBL2,ORC1,PCNA,POLA1,POLA2,PRIM1,RBL1,RRM2,TK1,TOP2A,TYMS	
+Nucleosome assembly	1.72E01	3.47E-01	NaN	CENPA,CENPH,CENPI,CENPK,CENPM,CENPN,CENPO,CENPU,CENPW,H2AX,H2AZ2,H2BC17,HJURP,ITGB3BP,KNL1,MIS18A,OIP5	
+Role of BRCA1 in DNA Damage Response	1.7E01	2.5E-01	NaN	BARD1,BLM,BRCA1,BRCA2,BRIP1,DPF1,E2F1,E2F2,E2F8,FANCA,FANCB,FANCD2,FANCE,FANCG,PLK1,RAD51,RBL1,RFC2,RFC3,RFC4	
+Telomere Maintenance	1.48E01	2.13E-01	NaN	BLM,CCNA2,CDK2,CHTF18,DNA2,DSCC1,FEN1,H2AX,H2AZ2,H2BC17,LIG1,PCNA,PIF1,POLA1,POLA2,PRIM1,RFC2,RFC3,RFC4	
+Mitotic Roles of Polo-Like Kinase	1.46E01	2.54E-01	NaN	CCNB1,CCNB2,CDC20,CDC25A,CDC25B,CDC25C,CDC7,CDK1,ESPL1,FBXO5,KIF11,KIF23,PKMYT1,PLK1,PLK4,PRC1,PTTG1	
+Mitotic G2-G2/M phases	1.35E01	1.25E-01	NaN	AURKA,CCNA2,CCNB1,CCNB2,CDC25A,CDC25B,CDC25C,CDK1,CDK2,CENPF,CNTRL,E2F1,FOXM1,GTSE1,HAUS7,HAUS8,HMMR,MYBL2,NDE1,NEK2,PKMYT1,PLK1,PLK4,TPX2,TUBA3C	
+Cohesin Chromatin Regulation Pathway	1.33E01	1.06E-01	NaN	AURKB,BIRC5,BUB1,CCNB1,CCNB2,CDCA5,CDCA8,CDK1,ESCO2,ESPL1,H2AX,H2AZ1,H2AZ2,H2BC17,HASPIN,INCENP,KNL1,NCAPD2,NCAPD3,NCAPG,NCAPG2,NCAPH,PLK1,PTTG1,SGO1,SMC2,SMC4,TTK	
+Role of CHK Proteins in Cell Cycle Checkpoint Control	1.18E01	2.41E-01	NaN	BRCA1,CDC25A,CDC25C,CDK1,CDK2,CLSPN,E2F1,E2F2,E2F8,PCNA,PLK1,RFC2,RFC3,RFC4	
+Hereditary Breast Cancer Signaling	1.12E01	1.38E-01	NaN	BARD1,BLM,BRCA1,BRCA2,CCNB1,CDC25C,CDK1,E2F1,FANCA,FANCB,FANCD2,FANCE,FANCG,H2AX,RAD51,RFC2,RFC3,RFC4,XRCC2	
+Regulation of TP53 Activity through Phosphorylation	1.1E01	1.72E-01	NaN	AURKA,AURKB,BARD1,BLM,BRCA1,BRIP1,CCNA2,CDK2,DNA2,EXO1,RFC2,RFC3,RFC4,RMI1,RMI2,TPX2	
+Regulation of mitotic cell cycle	1.03E01	1.7E-01	NaN	AURKA,AURKB,BUB1B,CCNA2,CCNB1,CDC20,CDK1,CDK2,FBXO5,MAD2L1,NEK2,PLK1,PTTG1,UBE2C,UBE2S	
+DNA Replication Pre-Initiation	1.02E01	1.54E-01	NaN	CDC6,CDT1,GMNN,H2AX,H2AZ2,H2BC17,MCM2,MCM3,MCM4,MCM5,MCM6,MCM7,MCM8,ORC1,UBE2C,UBE2S	
+Kinesins	1.02E01	2.1E-01	NaN	CENPE,KIF11,KIF15,KIF18B,KIF20A,KIF20B,KIF22,KIF23,KIF2C,KIF4A,KIFC1,RACGAP1,TUBA3C	
+Cell Cycle: G2/M DNA Damage Checkpoint Regulation	1.01E01	2.35E-01	NaN	AURKA,BRCA1,CCNB1,CCNB2,CDC25B,CDC25C,CDK1,CKS1B,CKS2,PKMYT1,PLK1,TOP2A	
+Cyclins and Cell Cycle Regulation	9.37E00	1.63E-01	NaN	CCNA2,CCNB1,CCNB2,CCNE2,CDC25A,CDK1,CDK2,CDKN2C,CDKN2D,E2F1,E2F2,E2F8,RBL1,SUV39H1	
+Estrogen-mediated S-phase Entry	9.36E00	3.46E-01	NaN	CCNA2,CCNE2,CDC25A,CDK1,CDK2,E2F1,E2F2,E2F8,RBL1	
+TP53 Regulates Transcription of Cell Cycle Genes	9.05E00	2.24E-01	NaN	AURKA,CCNA2,CCNB1,CCNE2,CDC25C,CDK1,CDK2,E2F1,E2F8,PCNA,RBL1	
+Meiotic recombination	8.95E00	2.2E-01	NaN	BLM,BRCA1,BRCA2,CDK2,FIRRM,H2AX,H2AZ2,H2BC17,MND1,PSMC3IP,RAD51	
+ATM Signaling	8.49E00	1.4E-01	NaN	BLM,BRCA1,CCNB1,CCNB2,CDC25A,CDC25C,CDK1,CDK2,FANCD2,H2AX,RAD51,SMC2,SUV39H1,TP73	
+Mitotic Prophase	8.26E00	1.35E-01	NaN	CCNB1,CCNB2,CDK1,H2AX,H2AZ2,H2BC17,LMNB1,MASTL,NCAPD3,NCAPG2,PLK1,SMC2,SMC4,TMPO	
+DNA damage-induced 14-3-3σ Signaling	8.14E00	2.17E-01	NaN	BCL2,BRCA1,CCNB1,CCNB2,CCNE2,CDC25C,CDK1,CDK2,E2F1,TP73	
+NER (Nucleotide Excision Repair, Enhanced Pathway)	8.03E00	1.43E-01	NaN	CHAF1A,CHAF1B,DNA2,LIG1,PCNA,POLA1,POLA2,POLE2,PRIM1,RFC2,RFC3,RFC4,TOP2A	
+Fanconi Anemia Pathway	7.73E00	2.37E-01	NaN	DCLRE1B,FANCA,FANCB,FANCD2,FANCE,FANCG,FANCI,UBE2T,USP1	
+Mismatch Repair in Eukaryotes	7.62E00	3.68E-01	NaN	EXO1,FEN1,LIG1,PCNA,RFC2,RFC3,RFC4	
+Cell Cycle: G1/S Checkpoint Regulation	7.4E00	1.59E-01	NaN	CCNE2,CDC25A,CDK2,CDKN2C,CDKN2D,E2F1,E2F2,E2F8,NRG1,RBL1,SUV39H1	
+DNA Double-Strand Break Repair by Homologous Recombination	7.06E00	4.29E-01	NaN	BRCA1,BRCA2,GEN1,LIG1,POLA1,RAD51	
+Nuclear Cytoskeleton Signaling Pathway	6.93E00	8.14E-02	NaN	CENPE,DHFR,H2AX,KIF11,KIF15,KIF18B,KIF20A,KIF20B,KIF22,KIF23,KIF2C,KIF4A,KIFC1,LMNB1,LMNB2,RACGAP1,SYNE3,TUBA3C	
+Histone Modification Signaling Pathway	6.85E00	7E-02	NaN	ATAD2,AURKB,BUB1,EZH2,H1-4,H1-5,H2AX,H2AZ1,H2AZ2,HASPIN,KDM4D,NCAPD3,NCAPG2,NSD2,ORC1,PHF19,RPS6KA5,SFMBT1,SGO2,SUV39H1,UHRF1	
+DNA Damage Bypass	6.79E00	1.88E-01	NaN	DTL,MAD2L2,PCLAF,PCNA,POLE2,RFC2,RFC3,RFC4,USP1	
+DNA Damage/Telomere Stress Induced Senescence	6.19E00	1.61E-01	NaN	CCNA2,CCNE2,CDK2,H1-4,H1-5,H2AX,H2AZ2,H2BC17,LMNB1	
+BER (Base Excision Repair) Pathway	5.99E00	1.82E-01	NaN	E2F1,FEN1,HMGB1,LIG1,PCNA,RFC2,RFC3,RFC4	
+Transcriptional regulation of granulopoiesis	5.48E00	1.57E-01	NaN	CDK2,DEK,E2F1,H2AX,H2AZ2,H2BC17,LEF1,MYB	
+Ribonucleotide Reductase Signaling Pathway	5.46E00	8.05E-02	NaN	BCL2,BIRC5,CCNF,CDC25A,CDK1,CDK2,DPF1,E2F1,E2F2,E2F8,FOXM1,MYBL2,RRM1,RRM2	
+Resolution of Abasic Sites (AP sites)	5.35E00	1.84E-01	NaN	FEN1,LIG1,PCNA,POLE2,RFC2,RFC3,RFC4	
+Senescence-Associated Secretory Phenotype (SASP)	5.15E00	1.22E-01	NaN	CCNA2,CDK2,CDKN2C,CDKN2D,H2AX,H2AZ2,H2BC17,UBE2C,UBE2S	
+Pancreatic Adenocarcinoma Signaling	4.78E00	8.8E-02	NaN	BCL2,BIRC5,BRCA2,CCNE2,CDK2,E2F1,E2F2,E2F8,RAD51,RBL1,SUV39H1	
+SUMOylation of DNA replication proteins	4.77E00	1.52E-01	NaN	AURKA,AURKB,BIRC5,CDCA8,INCENP,PCNA,TOP2A	
+MHC class II antigen presentation	4.68E00	8.59E-02	NaN	CENPE,CTSV,KIF11,KIF15,KIF20A,KIF22,KIF23,KIF2C,KIF4A,RACGAP1,TUBA3C	
+Transcriptional Regulation by E2F6	4.54E00	1.76E-01	NaN	BRCA1,CDC7,E2F1,EZH2,RAD51,RRM2	
+Senescence Pathway	4.44E00	5.65E-02	NaN	CCNB1,CCNB2,CCNE2,CDC25A,CDC25B,CDC25C,CDK1,CDK2,CGAS,E2F1,E2F2,E2F8,ETS2,EZH2,PHF19,RBL1,RPS6KA5	
+dTMP De Novo Biosynthesis	4.25E00	6E-01	NaN	DHFR,SHMT1,TYMS	
+DNA Methylation and Transcriptional Repression Signaling	4.16E00	9.18E-02	NaN	CDK1,CDK2,E2F1,E2F2,E2F8,RBL1,SUV39H1,TCF19,UHRF1	
+Small Cell Lung Cancer Signaling	4.16E00	9.18E-02	NaN	BCL2,CCNE2,CDK2,CKS1B,E2F1,E2F2,E2F8,RBL1,SUV39H1	
+S Phase	4.09E00	9E-02	NaN	CCNA2,CCNE2,CDC25A,CDC25B,CDCA5,CDK2,CKS1B,E2F1,ESCO2	
+Intra-Golgi and retrograde Golgi-to-ER traffic	4.05E00	6.37E-02	NaN	CENPE,KIF11,KIF15,KIF18B,KIF20A,KIF20B,KIF22,KIF23,KIF2C,KIF4A,KIFC1,RACGAP1,TUBA3C	
+GADD45 Signaling	4.01E00	1.17E-01	NaN	BRCA1,CCNB1,CCNE2,CDK1,CDK2,PCNA,WT1	
+Ovarian Cancer Signaling	3.83E00	6.92E-02	NaN	BCL2,BRCA1,BRCA2,E2F1,E2F2,E2F8,LEF1,RAD51,RBL1,SUV39H1,WNT7B	
+Oxidative Stress Induced Senescence	3.73E00	9.09E-02	NaN	CDKN2C,CDKN2D,E2F1,E2F2,EZH2,H2AX,H2AZ2,H2BC17	
+Chronic Myeloid Leukemia Signaling	3.72E00	5.34E-02	NaN	ADCY3,AURKA,AURKB,BCL2,BIRC5,E2F1,E2F2,E2F8,FOXM1,LEF1,PLK1,RAC3,RBL1,SUV39H1,WNT7B	
+RHO GTPase cycle	3.67E00	4.44E-02	NaN	ANLN,ARHGAP11A,ARHGAP11B,ARHGEF39,CIT,DEPDC1B,DIAPH3,DOCK2,ECT2,FAM169A,IQGAP3,KIF14,LBR,LMNB1,MCAM,PKN3,PLEKHG4B,RAC3,RACGAP1,TMPO	
+Prostate Cancer Signaling	3.6E00	7.76E-02	NaN	BCL2,CCNE2,CDK2,E2F1,E2F2,E2F8,LEF1,RBL1,SUV39H1	
+ID1 Signaling Pathway	3.5E00	5.94E-02	NaN	ATAD5,AURKA,BCL2,BIRC5,CDC20,CHRFAM7A,CHRNA5,E2F1,KIF11,MCAM,TYMS,USP1	
+Apoptotic execution phase	3.48E00	1.15E-01	NaN	CLSPN,H1-4,H1-5,HMGB1,HMGB2,LMNB1	
+PRC2 methylates histones and DNA	3.42E00	1.43E-01	NaN	EZH2,H2AX,H2AZ2,H2BC17,PHF19	
+Oncogene Induced Senescence	3.42E00	1.43E-01	NaN	CDKN2C,CDKN2D,E2F1,E2F2,ETS2	
+p53 Signaling	3.41E00	8.16E-02	NaN	BCL2,BIRC5,BRCA1,CDK2,E2F1,PCNA,TP73,WT1	
+Cell Cycle Regulation by BTG Family Proteins	3.25E00	1.32E-01	NaN	CCNE2,CDK2,E2F1,E2F2,E2F8	
+DNA Double Strand Break Response	3.18E00	1.02E-01	NaN	BARD1,BRCA1,H2AX,H2BC17,KPNA2,NSD2	
+HDR through MMEJ (alt-NHEJ)	2.95E00	2.5E-01	NaN	BRCA2,FEN1,POLQ	
+DNA methylation	2.95E00	1.54E-01	NaN	H2AX,H2AZ2,H2BC17,UHRF1	
+Pyrimidine Deoxyribonucleotides De Novo Biosynthesis I	2.95E00	1.54E-01	NaN	DTYMK,RRM1,RRM2,TYMS	
+MITF-M-dependent gene expression	2.78E00	7.37E-02	NaN	BCL2,CCNB1,CDK2,DPF1,LEF1,LIG1,PLK1	
+SIRT1 negatively regulates rRNA expression	2.77E00	1.38E-01	NaN	H2AX,H2AZ2,H2BC17,SUV39H1	
+Interconversion of nucleotide di- and triphosphates	2.77E00	1.38E-01	NaN	DTYMK,RRM1,RRM2,TYMS	
+Nonhomologous End-Joining (NHEJ)	2.74E00	1.02E-01	NaN	BARD1,BRCA1,H2AX,H2BC17,NSD2	
+Mitotic Telophase/Cytokinesis	2.65E00	2E-01	NaN	KIF20A,KIF23,PLK1	
+B-WICH complex positively regulates rRNA expression	2.62E00	9.62E-02	NaN	DEK,H2AX,H2AZ2,H2BC17,POLR1G	
+Chromatin modifications during the maternal to zygotic transition (MZT)	2.6E00	1.25E-01	NaN	H2AX,H2AZ2,H2BC17,UHRF1	
+Mismatch Repair	2.57E00	1.88E-01	NaN	EXO1,LIG1,PCNA	
+PKR-mediated signaling	2.55E00	7.69E-02	NaN	CDK1,FANCA,FANCB,FANCE,FANCG,TUBA3C	
+Meiotic synapsis	2.52E00	9.09E-02	NaN	BRCA1,H2AX,H2AZ2,H2BC17,LMNB1	
+Folate Signaling Pathway	2.45E00	8.77E-02	NaN	BCL2,CCNA2,DHFR,SHMT1,TYMS	
+Transcriptional regulation by the AP-2 (TFAP2) family of transcription factors	2.41E00	1.11E-01	NaN	ATAD2,DEK,MYBL2,YEATS4	
+Cilium Assembly	2.4E00	4.9E-02	NaN	CDK1,CNTRL,HAUS7,HAUS8,KIF24,NDE1,NEK2,PLK1,PLK4,TUBA3C	
+RHO GTPases activate CIT	2.35E00	1.58E-01	NaN	CIT,KIF14,PRC1	
+Transcriptional Regulation by VENTX	2.25E00	1E-01	NaN	CSF1R,LEF1,UBE2C,UBE2S	
+Aryl Hydrocarbon Receptor Signaling	2.22E00	4.92E-02	NaN	CCNA2,CCNE2,CDK2,DHFR,E2F1,MCM7,POLA1,RBL1,TP73	
+Pyridoxal 5'-phosphate Salvage Pathway	2.18E00	7.58E-02	NaN	CDK1,CDK2,NEK2,PLK1,TTK	
+Glioma Signaling	2.07E00	5.47E-02	NaN	CDKN2C,CDKN2D,E2F1,E2F2,E2F8,RBL1,SUV39H1	
+Salvage Pathways of Pyrimidine Ribonucleotides	2.03E00	6E-02	NaN	APOBEC3B,CDK1,CDK2,NEK2,PLK1,TTK	
+Sumoylation Pathway	2.01E00	5.94E-02	NaN	MYB,PCNA,RAC3,RFC2,RFC3,RFC4	
+Granzyme A Signaling	1.95E00	6.67E-02	NaN	H1-4,H1-5,HMGB2,LMNB1,LMNB2	
+Signaling by NOTCH3	1.91E00	8E-02	NaN	DLGAP5,NEURL1B,TACC3,WWC1	
+Glioblastoma Multiforme Signaling	1.91E00	4.68E-02	NaN	CCNE2,CDK2,E2F1,E2F2,E2F8,LEF1,RAC3,WNT7B	
+Molecular Mechanisms of Cancer	1.87E00	2.9E-02	NaN	ADCY3,AURKA,BCL2,BRCA1,CCNE2,CDC25A,CDC25B,CDC25C,CDK2,CDKN2C,CDKN2D,E2F1,E2F2,E2F8,FANCD2,GPR19,GPR3,GUCY1B1,IL7R,IRS1,LEF1,RAC3,RBL1,S1PR3,SUV39H1	
+Activated PKN1 stimulates transcription of AR regulated genes KLK2 and KLK3	1.87E00	1.07E-01	NaN	H2AX,H2AZ2,H2BC17	
+Nucleotide Excision Repair	1.85E00	5.5E-02	NaN	LIG1,PCNA,POLE2,RFC2,RFC3,RFC4	
+Coronavirus Pathogenesis Pathway	1.84E00	4.27E-02	NaN	BCL2,CCNE2,CDK2,E2F1,E2F2,E2F8,OAS3,RBL1,SUV39H1	
+Protein ubiquitination	1.79E00	1E-01	NaN	UBE2C,UBE2S,UBE2T	
+Sonic Hedgehog Signaling	1.75E00	9.68E-02	NaN	CCNB1,CCNB2,CDK1	
+ESR-mediated signaling	1.7E00	5.08E-02	NaN	BCL2,H2AX,H2AZ2,H2BC17,KPNA2,MYB	
+Transcriptional regulation by RUNX1	1.69E00	4.61E-02	NaN	CLDN5,CTSV,H2AX,H2AZ2,H2BC17,MYB,TP73	
+Bladder Cancer Signaling	1.68E00	5.04E-02	NaN	E2F1,E2F2,E2F8,RBL1,RPS6KA5,SUV39H1	
+Hepatitis B Chronic Liver Pathogenesis Signaling Pathway	1.68E00	4.26E-02	NaN	APOBEC3B,BUB1B,CDC20,ETV4,FOXM1,HMGB1,MAD2L1,MXD3	
+p75 NTR receptor-mediated signalling	1.61E00	4.43E-02	NaN	ARHGEF39,CIT,ECT2,ITGB3BP,PLK4,RTN4R,SORCS3	
+Epithelial Adherens Junction Signaling	1.61E00	4.43E-02	NaN	ECT2,KIF20A,KIF23,LEF1,NECTIN1,RACGAP1,WWC1	
+ERCC6 (CSB) and EHMT2 (G9a) positively regulate rRNA expression	1.54E00	8.11E-02	NaN	H2AX,H2AZ2,H2BC17	
+Non-Small Cell Lung Cancer Signaling	1.53E00	5.21E-02	NaN	E2F1,E2F2,E2F8,RBL1,SUV39H1	
+Regulation of TP53 Expression and Degradation	1.51E00	7.89E-02	NaN	CCNA2,CDK1,CDK2	
+NoRC negatively regulates rRNA expression	1.49E00	5.97E-02	NaN	H2AX,H2AZ2,H2BC17,POLR1G	
+Granzyme B Signaling	1.48E00	1.25E-01	NaN	LMNB1,LMNB2	
+Asparagine Degradation I	1.45E00	5E-01	NaN	ASRGL1	
+Putrescine Biosynthesis III	1.45E00	5E-01	NaN	ODC1	
+Glycine Biosynthesis I	1.45E00	5E-01	NaN	SHMT1	
+Metabolism of folate and pterines	1.44E00	1.18E-01	NaN	DHFR,SHMT1	
+RAN Signaling	1.44E00	1.18E-01	NaN	KPNA2,RANBP1	
+mRNA 3 Prime End Processing Signaling Pathway	1.43E00	4.9E-02	NaN	BARD1,BRCA1,E2F1,E2F2,E2F8	
+RNA Polymerase I Transcription	1.35E00	5.41E-02	NaN	H2AX,H2AZ2,H2BC17,POLR1G	
+Role of OCT4 in Mammalian Embryonic Stem Cell Pluripotency	1.3E00	6.52E-02	NaN	BRCA1,CCNF,ETS2	
+Pre-NOTCH Expression and Processing	1.3E00	5.19E-02	NaN	E2F1,H2AX,H2AZ2,H2BC17	
+Diphthamide Biosynthesis	1.28E00	3.33E-01	NaN	DPH6	
+IL-7 Signaling Pathway	1.27E00	5.06E-02	NaN	BCL2,CDC25A,CDK2,IL7R	
+FAT10 Cancer Signaling Pathway	1.2E00	5.88E-02	NaN	MAD2L1,MAD2L2,PCNA	
+Activation of anterior HOX genes in hindbrain during early embryogenesis	1.19E00	4.76E-02	NaN	EZH2,H2AX,H2AZ2,H2BC17	
+Activation of NMDA receptors and postsynaptic events	1.17E00	4.71E-02	NaN	KPNA2,NRG1,NRGN,TUBA3C	
+Interleukin-7 signaling	1.16E00	8.33E-02	NaN	IL7R,IRS1	
+Other interleukin signaling	1.16E00	8.33E-02	NaN	CSF1R,SDC1	
+Carnitine synthesis	1.16E00	2.5E-01	NaN	SHMT1	
+eNOS Signaling	1.15E00	3.73E-02	NaN	ADCY3,CCNA2,CHRFAM7A,CHRNA5,GUCY1B1,NOSTRIN	
+Intrinsic Pathway for Apoptosis	1.12E00	5.45E-02	NaN	BCL2,E2F1,TP73	
+Regulation of Cellular Mechanics by Calpain Protease	1.12E00	4.49E-02	NaN	CCNA2,CCNE2,CDK1,CDK2	
+RUNX1 regulates megakaryocyte differentiation and platelet function	1.06E00	5.17E-02	NaN	H2AX,H2AZ2,H2BC17	
+Transmission across Electrical Synapses	1.06E00	2E-01	NaN	GJC1	
+Superpathway of Serine and Glycine Biosynthesis I	1.06E00	2E-01	NaN	SHMT1	
+TR/RXR Activation	1.06E00	3.82E-02	NaN	CCNA2,CDK2,FOXM1,NRGN,PCNA	
+RHO GTPases activate PKNs	1.05E00	7.14E-02	NaN	CDC25C,PKN3	
+CDP-diacylglycerol Biosynthesis I	1.05E00	7.14E-02	NaN	GPAT3,MBOAT1	
+Chromatin organization	1.04E00	3.14E-02	NaN	EZH2,H2AX,H2AZ2,H2BC17,KDM4D,NSD2,SUV39H1,YEATS4	
+Phosphatidylglycerol Biosynthesis II (Non-plastidic)	9.96E-01	6.67E-02	NaN	GPAT3,MBOAT1	
+Ferroptosis Signaling Pathway	9.94E-01	3.65E-02	NaN	FANCD2,H2AX,H2AZ1,H2AZ2,RBL1	
+Zymosterol Biosynthesis	9.87E-01	1.67E-01	NaN	LBR	
+Folate Polyglutamylation	9.87E-01	1.67E-01	NaN	SHMT1	
+Melanocyte Development and Pigmentation Signaling	9.86E-01	4.04E-02	NaN	ADCY3,BCL2,GUCY1B1,RPS6KA5	
+Protein Kinase A Signaling	9.86E-01	2.78E-02	NaN	ADCY3,CDC25A,CDC25B,CDC25C,CDKN3,GUCY1B1,H1-4,H1-5,LEF1,MYLK2,UBASH3B	
+NCAM signaling for neurite out-growth	9.82E-01	4.76E-02	NaN	ARTN,RPS6KA5,SPTBN4	
+Signaling by ALK	9.72E-01	6.45E-02	NaN	IRS1,PTN	
+Signaling by CSF1 (M-CSF) in myeloid cells	9.72E-01	6.45E-02	NaN	CSF1R,GRAP2	
+Deubiquitination	9.72E-01	3.02E-02	NaN	BARD1,BRCA1,CCNA2,CDC20,CDC25A,CDK1,CLSPN,H2BC17	
+Gene Silencing by RNA	9.51E-01	3.92E-02	NaN	H2AX,H2AZ2,H2BC17,MYBL1	
+RHO GTPases activate IQGAPs	9.49E-01	6.25E-02	NaN	IQGAP3,TUBA3C	
+Regulation of endogenous retroelements	9.29E-01	3.85E-02	NaN	DPF1,H2AX,H2AZ2,H2BC17	
+Inhibition of Angiogenesis by TSP1	9.27E-01	6.06E-02	NaN	GUCY1B1,SDC1	
+Fructose metabolism	9.24E-01	1.43E-01	NaN	KHK	
+Salvage Pathways of Pyrimidine Deoxyribonucleotides	9.24E-01	1.43E-01	NaN	TK1	
+Ribavirin ADME	9.22E-01	4.48E-02	NaN	CIT,PLK4,SLC29A1	
+Transport of inorganic cations/anions and amino acids/oligopeptides	8.85E-01	3.7E-02	NaN	SLC16A10,SLC25A10,SLC4A8,SLC8A1	
+TP53 Regulates Transcription of DNA Repair Genes	8.81E-01	4.29E-02	NaN	BRCA1,FANCD2,FANCI	
+Sucrose Degradation V (Mammalian)	8.7E-01	1.25E-01	NaN	KHK	
+Replacement of protamines by nucleosomes in the male pronucleus	8.46E-01	5.41E-02	NaN	H2AX,H2BC17	
+CDX Gastrointestinal Cancer Signaling Pathway	8.38E-01	3.05E-02	NaN	BLM,CDK2,IL17B,LEF1,RAC3,WNT7B	
+OAS antiviral response	8.22E-01	1.11E-01	NaN	OAS3	
+NGF-stimulated transcription	8.1E-01	5.13E-02	NaN	F3,FOSL1	
+Cerebral Malformation Signaling Pathway	7.96E-01	3.42E-02	NaN	CCNA2,CDK1,CKS1B,E2F1	
+Hypoxia Signaling in the Cardiovascular System	7.82E-01	3.85E-02	NaN	UBE2C,UBE2S,UBE2T	
+mRNA Editing	7.8E-01	1E-01	NaN	APOBEC3B	
+Sphingosine-1-phosphate Signaling	7.78E-01	3.36E-02	NaN	ADCY3,GUCY1B1,RAC3,S1PR3	
+DAG and IP3 signaling	7.75E-01	4.88E-02	NaN	ADCY3,KPNA2	
+Mechanisms of Viral Exit from Host Cells	7.75E-01	4.88E-02	NaN	LMNB1,LMNB2	
+HOTAIR Regulatory Pathway	7.53E-01	3.03E-02	NaN	EZH2,FOXM1,LEF1,RBM38,WNT7B	
+Mitochondrial Division Signaling Pathway	7.45E-01	3.01E-02	NaN	AURKA,CCNB1,CCNB2,CDK1,S1PR3	
+Transport of vitamins, nucleosides, and related molecules	7.43E-01	4.65E-02	NaN	SLC29A1,SLCO4A1	
+Vasopressin regulates renal water homeostasis via Aquaporins	7.43E-01	4.65E-02	NaN	ADCY3,MYO5B	
+Phenylalanine and tyrosine metabolism	7.43E-01	9.09E-02	NaN	ASRGL1	
+NFE2L2 regulating tumorigenic genes	7.43E-01	9.09E-02	NaN	BCL2	
+Glycine Betaine Degradation	7.43E-01	9.09E-02	NaN	SHMT1	
+Folate Transformations I	7.43E-01	9.09E-02	NaN	SHMT1	
+L1CAM interactions	7.34E-01	3.23E-02	NaN	KIF4A,RPS6KA5,SPTBN4,TUBA3C	
+TP53 Regulates Transcription of Cell Death Genes	7.28E-01	4.55E-02	NaN	BIRC5,TP73	
+Aspirin ADME	7.28E-01	4.55E-02	NaN	GLYATL1,GLYATL2	
+Vitamin D (calciferol) metabolism	7.09E-01	8.33E-02	NaN	CYP24A1	
+Signaling by Leptin	7.09E-01	8.33E-02	NaN	IRS1	
+Signaling by LTK	7.09E-01	8.33E-02	NaN	IRS1	
+γ-glutamyl Cycle	7.09E-01	8.33E-02	NaN	CHAC2	
+Endocannabinoid Developing Neuron Pathway	7.01E-01	3.12E-02	NaN	ADCY3,BRCA1,GUCY1B1,RAC3	
+M-decay: degradation of maternal mRNAs by maternally stored factors	6.99E-01	4.35E-02	NaN	BIRC5,KPNA2	
+Regulation of the Epithelial Mesenchymal Transition in Development Pathway	6.96E-01	3.49E-02	NaN	BRCA1,LEF1,WNT7B	
+Breast Cancer Regulation by Stathmin1	6.89E-01	2.31E-02	NaN	AURKA,AURKB,CDK1,CDK2,E2F1,E2F2,E2F8,FOXM1,GPR19,GPR3,RAC3,S1PR3,STMN1,TUBA3C	
+Estrogen Biosynthesis	6.85E-01	4.26E-02	NaN	DHRS11,HSD17B8	
+Trafficking and processing of endosomal TLR	6.78E-01	7.69E-02	NaN	CTSV	
+Cytosolic iron-sulfur cluster assembly	6.78E-01	7.69E-02	NaN	BRIP1	
+Advanced glycosylation endproduct receptor signaling	6.78E-01	7.69E-02	NaN	HMGB1	
+Transcriptional regulation of testis differentiation	6.78E-01	7.69E-02	NaN	WT1	
+Nephron development	6.78E-01	7.69E-02	NaN	WT1	
+Cholesterol Biosynthesis I	6.78E-01	7.69E-02	NaN	LBR	
+Cholesterol Biosynthesis II (via 24,25-dihydrolanosterol)	6.78E-01	7.69E-02	NaN	LBR	
+Cholesterol Biosynthesis III (via Desmosterol)	6.78E-01	7.69E-02	NaN	LBR	
+Amyloid fiber formation	6.76E-01	3.41E-02	NaN	H2AX,H2AZ1,H2BC17	
+G alpha (z) signalling events	6.71E-01	4.17E-02	NaN	ADCY3,RGS20	
+NAP1L1 Transcription Regulation Signaling Pathway	6.67E-01	3.37E-02	NaN	CCNB1,E2F1,TUBA3C	
+Acetylcholine binding and downstream events	6.49E-01	7.14E-02	NaN	CHRNA5	
+Metabolism of nitric oxide: NOS3 activation and regulation	6.49E-01	7.14E-02	NaN	NOSTRIN	
+Regulation of TP53 Activity through Association with Co-factors	6.49E-01	7.14E-02	NaN	TP73	
+Formation of axial mesoderm	6.49E-01	7.14E-02	NaN	LEF1	
+Gap junction trafficking and regulation	6.32E-01	3.92E-02	NaN	GJC1,TUBA3C	
+Transcriptional regulation by RUNX2	6.32E-01	3.92E-02	NaN	CCNB1,CDK1	
+Factors involved in megakaryocyte development and platelet production	6.3E-01	3.23E-02	NaN	CDK2,DOCK2,MYB	
+Protein Ubiquitination Pathway	6.24E-01	2.51E-02	NaN	BRCA1,CDC20,DNAJC9,UBE2C,UBE2S,UBE2T,USP1	
+Apelin Adipocyte Signaling Pathway	6.22E-01	3.19E-02	NaN	ADCY3,GUCY1B1,RAC3	
+STAT3 Pathway	6.19E-01	2.88E-02	NaN	BCL2,CDC25A,IL7R,TNFRSF11A	
+Opioid Signaling Pathway	6.14E-01	2.49E-02	NaN	ADCY3,GUCY1B1,LEF1,RAC3,RGS20,RGS7,RPS6KA5	
+Immunogenic Cell Death Signaling Pathway	6.13E-01	3.16E-02	NaN	BCL2,CGAS,HMGB1	
+Extrinsic Prothrombin Activation Pathway	5.99E-01	6.25E-02	NaN	F3	
+Signaling by PTK6	5.85E-01	3.64E-02	NaN	CDK2,NRG1	
+Bone Mineralization Signaling Pathway	5.85E-01	2.78E-02	NaN	CYP24A1,LEF1,SLC8A1,WNT7B	
+Protein folding	5.8E-01	3.03E-02	NaN	CCNE2,RGS7,TUBA3C	
+Signaling by Type 1 Insulin-like Growth Factor 1 Receptor (IGF1R)	5.76E-01	5.88E-02	NaN	IRS1	
+Germ layer formation at gastrulation	5.76E-01	5.88E-02	NaN	LEF1	
+Specification of the neural plate border	5.76E-01	5.88E-02	NaN	MYB	
+E3 ubiquitin ligases ubiquitinate target proteins	5.74E-01	3.57E-02	NaN	H2BC17,PCNA	
+Gαi Signaling	5.65E-01	2.72E-02	NaN	ADCY3,GUCY1B1,RGS7,S1PR3	
+Endocannabinoid Cancer Inhibition Pathway	5.65E-01	2.72E-02	NaN	ADCY3,CCNE2,GUCY1B1,LEF1	
+Triacylglycerol Biosynthesis	5.53E-01	3.45E-02	NaN	GPAT3,MBOAT1	
+GPER1 signaling	5.49E-01	2.91E-02	NaN	ADCY3,CIT,PLK4	
+Acetylcholine Receptor Signaling Pathway	5.46E-01	2.53E-02	NaN	ADCY3,BCL2,CHRFAM7A,CHRNA5,GUCY1B1	
+TCF dependent signaling in response to WNT	5.46E-01	2.53E-02	NaN	H2AX,H2AZ2,H2BC17,KREMEN2,LEF1	
+Signaling by ERBB4	5.43E-01	3.39E-02	NaN	NRG1,STMN1	
+NAD Signaling Pathway	5.41E-01	2.65E-02	NaN	H1-4,H1-5,NAPRT,SLC29A1	
+WNT/SHH Axonal Guidance Signaling Pathway	5.41E-01	2.65E-02	NaN	ADCY3,GUCY1B1,LEF1,WNT7B	
+Signaling by Activin	5.35E-01	5.26E-02	NaN	FST	
+Pulmonary Healing Signaling Pathway	5.3E-01	2.49E-02	NaN	CCNB1,CDC25C,FOXM1,LEF1,WNT7B	
+WNK Renal Signaling Pathway	5.2E-01	2.8E-02	NaN	BRCA1,IRS1,RPS6KA5	
+Signaling by Hippo	5.17E-01	5E-02	NaN	WWC1	
+Apelin Liver Signaling Pathway	5.17E-01	5E-02	NaN	IRS1	
+Primary Immunodeficiency Signaling	5.14E-01	3.23E-02	NaN	IL7R,TNFRSF13C	
+Beta-catenin independent WNT signaling	5.1E-01	2.44E-02	NaN	CIT,LEF1,mir-25 (includes others),PLK4,RAC3	
+Phase II - Conjugation of compounds	5.06E-01	2.75E-02	NaN	CHAC2,GLYATL1,GLYATL2	
+Transcriptional Regulation by MECP2	5.04E-01	3.17E-02	NaN	AURKB,LBR	
+Role of Tissue Factor in Cancer	4.96E-01	2.4E-02	NaN	BCL2,BIRC5,F3,RBL1,RPS6KA5	
+Cytosolic sensors of pathogen-associated DNA	4.95E-01	3.12E-02	NaN	CGAS,DTX4	
+ERB2-ERBB3 Signaling	4.95E-01	3.12E-02	NaN	ETV4,NRG1	
+α-Adrenergic Signaling	4.92E-01	2.7E-02	NaN	ADCY3,GUCY1B1,SLC8A1	
+Role of JAK2 in Hormone-like Cytokine Signaling	4.86E-01	3.08E-02	NaN	BCL2,IRS1	
+Regulation of TLR by endogenous ligand	4.83E-01	4.55E-02	NaN	HMGB1	
+Formation of paraxial mesoderm	4.83E-01	4.55E-02	NaN	LEF1	
+Induction of Apoptosis by HIV1	4.78E-01	3.03E-02	NaN	BCL2,SLC25A10	
+Abacavir ADME	4.69E-01	2.99E-02	NaN	CIT,PLK4	
+RAF-independent MAPK1/3 activation	4.67E-01	4.35E-02	NaN	CDK1	
+Nucleotide salvage	4.67E-01	4.35E-02	NaN	TK1	
+Azathioprine ADME	4.67E-01	4.35E-02	NaN	SLC29A1	
+TNFR2 non-canonical NF-kB pathway	4.61E-01	2.94E-02	NaN	TNFRSF11A,TNFRSF13C	
+Agrin Interactions at Neuromuscular Junction	4.61E-01	2.94E-02	NaN	NRG1,RAC3	
+Role of JAK1 and JAK3 in γc Cytokine Signaling	4.53E-01	2.9E-02	NaN	IL7R,IRS1	
+Colorectal Cancer Metastasis Signaling	4.43E-01	2.21E-02	NaN	ADCY3,BIRC5,GUCY1B1,LEF1,RAC3,WNT7B	
+Metabolism of cofactors	4.38E-01	4E-02	NaN	DHFR	
+Growth hormone receptor signaling	4.38E-01	4E-02	NaN	IRS1	
+Basal Cell Carcinoma Signaling	4.37E-01	2.82E-02	NaN	LEF1,WNT7B	
+Glioma Invasiveness Signaling	4.37E-01	2.82E-02	NaN	HMMR,RAC3	
+Dopamine Receptor Signaling	4.29E-01	2.78E-02	NaN	ADCY3,GUCY1B1	
+WNT ligand biogenesis and trafficking	4.25E-01	3.85E-02	NaN	WNT7B	
+Growth Hormone Signaling	4.22E-01	2.74E-02	NaN	IRS1,RPS6KA5	
+Ephrin B Signaling	4.22E-01	2.74E-02	NaN	EPHB6,RAC3	
+RHOA Signaling	4.19E-01	2.44E-02	NaN	ANLN,CIT,MYLK2	
+ERK5 Signaling	4.15E-01	2.7E-02	NaN	FOSL1,RPS6KA5	
+HER-2 Signaling in Breast Cancer	4.13E-01	2.2E-02	NaN	BIRC5,CCNE2,ETS2,NRG1,RBL1	
+Cholesterol biosynthesis	4.12E-01	3.7E-02	NaN	LBR	
+Syndecan interactions	4.12E-01	3.7E-02	NaN	SDC1	
+Pyroptosis	4.12E-01	3.7E-02	NaN	HMGB1	
+Cardiogenesis	4.12E-01	3.7E-02	NaN	LEF1	
+Extra-nuclear estrogen signaling	4.08E-01	2.67E-02	NaN	BCL2,S1PR3	
+Role of Osteoblasts, Osteoclasts and Chondrocytes in Rheumatoid Arthritis	4.05E-01	2.18E-02	NaN	BCL2,CSF1R,LEF1,TNFRSF11A,WNT7B	
+GDNF Family Ligand-Receptor Interactions	4.01E-01	2.63E-02	NaN	ARTN,IRS1	
+GPCR-Mediated Integration of Enteroendocrine Signaling Exemplified by an L Cell	4.01E-01	2.63E-02	NaN	ADCY3,GUCY1B1	
+Sulfur amino acid metabolism	4E-01	3.57E-02	NaN	SLC25A10	
+Signaling by NOTCH1	3.94E-01	2.6E-02	NaN	DTX4,NEURL1B	
+SUMOylation of DNA damage response and repair proteins	3.94E-01	2.6E-02	NaN	BLM,BRCA1	
+Leptin Signaling in Obesity	3.94E-01	2.6E-02	NaN	ADCY3,GUCY1B1	
+Glycosaminoglycan metabolism	3.93E-01	2.34E-02	NaN	CSPG5,HMMR,SDC1	
+Role of p14/p19ARF in Tumor Suppression	3.88E-01	3.45E-02	NaN	E2F1	
+VDR/RXR Activation	3.87E-01	2.56E-02	NaN	CYP24A1,WT1	
+Thyroid Cancer Signaling	3.87E-01	2.56E-02	NaN	IRS1,LEF1	
+Role of WNT/GSK-3β Signaling in the Pathogenesis of Influenza	3.87E-01	2.56E-02	NaN	LEF1,WNT7B	
+Sertoli Cell-Germ Cell Junction Signaling Pathway (Enhanced)	3.78E-01	2.12E-02	NaN	CLDN5,FOSL1,GUCY1B1,NECTIN1,RAC3	
+Costimulation by the CD28 family	3.78E-01	2.29E-02	NaN	CIT,GRAP2,PLK4	
+Signaling by NTRK3 (TRKC)	3.77E-01	3.33E-02	NaN	IRS1	
+G alpha (12/13) signalling events	3.74E-01	2.5E-02	NaN	ARHGEF39,ECT2	
+Signaling by NTRK1 (TRKA)	3.68E-01	2.47E-02	NaN	IRS1,RPS6KA5	
+Nicotinate metabolism	3.66E-01	3.23E-02	NaN	NAPRT	
+Superpathway of Cholesterol Biosynthesis	3.66E-01	3.23E-02	NaN	LBR	
+Role of Osteoblasts in Rheumatoid Arthritis Signaling Pathway	3.64E-01	2.08E-02	NaN	BCL2,CTSV,IL17B,LEF1,WNT7B	
+BEX2 Signaling Pathway	3.62E-01	2.44E-02	NaN	BCL2,LEF1	
+Estrogen-Dependent Breast Cancer Signaling	3.56E-01	2.41E-02	NaN	DHRS11,HSD17B8	
+Sirtuin Signaling Pathway	3.53E-01	2.02E-02	NaN	E2F1,H1-4,H1-5,SUV39H1,TP73,TUBA3C	
+AMPK Signaling	3.5E-01	2.05E-02	NaN	CCNA2,CHRFAM7A,CHRNA5,DPF1,IRS1	
+Tuberculosis Active Signaling Pathway	3.46E-01	2.04E-02	NaN	BCL2,CGAS,CORO1A,EZH2,mir-25 (includes others)	
+Activation of Matrix Metalloproteinases	3.46E-01	3.03E-02	NaN	CTSV	
+MAPK targets/ Nuclear events mediated by MAP kinases	3.46E-01	3.03E-02	NaN	RPS6KA5	
+Role of PKR in Interferon Induction and Antiviral Response	3.44E-01	2.17E-02	NaN	E2F1,HMGB1,SCARA3	
+Neddylation	3.43E-01	2.03E-02	NaN	BIRC5,BRCA1,CCNF,DTL,LRR1	
+Platelet homeostasis	3.38E-01	2.33E-02	NaN	GUCY1B1,SLC8A1	
+Signaling by NOTCH2	3.37E-01	2.94E-02	NaN	NEURL1B	
+Methylglyoxal Degradation III	3.37E-01	2.94E-02	NaN	DHRS11	
+Signaling by NOTCH4	3.31E-01	2.13E-02	NaN	CIT,PLK4,TACC3	
+Oxytocin in Spinal Neurons Signaling Pathway	3.28E-01	2.86E-02	NaN	GUCY1B1	
+Coagulation System	3.28E-01	2.86E-02	NaN	F3	
+IL-9 Signaling	3.28E-01	2.86E-02	NaN	IRS1	
+Docosahexaenoic Acid (DHA) Signaling	3.27E-01	1.99E-02	NaN	ADCY3,BCL2,FABP5,GUCY1B1,SPTBN4	
+ILK Signaling	3.25E-01	2.03E-02	NaN	IRS1,LEF1,RAC3,RPS6KA5	
+Opioid Signalling	3.16E-01	2.22E-02	NaN	ADCY3,KPNA2	
+Tuberculosis Latent Signaling Pathway	3.16E-01	2.22E-02	NaN	ADCY3,GUCY1B1	
+Ceramide Signaling	3.11E-01	2.2E-02	NaN	BCL2,S1PR3	
+Fatty acyl-CoA biosynthesis	3.11E-01	2.7E-02	NaN	HSD17B8	
+Mitochondrial Fatty Acid Beta-Oxidation	3.11E-01	2.7E-02	NaN	ACBD7	
+Gene and protein expression by JAK-STAT signaling after IL-12 stimulation	3.11E-01	2.7E-02	NaN	LMNB1	
+Interferon Signaling	3.11E-01	2.7E-02	NaN	BCL2	
+Cachexia Signaling Pathway	3.07E-01	1.9E-02	NaN	ADCY3,BCL2,GUCY1B1,HMGB1,IL17B,IRS1,PTHLH	
+Adrenomedullin signaling pathway	3.07E-01	1.98E-02	NaN	ADCY3,BCL2,GUCY1B1,MYLK2	
+Cell junction organization	3.06E-01	2.17E-02	NaN	CLDN5,NECTIN1	
+MAPK6/MAPK4 signaling	3.06E-01	2.17E-02	NaN	CDK1,ETV4	
+Acute Myeloid Leukemia Signaling	3.06E-01	2.17E-02	NaN	CSF1R,LEF1	
+Unfolded protein response	3.06E-01	2.17E-02	NaN	BCL2,DNAJC9	
+Triglyceride metabolism	3.03E-01	2.63E-02	NaN	FABP5	
+Inhibition of Matrix Metalloproteases	3.03E-01	2.63E-02	NaN	SDC1	
+Notch Signaling	3.03E-01	2.63E-02	NaN	DTX4	
+Post-translational modification: synthesis of GPI-anchored proteins	3.01E-01	2.15E-02	NaN	LY6K,LYPD1	
+Sheddase Signaling Pathway	3.01E-01	1.96E-02	NaN	E2F1,E2F2,E2F8,ETS2	
+Formation of Fibrin Clot (Clotting Cascade)	2.95E-01	2.56E-02	NaN	F3	
+FLT3 Signaling	2.95E-01	2.56E-02	NaN	GRAP2	
+Class B/2 (Secretin family receptors)	2.91E-01	2.11E-02	NaN	PTHLH,WNT7B	
+Dilated Cardiomyopathy Signaling Pathway	2.91E-01	1.99E-02	NaN	ADCY3,BCL2,GUCY1B1	
+PTEN Signaling	2.91E-01	1.99E-02	NaN	BCL2,RAC3,TNFRSF11A	
+KEAP1-NFE2L2 pathway	2.87E-01	1.97E-02	NaN	BRCA1,CIT,PLK4	
+RAR Activation	2.86E-01	1.85E-02	NaN	ADCY3,DPF1,FABP5,GUCY1B1,IL17B,ITGB3BP,RAC3,RPS6KA5	
+RNA Polymerase III Transcription	2.8E-01	2.44E-02	NaN	SNAPC1	
+RET signaling	2.8E-01	2.44E-02	NaN	ARTN	
+Acetone Degradation I (to Methylglyoxal)	2.8E-01	2.44E-02	NaN	DHRS11	
+Interferon gamma signaling	2.77E-01	2.04E-02	NaN	OAS3,TRIM6	
+IL-1 Signaling	2.77E-01	2.04E-02	NaN	ADCY3,GUCY1B1	
+Class I MHC mediated antigen processing and presentation	2.76E-01	1.84E-02	NaN	CCNF,CDC20,CTSV,HMGB1,LRR1,UBE2C,UBE2S	
+MyD88:MAL(TIRAP) cascade initiated on plasma membrane	2.73E-01	2.38E-02	NaN	HMGB1	
+Pulmonary Fibrosis Idiopathic Signaling Pathway	2.73E-01	1.84E-02	NaN	BCL2,BIRC5,EZH2,LEF1,RPS6KA5,WNT7B	
+Signaling by SCF-KIT	2.66E-01	2.33E-02	NaN	GRAP2	
+DAP12 interactions	2.66E-01	2.33E-02	NaN	GRAP2	
+Smooth Muscle Contraction	2.66E-01	2.33E-02	NaN	GUCY1B1	
+B Cell Activating Factor Signaling	2.66E-01	2.33E-02	NaN	TNFRSF13C	
+COPI-mediated anterograde transport	2.6E-01	1.96E-02	NaN	SPTBN4,TUBA3C	
+PI3K Cascade	2.6E-01	2.27E-02	NaN	IRS1	
+Netrin-1 signaling	2.6E-01	2.27E-02	NaN	SLIT1	
+TAK1-dependent IKK and NF-kappa-B activation	2.6E-01	2.27E-02	NaN	HMGB1	
+Assembly and cell surface presentation of NMDA receptors	2.6E-01	2.27E-02	NaN	TUBA3C	
+Aggrephagy	2.6E-01	2.27E-02	NaN	TUBA3C	
+Retinoid metabolism and transport	2.6E-01	2.27E-02	NaN	SDC1	
+HMGB1 Signaling	2.59E-01	1.87E-02	NaN	HMGB1,IL17B,RAC3	
+HEY1 Signaling Pathway	2.56E-01	1.86E-02	NaN	E2F1,E2F2,E2F8	
+Preeclampsia Signaling Pathway	2.56E-01	1.86E-02	NaN	FOXM1,PKN3,STOX1	
+Multiple Sclerosis Signaling Pathway	2.55E-01	1.83E-02	NaN	EZH2,IL17B,IL7R,SLC8A1	
+Signaling by Insulin receptor	2.53E-01	2.22E-02	NaN	IRS1	
+Carboxyterminal post-translational modifications of tubulin	2.53E-01	2.22E-02	NaN	TUBA3C	
+Signaling by Retinoic Acid	2.47E-01	2.17E-02	NaN	FABP5	
+Role of IL-17F in Allergic Inflammatory Airway Diseases	2.47E-01	2.17E-02	NaN	RPS6KA5	
+Sleep REM Signaling Pathway	2.44E-01	1.89E-02	NaN	IL17B,RPS6KA5	
+CDK5 Signaling	2.44E-01	1.89E-02	NaN	ADCY3,GUCY1B1	
+Apoptosis Signaling	2.44E-01	1.89E-02	NaN	BCL2,CDK1	
+Telomerase Signaling	2.36E-01	1.85E-02	NaN	E2F1,ETS2	
+XBP1(S) activates chaperone genes	2.35E-01	2.08E-02	NaN	DDX11	
+ISGylation Signaling Pathway	2.32E-01	1.83E-02	NaN	BIRC5,PCNA	
+PFKFB4 Signaling Pathway	2.3E-01	2.04E-02	NaN	RPS6KA5	
+Interleukin-4 and Interleukin-13 signaling	2.25E-01	1.8E-02	NaN	BCL2,BIRC5	
+Signaling by ERBB2	2.24E-01	2E-02	NaN	NRG1	
+Signaling by TGFBR3	2.24E-01	2E-02	NaN	HELLS	
+Melanoma Signaling	2.24E-01	2E-02	NaN	E2F1	
+MYC Mediated Apoptosis Signaling	2.24E-01	2E-02	NaN	BCL2	
+Transcriptional activity of SMAD2/SMAD3:SMAD4 heterotrimer	2.19E-01	1.96E-02	NaN	RBL1	
+Transcriptional and post-translational regulation of MITF-M expression and activity	2.19E-01	1.96E-02	NaN	LEF1	
+Signaling by EGFR	2.09E-01	1.89E-02	NaN	FAM83D	
+UVB-Induced MAPK Signaling	2.04E-01	1.85E-02	NaN	RPS6KA5	
+Somitogenesis	2E-01	1.82E-02	NaN	LEF1	
+Neurovascular Coupling Signaling Pathway	-0E00	4.31E-03	NaN	GUCY1B1	
+Oxytocin Signaling Pathway	-0E00	3.51E-03	NaN	GUCY1B1	
+Pyroptosis Signaling Pathway	-0E00	9.8E-03	NaN	HMGB1	
+Wound Healing Signaling Pathway	-0E00	4.02E-03	NaN	IL17B	
+CLEAR Signaling Pathway	-0E00	3.51E-03	NaN	TNFRSF11A	
+SNARE Signaling Pathway	-0E00	1.45E-02	NaN	ADCY3,GUCY1B1	
+Macrophage Classical Activation Signaling Pathway	-0E00	1.06E-02	NaN	EZH2,IL17B	
+MicroRNA Biogenesis Signaling Pathway	-0E00	1.07E-02	NaN	BRCA1,HOPX	
+Pathogen Induced Cytokine Storm Signaling Pathway	-0E00	5.24E-03	NaN	CGAS,IL17B	
+Role of Osteoclasts in Rheumatoid Arthritis Signaling Pathway	-0E00	1.26E-02	NaN	BCL2,CSF1R,RAC3,TNFRSF11A	
+Glucocorticoid Receptor Signaling	-0E00	1E-02	NaN	BCL2,BRCA1,DPF1,HMGB1,IL7R,RPS6KA5	
+Natural Killer Cell Signaling	-0E00	4.93E-03	NaN	RAC3	
+IL-10 Signaling	-0E00	1.29E-02	NaN	BCL2,CDKN2D	
+Macrophage Alternative Activation Signaling Pathway	-0E00	1.56E-02	NaN	CSF1R,IRS1,RPS6KA5	
+Neutrophil Extracellular Trap Signaling Pathway	-0E00	4.89E-03	NaN	HMGB1,RAC3	
+S100 Family Signaling Pathway	-0E00	1.28E-02	NaN	BCL2,ETV4,GPR19,GPR3,LEF1,MCAM,RAC3,S100A2,S1PR3,WNT7B	
+Neuregulin Signaling	-0E00	8.47E-03	NaN	NRG1	
+Circadian Rhythm Signaling	-0E00	1.11E-02	NaN	ADCY3,GUCY1B1,RPS6KA5	
+Leukocyte Extravasation Signaling	-0E00	5.15E-03	NaN	CLDN5	
+Axonal Guidance Signaling	-0E00	1.16E-02	NaN	EPHB6,RAC3,RTN4R,SLIT1,TUBA3C,WNT7B	
+Amyotrophic Lateral Sclerosis Signaling	-0E00	8.55E-03	NaN	BCL2	
+Fc Epsilon RI Signaling	-0E00	1.67E-02	NaN	GRAP2,RAC3	
+Actin Cytoskeleton Signaling	-0E00	1.65E-02	NaN	DIAPH3,IQGAP3,MYLK2,RAC3	
+Synaptic Long Term Depression	-0E00	5.05E-03	NaN	GUCY1B1	
+Huntington's Disease Signaling	-0E00	3.48E-03	NaN	UBE2S	
+Chaperone Mediated Autophagy Signaling Pathway	-0E00	3.14E-03	NaN	CIP2A,HMGB1	
+IL-33 Signaling Pathway	-0E00	1.54E-02	NaN	H2AX,H2AZ1,H2AZ2	
+Myelination Signaling Pathway	-0E00	1.22E-02	NaN	IRS1,LMNB1,NRG1,WNT7B	
+NOD1/2 Signaling Pathway	-0E00	5.18E-03	NaN	IL17B	
+Activin Inhibin Signaling Pathway	-0E00	1.42E-02	NaN	FOSL1,FST,LEF1	
+Adrenergic Receptor Signaling Pathway (Enhanced)	-0E00	1.52E-02	NaN	ADCY3,GUCY1B1,IL17B	
+GABAergic Receptor Signaling Pathway (Enhanced)	-0E00	1.43E-02	NaN	ADCY3,GUCY1B1	
+Glutaminergic Receptor Signaling Pathway (Enhanced)	-0E00	6.13E-03	NaN	ADCY3,GUCY1B1	
+NFKBIE Signaling Pathway	-0E00	2.23E-03	NaN	TNFRSF13C	
+Orexin Signaling Pathway	-0E00	1.24E-02	NaN	ADCY3,GUCY1B1,SLC8A1	
+NRF2-mediated Oxidative Stress Response	-0E00	7.41E-03	NaN	DNAJC9,FOSL1	
+PPARα/RXRα Activation	-0E00	1.52E-02	NaN	ADCY3,GUCY1B1,IRS1	
+LPS/IL-1 Mediated Inhibition of RXR Function	-0E00	3.36E-03	NaN	FABP5	
+G alpha (i) signalling events	-0E00	1.55E-02	NaN	ADCY3,RGS20,RGS7,S1PR3	
+ISG15 antiviral mechanism	-0E00	1.35E-02	NaN	KPNA2	
+PIP3 activates AKT signaling	-0E00	1.38E-02	NaN	IRS1,NRG1	
+Potassium Channels	-0E00	9.71E-03	NaN	KCNH1	
+Degradation of the extracellular matrix	-0E00	1.23E-02	NaN	CTSV	
+Extracellular matrix organization	-0E00	9.35E-03	NaN	LRP4	
+Translocation of SLC2A4 (GLUT4) to the plasma membrane	-0E00	1.39E-02	NaN	TUBA3C	
+Glycerophospholipid biosynthesis	-0E00	1.56E-02	NaN	GPAT3,MBOAT1	
+Eukaryotic Translation Elongation	-0E00	8.2E-03	NaN	RPL39L	
+Integration of energy metabolism	-0E00	9.26E-03	NaN	ADCY3	
+Gamma carboxylation, hypusinylation, hydroxylation, and arylsulfatase activation	-0E00	1.64E-02	NaN	DPH6	
+NLR signaling pathways	-0E00	1.79E-02	NaN	BCL2	
+DDX58/IFIH1-mediated induction of interferon-alpha/beta	-0E00	1.23E-02	NaN	HMGB1	
+SRP-dependent cotranslational protein targeting to membrane	-0E00	7.04E-03	NaN	RPL39L	
+Degradation of beta-catenin by the destruction complex	-0E00	1.1E-02	NaN	LEF1	
+Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell	-0E00	4.65E-03	NaN	RAET1E	
+Assembly of collagen fibrils and other multimeric structures	-0E00	1.64E-02	NaN	CTSV	
+TCR signaling	-0E00	7.94E-03	NaN	GRAP2	
+Cell surface interactions at the vascular wall	-0E00	4.67E-03	NaN	SDC1	
+Generic Transcription Pathway	-0E00	4.66E-03	NaN	ZNF311,ZNF724	
+RNA Polymerase II Transcription	-0E00	1.33E-02	NaN	ALYREF,DDX39A	
+Phase I - Functionalization of compounds	-0E00	8.85E-03	NaN	CYP24A1	
+Selenoamino acid metabolism	-0E00	6.85E-03	NaN	RPL39L	
+Fc epsilon receptor (FCERI) signaling	-0E00	4.85E-03	NaN	GRAP2	
+EPH-Ephrin signaling	-0E00	1.08E-02	NaN	EPHB6	
+HSP90 chaperone cycle for steroid hormone receptors in the presence of ligand	-0E00	1.75E-02	NaN	TUBA3C	
+Metabolism of polyamines	-0E00	1.69E-02	NaN	ODC1	
+Class A/1 (Rhodopsin-like receptors)	-0E00	3.01E-03	NaN	S1PR3	
+Signaling by ROBO receptors	-0E00	8.13E-03	NaN	RPL39L,SLIT1	
+Olfactory Signaling Pathway	-0E00	1.35E-02	NaN	ADCY3	
+G alpha (s) signalling events	-0E00	1.38E-02	NaN	ADCY3,PTHLH	
+Cardiac conduction	-0E00	1.54E-02	NaN	KCNK12,SLC8A1	
+Hedgehog 'off' state	-0E00	1.75E-02	NaN	ADCY3,TUBA3C	
+C-type lectin receptors (CLRs)	-0E00	6.9E-03	NaN	RPS6KA5	
+Hedgehog 'on' state	-0E00	1.39E-02	NaN	CIT,PLK4	
+RAF/MAP kinase cascade	-0E00	1.53E-02	NaN	ARTN,IRS1,NRG1,SPTBN4	
+Major pathway of rRNA processing in the nucleolus and cytosol	-0E00	1.08E-02	NaN	FBL,RPL39L	
+Neurexins and neuroligins	-0E00	1.75E-02	NaN	EPB41	
+Neutrophil degranulation	-0E00	1.05E-02	NaN	DOCK2,DSN1,FABP5,HMGB1,NAPRT	
+PTEN Regulation	-0E00	1.33E-02	NaN	EZH2,mir-25 (includes others)	
+RNA polymerase II transcribes snRNA genes	-0E00	1.2E-02	NaN	SNAPC1	
+Processing of Capped Intron-Containing Pre-mRNA	-0E00	6.94E-03	NaN	ALYREF,DDX39A	
+Eukaryotic Translation Initiation	-0E00	6.67E-03	NaN	RPL39L	
+Eukaryotic Translation Termination	-0E00	8.2E-03	NaN	RPL39L	
+Cargo recognition for clathrin-mediated endocytosis	-0E00	9.52E-03	NaN	IL7R	
+Clathrin-mediated endocytosis	-0E00	7.75E-03	NaN	IL7R	
+Transcriptional regulation by RUNX3	-0E00	1.04E-02	NaN	LEF1	
+Interferon alpha/beta signaling	-0E00	1.32E-02	NaN	OAS3	
+Nonsense-Mediated Decay (NMD)	-0E00	8.55E-03	NaN	RPL39L	
+Response of EIF2AK4 (GCN2) to amino acid deficiency	-0E00	9.71E-03	NaN	RPL39L	
+Expression and translocation of olfactory receptors	-0E00	2.46E-03	NaN	OR6C1	
+GABA receptor activation	-0E00	1.67E-02	NaN	ADCY3	
+Ion channel transport	-0E00	5.46E-03	NaN	CLCN4	
+Hepatic Cholestasis	-0E00	1.33E-02	NaN	ADCY3,GUCY1B1,IL17B	
+Hepatic Fibrosis / Hepatic Stellate Cell Activation	-0E00	5.21E-03	NaN	BCL2	
+Mitochondrial Dysfunction	-0E00	2.9E-03	NaN	BCL2	
+Autism Signaling Pathway	-0E00	9.71E-03	NaN	IL17B,LEF1,WNT7B	
+CGAS-STING Signaling Pathway	-0E00	1.45E-02	NaN	CGAS,IL17B	
+NAFLD Signaling Pathway	-0E00	1.34E-02	NaN	GPAT3,IL17B,IRS1	
+Pancreatic Secretion Signaling Pathway	-0E00	8.23E-03	NaN	ADCY3,GUCY1B1	
+Protein Sorting Signaling Pathway	-0E00	1.1E-02	NaN	ADCY3,GUCY1B1	
+ROBO SLIT Signaling Pathway	-0E00	1.56E-02	NaN	mir-25 (includes others),SLIT1	
+FXR/RXR Activation	-0E00	1.54E-02	NaN	HMGB1,IL17B,SDC1	
+BBSome Signaling Pathway	-0E00	1.22E-02	NaN	EZH2,GPR19,GPR3,PHF19,PLK1,S1PR3	
+Sleep NREM Signaling Pathway	-0E00	1.72E-02	NaN	ADCY3,GUCY1B1	
+UFMylation Signaling Pathway	-0E00	1.56E-02	NaN	SUV39H1	
+Hematoma Resolution Signaling Pathway	-0E00	1.54E-02	NaN	HMGB1,IL17B,S1PR3,TUBA3C	
+Glycation Signaling Pathway	-0E00	1.78E-02	NaN	HMGB1,IL17B,IRS1,RAC3	
+Ribosomal Quality Control Signaling Pathway	-0E00	3.79E-03	NaN	RPL39L	
+rRNA modification in the nucleus and cytosol	-0E00	1.45E-02	NaN	FBL	
+Cyclophilin Signaling Pathway	-0E00	1.61E-02	NaN	BIRC5,LEF1,PLK1,WNT7B	
+Irritable Bowel Syndrome Signaling Pathway	-0E00	1.04E-02	NaN	IL17B,RAC3,WNT7B	
+Lung Ionic Balance Signaling Pathway	-0E00	5.75E-03	NaN	GPR19,GPR3,S1PR3	
+TRIM21 Intracellular Antibody Signaling Pathway	-0E00	1.76E-03	NaN	CGAS	
+ID3 Signaling Pathway	-0E00	2.07E-03	NaN	RAC3,USP1	
+Tight Junction Signaling	-0E00	1.66E-02	NaN	CLDN5,EPB41,NECTIN1	
+Regulation of Actin-based Motility by Rho	-0E00	9.01E-03	NaN	RAC3	
+Erythropoietin Signaling Pathway	-0E00	1.1E-02	NaN	IL17B,RAC3	
+14-3-3-mediated Signaling	-0E00	1.52E-02	NaN	TP73,TUBA3C	
+Fcγ Receptor-mediated Phagocytosis in Macrophages and Monocytes	-0E00	1.08E-02	NaN	RAC3	
+IL-8 Signaling	-0E00	9.62E-03	NaN	BCL2,RAC3	
+IL-12 Signaling and Production in Macrophages	-0E00	8.26E-03	NaN	ETS2,TNFRSF11A	
+Role of Pattern Recognition Receptors in Recognition of Bacteria and Viruses	-0E00	1.3E-02	NaN	IL17B,OAS3	
+Role of NFAT in Regulation of the Immune Response	-0E00	9.55E-04	NaN	KPNA2	
+Cytotoxic T Lymphocyte-mediated Apoptosis of Target Cells	-0E00	2.34E-03	NaN	BCL2	
+IL-17 Signaling	-0E00	5.29E-03	NaN	IL17B	
+Airway Pathology in Chronic Obstructive Pulmonary Disease	-0E00	8.77E-03	NaN	IL17B	
+fMLP Signaling in Neutrophils	-0E00	7.52E-03	NaN	RAC3	
+CXCR4 Signaling	-0E00	1.79E-02	NaN	ADCY3,GUCY1B1,RAC3	
+CTLA4 Signaling in Cytotoxic T Lymphocytes	-0E00	3.28E-03	NaN	GRAP2,RAC3	
+IL-15 Production	-0E00	8.2E-03	NaN	CSF1R	
+CD28 Signaling in T Helper Cells	-0E00	1.92E-03	NaN	GRAP2	
+IL-15 Signaling	-0E00	1.9E-03	NaN	RAC3	
+Virus Entry via Endocytic Pathways	-0E00	8.33E-03	NaN	RAC3	
+Reelin Signaling in Neurons	-0E00	7.25E-03	NaN	ARHGEF39	
+HIF1α Signaling	-0E00	4.76E-03	NaN	RAC3	
+Angiopoietin Signaling	-0E00	1.3E-02	NaN	BIRC5	
+Cellular Effects of Sildenafil (Viagra)	-0E00	8.76E-03	NaN	ADCY3,BCL2,GPR19,GPR3,GUCY1B1,S1PR3	
+Endothelin-1 Signaling	-0E00	1.03E-02	NaN	ADCY3,GUCY1B1	
+Relaxin Signaling	-0E00	1.28E-02	NaN	ADCY3,GUCY1B1	
+Factors Promoting Cardiogenesis in Vertebrates	-0E00	1.32E-02	NaN	LEF1,WNT7B	
+CNTF Signaling	-0E00	1.79E-02	NaN	RPS6KA5	
+Renin-Angiotensin Signaling	-0E00	1.64E-02	NaN	ADCY3,GUCY1B1	
+Semaphorin Signaling in Neurons	-0E00	1.69E-02	NaN	RAC3	
+Thrombin Signaling	-0E00	1.79E-02	NaN	ADCY3,ARHGEF39,GUCY1B1,RAC3	
+Cardiac Hypertrophy Signaling	-0E00	1.53E-02	NaN	ADCY3,GUCY1B1,IRS1,RAC3	
+ICOS-ICOSL Signaling in T Helper Cells	-0E00	1.95E-03	NaN	GRAP2	
+Corticotropin Releasing Hormone Signaling	-0E00	1.29E-02	NaN	ADCY3,GUCY1B1	
+HGF Signaling	-0E00	1.53E-02	NaN	CDK2,ETS2	
+FLT3 Signaling in Hematopoietic Progenitor Cells	-0E00	1.22E-02	NaN	RPS6KA5	
+Polyamine Regulation in Colon Cancer	-0E00	1.69E-02	NaN	ODC1	
+GNRH Signaling	-0E00	1.04E-02	NaN	ADCY3,GUCY1B1	
+Cholecystokinin/Gastrin-mediated Signaling	-0E00	8.55E-03	NaN	RAC3	
+Human Embryonic Stem Cell Pluripotency	-0E00	5E-03	NaN	WNT7B	
+Antiproliferative Role of Somatostatin Receptor 2	-0E00	1.3E-02	NaN	GUCY1B1	
+Germ Cell-Sertoli Cell Junction Signaling	-0E00	1.17E-02	NaN	RAC3,TUBA3C	
+Aldosterone Signaling in Epithelial Cells	-0E00	5.85E-03	NaN	DNAJC9	
+Role of NANOG in Mammalian Embryonic Stem Cell Pluripotency	-0E00	8.13E-03	NaN	WNT7B	
+Prolactin Signaling	-0E00	1.04E-02	NaN	IRS1	
+CREB Signaling in Neurons	-0E00	9.74E-03	NaN	ADCY3,GPR19,GPR3,GUCY1B1,S1PR3,TNFRSF11A	
+Type I Diabetes Mellitus Signaling	-0E00	1.95E-03	NaN	BCL2	
+Endometrial Cancer Signaling	-0E00	1.67E-02	NaN	LEF1	
+Type II Diabetes Mellitus Signaling	-0E00	6.58E-03	NaN	IRS1	
+Production of Nitric Oxide and Reactive Oxygen Species in Macrophages	-0E00	5.21E-03	NaN	RAC3	
+p70S6K Signaling	-0E00	1.72E-03	NaN	IRS1	
+mTOR Signaling	-0E00	1.4E-02	NaN	IRS1,RAC3,RPS6KA5	
+G Protein Signaling Mediated by Tubby	-0E00	4.26E-03	NaN	GRAP2,TUB	
+Communication between Innate and Adaptive Immune Cells	-0E00	1.06E-03	NaN	TNFRSF13C	
+Systemic Lupus Erythematosus Signaling	-0E00	9.36E-04	NaN	TNFRSF13C	
+CDC42 Signaling	-0E00	3.46E-03	NaN	DIAPH3,IQGAP3	
+FAK Signaling	-0E00	6.76E-03	NaN	ETS2,ETV4,GPR19,GPR3,IL7R,LEF1,S1PR3	
+EIF2 Signaling	-0E00	8.4E-03	NaN	BCL2,RPL39L	
+RAC Signaling	-0E00	1.46E-02	NaN	IQGAP3,RAC3	
+Phospholipase C Signaling	-0E00	3.56E-03	NaN	ADCY3,GRAP2,GUCY1B1,RAC3	
+Altered T Cell and B Cell Signaling in Rheumatoid Arthritis	-0E00	1.06E-03	NaN	TNFRSF13C	
+Atherosclerosis Signaling	-0E00	7.35E-03	NaN	F3	
+Role of Macrophages, Fibroblasts and Endothelial Cells in Rheumatoid Arthritis	-0E00	5.93E-03	NaN	LEF1,WNT7B	
+Regulation of eIF4 and p70S6K Signaling	-0E00	5.32E-03	NaN	IRS1	
+Role of NFAT in Cardiac Hypertrophy	-0E00	1.31E-02	NaN	ADCY3,GUCY1B1,SLC8A1	
+B Cell Development	-0E00	2.04E-03	NaN	IL7R	
+RANK Signaling in Osteoclasts	-0E00	1.08E-02	NaN	TNFRSF11A	
+NUR77 Signaling in T Lymphocytes	-0E00	3.85E-03	NaN	BCL2,PCNA	
+PKCθ Signaling in T Lymphocytes	-0E00	3.57E-03	NaN	GRAP2,RAC3	
+Role of MAPK Signaling in the Pathogenesis of Influenza	-0E00	1.19E-02	NaN	BCL2	
+Role of Hypercytokinemia/hyperchemokinemia in the Pathogenesis of Influenza	-0E00	1.09E-02	NaN	OAS3	
+Antiproliferative Role of TOB in T Cell Signaling	-0E00	7.04E-03	NaN	CCNA2,CCNE2,CDK2	
+OX40 Signaling Pathway	-0E00	2.07E-03	NaN	BCL2	
+PI3K Signaling in B Lymphocytes	-0E00	1.69E-03	NaN	IRS1	
+P2Y Purinergic Receptor Signaling Pathway	-0E00	1.49E-02	NaN	ADCY3,GUCY1B1	
+IL-17A Signaling in Fibroblasts	-0E00	1.25E-02	NaN	BCL2	
+Role of JAK family kinases in IL-6-type Cytokine Signaling	-0E00	1.23E-02	NaN	BIRC5	
+Actin Nucleation by ARP-WASP Complex	-0E00	1.1E-02	NaN	RAC3	
+Dopamine-DARPP32 Feedback in cAMP Signaling	-0E00	1.12E-02	NaN	ADCY3,GUCY1B1	
+NGF Signaling	-0E00	8.26E-03	NaN	RPS6KA5	
+Signaling by Rho Family GTPases	-0E00	1.5E-02	NaN	CIT,DIAPH3,RAC3,STMN1	
+RHOGDI Signaling	-0E00	4.55E-03	NaN	RAC3	
+Sertoli Cell-Sertoli Cell Junction Signaling	-0E00	1.62E-02	NaN	CLDN5,EPB41,NECTIN1,TUBA3C	
+Gap Junction Signaling	-0E00	1.79E-02	NaN	ADCY3,BIRC5,GJC1,GUCY1B1,LEF1,TUBA3C	
+Mouse Embryonic Stem Cell Pluripotency	-0E00	9.71E-03	NaN	LEF1	
+Transcriptional Regulatory Network in Embryonic Stem Cells	-0E00	6.1E-03	NaN	WNT7B	
+ERBB Signaling	-0E00	1.08E-02	NaN	NRG1	
+ERBB4 Signaling	-0E00	1.49E-02	NaN	NRG1	
+Netrin Signaling	-0E00	5.71E-03	NaN	RAC3	
+D-myo-inositol-5-phosphate Metabolism	-0E00	1.47E-02	NaN	CDC25A,CDC25B,CDC25C	
+D-myo-inositol (1,4,5,6)-Tetrakisphosphate Biosynthesis	-0E00	1.59E-02	NaN	CDC25A,CDC25B,CDC25C	
+Superpathway of Inositol Phosphate Compounds	-0E00	1.24E-02	NaN	CDC25A,CDC25B,CDC25C	
+D-myo-inositol (3,4,5,6)-tetrakisphosphate Biosynthesis	-0E00	1.59E-02	NaN	CDC25A,CDC25B,CDC25C	
+3-phosphoinositide Degradation	-0E00	1.5E-02	NaN	CDC25A,CDC25B,CDC25C	
+3-phosphoinositide Biosynthesis	-0E00	1.4E-02	NaN	CDC25A,CDC25B,CDC25C	
+Stearate Biosynthesis I (Animals)	-0E00	1.59E-02	NaN	DHRS11	
+Gαq Signaling	-0E00	1.18E-02	NaN	RAC3,RGS7	
+Gαs Signaling	-0E00	1.57E-02	NaN	ADCY3,GUCY1B1	
+PEDF Signaling	-0E00	1.19E-02	NaN	BCL2	
+Remodeling of Epithelial Adherens Junctions	-0E00	1.41E-02	NaN	TUBA3C	
+Agranulocyte Adhesion and Diapedesis	-0E00	4.46E-03	NaN	CLDN5	
+Granulocyte Adhesion and Diapedesis	-0E00	9.8E-03	NaN	CLDN5,SDC1	
+Regulation of the Epithelial-Mesenchymal Transition Pathway	-0E00	1.03E-02	NaN	LEF1,WNT7B	
+Sperm Motility	-0E00	1.17E-02	NaN	CSF1R,GUCY1B1,SLC16A10	
+TEC Kinase Signaling	-0E00	1.73E-03	NaN	RAC3	
+UVA-Induced MAPK Signaling	-0E00	1.02E-02	NaN	RPS6KA5	
+Adipogenesis pathway	-0E00	7.25E-03	NaN	EZH2	
+HIPPO signaling	-0E00	1.3E-02	NaN	WWC1	
+PCP (Planar Cell Polarity) Pathway	-0E00	1.67E-02	NaN	WNT7B	
+Parkinson's Signaling Pathway	-0E00	6.33E-03	NaN	IL17B,TUBA3C	
+Estrogen Receptor Signaling	-0E00	9.73E-03	NaN	ADCY3,BCL2,GUCY1B1,PCNA	
+ERK/MAPK Signaling	-0E00	1.36E-02	NaN	ETS2,RAC3,RPS6KA5	
+SAPK/JNK Signaling	-0E00	3.98E-03	NaN	IRS1,RAC3	
+PI3K/AKT Signaling	-0E00	1E-02	NaN	BCL2,IL7R	
+Nitric Oxide Signaling in the Cardiovascular System	-0E00	8.33E-03	NaN	GUCY1B1	
+Cardiac β-adrenergic Signaling	-0E00	1.76E-02	NaN	ADCY3,GUCY1B1,SLC8A1	
+FGF Signaling	-0E00	1.16E-02	NaN	RPS6KA5	
+GABA Receptor Signaling	-0E00	1.5E-02	NaN	ADCY3,GUCY1B1	
+IL-4 Signaling	-0E00	1.74E-03	NaN	IRS1	
+WNT/β-catenin Signaling	-0E00	1.73E-02	NaN	KREMEN2,LEF1,WNT7B	
+Serotonin Receptor Signaling	-0E00	1.7E-02	NaN	ADCY3,BCL2,CCNE2,CDK2,GUCY1B1,MYLK2,RAC3,RBL1	
+Insulin Receptor Signaling	-0E00	7.75E-03	NaN	IRS1	
+Phototransduction Pathway	-0E00	1.79E-02	NaN	GUCY1B1	
+Integrin Signaling	-0E00	9.52E-03	NaN	MYLK2,RAC3	
+Death Receptor Signaling	-0E00	1.03E-02	NaN	BCL2	
+IGF-1 Signaling	-0E00	9.52E-03	NaN	IRS1	
+cAMP-mediated signaling	-0E00	1.66E-02	NaN	ADCY3,GUCY1B1,RGS7,S1PR3	
+p38 MAPK Signaling	-0E00	1.61E-02	NaN	CDC25B,RPS6KA5	
+TGF-β Signaling	-0E00	1.03E-02	NaN	BCL2	
+NF-κB Signaling	-0E00	1.75E-03	NaN	TNFRSF11A	
+VEGF Signaling	-0E00	1.03E-02	NaN	BCL2	
+T Cell Receptor Signaling	-0E00	3.22E-03	NaN	GRAP2,LEF1	
+G-Protein Coupled Receptor Signaling	-0E00	1.12E-02	NaN	ADCY3,GPR19,GPR3,GUCY1B1,MYLK2,RAC3,RGS7,S1PR3	
+BMP signaling pathway	-0E00	1.11E-02	NaN	FST	
+GPCR-Mediated Nutrient Sensing in Enteroendocrine Cells	-0E00	1.68E-02	NaN	ADCY3,GUCY1B1	
+Gustation Pathway	-0E00	9.48E-03	NaN	ADCY3,GUCY1B1	
+Phagosome Formation	-0E00	8.5E-03	NaN	GPR19,GPR3,MYLK2,RAC3,S1PR3,SCARA3	
+Phagosome Maturation	-0E00	1.75E-02	NaN	CTSV,RAC3,TUBA3C	
+Autophagy	-0E00	1.37E-02	NaN	BCL2,E2F1,IRS1	
+Macropinocytosis Signaling	-0E00	1.32E-02	NaN	CSF1R	
+PD-1, PD-L1 cancer immunotherapy pathway	-0E00	1.75E-02	NaN	CDK2,CIP2A	
+Osteoarthritis Pathway	-0E00	1.68E-02	NaN	HMGB1,LEF1,PTHLH,S1PR3	
+GP6 Signaling Pathway	-0E00	7.81E-03	NaN	GRAP2	
+Neuroinflammation Signaling Pathway	-0E00	1.52E-02	NaN	BCL2,BIRC5,CSF1R,HMGB1,RAC3	
+Endocannabinoid Neuronal Synapse Pathway	-0E00	1.33E-02	NaN	ADCY3,GUCY1B1	
+Apelin Cardiomyocyte Signaling Pathway	-0E00	1E-02	NaN	SLC8A1	
+Apelin Endothelial Signaling Pathway	-0E00	1.38E-02	NaN	ADCY3,GUCY1B1	
+Cardiac Hypertrophy Signaling (Enhanced)	-0E00	1.3E-02	NaN	ADCY3,DIAPH3,GUCY1B1,IL17B,IL7R,RPS6KA5,WNT7B	
+Synaptogenesis Signaling Pathway	-0E00	1.27E-02	NaN	ADCY3,EPHB6,GUCY1B1,NECTIN1	
+Systemic Lupus Erythematosus in T Cell Signaling Pathway	-0E00	3.1E-03	NaN	RAC3,S1PR3	
+Systemic Lupus Erythematosus in B Cell Signaling Pathway	-0E00	5.49E-03	NaN	BCL2,IL17B,RAC3,TNFRSF13C	
+White Adipose Tissue Browning Pathway	-0E00	1.44E-02	NaN	ADCY3,GUCY1B1	
+Hepatic Fibrosis Signaling Pathway	-0E00	1.44E-02	NaN	BCL2,EZH2,LEF1,MYLK2,RAC3,WNT7B	
+Necroptosis Signaling Pathway	-0E00	1.23E-02	NaN	RBL1,SLC25A10	
+Xenobiotic Metabolism PXR Signaling Pathway	-0E00	4.52E-03	NaN	CDK2	
+Insulin Secretion Signaling Pathway	-0E00	1.08E-02	NaN	ADCY3,GUCY1B1,RPS6KA5	
+Semaphorin Neuronal Repulsive Signaling Pathway	-0E00	1.36E-02	NaN	CSPG5,GUCY1B1	
+Coronavirus Replication Pathway	-0E00	1.2E-02	NaN	RPL39L,TUBA3C	
+Tumor Microenvironment Pathway	-0E00	5.56E-03	NaN	BCL2	
+MSP-RON Signaling in Cancer Cells Pathway	-0E00	1.4E-02	NaN	ETS2,LEF1	
+Calcium Signaling	-0E00	1.38E-02	NaN	CHRFAM7A,CHRNA5,SLC8A1	
+Eicosanoid Signaling	-0E00	1.06E-02	NaN	ADCY3,GUCY1B1,LEF1	
+Ephrin Receptor Signaling	-0E00	9.9E-03	NaN	EPHB6,RAC3	
+Role of MAPK Signaling in Promoting the Pathogenesis of Influenza	-0E00	8.77E-03	NaN	BCL2	
