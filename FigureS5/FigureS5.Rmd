@@ -1,0 +1,458 @@
+---
+title: "Figure S5: NF-κB driven SASP signature is also found in drug distinct upregulated genes, related to Figure 5"
+author: "Joanna Yeung"
+date: '2025-04-23'
+output: html_document
+---
+```{r}
+# data wrangling
+library(preprocessCore)
+library(readr)
+library(readxl)
+library(stringr)
+library(dplyr)
+
+# plotting
+library(gridExtra)
+library(ggplot2)
+library(pheatmap)
+library(cowplot)
+library(viridis)
+library(RColorBrewer)
+library(scales)
+library(ggrepel)
+
+# genomics data wrangling and analysis
+library(rtracklayer)
+library(Biostrings)
+library(GenomicFeatures)
+library(GenomicRanges)
+library(rtracklayer)
+library(DESeq2)
+library(apeglm)
+library(ChIPseeker)
+library(clusterProfiler)
+library(msigdbr)
+library(MotifDb)
+library(motifmatchr)
+
+# genome annotation databases
+library(EnsDb.Hsapiens.v79)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(BSgenome.Hsapiens.UCSC.hg38)
+library(org.Hs.eg.db)
+```
+
+
+# annotation colors for pheatmap
+```{r}
+hm_cols_RNA <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
+                Treatment=c("Cycling"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD", "DoxovsPalbo"="#CCEBC5"), 
+                Biorep=c("1"="orange", "2"="light blue", "3"="pink"), 
+                log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "DoxovsPalbo"="#CCEBC5"), 
+                Clusters=c("5"="#66C2A5","2"="#A6D854","1"="#FC8D62", "7"="#8DA0CB","4"="#E78AC3","6"="#E78AC3","3"="#FFD92F","8"="#E5C494"), 
+                SASP = c("Yes"="dark green", "No"="white"),
+                Cell_Cycle = c("Yes"="dark blue", "No"="white"), 
+                p53_All=c("Yes"="#00B0F0", "No"="white"),
+                NFKB_All=c("Yes"="red", "No"="white"))
+
+
+hm_cols_ATAC <- list(Timepoint=c("0"="#440154FF", "3"="#3B528BFF", "10"= "#4DA6A3", "14"="#21908CFF", "21"="#5DC863FF", "28"="#FDE725FF"), 
+                Treatment=c("None"="#F8766D", "Doxo"="#B3C543", "Palbo"="#E0ADCD", "PvsD"="#CCEBC5"),
+                Biorep=c("1"="orange", "2"="light blue", "3"="pink", "4"="light green"), 
+                log2FC=c("vs Cyc"="#FBB4AE","vs day3"="#B3CDE3", "PvsD"="#CCEBC5"),
+                Peak_anno=c("Distal"="#B15A28", "Gene Body"="#7F54A2", "Promoter"="#A7CEE2"), 
+                Doxo=c("Yes"="#B3C543", "No"="white"),
+                Palbo=c("Yes"="#E0ADCD", "No"="white")
+                )
+```
+
+# load in workspace with DESeq results and rlog counts matrix of genes. 
+```{r}
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure2/workspace.RData")
+```
+
+#### universe (background gene set) for GO enrichment analysis is all genes expressed
+```{r}
+universe <- genes_anno_type[match(gsub('\\.[0-9]*$', '', row.names(acrossGroups)), genes_anno_type$ensembl_id), ]
+```
+
+# make function to specify code chunk to run from other Rmd file to avoid copying and pasting large lines of code. 
+```{r}
+# arguments: 
+# Rmd_file=file path & name of Rmd file with code chunk
+# chunk_name= name of code chunk to run from Rmd file. 
+run_code_chunk <- function(Rmd_file, chunk_name){ 
+  # Read the Rmd file
+lines <- readLines(Rmd_file)
+
+# Identify the start and end of the specific chunk
+chunk_start <- grep(paste0("^```\\{r\\s*", chunk_name), lines)  # Find chunk start
+chunk_end <- grep("^```$", lines)  # Find all chunk end lines
+
+# Find the first `chunk_end` after `chunk_start`
+chunk_end <- chunk_end[chunk_end > chunk_start][1]
+
+  if (is.na(chunk_end)) {
+    stop(paste("End of chunk", chunk_name, "not found. Check the Rmd file for missing delimiters."))
+  }
+
+# specify lines inside chunk, removing lines that make up the start and end of the chunk. 
+chunk_to_run <- lines[(chunk_start[1]+1):(chunk_end[1]-1)]
+
+# Evaluate the extracted code
+  eval(parse(text = paste(chunk_to_run, collapse = "\n")), envir = .GlobalEnv)
+}
+```
+
+# RNA-seq: run code chunks to make matrix with log2FC values of significant genes
+```{r}
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure4/Figure4.Rmd", chunk_name="log2FC sig genes matrix")
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure5/Figure5.Rmd", chunk_name="p53 NFKB databases")
+```
+
+# RNA-seq: SASP signatures, make log2FC matrix of SASP genes going up with drug treatment
+```{r}
+# extract genes under Hallmark terms P53 PATHWAY & TNFA SIGNALING VIA NFKB
+p53_Hallmark <- msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_P53_PATHWAY", ]$gene_symbol
+NFKB_Hallmark <- msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_TNFA_SIGNALING_VIA_NFKB", ]$gene_symbol
+
+# import p53 census target gene database from https://tp53.isb-cgc.org/target_genes
+Fischer_Oncogene_2017_p53_census_target_genes <- read_excel("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/external_databases/Fischer_Oncogene_2017_p53_census_target_genes.xlsx")
+
+# import Gilmore Lab's list of NF-kB target genes
+Gilmore_NFKB_Targets <- as.data.frame(read_excel("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/RNAseq/external_databases/GilmoreLab_NFKB_Target_Genes_BostonUniversity.xlsx"))$`Human Gene Name`
+Gilmore_NFKB_Targets <- unique(Gilmore_NFKB_Targets[!is.na(Gilmore_NFKB_Targets)])
+
+# filter for E2F target genes from IPA
+E2F_Targets=unique(c(unlist(lapply(IPA_upstream_regs, function(x){str_split(x[grep("E2F", x$Upstream.Regulator), ]$Target.Molecules.in.Dataset, ",")})), 
+              msigdbr_df_H[msigdbr_df_H$gs_name %in% "HALLMARK_E2F_TARGETS", ]$gene_symbol))
+
+# filter for p53 & NFKB target genes from IPA
+IPA_targets <- list(p53=unlist(lapply(IPA_upstream_regs, function(x){str_split(x[grep("TP53$", x$Upstream.Regulator), ]$Target.Molecules.in.Dataset, ",")})),
+                    NFKB=unlist(lapply(IPA_upstream_regs, function(x){unique(unlist(str_split(x[grep("NFKB", x$Upstream.Regulator), ]$Target.Molecules.in.Dataset, ",")))}))
+                    )
+
+# add annotation to significant genes based on if they are NF-kB or p53 targets. 
+clusterDF$NFKB_All <- ifelse(row.names(clusterDF) %in% c(Gilmore_NFKB_Targets, NFKB_Hallmark, IPA_targets$NFKB), "Yes", "No") # annotate sig genes as NF-kB targets if they are part of Gilmore_NFKB_Targets or TNFA SIGNALING VIA NFKB Hallmark term 
+clusterDF$p53_All <- ifelse(row.names(clusterDF) %in% c(Fischer_Oncogene_2017_p53_census_target_genes$`Gene Symbol`, p53_Hallmark), "Yes", "No")
+
+SASP_sig_LFCMat <- sig_LFCMat[row.names(sig_LFCMat) %in% clusterDF[clusterDF$SASP %in% "Yes" & ! clusterDF$Clusters %in% c("5", "2"), ]$gene_id, ]
+
+anno_sigLFC <- data.frame(
+  row.names = colnames(sig_LFCMat),
+  log2FC = c(rep("vs Cyc", 4), rep("vs day3", 3), rep("vs Cyc", 5), rep("vs day3", 4), rep("DoxovsPalbo",4)),
+  Treatment = c(rep("Doxo", 7), rep("Palbo", 9), rep("DoxovsPalbo",4)),
+  Timepoint = c("3", "10", "14", "21", "10", "14", "21", "3", "10", "14", "21", "28", "10", "14", "21", "28","3", "10", "14", "21")
+)
+```
+
+# RNA-seq: generate input files for IPA upstream regulator analysis based on log2FC values of SASP genes 
+```{r}
+outdir_IPA <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS5/IPA_files_kmeans7_clusters/input"
+
+write.table(SASP_sig_LFCMat[row.names(SASP_sig_LFCMat) %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id, ], file=paste0(outdir_IPA, "/Palbo_SASP_sig_LFCmat.csv"), row.names=T, sep=",")
+
+write.table(SASP_sig_LFCMat[row.names(SASP_sig_LFCMat) %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id, ], file=paste0(outdir_IPA, "/Doxo_SASP_sig_LFCmat.csv"), row.names=T, sep=",")
+
+write.table(SASP_sig_LFCMat[row.names(SASP_sig_LFCMat) %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id, ], file=paste0(outdir_IPA,"/Shared_SASP_sig_LFCmat.csv"), row.names=T, sep=",")
+```
+
+# RNA-seq: import IPA upstream regulators & pathways for SASP genes
+```{r import IPA results}
+setwd("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS5/IPA_files_kmeans7_clusters/output")
+IPA_SASP_upstream_regs <- list()
+IPA_SASP_pathways <- list()
+# read in information for enriched IPA pathways per hierarchical cluster (clustering based on scaled rlog normalized counts)
+
+upstream_regs_files <- dir(pattern="_IPA_Upstream_regs.txt")
+pathways_files <- dir(pattern="_IPA_pathways.txt")
+for(i in 1:length(pathways_files)){
+# read in information for enriched pathways
+IPA_SASP_pathways[[i]]<- read_tsv(pathways_files[i], skip=2)
+# read in information for enriched upstream regulators 
+IPA_SASP_upstream_regs[[i]] <- read_tsv(upstream_regs_files[i], skip=2)
+
+  IPA_SASP_pathways[[i]] <- IPA_SASP_pathways[[i]] %>%
+  mutate(across(where(is.character), ~ replace(.x, .x == "N/A", "0"))) %>%
+  mutate(across(-`Canonical Pathways`, as.numeric)) # Convert all except the first column to numeric
+  
+  IPA_SASP_upstream_regs[[i]] <- IPA_SASP_upstream_regs[[i]] %>%
+  mutate(across(where(is.character), ~ replace(.x, .x == "N/A", "0"))) %>%
+    mutate(across(-`Upstream Regulators`, as.numeric)) # Convert all except the first column to numeric
+}
+
+names(IPA_SASP_upstream_regs) <- gsub("_.*", "", pathways_files)
+names(IPA_SASP_pathways) <- gsub("_.*", "", pathways_files)
+
+# convert IPA results into matrix for plotting. 
+IPA_SASP_pathways_mat <- lapply(IPA_SASP_pathways, function(x){
+  mat <- as.matrix(x[ ,-1])
+  row.names(mat) <- x$`Canonical Pathways`
+ remove <- which(rowSums(mat != 0) == 0) # Find rows where the entire row (all columns) is exactly 0 to remove upstream regulators that have no activation score across all columns (DESeq comparisons)
+    return(mat[-remove, ])
+})
+
+IPA_SASP_upstream_regs_mat <- lapply(IPA_SASP_upstream_regs, function(x){
+  mat <- as.matrix(x[ ,-1])
+  row.names(mat) <- x$`Upstream Regulators`
+  remove <- which(rowSums(mat != 0) == 0) # Find rows where the entire row (all columns) is exactly 0 to remove upstream regulators that have no activation score across all columns (DESeq comparisons)
+  return(mat[-remove, ])
+})
+```
+
+#*FIGURES*
+# plot heatmap of all-upregulated NF-kB target genes, clustered based on log2FC from day 3 treatment controls & Cycling controls
+```{r}
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS5/RNA_log2FC_NFKB_targets_mat.pdf", width=5, height=3)
+pheatmap(NFKB_sig_LFCMat, show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("Clusters", "SASP", "Cell_Cycle", "p53_All")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="all up NF-kB target genes")
+```
+# plot log2FC of NF-kB target genes at day 3 & 14 timepoints relative to Cycling
+```{r}
+p53_NFKB_SASP_genes <- clusterDF[clusterDF$p53_All %in% "Yes"|clusterDF$SASP %in% "Yes"|clusterDF$NFKB_All %in% "Yes", ]
+p53_NFKB_SASP_genes <- row.names(p53_NFKB_SASP_genes[!p53_NFKB_SASP_genes$Clusters %in% c("5", "2"), ])
+
+log2FC_p53_NFKB_SASP <- rbind(
+          data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo3 vs Cycling0"], 
+           Condition="day 3 Palbo", 
+           Comparison="vs Cycling"),
+  
+          data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo14 vs Cycling0"], 
+           Condition="day 14 Palbo", 
+           Comparison="vs Cycling" ), 
+           
+           data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo21 vs Cycling0"], 
+           Condition="day 21 Palbo", 
+           Comparison="vs Cycling" ), 
+           
+           data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo28 vs Cycling0"], 
+           Condition="day 28 Palbo", 
+           Comparison="vs Cycling" ),
+           
+           data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo3 vs Cycling0"], 
+           Condition="day 3 Doxo", 
+           Comparison="vs Cycling"),
+      
+      data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo14 vs Cycling0"], 
+           Condition="day 14 Doxo", 
+           Comparison="vs Cycling"), 
+      
+          data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo21 vs Cycling0"], 
+           Condition="day 21 Doxo", 
+           Comparison="vs Cycling"), 
+      
+      data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo14 vs Palbo3"], 
+           Condition="day 14 Palbo",
+           Comparison="vs day 3"), 
+      
+       data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo21 vs Palbo3"], 
+           Condition="day 21 Palbo",
+           Comparison="vs day 3" ), 
+           
+           data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Palbo28 vs Palbo3"], 
+           Condition="day 28 Palbo",
+           Comparison="vs day 3" ),
+      
+      data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo14 vs Doxo3"], 
+           Condition="day 14 Doxo",
+           Comparison="vs day 3"),
+      
+      data.frame(genes= p53_NFKB_SASP_genes , 
+           log2FC=sig_LFCMat[row.names(sig_LFCMat) %in% p53_NFKB_SASP_genes, "Doxo21 vs Doxo3"], 
+           Condition="day 21 Doxo",
+           Comparison="vs day 3")
+)
+
+log2FC_p53_NFKB_SASP[ ,5:7] <- clusterDF[match(log2FC_p53_NFKB_SASP$genes, row.names(clusterDF)), c("SASP", "NFKB_All", "p53_All")]
+
+# function to create violin plot of log2FC values of genes
+create_violin_plot <- function(data=log2FC_p53_NFKB_SASP, plot_title="RNA: log2FC of p53 target genes") {
+  library(ggplot2)
+  library(ggbeeswarm)
+  
+  ggplot(
+    data,
+    aes(x = Condition, y = log2FC, fill = Condition)
+  ) +
+    geom_violin() +
+    geom_quasirandom(
+      color = "black", alpha = 0.2,
+      method = "pseudorandom", # Aligns jitter points to violin shape
+      groupOnX = TRUE,
+      size = 0.5
+    ) +
+    stat_summary(
+      fun = "median",
+      geom = "crossbar",
+      color = "white",
+      width = 0.5
+    ) +
+    theme_classic() +
+    theme(
+      axis.text.x = element_text(angle = 90, size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title.y = element_text(size = 10)
+    ) +
+    facet_wrap(~Comparison, scales = "free_x") +
+    scale_fill_manual(
+      values = c(
+        "day 3 Doxo" = "#B3C543",
+        "day 14 Doxo" = "#B3C543",
+        "day 21 Doxo" = "#B3C543",
+        "day 3 Palbo" = "#E0ADCD",
+        "day 14 Palbo" = "#E0ADCD",
+        "day 21 Palbo" = "#E0ADCD",
+        "day 28 Palbo" = "#E0ADCD"
+      )
+    ) +
+    ylab("log2FC") +
+    xlab("") +
+    ggtitle(plot_title)+
+    geom_hline(yintercept = 0, color="darkgrey", linetype="dashed")
+}
+
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS5"
+
+pdf(paste0(pdf_dir, "/RNA_day14_log2FC_NFKB_targets.pdf"), width=4, height=3)
+library(ggbeeswarm)
+create_violin_plot(
+  data = log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes" & log2FC_p53_NFKB_SASP$Condition %in% c("day 3 Doxo", "day 14 Doxo",  "day 3 Palbo", "day 14 Palbo") & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling", ],
+  plot_title = "RNA: log2FC of all upregulated NF-kB target genes"
+)+ylim(-5,10) # after talking with Justin, we both agreed it looks better to include day 3 controls and plot relative to Cycling to show the increase over time in both drugs. 
+
+plot log2FC of NF-kB target genes at day 3 & 14 timepoints relative to Cycling but break it up by the RNA cluster that the gene belongs to (more accurately showing shared upregulated NF-kB target genes response)
+shared_genes <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id, ]$genes
+create_violin_plot(
+  data = log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes" & log2FC_p53_NFKB_SASP$Condition %in% c("day 3 Doxo", "day 14 Doxo",  "day 3 Palbo", "day 14 Palbo") & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$genes %in% shared_genes, ],
+  plot_title = "RNA: log2FC of NF-kB target genes upregulated in both drugs"
+)+ylim(-5,10)
+
+Doxo_upgenes <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id, ]$genes
+create_violin_plot(
+  data = log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes" & log2FC_p53_NFKB_SASP$Condition %in% c("day 3 Doxo", "day 14 Doxo",  "day 3 Palbo", "day 14 Palbo") & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$genes %in% Doxo_upgenes, ],
+  plot_title = "RNA: log2FC of NF-kB target genes upregulated in Doxo"
+)+ylim(-5,10)
+
+Palbo_upgenes <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("1", "7"), ]$gene_id, ]$genes
+create_violin_plot(
+  data = log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes" & log2FC_p53_NFKB_SASP$Condition %in% c("day 3 Doxo", "day 14 Doxo",  "day 3 Palbo", "day 14 Palbo") & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$genes %in% Palbo_upgenes, ],
+  plot_title = "RNA: log2FC of NF-kB target genes upregulated in Palbo"
+)+ylim(-5,10)
+dev.off()
+```
+
+```{r}
+# for shared upregulated NF-kB target genes
+d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Palbo vs Cycling
+
+d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Doxo vs Cycling
+
+d3_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Palbo vs Cycling
+
+d3_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% "3", ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Doxo vs Cycling
+
+
+compare_log2FC_differences(d14_Palbo_log2FC, d14_Doxo_log2FC) # shared NF-kB target genes between day 14 Palbo and day 14 Doxo vs cycling 
+
+compare_log2FC_differences(d3_Palbo_log2FC, d3_Doxo_log2FC) # shared NF-kB target genes between day 3 Palbo and day 3 Doxo vs cycling 
+
+compare_log2FC_differences(d3_Palbo_log2FC, d14_Palbo_log2FC) # shared NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
+
+compare_log2FC_differences(d3_Doxo_log2FC, d14_Doxo_log2FC) # shared NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
+```
+
+```{r}
+# for Palbo upregulated NF-kB target genes
+d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Palbo vs Cycling
+
+d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Doxo vs Cycling
+
+d3_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Palbo vs Cycling
+
+d3_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("7", "1"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Doxo vs Cycling
+
+
+compare_log2FC_differences(d14_Palbo_log2FC, d14_Doxo_log2FC) # Palbo upregulated NF-kB target genes between day 14 Palbo and day 14 Doxo vs cycling 
+
+compare_log2FC_differences(d3_Palbo_log2FC, d3_Doxo_log2FC) # Palbo upregulated NF-kB target genes between day 3 Palbo and day 3 Doxo vs cycling 
+
+compare_log2FC_differences(d3_Palbo_log2FC, d14_Palbo_log2FC) # Palbo upregulated NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
+
+compare_log2FC_differences(d3_Doxo_log2FC, d14_Doxo_log2FC) # Palbo upregulated NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
+```
+
+```{r}
+# for Doxo upregulated NF-kB target genes
+d14_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Palbo vs Cycling
+
+d14_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 14 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 14 Doxo vs Cycling
+
+d3_Palbo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Palbo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Palbo vs Cycling
+
+d3_Doxo_log2FC <- log2FC_p53_NFKB_SASP[log2FC_p53_NFKB_SASP$genes %in% clusterDF[clusterDF$Clusters %in% c("4", "6"), ]$gene_id & log2FC_p53_NFKB_SASP$Condition %in% "day 3 Doxo" & log2FC_p53_NFKB_SASP$Comparison %in% "vs Cycling" & log2FC_p53_NFKB_SASP$NFKB_All %in% "Yes", ]$log2FC # log2FC values of NFKB targets in day 3 Doxo vs Cycling
+
+
+compare_log2FC_differences(d14_Palbo_log2FC, d14_Doxo_log2FC) # shared NF-kB target genes between day 14 Palbo and day 14 Doxo vs cycling 
+
+compare_log2FC_differences(d3_Palbo_log2FC, d3_Doxo_log2FC) # shared NF-kB target genes between day 3 Palbo and day 3 Doxo vs cycling 
+
+compare_log2FC_differences(d3_Palbo_log2FC, d14_Palbo_log2FC) # shared NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
+
+compare_log2FC_differences(d3_Doxo_log2FC, d14_Doxo_log2FC) # shared NF-kB target genes between day 3 Palbo and day 14 Palbo vs cycling 
+```
+
+# RNA-seq: plot heatmap of SASP genes, clustered based on log2FC from day 3 treatment controls & Cycling controls
+```{r}
+pdf(paste0(pdf_dir, "/RNA_log2FC_SASP_mat.pdf"), width=4.35, height=6)
+pheatmap(SASP_sig_LFCMat, show_rownames = F, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-6, 6,length.out = 100), annotation_row = clusterDF[ ,c("p53_All", "NFKB_All", "Clusters")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="SASP")
+dev.off()
+```
+
+# RNA-seq: plotting padj values of top IPA predicted upstream regulators of SASP genes
+```{r IPA results matrix}
+filter_upstream_regulators <- function(mat, threshold_neg1 = -0.5, threshold_pos1 = 0.5,  threshold_neg2 = -0.5, threshold_pos2 = 0.5) {
+  # Identify upstream regulators that are differentially regulated between Doxo & Palbo
+  filt_negDoxo_posPalbo <- which(rowSums(mat[, 1:4]) <= threshold_neg1 & rowSums(mat[, 5:8]) >= threshold_pos1)
+  filt_posDoxo_negPalbo <- which(rowSums(mat[, 1:4]) >= threshold_pos2 & rowSums(mat[, 5:8]) <= threshold_neg2)
+  
+  # Combine filtered indices
+  filt_mat <- mat[c(filt_negDoxo_posPalbo, filt_posDoxo_negPalbo), , drop = FALSE]
+  
+  # Remove random drugs/chemicals (upstream regulators that contain at least 2 uppercase letters)
+  filt_mat <- filt_mat[grep("[A-Z].*[A-Z]", rownames(filt_mat)), , drop = FALSE]
+  
+  return(filt_mat)
+}
+
+# plot most differentially activated upstream regulators of Doxo SASP genes
+filt_mat <- filter_upstream_regulators(IPA_SASP_upstream_regs_mat$Doxo, threshold_neg1 = -17, threshold_pos1 = 17,  threshold_neg2 = -0.5, threshold_pos2 = 0.5)
+nrow(filt_mat)
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS5"
+# plot heatmap of -log10 pvalue of overlap of enriched complex regulators
+pdf(paste0(pdf_dir, "/RNA_IPA_DoxoSASP_upstream_regs_Comparison.pdf"), width=3, height=3)
+pheatmap(filt_mat[order(rowSums(filt_mat[ ,1:4]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-1.5, 1.5,length.out = 100), main="Activation scores")
+dev.off()
+
+filt_mat <- filter_upstream_regulators(IPA_SASP_upstream_regs_mat$Palbo, threshold_neg1 = -2.5, threshold_pos1 = 9, threshold_neg2 = -6, threshold_pos2 = 2.5)
+filt_mat <- filt_mat[grep("-", rownames(filt_mat), invert = T), , drop = FALSE]
+
+pdf(paste0(pdf_dir, "/RNA_IPA_PalboSASP_upstream_regs_Comparison.pdf"), width=3, height=3)
+pheatmap(filt_mat[order(rowSums(filt_mat[ ,4:8]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-3, 4,length.out = 100), main="Activation scores")
+dev.off()
+
+filt_mat <- filter_upstream_regulators(IPA_SASP_upstream_regs_mat$Shared, threshold_neg1 = 0, threshold_pos1 = 20, threshold_neg2 = 20, threshold_pos2 =11.62)
+pdf(paste0(pdf_dir, "/RNA_IPA_sharedSASP_upstream_regs_Comparison.pdf"), width=3, height=3)
+pheatmap(filt_mat[order(rowSums(filt_mat[ ,4:8]), decreasing=T), ], cluster_cols = F, cluster_rows=F,  colorRampPalette(rev(brewer.pal(n = 7, name ="PuOr")))(100), breaks = seq(-3, 4,length.out = 100), main="Activation scores")
+dev.off()
+```
