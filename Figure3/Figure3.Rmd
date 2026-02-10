@@ -292,6 +292,7 @@ NormCountsMat <- counts(RNAddsall, normalized=T)
 # convert row names of matrix of normalized counts of off to on genes to gene symbol format. If there is no gene symbol format, keep ensembl format. 
 row.names(NormCountsMat) <- gsub('\\.[0-9]*$', '', row.names(NormCountsMat))
 row.names(NormCountsMat) <- ifelse(genes_anno_type[match(row.names(NormCountsMat), genes_anno_type$ensembl_id), ]$gene_id %in% NA, row.names(NormCountsMat), genes_anno_type[match(row.names(NormCountsMat), genes_anno_type$ensembl_id), ]$gene_id)
+write.csv(NormCountsMat, file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Supplemental_Tables/RNA_NormalizedCounts.csv")
 
 # convert matrix of normalized counts of off to on genes into a dataframe with metaData information for ggplot to accept
 NormCounts_df <- list()

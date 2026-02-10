@@ -619,3 +619,21 @@ pdf(paste0(outdir, "/ATAC_all_E2F_tp_downpeaks_PalbovsDoxo_overlap_venn.pdf"), w
 create_proportional_venn(sets=list(Palbo=tp_downpeaks_Palbo, Doxo=tp_downpeaks_Doxo, allDown=all_downpeaks_ids), set_labels = c("Palbo", "Doxo", "all Down"), colors = c("#E0ADCD", "#B3C543", "#F6F2EA"))
 dev.off()
 ```
+
+# ATAC-seq: make sequence Logo from HOCOMOCO E2F motifs
+```{r}
+outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS2"
+# load in HOCOMOCO motif sequence database
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/motifs/HOCOMOCO_v11_matrix.RData")
+library(seqLogo)
+pdf(paste0(outdir, "/E2F_HUMAN_HOCOMOCO_seqLogo.pdf"), width=6, height=4)
+seqLogo(HOCOMOCO_v11_matrix$E2F1_HUMAN.H11MO.0.A)
+seqLogo(HOCOMOCO_v11_matrix$E2F2_HUMAN.H11MO.0.B)
+seqLogo(HOCOMOCO_v11_matrix$E2F3_HUMAN.H11MO.0.A)
+seqLogo(HOCOMOCO_v11_matrix$E2F4_HUMAN.H11MO.0.A)
+seqLogo(HOCOMOCO_v11_matrix$E2F4_HUMAN.H11MO.1.A)
+seqLogo(HOCOMOCO_v11_matrix$E2F5_HUMAN.H11MO.0.B)
+seqLogo(HOCOMOCO_v11_matrix$E2F6_HUMAN.H11MO.0.A)
+seqLogo(HOCOMOCO_v11_matrix$E2F7_HUMAN.H11MO.0.B)
+dev.off()
+```

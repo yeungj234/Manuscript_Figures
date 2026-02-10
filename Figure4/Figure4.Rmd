@@ -457,8 +457,9 @@ IPA_TF_regs_mat <- create_ipa_regs_matrix(
 
 # plot heatmap of -log10 pvalue of overlap of enriched complex regulators
 pheatmap(IPA_group_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100))
-
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure4/IPA_TF_regs_mat.pdf", width=3.8, height=12)
 pheatmap(IPA_TF_regs_mat, cluster_cols = F, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 10,length.out = 100))
+dev.off()
 ```
 
 # RNA-seq: import comparison analysis of IPA upstream regulators and pathways for sig changing genes
@@ -587,6 +588,7 @@ folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure4/motif_
 ```{r import_differential_MEMEAME_results}
 expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
 expressedGenes[grep("TP53$|TP63$|TP73$", expressedGenes)] <- c("P63", "P73", "P53")
+expressedGenes[grep("RELA$", expressedGenes)] <- "TF65"
 load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS6/Functions/process_motif_data.RData")
 
 # differential motifs: Doxo vs Palbo
@@ -620,6 +622,16 @@ pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure4"
 
 pdf(paste0(pdf_dir, "/RNA_log2FC_drug_distinct_sig_LFCmat.pdf"), width=4.35, height=5)
 pheatmap(sig_LFCMat_drugdistinct, show_rownames = F, show_colnames=F, cluster_cols = F, cluster_rows=F, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-4.5, 4.5,length.out = 100), annotation_row = clusterDF[ ,c("SASP", "Clusters")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="drug distinct upreg genes")
+dev.off()
+
+pdf(paste0(pdf_dir, "/RNA_log2FC_EMT_HALLMARK_sig_LFCmat.pdf"), width=4.35, height=5)
+EMT_HALLMARK_genes <- unlist(str_split(GO_enrichment_clusters_HallMark[[3]]$geneID[1], "/"))
+pheatmap(sig_LFCMat_drugdistinct[row.names(sig_LFCMat_drugdistinct) %in% EMT_HALLMARK_genes, ], show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=T, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-4.5, 4.5,length.out = 100), annotation_row = clusterDF[ ,c("SASP", "Clusters")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="EPITHELIAL TO MESECHYMAL TRANSITION")
+dev.off()
+
+pdf(paste0(pdf_dir, "/RNA_log2FC_HYPOXIA_HALLMARK_sig_LFCmat.pdf"), width=4.35, height=5)
+HYPOXIA_HALLMARK_genes <- unlist(str_split(GO_enrichment_clusters_HallMark[[4]]$geneID[1], "/"))
+pheatmap(sig_LFCMat_drugdistinct[row.names(sig_LFCMat_drugdistinct) %in% HYPOXIA_HALLMARK_genes, ], show_rownames = T, show_colnames=F, cluster_cols = F, cluster_rows=T, colorRampPalette(rev(brewer.pal(n = 7, name ="RdBu")))(100), breaks = seq(-4.5, 4.5,length.out = 100), annotation_row = clusterDF[ ,c("SASP", "Clusters")], annotation_col = anno_sigLFC, annotation_colors = hm_cols_RNA, border_color = NA, main="HYPOXIA")
 dev.off()
 ```
 
@@ -801,4 +813,9 @@ pheatmap(IPA_group_regs_clusters[[1]], cluster_cols = F, colorRampPalette(brewer
 dev.off()
 ```
 
+```{r}
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure4/IPA_TF_regs_mat_filt.pdf", width=3.8, height=10)
+pheatmap(IPA_TF_regs_mat[rowSums(IPA_TF_regs_mat[ ,3:7] > 6) > 0, ], cluster_cols = F, cluster_rows=T, colorRampPalette(brewer.pal(n = 7, name ="Greens"))(100), breaks = seq(0, 12,length.out = 100), clustering_distance_rows="correlation")
+dev.off()
+```
 
