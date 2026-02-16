@@ -108,6 +108,10 @@ chunk_to_run <- lines[(chunk_start[1]+1):(chunk_end[1]-1)]
 }
 ```
 
+```{r}
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure4/Figure4.Rmd", chunk_name="genes_in_clusters")
+```
+
 # ATAC-seq: plot Tn5 insertion sites around RELA motifs to show shared increased accessibility at putative NF-kB binding sites (all up peaks)
 ```{r}
 # filter for GRanges of up peaks in each drug and cell cycle arrest category 
@@ -181,7 +185,7 @@ merge_geneclusters <- list("CellCycle"=genes_in_clusters[[1]],
 )
 
 # import gtf file for genes
-genes_anno <- import("/lustre/fs4/risc_lab/store/jyeung/references/gencode.v41.GRCh38.p13.annotation.gtf")
+genes_anno <- import("/lustre/fs4/risc_lab/scratch/jyeung/references/gencode.v41.GRCh38.p13.annotation.gtf")
 genes_anno <- genes_anno[genes_anno$type %in% "gene", ] # filter for regions that are only genes 
 genes_anno$gene_id <- gsub('\\.[0-9]*$', '', genes_anno$gene_id) # remove numbers after . in gene id column 
 genes_anno <- genes_anno[ ,c("source", "type", "gene_id", "gene_type", "gene_name", "level")] # keep only these columns
@@ -214,12 +218,27 @@ NFKB1_Up_PvsD_gene_clusters[[i]] <- lapply(Up_PvsD_gene_clusters[[i]], function(
 }
 names(NFKB1_Up_PvsD_gene_clusters) <- names(Up_PvsD_gene_clusters)
 
+# filter for TF65 motifs that overlap with up peaks nearby sig changing genes 
+TF65_Up_PvsD_gene_clusters <- list()
+for(i in 1:length(Up_PvsD_gene_clusters)){
+TF65_Up_PvsD_gene_clusters[[i]] <- lapply(Up_PvsD_gene_clusters[[i]], function(x){TF65_HMv11[TF65_HMv11 %over% x]})
+}
+names(TF65_Up_PvsD_gene_clusters) <- names(Up_PvsD_gene_clusters)
+
+
 directory <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTools_files/input_beds"
   
 # Export each GRanges object as a BED file
 for(i in 1:length(NFKB1_Up_PvsD_gene_clusters)){
   for(j in 1:length(NFKB1_Up_PvsD_gene_clusters[[i]])){
 export.bed(NFKB1_Up_PvsD_gene_clusters[[i]][[j]], con = paste0(directory, "/", names(NFKB1_Up_PvsD_gene_clusters)[i], "_", names(NFKB1_Up_PvsD_gene_clusters[[i]])[j], "_genes", "_PvsD_NFKB1_HMv11.bed"))
+  }
+}
+
+# Export each GRanges object as a BED file
+for(i in 1:length(TF65_Up_PvsD_gene_clusters)){
+  for(j in 1:length(TF65_Up_PvsD_gene_clusters[[i]])){
+export.bed(TF65_Up_PvsD_gene_clusters[[i]][[j]], con = paste0(directory, "/", names(TF65_Up_PvsD_gene_clusters)[i], "_", names(TF65_Up_PvsD_gene_clusters[[i]])[j], "_genes", "_PvsD_TF65_HMv11.bed"))
   }
 }
 
@@ -231,6 +250,13 @@ writeLines(dir(directory, full.names=T, pattern="NFKB1.*\\.bed$"), con=paste0(di
 # filenames to be assigned to plots. 
 filenames <- gsub(".bed", "", dir(directory, pattern="NFKB1.*\\.bed$"))
 writeLines(filenames, con=paste0(directory, "/NFKB1_filename.txt"))
+
+# directory paths to bed files 
+writeLines(dir(directory, full.names=T, pattern="TF65.*\\.bed$"), con=paste0(directory, "/TF65_regions.txt"))
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir(directory, pattern="TF65.*\\.bed$"))
+writeLines(filenames, con=paste0(directory, "/TF65_filename.txt"))
 ```
 
 # ATAC-seq: submit bash job to plot around NFKB1 motifs in up peaks within 50kb of sig changing genes. 
@@ -249,6 +275,21 @@ filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTool
 /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTools_files/deeptools_Coverage_1kb.slurm
 ```
 
+# ATAC-seq: submit bash job to plot around TF65 motifs in up peaks within 50kb of sig changing genes. 
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTools_files/output_plots
+sbatch -p hpc_l40_a --array=1-26 \
+--export=bigwigs="$mergedcuts",\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTools_files/input_beds/TF65_regions.txt,\
+samplenames="$samplenames",\
+profile_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTools_files/output_plots/plotProfile,\
+heatmap_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTools_files/output_plots/plotHeatmap,\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTools_files/input_beds/TF65_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTools_files/deeptools_Coverage_1kb.slurm
+```
 # ATAC-seq: import motif enrichment results under ALL up peaks across all timepoint comparisons & drug treatment. 
 ```{r}
 annoUpPeaks_AME_df <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS3/motif_analysis_output/DESeq/annoUp", expressed_genes = expressedGenes)

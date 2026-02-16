@@ -6,7 +6,9 @@
 #SBATCH -e %x-%j-%a.err
 #SBATCH -o %x-%j-%a.out
 
-source activate encode-atac-seq-pipeline
+#source activate encode-atac-seq-pipeline
+source /lustre/fs4/risc_lab/store/jyeung/miniconda3/etc/profile.d/conda.sh
+conda activate /lustre/fs4/risc_lab/store/jyeung/miniconda3/envs/deeptools
 
 # Define the variable for BigWig files
 BIGWIG_FILES=$bigwigs
@@ -25,7 +27,6 @@ computeMatrix reference-point \
 	-b 1000 -a 1000 -bs=10 -p=max  \
 	--referencePoint center \
  	-out $NAME\_${OUTPUT_PREFIX}_matrix.gz \
- 	--numberOfProcessors "max" \
  	--skipZeros \
         --outFileSortedRegions $NAME\_${OUTPUT_PREFIX}_sorted_regions.bed 
 
