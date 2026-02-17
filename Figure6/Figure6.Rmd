@@ -292,6 +292,9 @@ filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/deepTool
 ```
 # ATAC-seq: import motif enrichment results under ALL up peaks across all timepoint comparisons & drug treatment. 
 ```{r}
+expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
+expressedGenes[grep("TP53$|TP63$|TP73$", expressedGenes)] <- c("P63", "P73", "P53")
+expressedGenes[expressedGenes %in% "RELA"] <- "TF65"
 annoUpPeaks_AME_df <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS3/motif_analysis_output/DESeq/annoUp", expressed_genes = expressedGenes)
 
 annoUpPeaks_AME_df$Comparison <- gsub("\\..*", "", row.names(annoUpPeaks_AME_df))
@@ -397,7 +400,7 @@ outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6"
 
 # plot motif enrichment values of NFkB motifs in all Up peaks for all timepoints vs Cycling. 
 pdf(paste0(outdir, "/ATAC_NFkB_UpPeaks_AME_dotplots.pdf"), width=8, height=4)
-create_AME_dotplots(annoUpPeaks_AME_df[grepl("NFKB|REL", annoUpPeaks_AME_df$motif_ID), ], Title="NFkB Motifs enriched in Up peaks", fill_limit=c(2, 92), size_limit=c(0, 17.4))
+create_AME_dotplots(annoUpPeaks_AME_df[grepl("NFKB|REL|TF65", annoUpPeaks_AME_df$motif_ID), ], Title="NFkB Motifs enriched in Up peaks", fill_limit=c(2, 110), size_limit=c(0, 17.4))
 dev.off()
 ```
 
@@ -407,6 +410,15 @@ outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6"
 library(seqLogo)
 pdf(paste0(outdir, "/NFKB1_HUMAN.H11MO.1.B_HOCOMOCO_seqLogo.pdf"), width=6, height=4)
 seqLogo(HOCOMOCO_v11_matrix$NFKB1_HUMAN.H11MO.1.B)
+dev.off()
+```
+
+# ATAC-seq: make sequence Logo from HOCOMOCO TF65 motif. 
+```{r}
+outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6"
+library(seqLogo)
+pdf(paste0(outdir, "/TF65_HUMAN.H11MO.1.B_HOCOMOCO_seqLogo.pdf"), width=6, height=4)
+seqLogo(HOCOMOCO_v11_matrix$TF65_HUMAN.H11MO.0.A)
 dev.off()
 ```
 

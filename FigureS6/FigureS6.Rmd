@@ -271,6 +271,7 @@ UpannoRow <- cbind(UpannoRow, Up_geneclusters_anno)
 #extract ids of all expressed genes
 expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
 expressedGenes[grep("TP53$|TP63$|TP73$", expressedGenes)] <- c("P63", "P73", "P53")
+expressedGenes[expressedGenes %in% "RELA"] <- "TF65"
 
 # function to import motif data. 
 process_motif_data <- function(base_dir, expressed_genes = NULL) {
@@ -566,7 +567,7 @@ dev.off()
 NFkB_AME_padj_dots <- list()
 for(i in 1:length(comparisons)){
 NFkB_AME_padj_dots[[i]] <- Peaks_AME_Clusters[Peaks_AME_Clusters$Comparison %in% comparisons[i], ]
-NFkB_AME_padj_dots[[i]] <- NFkB_AME_padj_dots[[i]][NFkB_AME_padj_dots[[i]]$motif_ID %in% c("NFKB1", "NFKB2", "REL", "RELB"), ] # show only top 15 most significant padj values motif IDs
+NFkB_AME_padj_dots[[i]] <- NFkB_AME_padj_dots[[i]][NFkB_AME_padj_dots[[i]]$motif_ID %in% c("NFKB1", "NFKB2", "REL", "RELB", "TF65"), ] # show only top 15 most significant padj values motif IDs
 NFkB_AME_padj_dots[[i]]$motif_ID <- factor(NFkB_AME_padj_dots[[i]]$motif_ID, levels=rev(unique(NFkB_AME_padj_dots[[i]]$motif_ID)))
 }
 names(NFkB_AME_padj_dots) <- comparisons
@@ -595,9 +596,9 @@ create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=c(
     theme_classic() +
     labs(x="Comparison", y="motif ID")}
 
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6/Up.Down.peaks.near.kmeans7RNAclusters.NFkB.motifs.dotplots.pdf", width=8, height=5)
-plot_grid( create_AME_dotplots(NFkB_AME_padj_dots$allUp_Doxo, Title="Up Doxo", fill_limit = c(1,15.2), size_limit = c(0, 6.2)),
-           create_AME_dotplots(NFkB_AME_padj_dots$allUp_Palbo, Title="Up Palbo", fill_limit = c(1,15.2), size_limit = c(0, 6.2)),
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS6/Up.Down.peaks.near.kmeans7RNAclusters.NFkB.motifs.dotplots.pdf", width=8, height=5)
+plot_grid( create_AME_dotplots(NFkB_AME_padj_dots$allUp_Doxo, Title="Up Doxo", fill_limit = c(1,20.5), size_limit = c(0, 8)),
+           create_AME_dotplots(NFkB_AME_padj_dots$allUp_Palbo, Title="Up Palbo", fill_limit = c(1,20.5), size_limit = c(0, 8)),
            nrow =1)
 dev.off()
 ```

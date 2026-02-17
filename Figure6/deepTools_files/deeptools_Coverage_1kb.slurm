@@ -52,7 +52,7 @@ plotHeatmap -m $NAME\_${OUTPUT_PREFIX}_matrix.gz \
     --plotHeight 8 \
     --plotWidth 10 \
     --yMin 0 \
-    --yMax 1.5 \
+    --yMax 2 \
 
 #NOTES:
 

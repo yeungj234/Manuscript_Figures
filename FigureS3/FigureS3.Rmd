@@ -123,6 +123,7 @@ folderlist=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS3/motif
 # extract ids of all expressed genes
 expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
 expressedGenes[grep("TP53$|TP63$|TP73$", expressedGenes)] <- c("P63", "P73", "P53")
+expressedGenes[expressedGenes %in% "RELA"] <- "TF65"
 
 # load in process_motif_data function. 
 load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS6/Functions/process_motif_data.RData")
