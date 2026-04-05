@@ -399,7 +399,7 @@ NFkB_UpPeaks_AME_mat <- NFkB_UpPeaks_AME_mat[order(rowSums(NFkB_UpPeaks_AME_mat)
 outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure6"
 
 # plot motif enrichment values of NFkB motifs in all Up peaks for all timepoints vs Cycling. 
-pdf(paste0(outdir, "/ATAC_NFkB_UpPeaks_AME_dotplots.pdf"), width=8, height=4)
+pdf(paste0(outdir, "/ATAC_NFkB_UpPeaks_AME_dotplots.pdf"), width=8, height=2.7)
 create_AME_dotplots(annoUpPeaks_AME_df[grepl("NFKB|REL|TF65", annoUpPeaks_AME_df$motif_ID), ], Title="NFkB Motifs enriched in Up peaks", fill_limit=c(2, 110), size_limit=c(0, 17.4))
 dev.off()
 ```

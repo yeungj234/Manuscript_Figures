@@ -671,5 +671,57 @@ seqLogo(HOCOMOCO_v11_matrix$P53_HUMAN.H11MO.0.A)
 dev.off()
 ```
 
+# for thesis, plot RNA norm counts of EPAS1, ANGPTL4, IL1R1 and TLR4
+```{r}
+NormCounts_df$Timepoint <- as.numeric(as.character(NormCounts_df$Timepoint))
+# save plot to pdf
+pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/RNA_NormCountsMat_ANGPTL4_EPAS1_IL1R1_TLR4.pdf", width=8, height=6)
 
+ggplot(NormCounts_df[NormCounts_df$Transcript %in% c("EPAS1", "ANGPTL4", "IL1R1", "TLR4"), ], aes(x=Timepoint, y=Counts, color=Treatment, shape=Biorep))+geom_point(size=3)+facet_wrap(~Transcript, scales="free")+scale_color_manual(values=hm_cols_RNA$Treatment)+theme_minimal()+ylab("Normalized Counts")+xlab("Length of Treatment (days)")+ggtitle("")+scale_y_continuous(n.breaks=5)+scale_x_continuous(n.breaks=5)+theme_classic()+theme(
+      axis.text.x = element_text(size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title.y = element_text(size = 10), 
+      axis.title.x = element_text(size = 10)
+)
+dev.off()
 
+pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/RNA_NormCountsMat_TNC_LUM_VCAN_TLR4.pdf", width=8, height=6)
+
+ggplot(NormCounts_df[NormCounts_df$Transcript %in% c("TNC", "LUM", "VCAN", "TLR4"), ], aes(x=Timepoint, y=Counts, color=Treatment, shape=Biorep))+geom_point(size=3)+facet_wrap(~Transcript, scales="free")+scale_color_manual(values=hm_cols_RNA$Treatment)+theme_minimal()+ylab("Normalized Counts")+xlab("Length of Treatment (days)")+ggtitle("")+scale_y_continuous(n.breaks=5)+scale_x_continuous(n.breaks=5)+theme_classic()+theme(
+      axis.text.x = element_text(size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title.y = element_text(size = 10), 
+      axis.title.x = element_text(size = 10)
+)
+dev.off()
+```
+
+# for thesis, plot RNA norm counts of IL1A, IL1B, CXCL1, CXCL6, CXCL8, CSF2, SOD2, IL6, IL37
+```{r}
+NormCounts_df$Timepoint <- as.numeric(as.character(NormCounts_df$Timepoint))
+# save plot to pdf
+pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure5/RNA_NormCountsMat_sharedSASP.pdf", width=8, height=6)
+
+ggplot(NormCounts_df[NormCounts_df$Transcript %in% c("IL1A", "IL1B", "CXCL1", "CXCL8", "CSF2", "SOD2", "IL6", "IL3"), ], aes(x=Timepoint, y=Counts, color=Treatment, shape=Biorep))+geom_point(size=3)+facet_wrap(~Transcript, scales="free")+scale_color_manual(values=hm_cols_RNA$Treatment)+theme_minimal()+ylab("Normalized Counts")+xlab("Length of Treatment (days)")+ggtitle("")+scale_y_continuous(n.breaks=5)+scale_x_continuous(n.breaks=5)+theme_classic()+theme(
+      axis.text.x = element_text(size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title.y = element_text(size = 10), 
+      axis.title.x = element_text(size = 10)
+)
+
+ggplot(NormCounts_df[NormCounts_df$Transcript %in% c("RELA", "REL", "RELB", "NFKB1", "NFKB2", "NFKBIA", "NFKBIB", "NFKBID", "NFKBIE", "NFKBIL1", "NFKBIZ"), ], aes(x=Timepoint, y=Counts, color=Treatment, shape=Biorep))+geom_point(size=3)+facet_wrap(~Transcript, scales="free")+scale_color_manual(values=hm_cols_RNA$Treatment)+theme_minimal()+ylab("Normalized Counts")+xlab("Length of Treatment (days)")+ggtitle("")+scale_y_continuous(n.breaks=5)+scale_x_continuous(n.breaks=5)+theme_classic()+theme(
+      axis.text.x = element_text(size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title.y = element_text(size = 10), 
+      axis.title.x = element_text(size = 10)
+)
+dev.off()
+
+pdf(file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure4/RNA_NormCountsMat_TGFB.pdf", width=11, height=6)
+ggplot(NormCounts_df[grepl("TGFB[0-9]$|TGFBR[0-9]$", NormCounts_df$Transcript), ], aes(x=Timepoint, y=Counts, color=Treatment, shape=Biorep))+geom_point(size=3)+facet_wrap(~Transcript, scales="free")+scale_color_manual(values=hm_cols_RNA$Treatment)+theme_minimal()+ylab("Normalized Counts")+xlab("Length of Treatment (days)")+ggtitle("")+scale_y_continuous(n.breaks=5)+scale_x_continuous(n.breaks=5)+theme_classic()+theme(
+      axis.text.x = element_text(size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title.y = element_text(size = 10), 
+      axis.title.x = element_text(size = 10)
+)
+```

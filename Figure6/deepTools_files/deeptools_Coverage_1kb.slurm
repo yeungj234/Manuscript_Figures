@@ -21,14 +21,14 @@ OUTPUT_PREFIX="1kb_coverage"
 GENOMIC_REGIONS=$(head -n $SLURM_ARRAY_TASK_ID $regions | tail -n 1) # text file containing paths to fasta files
 NAME=$(head -n $SLURM_ARRAY_TASK_ID $filename | tail -n 1) # text file containing names of future output directories
 
-computeMatrix reference-point \
-	-S $BIGWIG_FILES \
-	-R $GENOMIC_REGIONS \
-	-b 1000 -a 1000 -bs=10 -p=max  \
-	--referencePoint center \
- 	-out $NAME\_${OUTPUT_PREFIX}_matrix.gz \
- 	--skipZeros \
-        --outFileSortedRegions $NAME\_${OUTPUT_PREFIX}_sorted_regions.bed 
+#computeMatrix reference-point \
+#	-S $BIGWIG_FILES \
+#	-R $GENOMIC_REGIONS \
+#	-b 1000 -a 1000 -bs=10 -p=max  \
+#	--referencePoint center \
+#	-out $NAME\_${OUTPUT_PREFIX}_matrix.gz \
+# 	--skipZeros \
+#        --outFileSortedRegions $NAME\_${OUTPUT_PREFIX}_sorted_regions.bed 
 
 plotProfile -m $NAME\_${OUTPUT_PREFIX}_matrix.gz \
     -out $profile_outdir\/$NAME\_${OUTPUT_PREFIX}_profile.pdf \
@@ -40,7 +40,7 @@ plotProfile -m $NAME\_${OUTPUT_PREFIX}_matrix.gz \
     --plotHeight 8 \
     --plotWidth 10 \
     --yMin 0 \
-    --yMax 1.5 \
+    --yMax 2 \
 
 plotHeatmap -m $NAME\_${OUTPUT_PREFIX}_matrix.gz \
     -out  $heatmap_outdir\/$NAME\_${OUTPUT_PREFIX}_heatmap.pdf \

@@ -596,7 +596,7 @@ create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=c(
     theme_classic() +
     labs(x="Comparison", y="motif ID")}
 
-pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS6/Up.Down.peaks.near.kmeans7RNAclusters.NFkB.motifs.dotplots.pdf", width=8, height=5)
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS6/Up.Down.peaks.near.kmeans7RNAclusters.NFkB.motifs.dotplots.pdf", width=8, height=2.5)
 plot_grid( create_AME_dotplots(NFkB_AME_padj_dots$allUp_Doxo, Title="Up Doxo", fill_limit = c(1,20.5), size_limit = c(0, 8)),
            create_AME_dotplots(NFkB_AME_padj_dots$allUp_Palbo, Title="Up Palbo", fill_limit = c(1,20.5), size_limit = c(0, 8)),
            nrow =1)
