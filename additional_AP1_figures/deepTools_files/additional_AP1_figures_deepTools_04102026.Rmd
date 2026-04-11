@@ -1,0 +1,516 @@
+---
+title: "input_into_deepTools_04102026"
+author: "Joanna Yeung"
+date: "2026-04-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# load in workspace with DESeq results and rlog counts matrix of genes. 
+```{r}
+load("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure2/workspace.RData")
+```
+
+# filter for GRanges of up peaks in each drug and cell cycle arrest category
+```{r}
+Up_DrugandArrestCat <- list(
+  PalboUpvsCyc=allUpvsCycling$Palbo[!allUpvsCycling$Palbo %over% allUpvsCycling$Doxo, ], 
+  sharedUpvsCyc=allUpvsCycling$Palbo[allUpvsCycling$Palbo %over% allUpvsCycling$Doxo, ],
+  DoxoUpvsCyc=allUpvsCycling$Doxo[!allUpvsCycling$Doxo %over% allUpvsCycling$Palbo, ], 
+  PalboUpvsday3=allUpvsday3$Palbo[!allUpvsday3$Palbo %over% allUpvsday3$Doxo, ], 
+  sharedUpvsday3=allUpvsday3$Palbo[allUpvsday3$Palbo %over% allUpvsday3$Doxo, ], 
+  DoxoUpvsday3=allUpvsday3$Doxo[!allUpvsday3$Doxo %over% allUpvsday3$Palbo, ])
+
+# filter for GRanges of up peaks in each drug and cell cycle arrest category but without specifying shared up peaks. 
+Up_DrugandArrest_PvsD <- list(
+  PalboUpvsCyc=allUpvsCycling$Palbo, 
+  DoxoUpvsCyc=allUpvsCycling$Doxo, 
+  PalboUpvsday3=allUpvsday3$Palbo,
+  DoxoUpvsday3=allUpvsday3$Doxo)
+```
+
+# 4-10-2026: resubmission to G&D -- look at accessibility around AP-1 motifs (FOSB)
+```{r}
+# load in HOCOMOCO motif sequence database
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/motifs/HOCOMOCO_v11_matrix.RData")
+# scan for FOSB motifs
+FOSB_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$FOSB_HUMAN.H11MO.0.A, BSgenome.Hsapiens.UCSC.hg38, with.score=T)
+
+# filter for FOSB motifs that overlap with up peaks
+FOSB_ATAC_Up_DrugandArrestCat <- lapply(Up_DrugandArrestCat, function(x){FOSB_HMv11[FOSB_HMv11 %over% x]})
+FOSB_ATAC_Up_DrugandArrest_PvsD <- lapply(Up_DrugandArrest_PvsD, function(x){FOSB_HMv11[FOSB_HMv11 %over% x]})
+
+# print number of up peaks that overlap with FOSB motifs. 
+lapply(lapply(Up_DrugandArrestCat, function(x){x[x %over% FOSB_HMv11]}), length)
+```
+```{r}
+# Export each GRanges object as a BED file
+for(i in 1:length(FOSB_ATAC_Up_DrugandArrestCat)){
+export.bed(FOSB_ATAC_Up_DrugandArrestCat[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(FOSB_ATAC_Up_DrugandArrestCat)[i], "_FOSB_HMv11.bed"))
+}
+
+for(i in 1:length(FOSB_ATAC_Up_DrugandArrest_PvsD)){
+export.bed(FOSB_ATAC_Up_DrugandArrest_PvsD[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(FOSB_ATAC_Up_DrugandArrest_PvsD)[i], "_PvsD_FOSB_HMv11.bed"))
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+regions <- dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", full.names=T, pattern=".bed")
+regions <- regions[grepl("FOSB", regions)]
+writeLines(regions, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOSB_regions.txt")
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", pattern=".bed"))
+filenames <- filenames[grepl("FOSB", filenames)]
+writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOSB_filename.txt")
+```
+# 4-10-2026 submit bash job to plot around Tn5 cut sites around FOSB motifs in up peaks
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots
+sbatch -p hpc_l40_a --array=1-10 \
+--export=bigwigs="$mergedcuts",\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots,\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOSB_regions.txt,\
+samplenames="$samplenames",\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOSB_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+
+# 4-10-2026: resubmission to G&D -- look at accessibility around AP-1 motifs (FOSB)
+```{r}
+# load in HOCOMOCO motif sequence database
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/motifs/HOCOMOCO_v11_matrix.RData")
+# scan for FOSB motifs
+FOSB_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$FOSB_HUMAN.H11MO.0.A, BSgenome.Hsapiens.UCSC.hg38, with.score=T)
+
+# filter for FOSB motifs that overlap with up peaks
+FOSB_ATAC_Up_DrugandArrestCat <- lapply(Up_DrugandArrestCat, function(x){FOSB_HMv11[FOSB_HMv11 %over% x]})
+FOSB_ATAC_Up_DrugandArrest_PvsD <- lapply(Up_DrugandArrest_PvsD, function(x){FOSB_HMv11[FOSB_HMv11 %over% x]})
+
+# print number of up peaks that overlap with FOSB motifs. 
+lapply(lapply(Up_DrugandArrestCat, function(x){x[x %over% FOSB_HMv11]}), length)
+```
+```{r}
+# Export each GRanges object as a BED file
+for(i in 1:length(FOSB_ATAC_Up_DrugandArrestCat)){
+export.bed(FOSB_ATAC_Up_DrugandArrestCat[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(FOSB_ATAC_Up_DrugandArrestCat)[i], "_FOSB_HMv11.bed"))
+}
+
+for(i in 1:length(FOSB_ATAC_Up_DrugandArrest_PvsD)){
+export.bed(FOSB_ATAC_Up_DrugandArrest_PvsD[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(FOSB_ATAC_Up_DrugandArrest_PvsD)[i], "_PvsD_FOSB_HMv11.bed"))
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+regions <- dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", full.names=T, pattern=".bed")
+regions <- regions[grepl("FOSB", regions)]
+writeLines(regions, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOSB_regions.txt")
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", pattern=".bed"))
+filenames <- filenames[grepl("FOSB", filenames)]
+writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOSB_filename.txt")
+```
+# 4-10-2026 submit bash job to plot around Tn5 cut sites around FOSB motifs in up peaks
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots
+sbatch -p hpc_l40_a --array=1-10 \
+--export=bigwigs="$mergedcuts",\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots,\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOSB_regions.txt,\
+samplenames="$samplenames",\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOSB_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+
+# 4-10-2026: resubmission to G&D -- look at accessibility around AP-1 motifs (JUNB)
+```{r}
+# load in HOCOMOCO motif sequence database
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/motifs/HOCOMOCO_v11_matrix.RData")
+# scan for JUNB motifs
+JUNB_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$JUNB_HUMAN.H11MO.0.A, BSgenome.Hsapiens.UCSC.hg38, with.score=T)
+
+# filter for JUNB motifs that overlap with up peaks
+JUNB_ATAC_Up_DrugandArrestCat <- lapply(Up_DrugandArrestCat, function(x){JUNB_HMv11[JUNB_HMv11 %over% x]})
+JUNB_ATAC_Up_DrugandArrest_PvsD <- lapply(Up_DrugandArrest_PvsD, function(x){JUNB_HMv11[JUNB_HMv11 %over% x]})
+
+# print number of up peaks that overlap with JUNB motifs. 
+lapply(lapply(Up_DrugandArrestCat, function(x){x[x %over% JUNB_HMv11]}), length)
+```
+```{r}
+# Export each GRanges object as a BED file
+for(i in 1:length(JUNB_ATAC_Up_DrugandArrestCat)){
+export.bed(JUNB_ATAC_Up_DrugandArrestCat[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(JUNB_ATAC_Up_DrugandArrestCat)[i], "_JUNB_HMv11.bed"))
+}
+
+for(i in 1:length(JUNB_ATAC_Up_DrugandArrest_PvsD)){
+export.bed(JUNB_ATAC_Up_DrugandArrest_PvsD[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(JUNB_ATAC_Up_DrugandArrest_PvsD)[i], "_PvsD_JUNB_HMv11.bed"))
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+regions <- dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", full.names=T, pattern=".bed")
+regions <- regions[grepl("JUNB", regions)]
+writeLines(regions, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_JUNB_regions.txt")
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", pattern=".bed"))
+filenames <- filenames[grepl("JUNB", filenames)]
+writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_JUNB_filename.txt")
+```
+# 4-10-2026 submit bash job to plot around Tn5 cut sites around JUNB motifs in up peaks
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots
+sbatch -p hpc_bigmem_b --array=1-10 \
+--export=bigwigs="$mergedcuts",\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots,\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_JUNB_regions.txt,\
+samplenames="$samplenames",\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_JUNB_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+
+# 4-10-2026: resubmission to G&D -- look at accessibility around AP-1 motifs (FOS)
+```{r}
+# load in HOCOMOCO motif sequence database
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/motifs/HOCOMOCO_v11_matrix.RData")
+# scan for FOS motifs
+FOS_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$FOS_HUMAN.H11MO.0.A, BSgenome.Hsapiens.UCSC.hg38, with.score=T)
+
+# filter for FOS motifs that overlap with up peaks
+FOS_ATAC_Up_DrugandArrestCat <- lapply(Up_DrugandArrestCat, function(x){FOS_HMv11[FOS_HMv11 %over% x]})
+FOS_ATAC_Up_DrugandArrest_PvsD <- lapply(Up_DrugandArrest_PvsD, function(x){FOS_HMv11[FOS_HMv11 %over% x]})
+
+# print number of up peaks that overlap with FOS motifs. 
+lapply(lapply(Up_DrugandArrestCat, function(x){x[x %over% FOS_HMv11]}), length)
+```
+```{r}
+# Export each GRanges object as a BED file
+for(i in 1:length(FOS_ATAC_Up_DrugandArrestCat)){
+export.bed(FOS_ATAC_Up_DrugandArrestCat[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(FOS_ATAC_Up_DrugandArrestCat)[i], "_FOS_HMv11.bed"))
+}
+
+for(i in 1:length(FOS_ATAC_Up_DrugandArrest_PvsD)){
+export.bed(FOS_ATAC_Up_DrugandArrest_PvsD[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(FOS_ATAC_Up_DrugandArrest_PvsD)[i], "_PvsD_FOS_HMv11.bed"))
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+regions <- dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", full.names=T, pattern=".bed")
+regions <- regions[grepl("FOS", regions)]
+writeLines(regions, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOS_regions.txt")
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", pattern=".bed"))
+filenames <- filenames[grepl("FOS", filenames)]
+writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOS_filename.txt")
+```
+# 4-10-2026 submit bash job to plot around Tn5 cut sites around FOS motifs in up peaks
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots
+sbatch -p hpc_bigmem_b --array=1-10 \
+--export=bigwigs="$mergedcuts",\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots,\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOS_regions.txt,\
+samplenames="$samplenames",\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_FOS_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+# 4-10-2026: resubmission to G&D -- look at accessibility around AP-1 motifs (JUN)
+```{r}
+# load in HOCOMOCO motif sequence database
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/motifs/HOCOMOCO_v11_matrix.RData")
+# scan for JUN motifs
+JUN_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$JUN_HUMAN.H11MO.0.A, BSgenome.Hsapiens.UCSC.hg38, with.score=T)
+
+# filter for JUN motifs that overlap with up peaks
+JUN_ATAC_Up_DrugandArrestCat <- lapply(Up_DrugandArrestCat, function(x){JUN_HMv11[JUN_HMv11 %over% x]})
+JUN_ATAC_Up_DrugandArrest_PvsD <- lapply(Up_DrugandArrest_PvsD, function(x){JUN_HMv11[JUN_HMv11 %over% x]})
+
+# print number of up peaks that overlap with JUN motifs. 
+lapply(lapply(Up_DrugandArrestCat, function(x){x[x %over% JUN_HMv11]}), length)
+```
+```{r}
+# Export each GRanges object as a BED file
+for(i in 1:length(JUN_ATAC_Up_DrugandArrestCat)){
+export.bed(JUN_ATAC_Up_DrugandArrestCat[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(JUN_ATAC_Up_DrugandArrestCat)[i], "_JUN_HMv11.bed"))
+}
+
+for(i in 1:length(JUN_ATAC_Up_DrugandArrest_PvsD)){
+export.bed(JUN_ATAC_Up_DrugandArrest_PvsD[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/", names(JUN_ATAC_Up_DrugandArrest_PvsD)[i], "_PvsD_JUN_HMv11.bed"))
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+regions <- dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", full.names=T, pattern=".bed")
+regions <- regions[grepl("JUN", regions)]
+writeLines(regions, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_JUN_regions.txt")
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds", pattern=".bed"))
+filenames <- filenames[grepl("JUN", filenames)]
+writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_JUN_filename.txt")
+```
+# 4-10-2026 submit bash job to plot around Tn5 cut sites around JUN motifs in up peaks
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots
+sbatch -p hpc_bigmem_b --array=1-10 \
+--export=bigwigs="$mergedcuts",\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots,\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_JUN_regions.txt,\
+samplenames="$samplenames",\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/all_JUN_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+
+# plot accessibility around AP-1 motifs for all upregulated ATAC-seq peaks that overlap (do not separate by drug category)
+```{r}
+allUp_ATAC <- unique(unlist(GRangesList(mergedDiffGR[1:2])))
+# filter for JUN motifs that overlap with up peaks
+AP1_overlap_allUp.ATAC <- list(JUN=JUN_HMv11[JUN_HMv11 %over% allUp_ATAC],
+                               JUNB=JUNB_HMv11[JUNB_HMv11 %over% allUp_ATAC], 
+                               FOS=FOS_HMv11[FOS_HMv11 %over% allUp_ATAC], 
+                               FOSB=FOSB_HMv11[FOSB_HMv11 %over% allUp_ATAC])
+
+# Export each GRanges object as a BED file
+for(i in 1:length(AP1_overlap_allUp.ATAC)){
+export.bed(AP1_overlap_allUp.ATAC[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/", names(AP1_overlap_allUp.ATAC)[i], "_AP1_overlap_allUp.ATAC_HMv11.bed"))
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+regions <- dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC", full.names=T, pattern=".bed")
+writeLines(regions, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/all_AP1_regions.txt")
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC", pattern=".bed"))
+writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/all_AP1_filename.txt")
+```
+# 4-10-2026 submit bash job to plot around Tn5 cut sites around AP-1 motifs overlapping all up ATAC-seq peaks
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots/allUp_ATAC
+sbatch -p hpc_bigmem_b --array=1-4 \
+--export=bigwigs="$mergedcuts",\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots/allUp_ATAC,\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/all_AP1_regions.txt,\
+samplenames="$samplenames",\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/all_AP1_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+
+# 4-10-2026 submit bash job to plot around H3K27ac signal around AP-1 motifs overlapping all up ATAC-seq peaks
+```{bash}
+bw_dir="/lustre/fs4/risc_lab/scratch/jyeung/CUTnTag_LS8817_PDvsDoxo_Oct2025/mergedbigwigs/merge.across.biorep1and2"
+BIGWIG_FILES="${bw_dir}/Cycling_K27ac_merged_RPGCnorm.bw ${bw_dir}/day14_Doxo_K27ac_merged_RPGCnorm.bw ${bw_dir}/day14_Palbo_K27ac_merged_RPGCnorm.bw ${bw_dir}/day28_Palbo_K27ac_merged_RPGCnorm.bw"
+
+samplenames="Cycling_K27ac day14_Doxo_K27ac day14_Palbo_K27ac day28_Palbo_K27ac"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots/allUp_ATAC
+sbatch -p hpc_bigmem_b --array=1-4 \
+--export=bigwigs="$BIGWIG_FILES",\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots/allUp_ATAC,\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/all_AP1_regions.txt,\
+samplenames="$samplenames",\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/K27ac_all_AP1_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+# make function to specify code chunk to run from other Rmd file to avoid copying and pasting large lines of code. 
+```{r}
+# arguments: 
+# Rmd_file=file path & name of Rmd file with code chunk
+# chunk_name= name of code chunk to run from Rmd file. 
+run_code_chunk <- function(Rmd_file, chunk_name){ 
+  # Read the Rmd file
+lines <- readLines(Rmd_file)
+
+# Identify the start and end of the specific chunk
+chunk_start <- grep(paste0("^```\\{r\\s*", chunk_name), lines)  # Find chunk start
+chunk_end <- grep("^```$", lines)  # Find all chunk end lines
+
+# Find the first `chunk_end` after `chunk_start`
+chunk_end <- chunk_end[chunk_end > chunk_start][1]
+
+  if (is.na(chunk_end)) {
+    stop(paste("End of chunk", chunk_name, "not found. Check the Rmd file for missing delimiters."))
+  }
+
+# specify lines inside chunk, removing lines that make up the start and end of the chunk. 
+chunk_to_run <- lines[(chunk_start[1]+1):(chunk_end[1]-1)]
+
+# Evaluate the extracted code
+  eval(parse(text = paste(chunk_to_run, collapse = "\n")), envir = .GlobalEnv)
+}
+```
+
+```{r}
+run_code_chunk(Rmd_file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure4/Figure4.Rmd", chunk_name="genes_in_clusters")
+```
+# plot accessibility around AP-1 motifs for nearby RNA Clusters of upregulated ATAC-seq peaks that overlap (do not separate by drug category)
+```{r}
+# merge RNA clusters of the same drug category.
+merge_geneclusters <- list("CellCycle"=genes_in_clusters[[1]], 
+                           "Palbo"=unlist(genes_in_clusters[2:3]), 
+                           "Doxo"=unlist(genes_in_clusters[4:5]), 
+                           "Shared"=genes_in_clusters[[6]]
+)
+
+# import gtf file for genes
+genes_anno <- import("/lustre/fs4/risc_lab/scratch/jyeung/references/gencode.v41.GRCh38.p13.annotation.gtf")
+genes_anno <- genes_anno[genes_anno$type %in% "gene", ] # filter for regions that are only genes 
+genes_anno$gene_id <- gsub('\\.[0-9]*$', '', genes_anno$gene_id) # remove numbers after . in gene id column 
+genes_anno <- genes_anno[ ,c("source", "type", "gene_id", "gene_type", "gene_name", "level")] # keep only these columns
+
+
+# get the genomic coordinates of significantly changing genes from merged clusters (RNA-seq data)
+merge_geneclusters_anno <- lapply(merge_geneclusters, function(merge_geneclusters){genes_anno[genes_anno$gene_name %in% merge_geneclusters]})
+
+# make GRanges where the coordinates are 50kb upstream of gene TSS and 50kb downstream of end of gene. 
+merge_geneclusters_anno_findpeaks <- merge_geneclusters_anno
+for(i in 1:length(merge_geneclusters_anno)){
+  start(merge_geneclusters_anno_findpeaks[[i]]) <- start(merge_geneclusters_anno[[i]])-50000
+  end(merge_geneclusters_anno_findpeaks[[i]]) <- end(merge_geneclusters_anno[[i]])+50000
+}
+
+# find peaks that overlap within 50kb of significantly changing genes in clusters
+peaks_in_geneclusters <- lapply(merge_geneclusters_anno_findpeaks, function(merge_geneclusters_anno_findpeaks){annomasterpeaks_pval0.2[annomasterpeaks_pval0.2 %over% merge_geneclusters_anno_findpeaks, ]})
+
+# filter for sig changing peaks within 50kb of sig changing genes in clusters. 
+AP1_overlap_allUp.ATAC_gene_clusters <- list()
+for(i in 1:length(AP1_overlap_allUp.ATAC)){
+AP1_overlap_allUp.ATAC_gene_clusters[[i]] <-lapply(peaks_in_geneclusters, function(peaks_in_geneclusters){AP1_overlap_allUp.ATAC[[i]][AP1_overlap_allUp.ATAC[[i]] %over% peaks_in_geneclusters, ]}) 
+}
+names(AP1_overlap_allUp.ATAC_gene_clusters) <- names(AP1_overlap_allUp.ATAC)
+directory <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/nearbyUp_ATAC"
+```
+```{r}
+# Export each GRanges object as a BED file
+for(i in 1:length(AP1_overlap_allUp.ATAC_gene_clusters)){
+  for(j in 1:length(AP1_overlap_allUp.ATAC_gene_clusters[[i]])){
+export.bed(AP1_overlap_allUp.ATAC_gene_clusters[[i]][[j]], con = paste0(directory, "/", names(AP1_overlap_allUp.ATAC_gene_clusters)[i], "_nearby.RNA_allUp.ATAC_", names(AP1_overlap_allUp.ATAC_gene_clusters[[i]])[j], "_genes", "_PvsD_HMv11.bed"))
+  }
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+writeLines(dir(directory, full.names=T, pattern=".bed$"), con=paste0(directory, "/nearby.RNA_allUp.ATAC_AP1_regions.txt"))
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir(directory, pattern=".bed$"))
+writeLines(filenames, con=paste0(directory, "/nearby.RNA_allUp.ATAC_AP1_filename.txt"))
+```
+
+# 4-10-2026 submit bash job to plot around Tn5 cut sites around AP-1 motifs overlapping up ATAC-seq peaks nearby (within 50kb) of RNA Clusters of sig changing genes
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots/nearbyUp_ATAC
+sbatch -p hpc_l40_a --array=1-16 \
+--export=bigwigs="$mergedcuts",\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots/nearbyUp_ATAC,\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/nearbyUp_ATAC/nearby.RNA_allUp.ATAC_AP1_regions.txt,\
+samplenames="$samplenames",\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/nearbyUp_ATAC/nearby.RNA_allUp.ATAC_AP1_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/deeptools_Coverage_1kb.slurm
+```
+
+# 4-10-2026 submit bash job to plot around H3K27ac signal around AP-1 motifs overlapping up ATAC-seq peaks nearby (within 50kb) of RNA Clusters of sig changing genes
+```{bash}
+bw_dir="/lustre/fs4/risc_lab/scratch/jyeung/CUTnTag_LS8817_PDvsDoxo_Oct2025/mergedbigwigs/merge.across.biorep1and2"
+BIGWIG_FILES="${bw_dir}/Cycling_K27ac_merged_RPGCnorm.bw ${bw_dir}/day14_Doxo_K27ac_merged_RPGCnorm.bw ${bw_dir}/day14_Palbo_K27ac_merged_RPGCnorm.bw ${bw_dir}/day28_Palbo_K27ac_merged_RPGCnorm.bw"
+
+samplenames="Cycling_K27ac day14_Doxo_K27ac day14_Palbo_K27ac day28_Palbo_K27ac"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots/nearbyUp_ATAC
+sbatch -p hpc_l40_a --array=1-16 \
+--export=bigwigs="$BIGWIG_FILES",\
+outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/output_plots/nearbyUp_ATAC,\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/nearbyUp_ATAC/nearby.RNA_allUp.ATAC_AP1_regions.txt,\
+samplenames="$samplenames",\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/nearbyUp_ATAC/K27ac_nearby.RNA_allUp.ATAC_AP1_filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/deeptools_Coverage_1kb.slurm
+```
