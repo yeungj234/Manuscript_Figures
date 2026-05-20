@@ -1,0 +1,10 @@
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/DoxoUpvsCyc_JUNB_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/DoxoUpvsCyc_PvsD_JUNB_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/DoxoUpvsday3_JUNB_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/DoxoUpvsday3_PvsD_JUNB_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/PalboUpvsCyc_JUNB_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/PalboUpvsCyc_PvsD_JUNB_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/PalboUpvsday3_JUNB_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/PalboUpvsday3_PvsD_JUNB_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/sharedUpvsCyc_JUNB_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/sharedUpvsday3_JUNB_HMv11.bed

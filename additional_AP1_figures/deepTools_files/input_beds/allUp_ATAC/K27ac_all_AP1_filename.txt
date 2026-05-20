@@ -1,0 +1,4 @@
+K27ac.signal_FOS_AP1_overlap_allUp.ATAC_HMv11
+K27ac.signal_FOSB_AP1_overlap_allUp.ATAC_HMv11
+K27ac.signal_JUN_AP1_overlap_allUp.ATAC_HMv11
+K27ac.signal_JUNB_AP1_overlap_allUp.ATAC_HMv11

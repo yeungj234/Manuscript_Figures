@@ -1,0 +1,4 @@
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/FOS_AP1_overlap_allUp.ATAC_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/FOSB_AP1_overlap_allUp.ATAC_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/JUN_AP1_overlap_allUp.ATAC_HMv11.bed
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/deepTools_files/input_beds/allUp_ATAC/JUNB_AP1_overlap_allUp.ATAC_HMv11.bed
