@@ -376,6 +376,64 @@ filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTool
 /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/deeptools_Coverage_1kb.slurm
 ```
 
+# 4-10-2026: resubmission to G&D -- look at accessibility around AP-1 motifs (JUNB)
+```{r}
+# load in HOCOMOCO motif sequence database
+load("/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/post_peakcalling_analysis/motifs/HOCOMOCO_v11_matrix.RData")
+# scan for JUNB motifs
+JUNB_HMv11 <- matchPWM(HOCOMOCO_v11_matrix$JUNB_HUMAN.H11MO.0.A, BSgenome.Hsapiens.UCSC.hg38, with.score=T)
+
+# filter for JUNB motifs that overlap with up peaks
+JUNB_ATAC_Up_DrugandArrestCat <- lapply(Up_DrugandArrestCat, function(x){JUNB_HMv11[JUNB_HMv11 %over% x]})
+JUNB_ATAC_Up_DrugandArrest_PvsD <- lapply(Up_DrugandArrest_PvsD, function(x){JUNB_HMv11[JUNB_HMv11 %over% x]})
+
+# print number of up peaks that overlap with JUNB motifs. 
+lapply(lapply(Up_DrugandArrestCat, function(x){x[x %over% JUNB_HMv11]}), length)
+
+# Export each GRanges object as a BED file
+for(i in 1:length(JUNB_ATAC_Up_DrugandArrestCat)){
+export.bed(JUNB_ATAC_Up_DrugandArrestCat[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/input_beds/", names(JUNB_ATAC_Up_DrugandArrestCat)[i], "_JUNB_HMv11.bed"))
+}
+
+for(i in 1:length(JUNB_ATAC_Up_DrugandArrest_PvsD)){
+export.bed(JUNB_ATAC_Up_DrugandArrest_PvsD[[i]], con = paste0("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/input_beds/", names(JUNB_ATAC_Up_DrugandArrest_PvsD)[i], "_PvsD_JUNB_HMv11.bed"))
+}
+
+# generate input files for deepTools scripts
+# directory paths to bed files 
+regions <- dir("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/input_beds", full.names=T, pattern=".bed")
+regions <- regions[grepl("JUNB", regions)]
+writeLines(regions, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/input_beds/regions.txt")
+
+# filenames to be assigned to plots. 
+filenames <- gsub(".bed", "", dir("//lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/input_beds", pattern=".bed"))
+filenames <- filenames[grepl("JUNB", filenames)]
+writeLines(filenames, con="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/input_beds/filename.txt")
+```
+# 4-10-2026 submit bash job to plot around Tn5 cut sites around FOSB motifs in up peaks
+```{bash}
+mergedcuts="/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/Cyclingmerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Doxomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day3_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day10_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day14_Palbomerged_scaleFactornorm_cutsCoverage.bw
+/lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day21_Palbomerged_scaleFactornorm_cutsCoverage.bw /lustre/fs4/risc_lab/scratch/jyeung/LS_PDvsDoxo_2/ATACseq/Tn5_offset_merged_bigwigs/scaleFactornorm_cutsCoverage_bigwigs/day28_Palbomerged_scaleFactornorm_cutsCoverage.bw"
+
+samplenames="Cycling day3_Doxo day10_Doxo day14_Doxo day21_Doxo day3_Palbo day10Palbo day14_Palbo day21_Palbo day28_Palbo"
+
+cd /lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/output_plots
+sbatch -p hpc_l40_a --array=1-10 \
+--export=bigwigs="$mergedcuts",\
+regions=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/input_beds/regions.txt,\
+samplenames="$samplenames",\
+profile_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/output_plots/plotProfile,\
+heatmap_outdir=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/output_plots/plotHeatmap,\
+filename=/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/input_beds/filename.txt \
+/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/deepTools_files/deeptools_Coverage_1kb.slurm
+```
 # *FIGURES*
 
 # RNA-seq: save GSEA running score for day 14 Doxo vs Cycling's Hallmark p53 Pathway
@@ -724,4 +782,16 @@ ggplot(NormCounts_df[grepl("TGFB[0-9]$|TGFBR[0-9]$", NormCounts_df$Transcript), 
       axis.title.y = element_text(size = 10), 
       axis.title.x = element_text(size = 10)
 )
+```
+
+# check linker histone H1 levels b/c I'm curious
+```{r}
+pdf("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/Figure3/RNA_NormCountsMat_LinkerHistone.pdf", height=5)
+ggplot(NormCounts_df[grepl("^H1-[0-9]$|^H1-10$", NormCounts_df$Transcript), ], aes(x=Timepoint, y=Counts, color=Treatment, shape=Biorep))+geom_point(size=3)+facet_wrap(~Transcript, scales="free")+scale_color_manual(values=hm_cols_RNA$Treatment)+theme_minimal()+ylab("Normalized Counts")+xlab("Length of Treatment (days)")+ggtitle("")+scale_y_continuous(n.breaks=5)+scale_x_continuous(n.breaks=5)+theme_classic()+theme(
+      axis.text.x = element_text(size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title.y = element_text(size = 10), 
+      axis.title.x = element_text(size = 10)
+)
+dev.off()
 ```

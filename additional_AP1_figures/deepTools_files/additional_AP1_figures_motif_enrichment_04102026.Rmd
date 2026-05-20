@@ -62,10 +62,133 @@ AP1_UpPeaks_AME_mat <- create_AME_peaks_matrix(annoUpPeaks_AME_df[grepl("JUN|FOS
                                                       
 AP1_UpPeaks_AME_mat <- AP1_UpPeaks_AME_mat[order(rowSums(AP1_UpPeaks_AME_mat), decreasing=T), ] # order by overall most to least enriched AP1 motifs 
 
-outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures"
+outdir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/Figures"
 
-# plot motif enrichment values of AP1 motifs in all Up peaks for all timepoints vs Cycling. 
-pdf(paste0(outdir, "/ATAC_AP1_UpPeaks_AME_dotplots.pdf"), width=8, height=2.7)
-create_AME_dotplots(annoUpPeaks_AME_df[grepl("JUN|FOS|ATF", annoUpPeaks_AME_df$motif_ID), ], Title="AP1 Motifs enriched in Up peaks", fill_limit=c(2, 305), size_limit=c(0, 51))
+# plot motif enrichment values of AP1 motifs in all Up peaks for all timepoints
+pdf(paste0(outdir, "/ATAC_AP1_UpPeaks_AME_dotplots.pdf"), width=10, height=4.5)
+create_AME_dotplots(annoUpPeaks_AME_df[grepl("JUN|FOS", annoUpPeaks_AME_df$motif_ID), ], Title="AP1 Motifs enriched in Up peaks", fill_limit=c(2, 305), size_limit=c(0, 51))
+dev.off()
+```
+
+
+#ATAC-seq: import motif enrichment results of changing peaks within 50kb of each RNA cluster of changing genes. 
+```{r import nearby peaks kmeans 7 RNA clusters}
+#extract ids of all expressed genes
+expressedGenes <- LFCResultsall_RNA[[1]]$SYMBOL
+expressedGenes[grep("TP53$|TP63$|TP73$", expressedGenes)] <- c("P63", "P73", "P53")
+expressedGenes[expressedGenes %in% "RELA"] <- "TF65"
+
+# function to import motif data. 
+process_motif_data <- function(base_dir, expressed_genes = NULL) {
+  library(dplyr)
+  library(readr)
+  
+  # Initialize an empty list to store the data frames
+  Peaks_AME <- list()
+  processed_dirs <- vector()
+  setwd(base_dir)
+  file_paths=dir()
+
+  # Loop through each directory and process the files
+  for (i in seq_along(file_paths)) {
+    # Construct the path to the ame.tsv file
+    ame_file_path <- paste0(file_paths[i], "/ame.tsv")
+    
+    # Check the file size
+    file_info <- file.info(ame_file_path)
+    if (file_info$size == 1.1 || is.na(file_info$size)) {
+      # If the file size is 0 or file does not exist, skip to the next iteration
+      next
+    }
+    
+    # Read the ame.tsv file
+    Peaks_AME[[length(Peaks_AME) + 1]] <- as.data.frame(read_tsv(file = ame_file_path, comment = "#"))
+    
+    # Add the current directory to the processed_dirs vector
+    processed_dirs <- c(processed_dirs, file_paths[i])
+  }
+  
+  # Set names for the list elements
+  names(Peaks_AME) <- processed_dirs
+  
+  # Post-processing each dataframe
+  for (i in seq_along(Peaks_AME)) {
+    
+    # Calculate TPvsFP and add as a new column
+    Peaks_AME[[i]]$TPvsFP <- Peaks_AME[[i]]$`%TP` - Peaks_AME[[i]]$`%FP`
+    
+    # Remove everything after "_" in the motif_ID column
+    Peaks_AME[[i]]$motif_ID <- gsub("\\_.*", "", Peaks_AME[[i]]$motif_ID)
+  }
+  
+  # Convert the list of MEME-AME results into a single dataframe
+  Peaks_AME <- Peaks_AME[!sapply(Peaks_AME, is.null)]
+  Peaks_AME_df <- do.call(rbind, Peaks_AME)
+  
+  # Filter for motifs that are expressed, if provided
+  if (!is.null(expressed_genes)) {
+    Peaks_AME_df <- Peaks_AME_df %>%
+      dplyr::filter(motif_ID %in% expressed_genes)
+  }
+colnames(Peaks_AME_df)[c(7,15,17)] <- c("adj_pvalue", "percentTP", "percentFP") # change column names without special symbols 
+Peaks_AME_df$neglog10padj <- -log10(Peaks_AME_df$adj_pvalue) # add in column for -log10(adj pvalue)
+  return(Peaks_AME_df)
+}
+save(process_motif_data, file="/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS6/Functions/process_motif_data.RData")
+
+Peaks_AME_Clusters <- process_motif_data("/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/FigureS6/motif_analysis_output/allDoxo_allPalbo_sigPeaks_kmeans7_RNA_clusters", expressed_genes = expressedGenes)
+
+# Add column to specify which RNA cluster
+Peaks_AME_Clusters$Cluster <- gsub('\\.[0-9]*$', '', row.names(Peaks_AME_Clusters)) 
+Peaks_AME_Clusters$Cluster <- gsub("^[^_]+_[^_]+_", "", Peaks_AME_Clusters$Cluster) # remove everything before the 2nd "_"
+
+Peaks_AME_Clusters$Comparison <- gsub(".*?(all(Up|Down)_(Palbo|Doxo)).*", "\\1", row.names(Peaks_AME_Clusters))
+Peaks_AME_Clusters$Comparison <- as.factor(Peaks_AME_Clusters$Comparison)
+Peaks_AME_Clusters$Direction <- ifelse(grepl("Up", Peaks_AME_Clusters$Comparison), "Up", "Down")
+Peaks_AME_Clusters$Group <- gsub("^[^_]*_", "", Peaks_AME_Clusters$Comparison)
+```
+
+# ATAC-seq, separate RNA clusters: plot motif enrichment results as dotplot indicating difference between %TP & %FP as dot size & fill color as padj values.  
+```{r}
+AME_padj_dots <- list()
+comparisons <- c("allDown_Doxo", "allDown_Palbo", "allUp_Doxo", "allUp_Palbo")
+AME_padj_dots <- list(allDown=Peaks_AME_Clusters[Peaks_AME_Clusters$Comparison %in% c("allDown_Doxo", "allDown_Palbo"), ],
+                      allUp=Peaks_AME_Clusters[Peaks_AME_Clusters$Comparison %in% c("allUp_Doxo", "allUp_Palbo"), ])
+```
+
+# ATAC-seq: create function to plot motif enrichment results as dotplot where the fill color indicates -log10(padj) values & size of dot indicates %TP-%FP
+```{r create_AME_dotplots}
+create_AME_dotplots <- function(AME_df=AME_padj_dots, Title=Title, fill_limit=c(1,10), size_limit=4.5, midpoint=20){
+  AME_df <- AME_df %>% mutate(Comparison = Cluster)
+  ggplot(AME_df, aes(x=Comparison, y=motif_ID, size=TPvsFP)) +
+    geom_point(aes(fill=neglog10padj), colour="black", pch=21, alpha=0.8) +
+    scale_fill_gradient2(name="-log10(padj)", 
+                        low="white", mid="light yellow", high="dark orange",
+                        midpoint = midpoint,
+                        limits=fill_limit) + # Adjust fill scale
+    scale_size_continuous(name="%TP - %FP", 
+                          limits=size_limit, 
+                          range=c(1, 10)) +  # Adjust dot sizes
+    theme_minimal() +
+    ggtitle(Title) +
+    scale_x_discrete(labels = function(x) AME_df$Cluster[match(x, AME_df$Comparison)]) +  # to replace Comparison with Cluster labels on the x-axis. 
+    facet_wrap(~Group, nrow=1) +
+    theme(
+      axis.text.x = element_text(size=8, angle = 90, hjust=1),  # Rotate x-axis labels
+      strip.text.x = element_text(size=8, face="bold"),
+      strip.text.y = element_text(size=8, face="bold")
+    )+
+    theme_classic() +
+    labs(x="Comparison", y="motif ID")}
+``` 
+
+```{r}
+plot_nearbyUp.AP1_AME <- AME_padj_dots$allUp[grepl("JUN|FOS", AME_padj_dots$allUp$motif_ID) & AME_padj_dots$allUp$Cluster %in% "Shared_genes", ]
+
+plot_nearbyDown.AP1_AME <- AME_padj_dots$allDown[grepl("JUN|FOS|ATF", AME_padj_dots$allDown$motif_ID) & AME_padj_dots$allDown$Cluster %in% "Shared_genes", ]
+pdf_dir <- "/lustre/fs4/risc_lab/scratch/jyeung/Manuscript_Figures/additional_AP1_figures/Figures"
+pdf(paste0(pdf_dir, "/Up.Down.mergedpeaks.near.RNAclusters.AP1.motifs.dotplots.pdf"), width=4, height=3)
+create_AME_dotplots(plot_nearbyUp.AP1_AME, Title="nearby up peaks", fill_limit=c(0, 37), size_limit=c(0, 20.05), midpoint=2)
+create_AME_dotplots(plot_nearbyDown.AP1_AME, Title="nearby down peaks", fill_limit=c(0, 305), size_limit=c(0, 39.4), midpoint=10)
 dev.off()
 ```
