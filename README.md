@@ -1,7 +1,6 @@
 # Original code for bioinformatics analysis of ATAC-seq & RNA-seq data
-## A shared NF-κB-driven senescence response shows distinct temporal dynamics under CDK4/6 inhibition and doxorubicin treatment in liposarcoma
-
-### Authors: Joanna Lan-Hing Yeung,1,3 Justin Rendleman,1,3 Nicole Pagane,1 Lauren Anderson,1 Irene Duba,1 Ria Hosuru,1 Bat-Ider Tumenbayar,1 Andrew Koff,2 Viviana I. Risca1,4,* 
+## CDK4/6 inhibition induces a senescence-associated secretory phenotype via delayed NF-κB activation
+### Authors: Joanna Lan-Hing Yeung1,*, Justin Rendleman1,*, Lauren Anderson Westcott1, Arnold Ou1, Matthew Pressler1, Nicole Pagane1, Irene Duba1, Ria Hosuru1, Bat-Ider Tumenbayar1, Viviana I. Risca1 
 
 1Laboratory of Genome Architecture and Dynamics, The Rockefeller University, New York, NY 10065, USA.
 2Molecular Biology Program, Memorial Sloan Kettering Cancer Center, New York, NY 10065, USA. 
