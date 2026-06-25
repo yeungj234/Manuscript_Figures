@@ -3,14 +3,12 @@
 ### Authors: Joanna Lan-Hing Yeung1,*, Justin Rendleman1,*, Lauren Anderson Westcott1, Arnold Ou1, Matthew Pressler1, Nicole Pagane1, Irene Duba1, Ria Hosuru1, Bat-Ider Tumenbayar1, Viviana I. Risca1 
 
 1Laboratory of Genome Architecture and Dynamics, The Rockefeller University, New York, NY 10065, USA.
-2Molecular Biology Program, Memorial Sloan Kettering Cancer Center, New York, NY 10065, USA. 
-3These authors contributed equally 
-4Lead contact 
-*Correspondence: vrisca@rockefeller.edu
+*These authors contributed equally 
 
 ## SUMMARY 
-Cancer therapies can trigger geroconversion in tumor cells which influences patient outcomes, however it remains unclear how the characteristics of therapy-induced senescent states vary between treatments. While senescence is generally initiated by some form of DNA damage, CDK4/6 inhibitors (CDK4/6i) are unique in that they cause geroconversion in a damage-independent manner. Here, we use a multi-omics approach to profile the temporal dynamics of transcriptional rewiring during therapy-induced senescence in CDK4/6i-treated liposarcoma cells and compare this to the chemotherapy drug doxorubicin, which generates double-stranded breaks prompting geroconversion. We found the dynamics of senescence-related phenotypes varies between therapies, largely explained by a DNA damage-dependent signature specific to doxorubicin. Inevitably, there emerged a shared senescence-associated secretory phenotype (SASP) marked by NF-κB activation, coinciding with stable arrest. Pharmacological inhibition of NF-κB suppressed upregulation of this shared SASP program, confirming its regulatory role even in the absence of DNA damage. 
-
+Cellular senescence consists of regulated phenotypes associated with permanent exit from the cell cycle in response to stressors such as genomic instability. The consequences of senescence go beyond individual cells due to the senescence associated secretory phenotype (SASP), which can induce inflammation in neighboring cells. Some cancers respond to CDK4/6 inhibitors (CDK4/6i) with a senescence-like phenotype in the absence of extensive DNA damage. We asked how the SASP and the transcriptional regulatory profile triggered by CDK4/6i-driven arrest compares to the canonical NF-κB-regulated SASP triggered by DNA damage. We profiled the dynamics of transcriptional regulation in response to the CDK4/6i, palbociclib, and the DNA damaging agent, doxorubicin. We found upregulation of NF-κB driven-SASP genes was shared across both drugs, although delayed in CDK4/6i, coinciding with slower enhancer activation and epigenetic changes. ATM/ATR inhibition did not affect CDK4/6i-induced NF-κB nuclear localization, suggesting an alternative upstream activator. Inhibiting NF-κB suppressed the expression of SASP genes without reversing stable arrest, pointing to SASP manipulation as a potential therapeutic strategy and providing insights into controversies regarding cell cycle arrest-driven SASP.
+ 
+ 
 
 ## Directory tree
 ```
